@@ -301,6 +301,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.32] - 2026-04-09
+
+### Docs
+- Update README.md
+
+### Other
+- Update .gitignore
+- Update project/validation.toon.yaml
+- Update vscode-extension/out/extension.js
+- Update vscode-extension/out/extension.js.map
+- Update vscode-extension/src/extension.ts
+
 ## [0.1.31] - 2026-04-09
 
 ### Docs
