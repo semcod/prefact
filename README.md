@@ -5,6 +5,17 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+
+## AI Cost Tracking
+
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$4.65-green) ![AI Model](https://img.shields.io/badge/AI%20Model-openrouter%2Fqwen%2Fqwen3-coder-next-lightgrey)
+
+This project uses AI-generated code. Total cost: **$4.6500** with **31** AI commits.
+
+Generated on 2026-04-09 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/models/openrouter/qwen/qwen3-coder-next)
+
+---
+
 Automatic Python prefactoring toolkit — detect, fix, and validate common code issues introduced by LLMs and humans alike.
 
 ## The Problem
@@ -259,19 +270,6 @@ pytest -v
 ## License
 
 Licensed under Apache-2.0.
-
-
-Licensed under Apache-2.0.
-
-
-Apache License 2.0 - see [LICENSE](LICENSE) for details.
-
 ## Author
 
 Tom Sapletta
-
-
-Tom Sapletta
-
-
-Created by **Tom Sapletta** - [tom@sapletta.com](mailto:tom@sapletta.com)

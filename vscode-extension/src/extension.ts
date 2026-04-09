@@ -78,8 +78,8 @@ class PrefactDiagnosticsProvider {
             await this.runPrefact(['fix', '--path', document.uri.fsPath]);
             
             // Reload the document
-            const document = await vscode.workspace.openTextDocument(document.uri);
-            await vscode.window.showTextDocument(document);
+            const doc = await vscode.workspace.openTextDocument(document.uri);
+            await vscode.window.showTextDocument(doc);
             
             // Re-scan to verify fixes
             await this.scanFile(document);
@@ -394,7 +394,6 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         try {
-            const { spawn } = require('child_process');
             spawn('prefact', ['git-hooks', 'install'], {
                 cwd: workspaceFolders[0].uri.fsPath,
                 stdio: 'inherit'

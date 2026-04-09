@@ -9,7 +9,11 @@ from typing import Dict, List, Type
 
 from prefact.config import Config
 from prefact.models import Issue
-from prefact.rules import BaseRule, get_all_rules
+
+try:
+    from prefact.rules import BaseRule, get_all_rules
+except ImportError:
+    from ..rules import BaseRule, get_all_rules
 
 
 class RuleMigrationManager:

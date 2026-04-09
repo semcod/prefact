@@ -8,7 +8,11 @@ import ast
 from pathlib import Path
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 @register

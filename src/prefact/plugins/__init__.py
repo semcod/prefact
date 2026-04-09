@@ -6,7 +6,7 @@ entry points for third-party plugins and dynamic module loading for user plugins
 
 import importlib
 from pathlib import Path
-from typing import Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
 from prefact.config import Config
 from prefact.rules import BaseRule

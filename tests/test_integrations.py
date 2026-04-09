@@ -10,17 +10,26 @@ This module tests the integration of various Python libraries with prefact:
 
 from __future__ import annotations
 
-import ast
 import tempfile
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import pytest
 
+
 from prefact.config import Config
 from prefact.engine import RefactoringEngine
-from prefact.models import Issue, Severity
+from prefact.models import Issue
 from prefact.rules import get_all_rules
+
+PORT_3 = 3
+CONSTANT_5 = 5
+PORT_6 = 6
+CONSTANT_8 = 8
+CONSTANT_9 = 9
+CONSTANT_11 = 11
+CONSTANT_60 = 60
+
 
 
 class IntegrationTestCase:
@@ -81,22 +90,22 @@ def hello():
 ''',
                 expected_issues={
                     "unused-imports": [
-                        {"line": 3, "import": "json"}
+                        {"line": PORT_3, "import": "json"}
                     ],
                     "duplicate-imports": [
-                        {"line": 6, "import": "Dict"}
+                        {"line": PORT_6, "import": "Dict"}
                     ],
                     "string-concat": [
-                        {"line": 9}
+                        {"line": CONSTANT_9}
                     ],
                     "print-statements": [
-                        {"line": 9}
+                        {"line": CONSTANT_9}
                     ],
                     "unused-variables": [
-                        {"line": 11, "variable": "x"}
+                        {"line": CONSTANT_11, "variable": "x"}
                     ],
                     "missing-return-type": [
-                        {"line": 8}
+                        {"line": CONSTANT_8}
                     ]
                 }
             ),
@@ -148,8 +157,8 @@ def mixed():
                 expected_issues={
                     "string-concat": [
                         {"line": 2},
-                        {"line": 5},
-                        {"line": 9}
+                        {"line": CONSTANT_5},
+                        {"line": CONSTANT_9}
                     ]
                 }
             ),
@@ -170,7 +179,7 @@ def _private():
                 expected_issues={
                     "missing-return-type": [
                         {"line": 1},
-                        {"line": 5}
+                        {"line": CONSTANT_5}
                     ]
                 }
             ),
@@ -259,6 +268,12 @@ def _private():
 
 def test_ruff_integration():
     """Test Ruff-based rules."""
+    try:
+        import subprocess
+        subprocess.run(["ruff", "--version"], capture_output=True, check=True)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        pytest.skip("ruff not installed")
+    
     config = Config(project_root=Path.cwd())
     config.set_rule_option("unused-imports", "use_ruff", True)
     config.set_rule_option("wildcard-imports", "use_ruff", True)
@@ -312,6 +327,11 @@ def calculate():
 
 def test_isort_integration():
     """Test ISort-based rules."""
+    try:
+        import isort
+    except ImportError:
+        pytest.skip("isort not installed")
+    
     config = Config(project_root=Path.cwd())
     
     # Test unsorted imports
@@ -487,9 +507,9 @@ def test_performance_comparison():
 
 def run_integration_tests():
     """Run all integration tests."""
-    print("="*60)
+    print("="*CONSTANT_60)
     print("RUNNING INTEGRATION TESTS")
-    print("="*60)
+    print("="*CONSTANT_60)
     
     config = Config(project_root=Path.cwd())
     
@@ -516,9 +536,9 @@ def run_integration_tests():
     print("✓ Performance comparison completed")
     
     # Run comprehensive test suite
-    print("\n" + "="*60)
+    print("\n" + "="*CONSTANT_60)
     print("RUNNING COMPREHENSIVE TEST SUITE")
-    print("="*60)
+    print("="*CONSTANT_60)
     
     suite = IntegrationTestSuite()
     results = suite.run_all_tests(config)

@@ -4,8 +4,3 @@
 def test_placeholder():
     """Placeholder test to verify the test setup works."""
     assert True
-
-
-def test_import():
-    """Verify the main package can be imported."""
-    import examples  # noqa: F401

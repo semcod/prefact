@@ -11,7 +11,11 @@ from pathlib import Path
 from typing import Dict, List
 
 from prefact.models import Fix, Issue
-from prefact.rules import BaseRule
+
+try:
+    from prefact.rules import BaseRule
+except ImportError:
+    from ..rules import BaseRule
 
 
 class ToolStrategy(ABC):

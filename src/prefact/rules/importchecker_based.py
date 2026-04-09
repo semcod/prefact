@@ -12,7 +12,11 @@ from typing import Dict, List, Optional
 
 from prefact.config import Config
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 class ImportCheckerHelper:
@@ -60,9 +64,9 @@ class ImportCheckerHelper:
         
         # Remove common parent directories
         if "src" in parts:
-            parts = parts[f"{parts.index('src')}{1}":]
+            parts = parts[parts.index('src') + 1:]
         elif "lib" in parts:
-            parts = parts[f"{parts.index('lib')}{1}":]
+            parts = parts[parts.index('lib') + 1:]
         
         return ".".join(parts)
     
@@ -324,7 +328,7 @@ class ImportDependencyAnalysis(BaseRule):
                         module = parts[1]
                         imports.append({
                             "name": module,
-                            "line": f"{i}{1}",
+                            "line": i + 1,
                             "type": "from"
                         })
                 else:
@@ -333,7 +337,7 @@ class ImportDependencyAnalysis(BaseRule):
                         module = parts[1].split(".")[0]
                         imports.append({
                             "name": module,
-                            "line": f"{i}{1}",
+                            "line": i + 1,
                             "type": "import"
                         })
         

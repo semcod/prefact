@@ -1,85 +1,17 @@
-"""Rule: detect and remove unused imports."""
-
-
 import ast
 from pathlib import Path
-from typing import Optional
-
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
 
-
-def _collect_imported_names(tree: ast.Module) -> dict[str, ast.stmt]:
-    """Return {name: node} for every imported name at module level."""
-    names: dict[str, ast.stmt] = {}
-    for node in ast.iter_child_nodes(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                n = alias.asname or alias.name.split(".")[0]
-                names[n] = node
-        elif isinstance(node, ast.ImportFrom):
-            if node.names and node.names[0].name == "*":
-                continue
-            for alias in node.names:
-                n = alias.asname or alias.name
-                names[n] = node
-    return names
-
-
-def _collect_used_names(tree: ast.Module) -> set[str]:
-    """Return all Name.id values used outside import statements."""
-    used: set[str] = set()
-    import_lines = _get_import_lines(tree)
-    
-    for node in ast.walk(tree):
-        # Handle direct name usage
-        if isinstance(node, ast.Name) and getattr(node, "lineno", 0) not in import_lines:
-            used.add(node.id)
-        # Handle attribute chains (e.g., module.submodule.func)
-        elif isinstance(node, ast.Attribute):
-            root_name = _get_attribute_root(node)
-            if root_name:
-                used.add(root_name)
-        # Handle __all__ exports
-        elif isinstance(node, ast.Assign):
-            _process_assignment_for_all(node, used)
-    
-    return used
-
-
-def _get_import_lines(tree: ast.Module) -> set[int]:
-    """Get line numbers of all import statements."""
-    import_lines = set()
-    for node in ast.iter_child_nodes(tree):
-        if isinstance(node, (ast.Import, ast.ImportFrom)):
-            import_lines.add(node.lineno)
-    return import_lines
-
-
-def _get_attribute_root(node: ast.Attribute) -> Optional[str]:
-    """Get the root name of an attribute chain."""
-    root = node
-    while isinstance(root, ast.Attribute):
-        root = root.value
-    if isinstance(root, ast.Name):
-        return root.id
-    return None
-
-
-def _process_assignment_for_all(node: ast.Assign, used: set[str]) -> None:
-    """Process assignment to __all__ and add exported names to used set."""
-    for target in node.targets:
-        if isinstance(target, ast.Name) and target.id == "__all__":
-            if isinstance(node.value, (ast.List, ast.Tuple)):
-                for elt in node.value.elts:
-                    if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
-                        used.add(elt.value)
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 @register
 class UnusedImports(BaseRule):
     rule_id = "unused-imports"
-    description = "Detect imports that are never used in the module."
+    description = "Detect unused imports in Python files"
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:
         issues: list[Issue] = []
@@ -90,10 +22,13 @@ class UnusedImports(BaseRule):
 
         imported = _collect_imported_names(tree)
         used = _collect_used_names(tree)
+        all_exports = _collect_all_exports(tree)
 
         for name, imp_node in imported.items():
             if name.startswith("_"):
                 continue  # convention: _Foo may be re-exported
+            if name in all_exports:
+                continue  # exported via __all__
             if name not in used:
                 issues.append(
                     Issue(
@@ -107,6 +42,15 @@ class UnusedImports(BaseRule):
                     )
                 )
         return issues
+
+    def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
+        checks, errors = [], []
+        try:
+            ast.parse(fixed)
+            checks.append("syntax_valid")
+        except SyntaxError as exc:
+            errors.append(f"SyntaxError: {exc}")
+        return ValidationResult(file=path, passed=not errors, checks=checks, errors=errors)
 
     def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
         if not issues:
@@ -124,40 +68,164 @@ class UnusedImports(BaseRule):
 
         for node in ast.iter_child_nodes(tree):
             if isinstance(node, ast.ImportFrom):
-                remaining = [a for a in node.names if (a.asname or a.name) not in unused_names]
-                if not remaining:
-                    for ln in range(node.lineno, f"{(node.end_lineno or node.lineno)}{1}"):
-                        lines_to_remove.add(ln)
-                    fixes.append(
-                        Fix(
-                            issue=issues[0], file=path,
-                            original_code=lines[node.lineno - 1].rstrip(),
-                            fixed_code="", applied=True,
-                        )
-                    )
+                self.process_import_from(node, lines, lines_to_remove, fixes, issues[0], path, unused_names)
             elif isinstance(node, ast.Import):
-                remaining = [
-                    a for a in node.names if (a.asname or a.name.split(".")[0]) not in unused_names
-                ]
-                if not remaining:
-                    for ln in range(node.lineno, f"{(node.end_lineno or node.lineno)}{1}"):
-                        lines_to_remove.add(ln)
-                    fixes.append(
-                        Fix(
-                            issue=issues[0], file=path,
-                            original_code=lines[node.lineno - 1].rstrip(),
-                            fixed_code="", applied=True,
-                        )
-                    )
+                self.process_import(node, lines, lines_to_remove, fixes, issues[0], path, unused_names)
 
-        new_lines = [l for i, l in enumerate(lines, 1) if i not in lines_to_remove]
+        new_lines = self.remove_lines(lines, lines_to_remove)
         return "".join(new_lines), fixes
 
-    def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        checks, errors = [], []
-        try:
-            ast.parse(fixed)
-            checks.append("syntax_valid")
-        except SyntaxError as exc:
-            errors.append(f"SyntaxError: {exc}")
-        return ValidationResult(file=path, passed=not errors, checks=checks, errors=errors)
+    def remove_lines(self, lines: list[str], lines_to_remove: set[int]) -> list[str]:
+        return [l for i, l in enumerate(lines, 1) if i not in lines_to_remove]
+
+    def process_import_from(self, node: ast.ImportFrom, lines: list[str], lines_to_remove: set[int], fixes: list[Fix], issue: Issue, path: Path, unused_names: set[str]) -> None:
+        """Process ImportFrom node and mark unused imports for removal."""
+        unused_names_in_import = []
+        all_unused = True
+        
+        for alias in node.names:
+            name = alias.asname or alias.name
+            if name in unused_names:
+                unused_names_in_import.append(alias.name)
+            else:
+                all_unused = False
+        
+        if all_unused:
+            # Remove entire import line
+            lines_to_remove.add(node.lineno)
+            fixes.append(Fix(
+                issue=issue,
+                file=path,
+                original_code=lines[node.lineno - 1],
+                fixed_code="",
+                applied=True
+            ))
+        elif unused_names_in_import:
+            # Remove only unused names from the import
+            line_idx = node.lineno - 1
+            if line_idx < len(lines):
+                original_line = lines[line_idx]
+                modified_line = self._remove_unused_from_line(original_line, unused_names_in_import)
+                if modified_line != original_line:
+                    lines[line_idx] = modified_line
+                    fixes.append(Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=original_line,
+                        fixed_code=modified_line,
+                        applied=True
+                    ))
+
+    def process_import(self, node: ast.Import, lines: list[str], lines_to_remove: set[int], fixes: list[Fix], issue: Issue, path: Path, unused_names: set[str]) -> None:
+        """Process Import node and mark unused imports for removal."""
+        unused_aliases = []
+        all_unused = True
+        
+        for alias in node.names:
+            name = alias.asname or alias.name.split(".")[0]
+            if name in unused_names:
+                unused_aliases.append(alias.name)
+            else:
+                all_unused = False
+        
+        if all_unused:
+            # Remove entire import line
+            lines_to_remove.add(node.lineno)
+            fixes.append(Fix(
+                issue=issue,
+                file=path,
+                original_code=lines[node.lineno - 1],
+                fixed_code="",
+                applied=True
+            ))
+        elif unused_aliases:
+            # Remove only unused imports from the line
+            line_idx = node.lineno - 1
+            if line_idx < len(lines):
+                original_line = lines[line_idx]
+                modified_line = self._remove_unused_from_import_line(original_line, unused_aliases)
+                if modified_line != original_line:
+                    lines[line_idx] = modified_line
+                    fixes.append(Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=original_line,
+                        fixed_code=modified_line,
+                        applied=True
+                    ))
+
+    def _remove_unused_from_line(self, line: str, used_names: list[str]) -> str:
+        """Remove unused names from a 'from ... import ...' line."""
+        import re
+        # Match the import part after 'from ... import'
+        match = re.match(r'(\s*from\s+[^\s]+\s+import\s+)(.+)', line)
+        if match:
+            prefix = match.group(1)
+            imports_part = match.group(2)
+            # Filter out unused names
+            imports = [imp.strip() for imp in imports_part.split(',')]
+            filtered = [imp for imp in imports if any(name in imp for name in used_names)]
+            if filtered:
+                return prefix + ', '.join(filtered) + '\n'
+            else:
+                return ''  # Will be removed by line removal
+        return line
+
+    def _remove_unused_from_import_line(self, line: str, used_aliases: list[str]) -> str:
+        """Remove unused imports from an 'import ...' line."""
+        import re
+        # Match the import part after 'import'
+        match = re.match(r'(\s*import\s+)(.+)', line)
+        if match:
+            prefix = match.group(1)
+            imports_part = match.group(2)
+            # Filter out unused imports
+            imports = [imp.strip() for imp in imports_part.split(',')]
+            filtered = [imp for imp in imports if any(alias in imp for alias in used_aliases)]
+            if filtered:
+                return prefix + ', '.join(filtered) + '\n'
+            else:
+                return ''  # Will be removed by line removal
+        return line
+
+
+def _collect_imported_names(tree: ast.AST) -> dict[str, ast.AST]:
+    """Collect all imported names from the AST."""
+    imported = {}
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                name = alias.asname or alias.name.split('.')[0]
+                imported[name] = node
+        elif isinstance(node, ast.ImportFrom):
+            for alias in node.names:
+                name = alias.asname or alias.name
+                imported[name] = node
+    return imported
+
+
+def _collect_used_names(tree: ast.AST) -> set[str]:
+    """Collect all used names in the code."""
+    used = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name):
+            used.add(node.id)
+        elif isinstance(node, ast.Attribute):
+            # For attributes like 'module.name', collect the module part
+            if isinstance(node.value, ast.Name):
+                used.add(node.value.id)
+    return used
+
+
+def _collect_all_exports(tree: ast.AST) -> set[str]:
+    """Collect names exported via __all__."""
+    exports = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id == "__all__":
+                    if isinstance(node.value, (ast.List, ast.Tuple)):
+                        for elt in node.value.elts:
+                            if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
+                                exports.add(elt.value)
+    return exports

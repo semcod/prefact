@@ -1,0 +1,124 @@
+pipeline:
+  name: prefact-quality-loop
+
+  # ── Quality gates ─────────────────────────────────────────────────
+  # Pipeline iterates until ALL pass
+  metrics:
+    cc_max: 15           # cyclomatic complexity per function
+    vallm_pass_min: 60   # current: ~65%
+    coverage_min: 40     # current: ~43%
+
+  # ── Pipeline stages ───────────────────────────────────────────────
+  # Use 'tool:' for built-in presets or 'run:' for custom commands.
+  # Each test group is a separate stage so it can be controlled,
+  # retried, or skipped independently.
+  stages:
+
+    # ── Analysis ────────────────────────────────────────────────────
+    - name: analyze
+      tool: code2llm
+      when: first_iteration
+
+    # ── Dependency freshness ────────────────────────────────────────
+    - name: check-deps
+      run: |
+        prefact check-deps --path . --format json --max-outdated 0
+      when: first_iteration
+      timeout: 180
+
+    # ── Unit tests (by marker) ──────────────────────────────────────
+    - name: test-config
+      run: .venv/bin/pytest -m config --tb=short -q
+      timeout: 60
+
+    - name: test-engine
+      run: .venv/bin/pytest -m engine --tb=short -q
+      timeout: 120
+
+    - name: test-rules
+      run: .venv/bin/pytest -m rules --tb=short -q
+      timeout: 120
+
+    - name: test-relative-imports
+      run: .venv/bin/pytest -m relative_imports --tb=short -q
+      timeout: 60
+
+    - name: test-unused-imports
+      run: .venv/bin/pytest -m unused_imports --tb=short -q
+      timeout: 60
+
+    - name: test-deps
+      run: .venv/bin/pytest -m deps --tb=short -q
+      timeout: 60
+
+    # ── Integration tests (by marker) ───────────────────────────────
+    - name: test-ruff
+      run: .venv/bin/pytest -m ruff --tb=short -q
+      timeout: 120
+      optional: true
+
+    - name: test-mypy
+      run: .venv/bin/pytest -m mypy --tb=short -q
+      timeout: 120
+      optional: true
+
+    - name: test-isort
+      run: .venv/bin/pytest -m isort --tb=short -q
+      timeout: 120
+      optional: true
+
+    - name: test-autoflake
+      run: .venv/bin/pytest -m autoflake --tb=short -q
+      timeout: 120
+      optional: true
+
+    # ── Coverage ────────────────────────────────────────────────────
+    - name: coverage
+      run: |
+        .venv/bin/pytest --cov=src/prefact --cov-report=json:.pyqual/coverage.json -m "not slow" -q
+      timeout: 300
+
+    # ── Validation ──────────────────────────────────────────────────
+    - name: validate
+      tool: vallm
+
+    # ── Prefact self-scan ───────────────────────────────────────────
+    - name: prefact
+      tool: prefact
+      optional: true
+      when: any_stage_fail
+      timeout: 900
+
+    # ── LLX-powered code fix ────────────────────────────────────────
+    - name: fix
+      tool: llx-fix
+      optional: true
+      when: any_stage_fail
+      timeout: 1800
+
+    # ── Post-fix verification ───────────────────────────────────────
+    - name: verify
+      tool: vallm
+      optional: true
+      when: after_fix
+      timeout: 300
+
+    # ── Performance benchmark ───────────────────────────────────────
+    - name: benchmark
+      run: |
+        mkdir -p .pyqual
+        .venv/bin/pytest -m performance --tb=short -q 2>&1 | tee .pyqual/benchmark.txt
+      when: always
+      optional: true
+      timeout: 300
+
+  # ── Loop behavior ─────────────────────────────────────────────────
+  loop:
+    max_iterations: 3
+    on_fail: report      # report | create_ticket | block
+
+  # ── Environment (optional) ────────────────────────────────────────
+  env:
+    LLM_MODEL: openrouter/qwen/qwen3-coder-next
+    LLX_DEFAULT_TIER: balanced
+    LLX_VERBOSE: true

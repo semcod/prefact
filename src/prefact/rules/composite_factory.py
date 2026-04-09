@@ -9,7 +9,12 @@ from typing import List, Type
 
 from prefact.config import Config
 from prefact.models import Fix, Issue, ValidationResult
-from prefact.rules import BaseRule, get_all_rules, register
+
+try:
+    from prefact.rules import BaseRule, get_all_rules, register
+except ImportError:
+    from ..rules import BaseRule, get_all_rules, register
+
 from prefact.rules.strategies import (
     ParallelScanStrategy,
     SequentialScanStrategy,

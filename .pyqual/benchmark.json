@@ -1,0 +1,258 @@
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+Error in sorted-imports: [Errno 32] Broken pipe
+[
+  {
+    "name": "import prefact",
+    "suite": "startup",
+    "elapsed": 0.018,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 2.0,
+    "extra": {
+      "repeat": 3,
+      "all_times": [
+        0.018,
+        0.0188,
+        0.0189
+      ]
+    },
+    "error": null
+  },
+  {
+    "name": "import prefact.engine",
+    "suite": "startup",
+    "elapsed": 0.277,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 2.0,
+    "extra": {
+      "repeat": 3,
+      "all_times": [
+        0.3499,
+        0.277,
+        0.2792
+      ]
+    },
+    "error": null
+  },
+  {
+    "name": "import prefact.rules",
+    "suite": "startup",
+    "elapsed": 0.2722,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 2.0,
+    "extra": {
+      "repeat": 3,
+      "all_times": [
+        0.2727,
+        0.2843,
+        0.2722
+      ]
+    },
+    "error": null
+  },
+  {
+    "name": "prefact --help",
+    "suite": "cli",
+    "elapsed": 0.014,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 3.0,
+    "extra": {
+      "repeat": 3,
+      "all_times": [
+        0.0163,
+        0.0151,
+        0.014
+      ]
+    },
+    "error": null
+  },
+  {
+    "name": "prefact scan --help",
+    "suite": "cli",
+    "elapsed": 0.0142,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 3.0,
+    "extra": {
+      "repeat": 3,
+      "all_times": [
+        0.0164,
+        0.0142,
+        0.0157
+      ]
+    },
+    "error": null
+  },
+  {
+    "name": "full test suite",
+    "suite": "tests",
+    "elapsed": 21.9869,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 30.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_config.py",
+    "suite": "tests",
+    "elapsed": 0.3264,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_dependency_checker.py",
+    "suite": "tests",
+    "elapsed": 0.6302,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_engine.py",
+    "suite": "tests",
+    "elapsed": 18.9667,
+    "unit": "s",
+    "status": "FAIL",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_integrations.py",
+    "suite": "tests",
+    "elapsed": 3.9479,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_refactoring.py",
+    "suite": "tests",
+    "elapsed": 0.3132,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_relative_imports.py",
+    "suite": "tests",
+    "elapsed": 0.5935,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_rules.py",
+    "suite": "tests",
+    "elapsed": 0.5985,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pytest test_unused_imports.py",
+    "suite": "tests",
+    "elapsed": 0.616,
+    "unit": "s",
+    "status": "PASS",
+    "threshold": 15.0,
+    "extra": {
+      "returncode": 0
+    },
+    "error": null
+  },
+  {
+    "name": "scan 50\u00d71KB",
+    "suite": "scan",
+    "elapsed": 22.3352,
+    "unit": "s",
+    "status": "FAIL",
+    "threshold": 10.0,
+    "extra": {
+      "files": 50,
+      "issues_found": 1150,
+      "fixes_applied": 500,
+      "files_per_sec": 2.2
+    },
+    "error": null
+  },
+  {
+    "name": "scan 100\u00d71KB",
+    "suite": "scan",
+    "elapsed": 59.2972,
+    "unit": "s",
+    "status": "FAIL",
+    "threshold": 20.0,
+    "extra": {
+      "files": 100,
+      "issues_found": 2300,
+      "fixes_applied": 1000,
+      "files_per_sec": 1.7
+    },
+    "error": null
+  },
+  {
+    "name": "scan 200\u00d75KB",
+    "suite": "scan",
+    "elapsed": 147.4803,
+    "unit": "s",
+    "status": "FAIL",
+    "threshold": 40.0,
+    "extra": {
+      "files": 200,
+      "issues_found": 4600,
+      "fixes_applied": 2000,
+      "files_per_sec": 1.4
+    },
+    "error": null
+  },
+  {
+    "name": "scanner.scan (20 files, in-process)",
+    "suite": "throughput",
+    "elapsed": 0.0,
+    "unit": "s",
+    "status": "ERROR",
+    "threshold": null,
+    "extra": {},
+    "error": "[Errno 32] Broken pipe"
+  }
+]

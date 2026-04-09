@@ -7,7 +7,8 @@ from typing import Any, Dict, List
 
 import yaml
 
-from ._base import BaseManager, console, __version__
+from ._base import BaseManager, console
+from prefact import __version__
 
 
 class DocsManager(BaseManager):

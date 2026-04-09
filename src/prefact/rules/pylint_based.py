@@ -12,7 +12,11 @@ from typing import Dict, List, Optional
 
 from prefact.config import Config
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 class PylintHelper:

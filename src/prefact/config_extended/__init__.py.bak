@@ -1,0 +1,31 @@
+"""Extended configuration package public API."""
+
+from .constants import (
+    CONSTANT_3,
+    CONSTANT_4,
+    CONSTANT_8,
+    CONSTANT_88,
+    CONSTANT_104857600,
+    DEFAULT_CACHE_SIZE,
+    DEFAULT_EXCLUDE,
+    DEFAULT_INCLUDE,
+    DEFAULT_MAX_LINE_LENGTH,
+)
+from .config import ExtendedConfig
+from .generator import ConfigGenerator
+from .validation import ConfigValidator
+
+__all__ = [
+    "CONSTANT_3",
+    "CONSTANT_4",
+    "CONSTANT_8",
+    "CONSTANT_88",
+    "CONSTANT_104857600",
+    "DEFAULT_CACHE_SIZE",
+    "DEFAULT_EXCLUDE",
+    "DEFAULT_INCLUDE",
+    "DEFAULT_MAX_LINE_LENGTH",
+    "ExtendedConfig",
+    "ConfigGenerator",
+    "ConfigValidator",
+]

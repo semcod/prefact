@@ -7,7 +7,12 @@ at startup, significantly improving CLI cold-start performance.
 import importlib
 from typing import Dict, List, Optional, Type
 
-from prefact.rules import BaseRule
+try:
+    # Avoid circular import when registry is imported from __init__.py
+    from prefact.rules import BaseRule
+except ImportError:
+    # Fallback for when rules module is not fully initialized yet
+    from ..rules import BaseRule
 
 
 class LazyRuleRegistry:

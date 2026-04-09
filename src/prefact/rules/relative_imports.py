@@ -18,7 +18,11 @@ from prefact.models import Fix, Issue, Severity, ValidationResult
 
 # Constants
 DOT_CHAR_CODE = 46
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 # ── CST helpers ───────────────────────────────────────────────────────
@@ -95,7 +99,7 @@ class _RelativeImportFixer(cst.CSTTransformer):
         base_parts = parts[: len(parts) - up] if up else parts
 
         module_str = _module_to_str(module_node) if module_node else ""
-        result_parts = f"{list(base_parts)}{([module_str] if module_str else [])}"
+        result_parts = list(base_parts) + ([module_str] if module_str else [])
         return ".".join(result_parts) if result_parts else None
 
 

@@ -1,0 +1,25 @@
+"""Prefact logging package.
+
+This package preserves the original prefact.logging public API by re-exporting
+logger classes, formatters, levels, and exceptions.
+"""
+
+from prefact.logging.exceptions import (
+    ConfigurationError,
+    PprefactException,
+    PluginError,
+    RuleError,
+)
+from prefact.logging.formatters import JsonFormatter
+from prefact.logging.levels import LogLevel
+from prefact.logging.logger import PprefactLogger
+
+__all__ = [
+    "LogLevel",
+    "PprefactLogger",
+    "JsonFormatter",
+    "PprefactException",
+    "ConfigurationError",
+    "RuleError",
+    "PluginError",
+]

@@ -301,6 +301,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.31] - 2026-04-09
+
+### Docs
+- Update BENCHMARK.md
+- Update README.md
+- Update TODO.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_dependency_checker.py
+- Update tests/test_integrations.py
+
+### Other
+- Update .gitignore
+- Update .pyqual/benchmark.json
+- Update .pyqual/benchmark.txt
+- Update .pyqual/coverage.json
+- Update .pyqual/deps.json
+- Update .pyqual/llx_history.jsonl
+- Update .pyqual/pipeline.db
+- Update examples/.gitignore
+- Update examples/tests/test_examples.py
+- Update project.sh
+- ... and 29 more files
+
 ## [0.1.30] - 2026-03-27
 
 ### Docs

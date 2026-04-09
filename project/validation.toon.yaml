@@ -1,7 +1,7 @@
-# vallm batch | 161f | 90✓ 3⚠ 29✗ | 2026-03-27
+# vallm batch | 194f | 125✓ 3⚠ 19✗ | 2026-04-09
 
 SUMMARY:
-  scanned: 161  passed: 90 (55.9%)  warnings: 3  errors: 29  unsupported: 42
+  scanned: 194  passed: 125 (64.4%)  warnings: 3  errors: 19  unsupported: 50
 
 WARNINGS[3]{path,score}:
   vscode-extension/src/extension.ts,0.92
@@ -10,12 +10,14 @@ WARNINGS[3]{path,score}:
   src/prefact/config_extended.py,0.97
     issues[1]{rule,severity,message,line}:
       complexity.lizard_length,warning,generate_extended_config: 115 lines exceeds limit 100,276
-  src/prefact/rules/unused_imports.py,0.97
-    issues[2]{rule,severity,message,line}:
-      complexity.cyclomatic,warning,fix has cyclomatic complexity 21 (max: 15),111
-      complexity.lizard_cc,warning,fix: CC=19 exceeds limit 15,111
+  src/prefact/config_extended/generator.py,0.97
+    issues[1]{rule,severity,message,line}:
+      complexity.lizard_length,warning,generate_extended_config: 111 lines exceeds limit 100,17
 
-ERRORS[29]{path,score}:
+ERRORS[19]{path,score}:
+  .pyqual/benchmark.json,0.00
+    issues[1]{rule,severity,message,line}:
+      syntax.tree_sitter,error,tree-sitter found 34 parse error(s) in json,
   examples/01-individual-rules/relative-imports/after.py,0.57
     issues[8]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'mypackage.models' not found,3
@@ -28,69 +30,46 @@ ERRORS[29]{path,score}:
       python.import.resolvable,error,Module 'mypackage.utils' not found,26
   examples/01-individual-rules/relative-imports/before.py,0.57
     issues[7]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,3
-      python.import.resolvable,error,Module 'utils' not found,4
-      python.import.resolvable,error,Module 'config' not found,5
-      python.import.resolvable,error,Module 'models' not found,6
-      python.import.resolvable,error,Module 'utils' not found,7
-      python.import.resolvable,error,Module 'core' not found,22
-      python.import.resolvable,error,Module 'utils' not found,26
-  examples/04-custom-rules/custom_rules/__init__.py,0.57
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'no_todo_rule' not found,4
+      python.import.relative.resolvable,error,Relative import 'models' not found,3
+      python.import.relative.resolvable,error,Relative import 'utils' not found,4
+      python.import.relative.resolvable,error,Relative import 'config' not found,5
+      python.import.relative.resolvable,error,Relative import 'models' not found,6
+      python.import.relative.resolvable,error,Relative import 'utils' not found,7
+      python.import.relative.resolvable,error,Relative import 'core' not found,22
+      python.import.relative.resolvable,error,Relative import 'utils' not found,26
   examples/sample-project/core.py,0.57
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'utils' not found,3
-  examples/tests/test_examples.py,0.57
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'examples' not found,11
-  src/prefact/autonomous.py,0.57
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'autonomous' not found,14
   examples/sample-project/cli.py,0.74
     issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core' not found,5
+      python.import.relative.resolvable,error,Relative import 'core' not found,5
       python.import.resolvable,error,Module 'models' not found,6
       python.import.resolvable,error,Module 'utils' not found,7
   examples/01-individual-rules/wildcard-imports/after.py,0.79
     issues[2]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'utils' not found,4
-      python.import.resolvable,error,Module 'models' not found,5
+      python.import.relative.resolvable,error,Relative import 'models' not found,5
   examples/01-individual-rules/wildcard-imports/before.py,0.79
     issues[2]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'utils' not found,4
-      python.import.resolvable,error,Module 'models' not found,5
+      python.import.relative.resolvable,error,Relative import 'models' not found,5
   examples/02-multiple-rules/messy_module.py,0.82
     issues[5]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'utils' not found,7
-      python.import.resolvable,error,Module 'models' not found,8
-      python.import.resolvable,error,Module 'utils' not found,11
-      python.import.resolvable,error,Module 'models' not found,12
-      python.import.resolvable,error,Module 'config' not found,58
-  src/prefact/autonomous/__init__.py,0.82
-    issues[5]{rule,severity,message,line}:
-      python.import.resolvable,error,Module '_base' not found,15
-      python.import.resolvable,error,Module 'docs_manager' not found,16
-      python.import.resolvable,error,Module 'project_scanner' not found,17
-      python.import.resolvable,error,Module 'setup_manager' not found,18
-      python.import.resolvable,error,Module 'todo_manager' not found,19
+      python.import.relative.resolvable,error,Relative import 'utils' not found,7
+      python.import.relative.resolvable,error,Relative import 'models' not found,8
+      python.import.relative.resolvable,error,Relative import 'utils' not found,11
+      python.import.relative.resolvable,error,Relative import 'models' not found,12
+      python.import.relative.resolvable,error,Relative import 'config' not found,58
   examples/03-output-formats/sample_code.py,0.83
     issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'utils' not found,6
-      python.import.resolvable,error,Module 'models' not found,7
+      python.import.relative.resolvable,error,Relative import 'utils' not found,6
+      python.import.relative.resolvable,error,Relative import 'models' not found,7
   tests/test_config.py,0.89
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,7
-  src/prefact/rules/string_transformations.py,0.90
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'flynt' not found,271
-      python.import.resolvable,error,Module 'flynt.api' not found,272
-  src/prefact/autonomous/docs_manager.py,0.93
+  tests/test_dependency_checker.py,0.93
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module '_base' not found,10
-  src/prefact/performance/cache.py,0.93
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'diskcache' not found,16
+      python.import.resolvable,error,Module 'pytest' not found,9
   tests/test_engine.py,0.93
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,8
@@ -99,40 +78,25 @@ ERRORS[29]{path,score}:
       python.import.resolvable,error,Module 'pytest' not found,8
   examples/01-individual-rules/sorted-imports/after.py,0.94
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'local_module' not found,3
+      python.import.relative.resolvable,error,Relative import 'local_module' not found,3
   examples/01-individual-rules/sorted-imports/before.py,0.94
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'local_module' not found,3
+      python.import.relative.resolvable,error,Relative import 'local_module' not found,3
   tests/test_relative_imports.py,0.94
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,8
-  examples/06-api-usage/example.py,0.95
+  src/prefact/autonomous/dependency_checker.py,0.95
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'examples.custom_rules.no_todo_rule' not found,99
-  src/prefact/autonomous/setup_manager.py,0.95
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module '_base' not found,13
-  src/prefact/autonomous/todo_manager.py,0.95
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module '_base' not found,11
-  src/prefact/rules/isort_based.py,0.95
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'isort' not found,17
-  src/prefact/autonomous/project_scanner.py,0.96
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module '_base' not found,12
-  src/prefact/rules/importchecker_based.py,0.96
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'importchecker' not found,26
+      python.import.resolvable,error,Module 'tomli' not found,89
   tests/test_rules.py,0.96
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,8
-  tests/test_integrations.py,0.98
+  tests/test_integrations.py,0.97
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'pytest' not found,18
+      python.import.resolvable,error,Module 'pytest' not found,17
 
 UNSUPPORTED[4]{bucket,count}:
-  *.md,23
-  *.txt,2
+  *.md,24
+  *.txt,3
   *.yml,1
-  other,16
+  other,22

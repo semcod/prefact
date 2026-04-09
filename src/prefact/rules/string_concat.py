@@ -1,7 +1,7 @@
 """Rule: detect string concatenation with + that could use f-strings.
 
 Flags patterns like:
-    "Hello " + name + "!"
+    f"Hello {name}!"
 and suggests:
     f"Hello {name}!"
 
@@ -12,7 +12,11 @@ import ast
 from pathlib import Path
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 
 def _is_str_concat(node: ast.BinOp) -> bool:
@@ -28,7 +32,7 @@ def _is_str_concat(node: ast.BinOp) -> bool:
 def _flatten_add(node: ast.expr) -> list[ast.expr]:
     """Flatten nested BinOp(Add) into a list of operands."""
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
-        return f"{_flatten_add(node.left)}{_flatten_add(node.right)}"
+        return _flatten_add(node.left) + _flatten_add(node.right)
     return [node]
 
 

@@ -1,98 +1,119 @@
-# code2llm | 56f 11702L | python:54,typescript:1,shell:1 | 2026-03-27
-# CC̄=3.2 | critical:3/695 | dups:0 | cycles:0
+# code2llm | 75f 13272L | python:72,shell:1,typescript:1 | 2026-04-09
+# CC̄=3.1 | critical:3/790 | dups:11 | cycles:0
 
-HEALTH[3]:
-  🟡 CC    scan_file CC=15 (limit:15)
-  🟡 CC    fix CC=21 (limit:15)
+HEALTH[4]:
+  🔴 DUP   11 classes duplicated
   🟡 CC    from_yaml CC=15 (limit:15)
+  🟡 CC    from_yaml CC=15 (limit:15)
+  🟡 CC    scan_file CC=15 (limit:15)
 
-REFACTOR[1]:
-  1. split 3 high-CC methods  (CC>15)
+REFACTOR[2]:
+  1. rm duplicates  (-11 dup classes)
+  2. split 3 high-CC methods  (CC>15)
 
-PIPELINES[544]:
-  [1] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
+PIPELINES[630]:
+  [1] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
   [2] Src [__init__]: __init__
       PURITY: 100% pure
-  [3] Src [run]: run
+  [3] Src [process]: process → format_data
       PURITY: 100% pure
-  [4] Src [scan_only]: scan_only
+  [4] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [5] Src [run_file]: run_file
+  [5] Src [__init__]: __init__
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.2    ←in:0  →out:0
-  │ string_transformations     491L  6C   27m  CC=8      ←0
-  │ importchecker_based        480L  5C   24m  CC=14     ←0
-  │ isort_based                466L  4C   23m  CC=13     ←0
-  │ !! config_extended            465L  3C   18m  CC=15     ←4
-  │ autoflake_based            465L  5C   23m  CC=11     ←0
-  │ unimport_based             451L  5C   22m  CC=14     ←0
-  │ import_linter_based        445L  5C   24m  CC=8      ←0
-  │ logging                    434L  10C   28m  CC=4      ←0
-  │ cache                      433L  6C   37m  CC=5      ←10
-  │ mypy_based                 394L  6C   22m  CC=9      ←0
-  │ pylint_based               392L  5C   22m  CC=6      ←0
+  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
+  │ string_transformations     495L  6C   27m  CC=8      ←0
+  │ importchecker_based        484L  5C   24m  CC=14     ←0
+  │ isort_based                470L  4C   23m  CC=13     ←0
+  │ autoflake_based            469L  5C   23m  CC=11     ←0
+  │ !! config_extended            465L  3C   18m  CC=15     ←7  ×DUP
+  │ unimport_based             455L  5C   22m  CC=14     ←0
+  │ import_linter_based        449L  5C   24m  CC=8      ←0
+  │ logging                    434L  10C   28m  CC=4      ←0  ×DUP
+  │ cache                      433L  6C   37m  CC=5      ←0  ×DUP
+  │ mypy_based                 398L  6C   22m  CC=9      ←0
+  │ pylint_based               396L  5C   22m  CC=6      ←1
   │ git_hooks                  383L  2C   17m  CC=8      ←0
   │ parallel                   348L  4C   23m  CC=7      ←0
   │ __init__                   319L  3C   17m  CC=10     ←0
+  │ ruff_based                 311L  6C   19m  CC=4      ←0
   │ todo_manager               309L  1C   14m  CC=13     ←0
-  │ ruff_based                 307L  6C   19m  CC=4      ←0
-  │ composite_rules            268L  3C   16m  CC=12     ←0
-  │ registry                   250L  1C   13m  CC=8      ←8
+  │ benchmark                  293L  1C    6m  CC=7      ←0
+  │ composite_rules            273L  3C   16m  CC=12     ←0
+  │ registry                   255L  1C   13m  CC=8      ←8
+  │ dependency_checker         238L  1C   11m  CC=10     ←0
   │ cli                        237L  0C   10m  CC=6      ←1
-  │ migration                  228L  3C   10m  CC=5      ←0
-  │ relative_imports           215L  2C    9m  CC=14     ←0
-  │ llm_hallucinations         210L  1C    9m  CC=8      ←0
+  │ migration                  232L  3C   10m  CC=5      ←0
+  │ unused_imports             231L  1C   11m  CC=10     ←0
+  │ relative_imports           219L  2C    9m  CC=14     ←0
+  │ llm_hallucinations         214L  1C    9m  CC=8      ←0
   │ project_scanner            194L  1C    7m  CC=6      ←0
   │ config                     192L  2C   13m  CC=5      ←3
-  │ llm_generated_code         187L  1C    9m  CC=7      ←0
-  │ __init__                   185L  1C   16m  CC=7      ←0
+  │ llm_generated_code         191L  1C    9m  CC=7      ←0
+  │ __init__                   183L  1C   16m  CC=7      ←0
   │ __init__                   178L  1C    7m  CC=1      ←0
-  │ docs_manager               168L  1C    6m  CC=8      ←0
-  │ !! unused_imports             163L  1C    8m  CC=21     ←0
+  │ docs_manager               169L  1C    6m  CC=8      ←0
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
-  │ scanner                    152L  1C    7m  CC=12     ←0
-  │ strategies                 148L  4C   10m  CC=5      ←0
-  │ !! magic_numbers              134L  1C    6m  CC=15     ←0
+  │ generator                  158L  1C    3m  CC=12     ←0  ×DUP
+  │ scanner                    153L  1C    7m  CC=12     ←0
+  │ strategies                 152L  4C   10m  CC=5      ←0
+  │ !! magic_numbers              138L  1C    6m  CC=15     ←0
   │ setup_manager              121L  1C    3m  CC=9      ←0
-  │ composite_factory          114L  1C    2m  CC=4      ←0
+  │ composite_factory          119L  1C    2m  CC=4      ←0
+  │ !! config                     111L  1C    7m  CC=15     ←1  ×DUP
+  │ cache_adapters             106L  4C   16m  CC=3      ←0  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
-  │ duplicate_imports           76L  1C    3m  CC=11     ←0
+  │ duplicate_imports           80L  1C    3m  CC=11     ←0
+  │ cache_state                 74L  0C    7m  CC=2      ←2
+  │ string_concat               66L  1C    5m  CC=6      ←0
+  │ ai_boilerplate              66L  1C    3m  CC=4      ←0
+  │ validation                  65L  1C    6m  CC=6      ←1  ×DUP
+  │ cache_core                  64L  1C    7m  CC=3      ←10  ×DUP
   │ console                     64L  0C    1m  CC=14     ←0
-  │ string_concat               62L  1C    5m  CC=6      ←0
-  │ ai_boilerplate              62L  1C    3m  CC=4      ←0
-  │ sorted_imports              59L  1C    4m  CC=7      ←0
+  │ logger                      63L  2C   15m  CC=3      ←0  ×DUP
+  │ sorted_imports              63L  1C    4m  CC=7      ←0
+  │ print_statements            58L  1C    3m  CC=9      ←0
   │ json_reporter               57L  0C    2m  CC=4      ←1
-  │ print_statements            54L  1C    3m  CC=9      ←0
+  │ _ast_cache                  51L  0C    2m  CC=4      ←0
   │ fixer                       49L  1C    3m  CC=7      ←0
-  │ type_hints                  42L  1C    3m  CC=6      ←0
-  │ wildcard_imports            41L  1C    3m  CC=7      ←0
+  │ type_hints                  46L  1C    3m  CC=6      ←0
+  │ wildcard_imports            45L  1C    3m  CC=7      ←0
   │ __init__                    41L  0C    0m  CC=0.0    ←0
+  │ models                      34L  1C    3m  CC=13     ←0
   │ validator                   29L  1C    2m  CC=4      ←0
   │ _base                       27L  1C    1m  CC=1      ←0
+  │ validators                  26L  1C    4m  CC=4      ←0  ×DUP
+  │ constants                   24L  0C    0m  CC=0.0    ←0
+  │ exceptions                  23L  4C    3m  CC=2      ←0
+  │ formatters                  23L  1C    1m  CC=2      ←0
+  │ levels                      13L  1C    0m  CC=0.0    ←0
   │ builtin                     13L  0C    0m  CC=0.0    ←0
+  │ utils                        9L  0C    1m  CC=5      ←1
+  │ _base                        6L  0C    0m  CC=0.0    ←0
+  │ __init__                     6L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
-  │ extension.ts               441L  5C   48m  CC=14     ←25
+  │ extension.ts               440L  5C   48m  CC=14     ←29
   │
   ./                              CC̄=2.6    ←in:0  →out:0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
-  │ project.sh                  23L  0C    0m  CC=0.0    ←0
+  │ project.sh                  36L  0C    0m  CC=0.0    ←0
   │
 
 COUPLING:
                                     vscode-extension.src                 src.prefact  benchmark_ram_optimization
-        vscode-extension.src                          ──                         ←44                          ←1  hub
-                 src.prefact                          44                          ──                              !! fan-out
+        vscode-extension.src                          ──                         ←52                          ←1  hub
+                 src.prefact                          52                          ──                              !! fan-out
   benchmark_ram_optimization                           1                                                      ──
   CYCLES: none
-  HUB: vscode-extension.src/ (fan-in=45)
-  SMELL: src.prefact/ fan-out=44 → split needed
+  HUB: vscode-extension.src/ (fan-in=53)
+  SMELL: src.prefact/ fan-out=52 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

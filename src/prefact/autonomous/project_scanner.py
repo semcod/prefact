@@ -9,7 +9,7 @@ from prefact.config_extended import ExtendedConfig
 from prefact.engine import RefactoringEngine
 from prefact.scanner import Scanner
 
-from ._base import BaseManager, console, MIN_CODE_SIZE
+from prefact.autonomous._base import BaseManager, console, MIN_CODE_SIZE
 
 
 class ProjectScanner(BaseManager):

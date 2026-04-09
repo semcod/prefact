@@ -5,10 +5,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from prefact.config_extended import ExtendedConfig
+from prefact.config import Config
 from prefact.fixer import Fixer
 from prefact.scanner import Scanner
 
-from ._base import BaseManager, console, __version__
+from ._base import BaseManager, console
+from prefact import __version__
 
 
 class TodoManager(BaseManager):
@@ -214,10 +216,8 @@ class TodoManager(BaseManager):
             try:
                 config = ExtendedConfig.from_yaml(self.refact_config_path)
             except Exception:
-                from prefact.config import Config
                 config = Config.from_yaml(self.refact_config_path)
         else:
-            from prefact.config import Config
             config = Config()
         config.project_root = self.project_root
         return config

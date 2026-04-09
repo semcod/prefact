@@ -1,0 +1,17 @@
+{
+  "outdated_count": 2,
+  "packages": [
+    {
+      "name": "",
+      "message": "Outdated dependency: click 8.0.4 \u2192 8.3.1 (wheel)",
+      "file": "/home/tom/github/semcod/prefact/pyproject.toml",
+      "line": 43
+    },
+    {
+      "name": "",
+      "message": "Outdated dependency: rich 13.7.1 \u2192 14.3.3 (wheel)",
+      "file": "/home/tom/github/semcod/prefact/pyproject.toml",
+      "line": 46
+    }
+  ]
+}

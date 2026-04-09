@@ -82,7 +82,8 @@ class Scanner:
         # Load gitignore patterns
         self._gitignore_patterns = _load_gitignore(config.project_root)
         # Combine with config exclude patterns
-        self._exclude_patterns = [*config.exclude, *self._gitignore_patterns]
+        exclude_list = config.exclude or []
+        self._exclude_patterns = [*exclude_list, *self._gitignore_patterns]
         for rule_id, rule_cls in get_all_rules().items():
             if config.rule_enabled(rule_id):
                 self._rules.append(rule_cls(config))
@@ -90,7 +91,7 @@ class Scanner:
     def collect_files(self) -> list[Path]:
         root = self.config.project_root
         files: list[Path] = []
-        for pattern in self.config.include:
+        for pattern in self.config.include or []:
             for p in root.glob(pattern):
                 if p.is_file() and not self._excluded(p):
                     files.append(p)

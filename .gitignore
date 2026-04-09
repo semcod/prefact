@@ -1,3 +1,6 @@
+.env.example
+examples/.env.example
+vscode-extension/.env.example
 .idea
 litellm_config.yaml
 litellm-config.yaml

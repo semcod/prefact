@@ -10,13 +10,11 @@ This module provides autonomous functionality for prefact including:
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from rich.console import Console
-
 from ._base import console
-from .docs_manager import DocsManager
-from .project_scanner import ProjectScanner
-from .setup_manager import SetupManager
-from .todo_manager import TodoManager
+from prefact.autonomous.docs_manager import DocsManager
+from prefact.autonomous.project_scanner import ProjectScanner
+from prefact.autonomous.setup_manager import SetupManager
+from prefact.autonomous.todo_manager import TodoManager
 
 
 class AutonomousRefact:

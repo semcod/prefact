@@ -11,7 +11,7 @@ Please import from prefact.autonomous instead.
 """
 
 # Import the AutonomousRefact class from the new module structure
-from .autonomous import AutonomousRefact  # noqa: F401
+from prefact.autonomous import AutonomousRefact  # noqa: F401
 
 # Re-export everything for backward compatibility
 __all__ = ['AutonomousRefact']

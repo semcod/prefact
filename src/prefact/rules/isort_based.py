@@ -10,7 +10,11 @@ from typing import Dict, List, Optional
 from prefact.config import Config
 from prefact.config_extended import DEFAULT_MAX_LINE_LENGTH
 from prefact.models import Fix, Issue, Severity, ValidationResult
-from prefact.rules import BaseRule, register
+
+try:
+    from prefact.rules import BaseRule, register
+except ImportError:
+    from ..rules import BaseRule, register
 
 # Optional import - only import when needed
 try:
@@ -92,7 +96,7 @@ class ISortHelper:
                     start_line = i
             elif in_block and not stripped and not any(
                 lines[j].strip().startswith(("import ", "from "))
-                for j in range(f"{i}{1}", min(f"{i}{3}", len(lines)))
+                for j in range(i + 1, min(i + 3, len(lines)))
             ):
                 # End of import block
                 blocks.append({
