@@ -1,11 +1,8 @@
 """Base utilities for autonomous modules."""
 
 from pathlib import Path
-from typing import Tuple
 
 from rich.console import Console
-
-from prefact import __version__
 
 # Shared console instance
 console = Console()
@@ -17,7 +14,7 @@ HASH_BLOCK_SIZE = 65536
 
 class BaseManager:
     """Base class for autonomous managers."""
-    
+
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.refact_config_path = project_root / "prefact.yaml"

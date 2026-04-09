@@ -1,20 +1,17 @@
-# vallm batch | 196f | 127✓ 3⚠ 19✗ | 2026-04-09
+# vallm batch | 192f | 122✓ 2⚠ 21✗ | 2026-04-09
 
 SUMMARY:
-  scanned: 196  passed: 127 (64.8%)  warnings: 3  errors: 19  unsupported: 50
+  scanned: 192  passed: 122 (63.5%)  warnings: 2  errors: 21  unsupported: 49
 
-WARNINGS[3]{path,score}:
+WARNINGS[2]{path,score}:
   vscode-extension/src/extension.ts,0.83
     issues[1]{rule,severity,message,line}:
       js.import.resolvable,warning,Module 'vscode' not found,1
-  src/prefact/config_extended.py,0.97
-    issues[1]{rule,severity,message,line}:
-      complexity.lizard_length,warning,generate_extended_config: 115 lines exceeds limit 100,276
   src/prefact/config_extended/generator.py,0.97
     issues[1]{rule,severity,message,line}:
       complexity.lizard_length,warning,generate_extended_config: 111 lines exceeds limit 100,17
 
-ERRORS[19]{path,score}:
+ERRORS[21]{path,score}:
   .pyqual/benchmark.json,0.00
     issues[1]{rule,severity,message,line}:
       syntax.tree_sitter,error,tree-sitter found 34 parse error(s) in json,
@@ -67,6 +64,9 @@ ERRORS[19]{path,score}:
   tests/test_config.py,0.89
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,7
+  src/prefact/performance/cache_state.py,0.91
+    issues[1]{rule,severity,message,line}:
+      python.import.relative.resolvable,error,Relative import 'cache_core' not found,10
   tests/test_dependency_checker.py,0.93
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,9
@@ -82,6 +82,9 @@ ERRORS[19]{path,score}:
   examples/01-individual-rules/sorted-imports/before.py,0.94
     issues[1]{rule,severity,message,line}:
       python.import.relative.resolvable,error,Relative import 'local_module' not found,3
+  src/prefact/performance/cache_adapters.py,0.94
+    issues[1]{rule,severity,message,line}:
+      python.import.relative.resolvable,error,Relative import 'cache_core' not found,12
   tests/test_relative_imports.py,0.94
     issues[1]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'pytest' not found,8
@@ -99,4 +102,4 @@ UNSUPPORTED[4]{bucket,count}:
   *.md,24
   *.txt,3
   *.yml,1
-  other,22
+  other,21

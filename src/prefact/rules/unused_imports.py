@@ -1,5 +1,6 @@
 import ast
 from pathlib import Path
+
 from prefact.models import Fix, Issue, Severity, ValidationResult
 
 try:
@@ -82,14 +83,14 @@ class UnusedImports(BaseRule):
         """Process ImportFrom node and mark unused imports for removal."""
         unused_names_in_import = []
         all_unused = True
-        
+
         for alias in node.names:
             name = alias.asname or alias.name
             if name in unused_names:
                 unused_names_in_import.append(alias.name)
             else:
                 all_unused = False
-        
+
         if all_unused:
             # Remove entire import line
             lines_to_remove.add(node.lineno)
@@ -120,14 +121,14 @@ class UnusedImports(BaseRule):
         """Process Import node and mark unused imports for removal."""
         unused_aliases = []
         all_unused = True
-        
+
         for alias in node.names:
             name = alias.asname or alias.name.split(".")[0]
             if name in unused_names:
                 unused_aliases.append(alias.name)
             else:
                 all_unused = False
-        
+
         if all_unused:
             # Remove entire import line
             lines_to_remove.add(node.lineno)

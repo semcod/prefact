@@ -1,15 +1,7 @@
-# code2llm/evolution | 711 func | 65f | 2026-04-09
+# code2llm/evolution | 659 func | 62f | 2026-04-09
 
-NEXT[3] (ranked by impact):
-  [1] !  SPLIT-FUNC      ExtendedConfig.from_yaml  CC=15  fan=16
-      WHY: CC=15 exceeds 15
-      EFFORT: ~1h  IMPACT: 240
-
-  [2] !  SPLIT-FUNC      ExtendedConfig.from_yaml  CC=15  fan=16
-      WHY: CC=15 exceeds 15
-      EFFORT: ~1h  IMPACT: 240
-
-  [3] !  SPLIT-FUNC      MagicNumberRule.scan_file  CC=15  fan=9
+NEXT[1] (ranked by impact):
+  [1] !  SPLIT-FUNC      MagicNumberRule.scan_file  CC=15  fan=9
       WHY: CC=15 exceeds 15
       EFFORT: ~1h  IMPACT: 135
 
@@ -20,7 +12,7 @@ METRICS-TARGET:
   CC̄:          3.1 → ≤2.2
   max-CC:      15 → ≤7
   god-modules: 0 → 0
-  high-CC(≥15): 3 → ≤1
+  high-CC(≥15): 1 → ≤0
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):

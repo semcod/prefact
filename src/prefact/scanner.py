@@ -16,7 +16,7 @@ def _load_gitignore(root: Path) -> list[str]:
     patterns = []
     if gitignore_path.exists():
         try:
-            with open(gitignore_path, "r", encoding="utf-8") as f:
+            with open(gitignore_path, encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
                     # Skip empty lines and comments
@@ -34,18 +34,18 @@ def _match_gitignore_pattern(path: str, pattern: str) -> bool:
         pattern = pattern.rstrip("/")
         if not path.endswith("/"):
             path = f"{path}/"
-    
+
     # Handle negation patterns (starting with !)
     if pattern.startswith("!"):
         return False  # Negation handled separately
-    
+
     # Convert pattern to fnmatch format
     # ** matches any number of directories
     if "**" in pattern:
         # Split path and pattern
         path_parts = path.split("/")
         pattern_parts = pattern.split("/")
-        
+
         # Handle ** at start
         if pattern_parts[0] == "**":
             # Match remaining pattern anywhere in path
@@ -109,7 +109,7 @@ class Scanner:
             except (OSError, UnicodeDecodeError):
                 continue
         return self.scan_sources(sources)
-    
+
     def scan_sources(self, sources: dict[Path, str]) -> dict[Path, list[Issue]]:
         """Scan files using preloaded sources to avoid I/O operations."""
         results: dict[Path, list[Issue]] = {}
@@ -126,12 +126,12 @@ class Scanner:
         rel = str(path.relative_to(self.config.project_root))
         # Also check the full path string for pattern matching
         path_str = str(path)
-        
+
         for pat in self._exclude_patterns:
             # Skip empty patterns
             if not pat:
                 continue
-                
+
             # Check if pattern matches the relative path
             if _match_gitignore_pattern(rel, pat):
                 return True
@@ -149,5 +149,5 @@ class Scanner:
                 return True
             if "node_modules" in path_str:
                 return True
-                
+
         return False

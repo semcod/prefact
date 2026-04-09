@@ -11,10 +11,9 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 from prefact.autonomous._base import BaseManager, console
-
 
 # Regex for requirements.txt lines: package==version or package>=version etc.
 _REQ_RE = re.compile(

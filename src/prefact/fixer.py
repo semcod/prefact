@@ -24,7 +24,7 @@ class Fixer:
         except (OSError, UnicodeDecodeError):
             return "", []
         return self.fix_file_with_source(path, source, issues, dry_run=dry_run)
-    
+
     def fix_file_with_source(
         self, path: Path, source: str, issues: list[Issue], *, dry_run: bool = False,
     ) -> tuple[str, list[Fix]]:

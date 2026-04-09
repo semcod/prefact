@@ -69,23 +69,33 @@ def get_rule(rule_id: str) -> type["BaseRule"]:
 
 
 # Force-import concrete rules so they self-register.
-from prefact.rules.relative_imports import RelativeToAbsoluteImports as _r1  # noqa: F401, E402
-from prefact.rules.unused_imports import UnusedImports as _r2  # noqa: F401, E402
 from prefact.rules.duplicate_imports import DuplicateImports as _r3  # noqa: F401, E402
-from prefact.rules.wildcard_imports import WildcardImports as _r4  # noqa: F401, E402
+from prefact.rules.print_statements import PrintStatements as _r7  # noqa: F401, E402
+from prefact.rules.relative_imports import (
+    RelativeToAbsoluteImports as _r1,  # noqa: F401, E402
+)
 from prefact.rules.sorted_imports import SortedImports as _r5  # noqa: F401, E402
 from prefact.rules.string_concat import StringConcatToFstring as _r6  # noqa: F401, E402
-from prefact.rules.print_statements import PrintStatements as _r7  # noqa: F401, E402
 from prefact.rules.type_hints import MissingReturnType as _r8  # noqa: F401, E402
+from prefact.rules.unused_imports import UnusedImports as _r2  # noqa: F401, E402
+from prefact.rules.wildcard_imports import WildcardImports as _r4  # noqa: F401, E402
 
 # Import new integration rules so they self-register
 # Only import if dependencies are available
 try:
     from prefact.rules.ruff_based import (  # noqa: F401, E402
         RuffDuplicateImports as _ruff_1,
+    )
+    from prefact.rules.ruff_based import (
         RuffPrintStatements as _ruff_2,
+    )
+    from prefact.rules.ruff_based import (
         RuffSortedImports as _ruff_3,
+    )
+    from prefact.rules.ruff_based import (
         RuffUnusedImports as _ruff_4,
+    )
+    from prefact.rules.ruff_based import (
         RuffWildcardImports as _ruff_5,
     )
 except ImportError:
@@ -94,85 +104,133 @@ except ImportError:
 try:
     from prefact.rules.mypy_based import (  # noqa: F401, E402
         MyPyMissingReturnType as _mypy_1,
+    )
+    from prefact.rules.mypy_based import (
         MyPyTypeChecking as _mypy_2,
+    )
+    from prefact.rules.mypy_based import (
         SmartReturnTypeRule as _mypy_3,
     )
 except ImportError:
     pass
 
 try:
-    from prefact.rules.isort_based import (  # noqa: F401, E402
-        ISortedImports as _isort_1,
-        ImportSectionSeparator as _isort_2,
+    from prefact.rules.isort_based import (
         CustomImportOrganization as _isort_3,
     )
+    from prefact.rules.isort_based import (
+        ImportSectionSeparator as _isort_2,
+    )
+    from prefact.rules.isort_based import (  # noqa: F401, E402
+        ISortedImports as _isort_1,
+    )
 except ImportError:
     pass
 
 try:
-    from prefact.rules.autoflake_based import (  # noqa: F401, E402
-        AutoflakeUnusedImports as _autoflake_1,
-        AutoflakeUnusedVariables as _autoflake_2,
-        AutoflakeDuplicateKeys as _autoflake_3,
+    from prefact.rules.autoflake_based import (
         AutoflakeAll as _autoflake_4,
     )
+    from prefact.rules.autoflake_based import (
+        AutoflakeDuplicateKeys as _autoflake_3,
+    )
+    from prefact.rules.autoflake_based import (  # noqa: F401, E402
+        AutoflakeUnusedImports as _autoflake_1,
+    )
+    from prefact.rules.autoflake_based import (
+        AutoflakeUnusedVariables as _autoflake_2,
+    )
 except ImportError:
     pass
 
 try:
-    from prefact.rules.string_transformations import (  # noqa: F401, E402
-        StringConcatToFString as _string_1,
-        FlyntStringFormatting as _string_2,
+    from prefact.rules.string_transformations import (
         ContextAwareStringConcat as _string_3,
     )
+    from prefact.rules.string_transformations import (
+        FlyntStringFormatting as _string_2,
+    )
+    from prefact.rules.string_transformations import (  # noqa: F401, E402
+        StringConcatToFString as _string_1,
+    )
 except ImportError:
     pass
 
 try:
-    from prefact.rules.pylint_based import (  # noqa: F401, E402
-        PylintPrintStatements as _pylint_1,
-        PylintStringConcat as _pylint_2,
+    from prefact.rules.pylint_based import (
         PylintComprehensive as _pylint_3,
     )
-except ImportError:
-    pass
-
-try:
-    from prefact.rules.unimport_based import (  # noqa: F401, E402
-        UnimportUnusedImports as _unimport_1,
-        UnimportDuplicateImports as _unimport_2,
-        UnimportStarImports as _unimport_3,
-        UnimportAll as _unimport_4,
+    from prefact.rules.pylint_based import (  # noqa: F401, E402
+        PylintPrintStatements as _pylint_1,
+    )
+    from prefact.rules.pylint_based import (
+        PylintStringConcat as _pylint_2,
     )
 except ImportError:
     pass
 
 try:
+    from prefact.rules.unimport_based import (
+        UnimportAll as _unimport_4,
+    )
+    from prefact.rules.unimport_based import (
+        UnimportDuplicateImports as _unimport_2,
+    )
+    from prefact.rules.unimport_based import (
+        UnimportStarImports as _unimport_3,
+    )
+    from prefact.rules.unimport_based import (  # noqa: F401, E402
+        UnimportUnusedImports as _unimport_1,
+    )
+except ImportError:
+    pass
+
+try:
+    from prefact.rules.importchecker_based import (
+        ImportCheckerDuplicateImports as _ic_2,
+    )
     from prefact.rules.importchecker_based import (  # noqa: F401, E402
         ImportCheckerUnusedImports as _ic_1,
-        ImportCheckerDuplicateImports as _ic_2,
+    )
+    from prefact.rules.importchecker_based import (
         ImportDependencyAnalysis as _ic_3,
+    )
+    from prefact.rules.importchecker_based import (
         ImportOptimizer as _ic_4,
     )
 except ImportError:
     pass
 
 try:
+    from prefact.rules.import_linter_based import (
+        ImportLinterCustomArchitecture as _il_4,
+    )
+    from prefact.rules.import_linter_based import (
+        ImportLinterIndependence as _il_3,
+    )
     from prefact.rules.import_linter_based import (  # noqa: F401, E402
         ImportLinterLayers as _il_1,
+    )
+    from prefact.rules.import_linter_based import (
         ImportLinterNoRelative as _il_2,
-        ImportLinterIndependence as _il_3,
-        ImportLinterCustomArchitecture as _il_4,
     )
 except ImportError:
     pass
 # Import composite rules from new modules
-from prefact.rules.composite_rules import (  # noqa: F401, E402
-    CompositeUnusedImports as _comp_1,
+from prefact.rules.ai_boilerplate import AIBoilerplateRule as _llm_4  # noqa: F401, E402
+from prefact.rules.composite_rules import (
     CompositeImportRules as _comp_2,
+)
+from prefact.rules.composite_rules import (
     CompositeTypeChecking as _comp_3,
 )
-from prefact.rules.llm_hallucinations import LLMHallucinationRule as _llm_1  # noqa: F401, E402
+from prefact.rules.composite_rules import (  # noqa: F401, E402
+    CompositeUnusedImports as _comp_1,
+)
+from prefact.rules.llm_generated_code import (
+    LLMGeneratedCodeRule as _llm_3,  # noqa: F401, E402
+)
+from prefact.rules.llm_hallucinations import (
+    LLMHallucinationRule as _llm_1,  # noqa: F401, E402
+)
 from prefact.rules.magic_numbers import MagicNumberRule as _llm_2  # noqa: F401, E402
-from prefact.rules.llm_generated_code import LLMGeneratedCodeRule as _llm_3  # noqa: F401, E402
-from prefact.rules.ai_boilerplate import AIBoilerplateRule as _llm_4  # noqa: F401, E402

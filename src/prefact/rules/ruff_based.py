@@ -15,7 +15,7 @@ except ImportError:
 
 class RuffHelper:
     """Helper class for Ruff operations."""
-    
+
     @staticmethod
     def check_file(file_path: Path, select_codes: List[str]) -> List[Dict]:
         """Run Ruff on a single file and return JSON results."""
@@ -26,13 +26,13 @@ class RuffHelper:
                 "--output-format", "json",
                 "--no-fix"
             ], capture_output=True, text=True, check=False)  # Use check=False to handle non-zero exit
-            
+
             if result.stdout.strip():
                 return json.loads(result.stdout)
             return []
         except (subprocess.CalledProcessError, json.JSONDecodeError):
             return []
-    
+
     @staticmethod
     def fix_file(file_path: Path, select_codes: List[str]) -> bool:
         """Run Ruff with --fix on a file."""
@@ -45,20 +45,20 @@ class RuffHelper:
             return True
         except subprocess.CalledProcessError:
             return False
-    
+
     @staticmethod
     def fix_source(source: str, select_codes: List[str]) -> str:
         """Fix source code in memory using Ruff."""
         import tempfile
-        
+
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
-        
+
         try:
             success = RuffHelper.fix_file(Path(tmp_path), select_codes)
             if success:
-                with open(tmp_path, 'r') as f:
+                with open(tmp_path) as f:
                     return f.read()
             return source
         finally:
@@ -69,14 +69,14 @@ class RuffHelper:
 @register
 class RuffWildcardImports(BaseRule):
     """Wildcard imports detection using Ruff."""
-    
+
     rule_id = "wildcard-imports"
     description = "Detect wildcard imports (from x import *)"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = RuffHelper.check_file(path, ["F403"])  # F403 = star-imports
-        
+
         for item in results:
             issues.append(Issue(
                 rule_id=self.rule_id,
@@ -87,13 +87,13 @@ class RuffWildcardImports(BaseRule):
                 severity=Severity.WARNING,
                 original=item["message"]
             ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # Ruff doesn't auto-fix wildcard imports, so we just report
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return ValidationResult(file=path, passed=True, checks=[], errors=[])
 
@@ -101,19 +101,19 @@ class RuffWildcardImports(BaseRule):
 @register
 class RuffPrintStatements(BaseRule):
     """Print statements detection using Ruff."""
-    
+
     rule_id = "print-statements"
     description = "Detect print statements"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = RuffHelper.check_file(path, ["T201"])  # T201 = print
-        
+
         for item in results:
             # Check if file should be ignored
             if self._should_ignore_file(path):
                 continue
-                
+
             issues.append(Issue(
                 rule_id=self.rule_id,
                 file=path,
@@ -123,22 +123,22 @@ class RuffPrintStatements(BaseRule):
                 severity=Severity.INFO,
                 original="print()"
             ))
-        
+
         return issues
-    
+
     def _should_ignore_file(self, path: Path) -> bool:
         """Check if file should be ignored based on config."""
         ignore_patterns = getattr(self.config, 'ignore_print_patterns', [])
         return any(pattern in str(path) for pattern in ignore_patterns)
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
-        
+
         # Ruff can remove print statements
         success = RuffHelper.fix_file(path, ["T201"])
         fixes = []
-        
+
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
@@ -150,9 +150,9 @@ class RuffPrintStatements(BaseRule):
                     applied=True
                 ))
             return fixed_source, fixes
-        
+
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return ValidationResult(file=path, passed=True, checks=[], errors=[])
 
@@ -160,14 +160,14 @@ class RuffPrintStatements(BaseRule):
 @register
 class RuffUnusedImports(BaseRule):
     """Unused imports detection and removal using Ruff."""
-    
+
     rule_id = "unused-imports"
     description = "Detect and remove unused imports"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = RuffHelper.check_file(path, ["F401"])  # F401 = unused-import
-        
+
         for item in results:
             # Extract import name from message
             message = item["message"]
@@ -182,17 +182,17 @@ class RuffUnusedImports(BaseRule):
                     severity=Severity.INFO,
                     original=import_name
                 ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
-        
+
         # Use Ruff to remove unused imports
         success = RuffHelper.fix_file(path, ["F401"])
         fixes = []
-        
+
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
@@ -204,9 +204,9 @@ class RuffUnusedImports(BaseRule):
                     applied=True
                 ))
             return fixed_source, fixes
-        
+
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Verify no unused imports remain
         remaining = RuffHelper.check_file(path, ["F401"])
@@ -221,14 +221,14 @@ class RuffUnusedImports(BaseRule):
 @register
 class RuffSortedImports(BaseRule):
     """Import sorting using Ruff."""
-    
+
     rule_id = "sorted-imports"
     description = "Sort imports according to PEP8"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = RuffHelper.check_file(path, ["I001", "I002"])  # I001 = unsorted, I002 = missing newline
-        
+
         for item in results:
             issues.append(Issue(
                 rule_id=self.rule_id,
@@ -239,17 +239,17 @@ class RuffSortedImports(BaseRule):
                 severity=Severity.INFO,
                 original="unsorted imports"
             ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
-        
+
         # Use Ruff to sort imports
         success = RuffHelper.fix_file(path, ["I001", "I002"])
         fixes = []
-        
+
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
@@ -261,9 +261,9 @@ class RuffSortedImports(BaseRule):
                     applied=True
                 ))
             return fixed_source, fixes
-        
+
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Verify imports are sorted
         remaining = RuffHelper.check_file(path, ["I001", "I002"])
@@ -278,16 +278,16 @@ class RuffSortedImports(BaseRule):
 @register
 class RuffDuplicateImports(BaseRule):
     """Duplicate imports detection using Ruff."""
-    
+
     rule_id = "duplicate-imports"
     description = "Detect duplicate imports"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         # Ruff doesn't have a specific code for duplicate imports
         # We'll use F811 (redefined) which catches some cases
         results = RuffHelper.check_file(path, ["F811"])
-        
+
         for item in results:
             if "redefined" in item["message"].lower() and "import" in item["message"].lower():
                 issues.append(Issue(
@@ -299,13 +299,13 @@ class RuffDuplicateImports(BaseRule):
                     severity=Severity.WARNING,
                     original="duplicate import"
                 ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # Ruff doesn't auto-fix duplicate imports
         # Would need custom implementation
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return ValidationResult(file=path, passed=True, checks=[], errors=[])

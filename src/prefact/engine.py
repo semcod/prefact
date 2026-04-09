@@ -31,7 +31,7 @@ class RefactoringEngine:
 
         # Preload small files into RAM to avoid multiple I/O operations
         sources = self._preload_sources(files)
-        
+
         # Separate files that weren't preloaded (large files)
         large_files = [f for f in files if f not in sources]
 
@@ -41,7 +41,7 @@ class RefactoringEngine:
             issues_map.update(self.scanner.scan_sources(sources))
         if large_files:
             issues_map.update(self.scanner.scan(large_files))
-            
+
         for file_issues in issues_map.values():
             result.issues_found.extend(file_issues)
 
@@ -69,39 +69,39 @@ class RefactoringEngine:
 
     def scan_only(self) -> PipelineResult:
         result = PipelineResult(dry_run=True)
-        
+
         # Collect all files first
         files = self.scanner.collect_files()
         if not files:
             return result
-            
+
         # Preload small files into RAM
         sources = self._preload_sources(files)
-        
+
         # Separate files that weren't preloaded (large files)
         large_files = [f for f in files if f not in sources]
-        
+
         # Scan both preloaded and large files
         issues_map = {}
         if sources:
             issues_map.update(self.scanner.scan_sources(sources))
         if large_files:
             issues_map.update(self.scanner.scan(large_files))
-            
+
         for file_issues in issues_map.values():
             result.issues_found.extend(file_issues)
-            
+
         return result
 
     def run_file(self, path: Path, *, dry_run: bool = False) -> PipelineResult:
         result = PipelineResult(dry_run=dry_run)
-        
+
         # For single file, just load it directly
         try:
             source = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             return result
-            
+
         sources = {path: source}
         issues_map = self.scanner.scan_sources(sources)
         issues = issues_map.get(path, [])
@@ -117,7 +117,7 @@ class RefactoringEngine:
         validations = self.validator.validate_file(path, source, fixed_source, issues)
         result.validations.extend(validations)
         return result
-    
+
     def _preload_sources(self, files: list[Path] | None = None) -> dict[Path, str]:
         """Preload small file sources into RAM to avoid multiple I/O operations.
         
@@ -129,11 +129,11 @@ class RefactoringEngine:
         """
         sources = {}
         max_file_size = 100 * 1024  # 100KB
-        
+
         # Collect files if not provided
         if files is None:
             files = self.scanner.collect_files()
-        
+
         # Load file contents into RAM
         for path in files:
             try:
@@ -142,17 +142,17 @@ class RefactoringEngine:
                     if self.config.verbose:
                         print(f"Skipping large file (>{max_file_size//1024}KB): {path}")
                     continue
-                    
+
                 source = path.read_text(encoding="utf-8")
                 sources[path] = source
             except (OSError, UnicodeDecodeError):
                 # Skip files that can't be read
                 continue
-                
+
         if self.config.verbose:
             total_files = len(files) if files else 0
             preloaded_count = len(sources)
             total_bytes = sum(len(s) for s in sources.values())
             print(f"Preloaded {preloaded_count}/{total_files} files into RAM ({total_bytes} bytes)")
-            
+
         return sources

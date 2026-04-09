@@ -1,51 +1,50 @@
-# prefact | 711 func | 65f | 14989L | python | 2026-04-09
+# prefact | 659 func | 62f | 14026L | python | 2026-04-09
 
 HEALTH:
-  CC̄=3.1  critical=22 (limit:10)  dup=15  cycles=0
+  CC̄=3.1  critical=19 (limit:10)  dup=7  cycles=0
 
 ALERTS[20]:
   !!! high_fan_out     PrefactTreeProvider.activate = 20 (limit:10)
   !!  high_fan_out     CompositeRuleFactory.create_composite_rule = 18 (limit:10)
-  !!  high_fan_out     ExtendedConfig.from_yaml = 16 (limit:10)
-  !!  high_fan_out     ExtendedConfig.from_yaml = 16 (limit:10)
   !!  high_fan_out     RefactoringEngine.run = 15 (limit:10)
   !!  high_fan_out     DocsManager.update_planfile = 15 (limit:10)
   !!  high_fan_out     ProjectScanner._scan_files_parallel = 15 (limit:10)
-  !   cc_exceeded      ExtendedConfig.from_yaml = 15 (limit:15)
-  !   cc_exceeded      ExtendedConfig.from_yaml = 15 (limit:15)
   !   cc_exceeded      MagicNumberRule.scan_file = 15 (limit:15)
+  !   high_fan_out     ExtendedConfig.from_yaml = 14 (limit:10)
+  !   high_fan_out     benchmark_file = 14 (limit:10)
+  !   high_fan_out     benchmark_without_rampreload = 13 (limit:10)
+  !   high_fan_out     cached_file_operation = 13 (limit:10)
 
-MODULES[75] (top by size):
+MODULES[73] (top by size):
   M[src/prefact/rules/string_transformations.py] 495L C:6 F:27 CC↑8 D:0 (python)
   M[src/prefact/rules/importchecker_based.py] 484L C:5 F:24 CC↑14 D:0 (python)
   M[src/prefact/rules/isort_based.py] 470L C:4 F:23 CC↑13 D:0 (python)
   M[src/prefact/rules/autoflake_based.py] 469L C:5 F:23 CC↑11 D:0 (python)
-  M[src/prefact/config_extended.py] 465L C:3 F:18 CC↑15 D:0 (python)
   M[src/prefact/rules/unimport_based.py] 455L C:5 F:22 CC↑14 D:0 (python)
   M[src/prefact/rules/import_linter_based.py] 449L C:5 F:24 CC↑8 D:0 (python)
-  M[vscode-extension/src/extension.ts] 440L C:5 F:48 CC↑14 D:29 (typescript)
-  M[src/prefact/logging.py] 434L C:10 F:28 CC↑4 D:0 (python)
+  M[vscode-extension/src/extension.ts] 437L C:5 F:48 CC↑14 D:27 (typescript)
   M[src/prefact/performance/cache.py] 433L C:6 F:37 CC↑5 D:0 (python)
   M[src/prefact/rules/mypy_based.py] 398L C:6 F:22 CC↑9 D:0 (python)
-  M[src/prefact/rules/pylint_based.py] 396L C:5 F:22 CC↑6 D:1 (python)
+  M[src/prefact/rules/pylint_based.py] 396L C:5 F:22 CC↑6 D:0 (python)
   M[src/prefact/git_hooks.py] 383L C:2 F:17 CC↑8 D:0 (python)
-  M[src/prefact/performance/parallel.py] 348L C:4 F:23 CC↑7 D:0 (python)
+  M[src/prefact/performance/parallel.py] 347L C:4 F:23 CC↑7 D:0 (python)
   M[src/prefact/plugins/__init__.py] 319L C:3 F:17 CC↑10 D:0 (python)
-  LANGS: python:73/typescript:1/shell:1
+  M[src/prefact/rules/ruff_based.py] 311L C:6 F:19 CC↑4 D:0 (python)
+  M[src/prefact/autonomous/todo_manager.py] 309L C:1 F:14 CC↑13 D:0 (python)
+  LANGS: python:71/typescript:1/shell:1
 
 HOTSPOTS[10]:
   ★ PrefactTreeProvider.activate fan=20  // Orchestrates 20 calls
   ★ CompositeRuleFactory.create_composite_rule fan=18  // Create a composite rule dynamically.
-  ★ ExtendedConfig.from_yaml fan=16  // Load configuration from YAML file with environment support.
-  ★ ExtendedConfig.from_yaml fan=16  // Load configuration from YAML file with environment support.
   ★ RefactoringEngine.run fan=15  // Orchestrates 15 calls
+  ★ DocsManager.update_planfile fan=15  // Update planfile.yaml with new tickets.
+  ★ ProjectScanner._scan_files_parallel fan=15  // Scan files using parallel processing.
 
-REFACTOR[6]:
-  [1] M/L Split ExtendedConfig.from_yaml (CC=15 → target CC<10)
-  [2] M/L Split ExtendedConfig.from_yaml (CC=15 → target CC<10)
-  [3] M/L Split MagicNumberRule.scan_file (CC=15 → target CC<10)
-  [4] M/M Reduce PrefactTreeProvider.activate fan-out (currently 20)
-  [5] M/M Reduce CompositeRuleFactory.create_composite_rule fan-out (currently 18)
+REFACTOR[4]:
+  [1] M/L Split MagicNumberRule.scan_file (CC=15 → target CC<10)
+  [2] M/M Reduce PrefactTreeProvider.activate fan-out (currently 20)
+  [3] M/M Reduce CompositeRuleFactory.create_composite_rule fan-out (currently 18)
+  [4] M/M Reduce RefactoringEngine.run fan-out (currently 15)
 
 EVOLUTION:
-  2026-04-09 CC̄=3.1 crit=22 14989L // Automated analysis
+  2026-04-09 CC̄=3.1 crit=19 14026L // Automated analysis

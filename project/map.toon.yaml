@@ -1,10 +1,10 @@
-# prefact | 74f 12807L | shell:1,python:72,typescript:1 | 2026-04-09
-# stats: 711 func | 0 cls | 74 mod | CC̄=3.1 | critical:3 | cycles:0
-# alerts[5]: fan-out PrefactTreeProvider.activate=20; fan-out CompositeRuleFactory.create_composite_rule=18; fan-out ExtendedConfig.from_yaml=16; fan-out ExtendedConfig.from_yaml=16; CC ExtendedConfig.from_yaml=15
-# hotspots[5]: PrefactTreeProvider.activate fan=20; CompositeRuleFactory.create_composite_rule fan=18; ExtendedConfig.from_yaml fan=16; ExtendedConfig.from_yaml fan=16; RefactoringEngine.run fan=15
+# prefact | 73f 12315L | shell:1,python:71,typescript:1 | 2026-04-09
+# stats: 659 func | 0 cls | 73 mod | CC̄=3.1 | critical:1 | cycles:0
+# alerts[5]: fan-out PrefactTreeProvider.activate=20; fan-out CompositeRuleFactory.create_composite_rule=18; CC MagicNumberRule.scan_file=15; fan-out DocsManager.update_planfile=15; fan-out ProjectScanner._scan_files_parallel=15
+# hotspots[5]: PrefactTreeProvider.activate fan=20; CompositeRuleFactory.create_composite_rule fan=18; RefactoringEngine.run fan=15; DocsManager.update_planfile fan=15; ProjectScanner._scan_files_parallel fan=15
 # evolution: CC̄ 3.1→3.1 (flat 0.0)
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[74]:
+M[73]:
   benchmark_ram_optimization.py,222
   project.sh,36
   src/prefact/__init__.py,3
@@ -20,7 +20,7 @@ M[74]:
   src/prefact/cli.py,237
   src/prefact/config.py,192
   src/prefact/config_extended/__init__.py,6
-  src/prefact/config_extended/config.py,111
+  src/prefact/config_extended/config.py,116
   src/prefact/config_extended/constants.py,24
   src/prefact/config_extended/generator.py,158
   src/prefact/config_extended/models.py,34
@@ -30,7 +30,7 @@ M[74]:
   src/prefact/engine.py,158
   src/prefact/fixer.py,49
   src/prefact/git_hooks.py,383
-  src/prefact/logging.py,434
+  src/prefact/logging/__init__.py,5
   src/prefact/logging/exceptions.py,23
   src/prefact/logging/formatters.py,23
   src/prefact/logging/levels.py,13
@@ -39,9 +39,8 @@ M[74]:
   src/prefact/performance/__init__.py,41
   src/prefact/performance/cache.py,433
   src/prefact/performance/cache_adapters.py,106
-  src/prefact/performance/cache_core.py,64
   src/prefact/performance/cache_state.py,74
-  src/prefact/performance/parallel.py,348
+  src/prefact/performance/parallel.py,347
   src/prefact/plugins/__init__.py,319
   src/prefact/plugins/builtin.py,13
   src/prefact/reporters/__init__.py,1
@@ -78,11 +77,8 @@ M[74]:
   src/prefact/rules/wildcard_imports.py,45
   src/prefact/scanner.py,153
   src/prefact/validator.py,29
-  vscode-extension/src/extension.ts,440
+  vscode-extension/src/extension.ts,437
 D:
-  src/prefact/config_extended/config.py:
-    e: ExtendedConfig
-    ExtendedConfig(Config): __init__(9),from_yaml(2),_deep_merge(1),get_tool_config(1),get_performance_setting(2),get_plugin_config(1),to_dict(0)  # Extended configuration with additional features...
   src/prefact/rules/magic_numbers.py:
     e: MagicNumberRule
     MagicNumberRule(BaseRule): __init__(1),_load_allowed_numbers(0),scan_file(2),_is_magic_number(1),fix(3),validate(3)  # Detect magic numbers in code...
@@ -104,13 +100,13 @@ D:
     UnimportStarImports(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Handle star imports using unimport...
     UnimportAll(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Apply all unimport fixes...
   vscode-extension/src/extension.ts:
-    i: child_process,fs/promises,path,vscode
+    i: child_process,vscode
     e: PrefactIssue,PrefactResult,PrefactDiagnosticsProvider,PrefactTreeItem,PrefactTreeProvider
     PrefactIssue:
     PrefactResult:
     PrefactDiagnosticsProvider: scanFile(-1),config(-1),result(-1),scanWorkspace(-1),workspaceFolders(-1),config(-1),result(-1),fixFile(-1),doc(-1),fixWorkspace(-1),workspaceFolders(-1),runPrefact(-1),config(-1),executablePath(-1),child(-1),resolve(-1),reject(-1),reject(-1),updateDiagnostics(-1),range(-1),severity(-1),diagnostic(-1),updateWorkspaceDiagnostics(-1),diagnosticsByFile(-1),diagnostics(-1),range(-1),severity(-1),diagnostic(-1),entries(-1),getSeverity(-1),showOutput(-1),dispose(-1)
     PrefactTreeItem: super(-1)
-    PrefactTreeProvider: refresh(-1),getTreeItem(-1),getChildren(-1),issuesByFile(-1),file(-1),item(-1),fileIssues(-1),item(-1),activate(-1),diagnosticsProvider(-1),treeProvider(-1),treeView(-1),scanCommand(-1),document(-1),scanWorkspaceCommand(-1),fixCommand(-1),document(-1),fixWorkspaceCommand(-1),configureCommand(-1),config(-1),installHooksCommand(-1),workspaceFolders(-1),onSave(-1),config(-1),setInterval(-1),deactivate(-1)
+    PrefactTreeProvider: refresh(-1),getTreeItem(-1),getChildren(-1),issuesByFile(-1),file(-1),item(-1),fileIssues(-1),item(-1),activate(-1),diagnosticsProvider(-1),treeProvider(-1),treeView(-1),scanCommand(-1),document(-1),scanWorkspaceCommand(-1),fixCommand(-1),document(-1),fixWorkspaceCommand(-1),configureCommand(-1),installHooksCommand(-1),workspaceFolders(-1),onSave(-1),config(-1),setInterval(-1),deactivate(-1)
   src/prefact/rules/relative_imports.py:
     e: _RelativeImportFixer,RelativeToAbsoluteImports,_module_to_str,_str_to_module
     _RelativeImportFixer(cst.CSTTransformer): __init__(3),leave_ImportFrom(2),_resolve(2)  # Transform relative imports to absolute using the resolved pa...
@@ -120,12 +116,12 @@ D:
   src/prefact/engine.py:
     e: RefactoringEngine
     RefactoringEngine: __init__(1),run(0),scan_only(0),run_file(1),_preload_sources(1)  # Main entry point: scan the project, apply fixes, validate re...
-  src/prefact/autonomous/todo_manager.py:
-    e: TodoManager
-    TodoManager(BaseManager): __init__(1),update_todo_md(0),_parse_existing_todos(0),_generate_current_todos(1),_find_completed_tasks(2),_write_todo_md(2),_get_relative_file_path(1),execute_todos(0),_parse_todo_tasks(0),_get_refactoring_config(0),_execute_todo_tasks(1),_group_tasks_by_file(1),_process_file_tasks(4),_update_todo_with_execution_results(3)  # Manages TODO.md file operations...
   src/prefact/config_extended/models.py:
     e: ExtendedConfig
     ExtendedConfig(Config): __init__(9),from_yaml(2),to_dict(0)
+  src/prefact/autonomous/todo_manager.py:
+    e: TodoManager
+    TodoManager(BaseManager): __init__(1),update_todo_md(0),_parse_existing_todos(0),_generate_current_todos(1),_find_completed_tasks(2),_write_todo_md(2),_get_relative_file_path(1),execute_todos(0),_parse_todo_tasks(0),_get_refactoring_config(0),_execute_todo_tasks(1),_group_tasks_by_file(1),_process_file_tasks(4),_update_todo_with_execution_results(3)  # Manages TODO.md file operations...
   src/prefact/rules/isort_based.py:
     e: ISortHelper,ISortedImports,ImportSectionSeparator,CustomImportOrganization
     ISortHelper: check_file(1),check_source(1),_find_import_blocks(0),_is_block_sorted(1),_needs_section_separators(1),fix_file(1),fix_source(1)  # Helper class for ISort operations...
@@ -174,6 +170,9 @@ D:
   src/prefact/autonomous/setup_manager.py:
     e: SetupManager
     SetupManager(BaseManager): create_refact_config(0),detect_project_info(0),run_examples(0)  # Handles project setup - configuration and examples...
+  src/prefact/config_extended/config.py:
+    e: ExtendedConfig
+    ExtendedConfig(Config): __init__(9),from_yaml(2),_parse_rules(0),_deep_merge(1),get_tool_config(1),get_performance_setting(2),get_plugin_config(1),to_dict(0)  # Extended configuration with additional features...
   src/prefact/rules/print_statements.py:
     e: PrintStatements
     PrintStatements(BaseRule): scan_file(2),fix(3),validate(3)
@@ -245,6 +244,13 @@ D:
     init_worker()
     scan_file_worker(args)
     get_performance_monitor()
+  src/prefact/benchmark.py:
+    e: ScanProbe,_make_inprocess_probe,build_prefact_suite,benchmark_library,main
+    ScanProbe(BenchmarkProbe): __init__(4),run(0)  # Prefact-specific: creates N temp Python files and measures s...
+    _make_inprocess_probe()
+    build_prefact_suite()
+    benchmark_library(module;cli_commands;test_path;threshold_import;threshold_cli;threshold_tests)
+    main()
   src/prefact/rules/wildcard_imports.py:
     e: WildcardImports
     WildcardImports(BaseRule): scan_file(2),fix(3),validate(3)
@@ -255,13 +261,6 @@ D:
     e: SortedImports,_sort_key
     SortedImports(BaseRule): scan_file(2),fix(3),validate(3)
     _sort_key(node)
-  src/prefact/benchmark.py:
-    e: ScanProbe,_make_inprocess_probe,build_prefact_suite,benchmark_library,main
-    ScanProbe(BenchmarkProbe): __init__(4),run(0)  # Prefact-specific: creates N temp Python files and measures s...
-    _make_inprocess_probe()
-    build_prefact_suite()
-    benchmark_library(module;cli_commands;test_path;threshold_import;threshold_cli;threshold_tests)
-    main()
   src/prefact/rules/benchmark.py:
     e: benchmark_file,benchmark_project,print_benchmark_results,main
     benchmark_file(file_path;config)
@@ -343,23 +342,6 @@ D:
   src/prefact/validator.py:
     e: Validator
     Validator: __init__(1),validate_file(4)
-  src/prefact/logging.py:
-    e: LogLevel,PprefactLogger,JsonFormatter,PprefactException,ConfigurationError,RuleError,PluginError,CacheError,PerformanceError,LogContext,get_logger,setup_logging,setup_telemetry,log_execution,handle_exception
-    LogLevel(str,Enum):  # Log levels for prefact...
-    PprefactLogger: __init__(5),_setup_handlers(0),debug(1),info(1),warning(1),error(2),critical(2),_log(2),_send_telemetry(1),add_telemetry_callback(1),log_scan_start(2),log_scan_complete(3),log_rule_execution(4),log_plugin_loaded(2),log_performance_metrics(1)  # Structured logger for prefact with enterprise features...
-    JsonFormatter(logging.Formatter): format(1)  # JSON formatter for structured logging...
-    PprefactException(Exception): __init__(3)  # Base exception for prefact...
-    ConfigurationError(PprefactException):  # Raised when configuration is invalid...
-    RuleError(PprefactException): __init__(3)  # Raised when a rule encounters an error...
-    PluginError(PprefactException): __init__(2)  # Raised when a plugin encounters an error...
-    CacheError(PprefactException):  # Raised when cache operations fail...
-    PerformanceError(PprefactException):  # Raised when performance issues are detected...
-    LogContext: __init__(1),__enter__(0),__exit__(3),log(2)  # Context manager for logging with additional context...
-    get_logger()
-    setup_logging(config)
-    setup_telemetry(config)
-    log_execution(logger)
-    handle_exception(exc_type;exc_value;exc_traceback)
   src/prefact/reporters/json_reporter.py:
     e: to_dict,dump
     to_dict(result)
@@ -390,9 +372,6 @@ D:
     e: LogLevel,PprefactLogger
     LogLevel(str,Enum):
     PprefactLogger: __init__(5),_setup_handlers(0),debug(1),info(1),warning(1),error(2),critical(2),_log(2),_send_telemetry(1),add_telemetry_callback(1),log_scan_start(2),log_scan_complete(3),log_rule_execution(4),log_plugin_loaded(2),log_performance_metrics(1)
-  src/prefact/performance/cache_core.py:
-    e: Cache
-    Cache: __init__(2),get(2),set(3),delete(1),clear(0),get_stats(0),close(0)  # Wrapper for diskcache with additional functionality...
   src/prefact/performance/cache_adapters.py:
     e: ScanResultCache,ConfigCache,RuleResultCache,FileHashCache
     ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results...
@@ -428,6 +407,8 @@ D:
     get_rule(rule_id)
   project.sh:
   src/prefact/__init__.py:
+  src/prefact/_base.py:
+  src/prefact/logging/__init__.py:
   src/prefact/models.py:
     e: Severity,Phase,Issue,Fix,ValidationResult,PipelineResult
     Severity(enum.Enum):  # How critical an issue is...
@@ -436,12 +417,11 @@ D:
     Fix:  # A concrete code change to apply...
     ValidationResult:  # Result of post-fix validation...
     PipelineResult:  # Aggregate result of the full scan → fix → validate pipeline...
-  src/prefact/_base.py:
-  src/prefact/config_extended/__init__.py:
+  src/prefact/plugins/builtin.py:
+  src/prefact/performance/__init__.py:
   src/prefact/logging/levels.py:
     e: LogLevel
     LogLevel(str,Enum):  # Log levels for prefact...
-  src/prefact/plugins/builtin.py:
-  src/prefact/performance/__init__.py:
   src/prefact/reporters/__init__.py:
+  src/prefact/config_extended/__init__.py:
   src/prefact/config_extended/constants.py:

@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class ConfigValidator:
     @staticmethod
     def validate(config) -> List[str]:

@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 from prefact.config import Config, RuleConfig
+
 from .constants import DEFAULT_EXCLUDE, DEFAULT_INCLUDE
 
 

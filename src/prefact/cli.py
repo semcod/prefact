@@ -176,12 +176,12 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
     scans for issues, and creates tickets in planfile.yaml.
     """
     from rich.console import Console
-    
+
     console = Console()
-    
+
     # Initialize autonomous prefact
     auto = AutonomousRefact(Path(project_path))
-    
+
     if init_only:
         if not auto.refact_config_path.exists():
             console.print("📝 Creating prefact.yaml configuration...")
@@ -190,10 +190,10 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
         else:
             console.print("ℹ️ prefact.yaml already exists", style="blue")
         return
-    
+
     # Run full autonomous process
     success = auto.run_autonomous()
-    
+
     if not success:
         raise SystemExit(1)
 
@@ -201,9 +201,9 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
 @main.command()
 def rules() -> None:
     """List all available rules."""
-    from prefact.rules import get_all_rules
-
     from rich.table import Table
+
+    from prefact.rules import get_all_rules
 
     console = Console()
     table = Table(title="Available Rules")

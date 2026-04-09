@@ -1,5 +1,5 @@
-from .logger import PprefactLogger, LogLevel
-from .exceptions import PprefactException, ConfigurationError, RuleError, PluginError
+from .exceptions import ConfigurationError, PluginError, PprefactException, RuleError
 from .formatters import JsonFormatter
+from .logger import LogLevel, PprefactLogger
 
 __all__ = ["PprefactLogger", "LogLevel", "PprefactException", "ConfigurationError", "RuleError", "PluginError", "JsonFormatter"]

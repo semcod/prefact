@@ -1,17 +1,15 @@
-# code2llm | 75f 13272L | python:72,shell:1,typescript:1 | 2026-04-09
-# CC̄=3.1 | critical:3/790 | dups:11 | cycles:0
+# code2llm | 73f 12315L | python:71,shell:1,typescript:1 | 2026-04-09
+# CC̄=3.1 | critical:1/738 | dups:5 | cycles:0
 
-HEALTH[4]:
-  🔴 DUP   11 classes duplicated
-  🟡 CC    from_yaml CC=15 (limit:15)
-  🟡 CC    from_yaml CC=15 (limit:15)
+HEALTH[2]:
+  🔴 DUP   5 classes duplicated
   🟡 CC    scan_file CC=15 (limit:15)
 
 REFACTOR[2]:
-  1. rm duplicates  (-11 dup classes)
-  2. split 3 high-CC methods  (CC>15)
+  1. rm duplicates  (-5 dup classes)
+  2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[630]:
+PIPELINES[581]:
   [1] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
   [2] Src [__init__]: __init__
@@ -24,20 +22,18 @@ PIPELINES[630]:
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
+  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
   │ importchecker_based        484L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
   │ autoflake_based            469L  5C   23m  CC=11     ←0
-  │ !! config_extended            465L  3C   18m  CC=15     ←7  ×DUP
   │ unimport_based             455L  5C   22m  CC=14     ←0
   │ import_linter_based        449L  5C   24m  CC=8      ←0
-  │ logging                    434L  10C   28m  CC=4      ←0  ×DUP
   │ cache                      433L  6C   37m  CC=5      ←0  ×DUP
   │ mypy_based                 398L  6C   22m  CC=9      ←0
-  │ pylint_based               396L  5C   22m  CC=6      ←1
+  │ pylint_based               396L  5C   22m  CC=6      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
-  │ parallel                   348L  4C   23m  CC=7      ←0
+  │ parallel                   347L  4C   23m  CC=7      ←0
   │ __init__                   319L  3C   17m  CC=10     ←0
   │ ruff_based                 311L  6C   19m  CC=4      ←0
   │ todo_manager               309L  1C   14m  CC=13     ←0
@@ -58,23 +54,22 @@ LAYERS:
   │ docs_manager               169L  1C    6m  CC=8      ←0
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
-  │ generator                  158L  1C    3m  CC=12     ←0  ×DUP
+  │ generator                  158L  1C    3m  CC=12     ←1
   │ scanner                    153L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
   │ !! magic_numbers              138L  1C    6m  CC=15     ←0
   │ setup_manager              121L  1C    3m  CC=9      ←0
   │ composite_factory          119L  1C    2m  CC=4      ←0
-  │ !! config                     111L  1C    7m  CC=15     ←1  ×DUP
-  │ cache_adapters             106L  4C   16m  CC=3      ←0  ×DUP
+  │ config                     116L  1C    8m  CC=9      ←3
+  │ cache_adapters             106L  4C   16m  CC=3      ←10  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
   │ duplicate_imports           80L  1C    3m  CC=11     ←0
   │ cache_state                 74L  0C    7m  CC=2      ←2
   │ string_concat               66L  1C    5m  CC=6      ←0
   │ ai_boilerplate              66L  1C    3m  CC=4      ←0
   │ validation                  65L  1C    6m  CC=6      ←1  ×DUP
-  │ cache_core                  64L  1C    7m  CC=3      ←10  ×DUP
   │ console                     64L  0C    1m  CC=14     ←0
-  │ logger                      63L  2C   15m  CC=3      ←0  ×DUP
+  │ logger                      63L  2C   15m  CC=3      ←0
   │ sorted_imports              63L  1C    4m  CC=7      ←0
   │ print_statements            58L  1C    3m  CC=9      ←0
   │ json_reporter               57L  0C    2m  CC=4      ←1
@@ -86,7 +81,7 @@ LAYERS:
   │ models                      34L  1C    3m  CC=13     ←0
   │ validator                   29L  1C    2m  CC=4      ←0
   │ _base                       27L  1C    1m  CC=1      ←0
-  │ validators                  26L  1C    4m  CC=4      ←0  ×DUP
+  │ validators                  26L  1C    4m  CC=4      ←1  ×DUP
   │ constants                   24L  0C    0m  CC=0.0    ←0
   │ exceptions                  23L  4C    3m  CC=2      ←0
   │ formatters                  23L  1C    1m  CC=2      ←0
@@ -95,11 +90,12 @@ LAYERS:
   │ utils                        9L  0C    1m  CC=5      ←1
   │ _base                        6L  0C    0m  CC=0.0    ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
+  │ __init__                     5L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
-  │ extension.ts               440L  5C   48m  CC=14     ←29
+  │ extension.ts               437L  5C   48m  CC=14     ←27
   │
   ./                              CC̄=2.6    ←in:0  →out:0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
@@ -108,12 +104,12 @@ LAYERS:
 
 COUPLING:
                                     vscode-extension.src                 src.prefact  benchmark_ram_optimization
-        vscode-extension.src                          ──                         ←52                          ←1  hub
-                 src.prefact                          52                          ──                              !! fan-out
+        vscode-extension.src                          ──                         ←47                          ←1  hub
+                 src.prefact                          47                          ──                              !! fan-out
   benchmark_ram_optimization                           1                                                      ──
   CYCLES: none
-  HUB: vscode-extension.src/ (fan-in=53)
-  SMELL: src.prefact/ fan-out=52 → split needed
+  HUB: vscode-extension.src/ (fan-in=48)
+  SMELL: src.prefact/ fan-out=47 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

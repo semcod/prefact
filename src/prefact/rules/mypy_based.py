@@ -24,13 +24,13 @@ except ImportError:
 
 class MyPyHelper:
     """Helper class for MyPy operations."""
-    
+
     @staticmethod
     def check_file(file_path: Path, config: Optional[Dict] = None) -> List[Dict]:
         """Run MyPy on a single file and return JSON results."""
         with tempfile.TemporaryDirectory() as tmpdir:
             report_file = Path(tmpdir) / "result.json"
-            
+
             cmd = [
                 "mypy", str(file_path),
                 "--show-error-codes",
@@ -38,22 +38,22 @@ class MyPyHelper:
                 "--json-report", str(tmpdir),
                 "--check-untyped-defs"
             ]
-            
+
             # Add additional config options
             if config:
                 if config.get("strict"):
                     cmd.append("--strict")
                 if config.get("ignore_missing_imports"):
                     cmd.append("--ignore-missing-imports")
-            
+
             try:
                 subprocess.run(cmd, capture_output=True, check=True)
-                
+
                 # Read JSON report
                 if report_file.exists():
                     with open(report_file) as f:
                         report = json.load(f)
-                    
+
                     # Extract errors from report
                     errors = []
                     for file_data in report.get("files", []):
@@ -72,16 +72,16 @@ class MyPyHelper:
                 pass
             except (json.JSONDecodeError, FileNotFoundError):
                 pass
-        
+
         return []
-    
+
     @staticmethod
     def check_source(source: str, config: Optional[Dict] = None) -> List[Dict]:
         """Check source code in memory using MyPy."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
-        
+
         try:
             return MyPyHelper.check_file(Path(tmp_path), config)
         finally:
@@ -92,14 +92,14 @@ class MyPyHelper:
 @register
 class MyPyMissingReturnType(BaseRule):
     """Detect missing return type annotations using MyPy."""
-    
+
     rule_id = "missing-return-type"
     description = "Detect functions missing return type annotations"
-    
+
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.mypy_config = self._load_mypy_config()
-    
+
     def _load_mypy_config(self) -> Dict:
         """Load MyPy configuration from prefact config."""
         return {
@@ -108,11 +108,11 @@ class MyPyMissingReturnType(BaseRule):
                 self.rule_id, "ignore_missing_imports", True
             )
         }
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = MyPyHelper.check_file(path, self.mypy_config)
-        
+
         for item in results:
             # Filter for missing return type errors
             if item.get("code") in ["no-return-type", "no-untyped-def"]:
@@ -127,9 +127,9 @@ class MyPyMissingReturnType(BaseRule):
                         severity=Severity.INFO,
                         original="def function(...):"
                     ))
-        
+
         return issues
-    
+
     def _is_public_function(self, path: Path, line_num: int) -> bool:
         """Check if the function at line_num is public."""
         try:
@@ -142,20 +142,20 @@ class MyPyMissingReturnType(BaseRule):
         except Exception:
             pass
         return True
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # MyPy doesn't auto-fix missing return types
         # Would need to infer types or add -> Any
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Check if missing return types were added
         remaining = MyPyHelper.check_file(path, self.mypy_config)
         missing_types = [
-            r for r in remaining 
+            r for r in remaining
             if r.get("code") in ["no-return-type", "no-untyped-def"]
         ]
-        
+
         return ValidationResult(
             file=path,
             passed=len(missing_types) == 0,
@@ -167,14 +167,14 @@ class MyPyMissingReturnType(BaseRule):
 @register
 class MyPyTypeChecking(BaseRule):
     """General type checking using MyPy."""
-    
+
     rule_id = "type-checking"
     description = "Run MyPy type checking on the code"
-    
+
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.mypy_config = self._load_mypy_config()
-    
+
     def _load_mypy_config(self) -> Dict:
         """Load MyPy configuration."""
         return {
@@ -183,18 +183,18 @@ class MyPyTypeChecking(BaseRule):
                 self.rule_id, "ignore_missing_imports", True
             )
         }
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         results = MyPyHelper.check_file(path, self.mypy_config)
-        
+
         for item in results:
             # Map MyPy severity to prefact severity
             severity = (
-                Severity.ERROR if item.get("severity") == "error" 
+                Severity.ERROR if item.get("severity") == "error"
                 else Severity.WARNING
             )
-            
+
             issues.append(Issue(
                 rule_id=self.rule_id,
                 file=path,
@@ -204,18 +204,18 @@ class MyPyTypeChecking(BaseRule):
                 severity=severity,
                 original=item.get("code", "")
             ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # MyPy doesn't provide auto-fixes
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Run MyPy to check if type errors were resolved
         results = MyPyHelper.check_file(path, self.mypy_config)
         errors = [r for r in results if r.get("severity") == "error"]
-        
+
         return ValidationResult(
             file=path,
             passed=len(errors) == 0,
@@ -227,11 +227,11 @@ class MyPyTypeChecking(BaseRule):
 # Advanced: Type inference for automatic return type suggestions
 class ReturnTypeInferrer:
     """Infer return types for simple functions."""
-    
+
     @staticmethod
     def infer_return_type(source: str, func_name: str) -> Optional[str]:
         """Try to infer return type of a function."""
-        
+
         try:
             tree = ast.parse(source)
             for node in ast.walk(tree):
@@ -240,28 +240,28 @@ class ReturnTypeInferrer:
                     return ReturnTypeInferrer._unify_types(return_types)
         except SyntaxError:
             pass
-        
+
         return None
-    
+
     @staticmethod
     def _analyze_return_types(node: ast.FunctionDef) -> set[str]:
         """Analyze all return statements in a function."""
         return_types = set()
-        
+
         for n in ast.walk(node):
             if isinstance(n, ast.Return):
                 type_name = ReturnTypeInferrer._get_return_value_type(n.value)
                 if type_name:
                     return_types.add(type_name)
-        
+
         return return_types
-    
+
     @staticmethod
     def _get_return_value_type(value: Optional[ast.expr]) -> str:
         """Get type name of a return value."""
         if value is None:
             return "None"
-        
+
         # Type mapping for different AST node types
         type_map = {
             ast.Constant: lambda v: type(v.value).__name__,
@@ -269,13 +269,13 @@ class ReturnTypeInferrer:
             ast.List: lambda v: "List",
             ast.Dict: lambda v: "Dict",
         }
-        
+
         for ast_type, type_func in type_map.items():
             if isinstance(value, ast_type):
                 return type_func(value)
-        
+
         return "Any"
-    
+
     @staticmethod
     def _unify_types(return_types: set[str]) -> str:
         """Unify multiple return types into a single type annotation."""
@@ -294,12 +294,12 @@ class ReturnTypeInferrer:
 
 class ReturnTypeAdder(cst.CSTTransformer):
     """Transformer to add return type annotations to functions."""
-    
+
     def __init__(self, issues: List[Issue], path: Path):
         self.issues_by_line = {i.line: i for i in issues}
         self.fixes = []
         self.path = path
-    
+
     def leave_FunctionDef(
         self,
         original_node: cst.FunctionDef,
@@ -308,7 +308,7 @@ class ReturnTypeAdder(cst.CSTTransformer):
         if original_node.name.value in self.issues_by_line:
             issue = self.issues_by_line[original_node.name.value]
             inferred = issue.meta.get("inferred_type", "Any")
-            
+
             if inferred:
                 # Add return type annotation
                 new_returns = cst.Annotation(
@@ -317,7 +317,7 @@ class ReturnTypeAdder(cst.CSTTransformer):
                 updated_node = updated_node.with_changes(
                     returns=new_returns
                 )
-                
+
                 self.fixes.append(Fix(
                     issue=issue,
                     file=self.path,
@@ -325,7 +325,7 @@ class ReturnTypeAdder(cst.CSTTransformer):
                     fixed_code=f"def {original_node.name.value}(...) -> {inferred}:",
                     applied=True
                 ))
-        
+
         return updated_node
 
 
@@ -333,29 +333,29 @@ class ReturnTypeAdder(cst.CSTTransformer):
 @register
 class SmartReturnTypeRule(BaseRule):
     """Smart return type detection with inference suggestions."""
-    
+
     rule_id = "smart-return-type"
     description = "Detect missing return types and suggest inferred types"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
-        
+
         issues = []
         try:
             tree = ast.parse(source)
         except SyntaxError:
             return issues
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 # Check if function has return type annotation
                 if node.returns is None and not node.name.startswith("_"):
                     # Try to infer return type
                     inferred = ReturnTypeInferrer.infer_return_type(source, node.name)
-                    
+
                     message = f"Function '{node.name}' missing return type"
                     if inferred:
                         message += f" (suggested: -> {inferred})"
-                    
+
                     issues.append(Issue(
                         rule_id=self.rule_id,
                         file=path,
@@ -367,14 +367,14 @@ class SmartReturnTypeRule(BaseRule):
                         suggested=f"def {node.name}(...) -> {inferred or 'Any'}:" if inferred else None,
                         meta={"inferred_type": inferred}
                     ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
-        
+
         if not issues:
             return source, []
-        
+
         # Use LibCST for safe transformation
         try:
             cst_tree = cst.parse_module(source)
@@ -383,7 +383,7 @@ class SmartReturnTypeRule(BaseRule):
             return fixed_tree.code, transformer.fixes
         except cst.ParserSyntaxError:
             return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Simple syntax check
         try:
@@ -391,8 +391,8 @@ class SmartReturnTypeRule(BaseRule):
             return ValidationResult(file=path, passed=True, checks=["syntax_valid"], errors=[])
         except SyntaxError as e:
             return ValidationResult(
-                file=path, 
-                passed=False, 
-                checks=[], 
+                file=path,
+                passed=False,
+                checks=[],
                 errors=[f"Syntax error: {e}"]
             )

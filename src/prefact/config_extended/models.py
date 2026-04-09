@@ -1,8 +1,12 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
+
 import yaml
+
 from prefact.config import Config, RuleConfig
+
 from .utils import deep_merge
+
 
 class ExtendedConfig(Config):
     def __init__(self, project_root=None, package_name="", include=None, exclude=None, rules=None, tools=None, performance=None, plugins=None, environments=None, **kwargs):

@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+
 def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
     result = base.copy()
     for key, value in override.items():

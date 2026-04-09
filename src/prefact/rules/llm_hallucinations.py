@@ -21,14 +21,14 @@ except ImportError:
 @register
 class LLMHallucinationRule(BaseRule):
     """Detect LLM hallucination patterns in code."""
-    
+
     rule_id = "llm-hallucinations"
     description = "Detect potential LLM hallucinations in code"
-    
+
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.patterns = self._load_patterns()
-    
+
     def _load_patterns(self) -> List[dict]:
         """Load hallucination patterns from configuration."""
         default_patterns = [
@@ -83,26 +83,26 @@ class LLMHallucinationRule(BaseRule):
                 "message": "Import of non-existent module detected"
             }
         ]
-        
+
         return self.config.get_rule_option(
-            self.rule_id, 
-            "patterns", 
+            self.rule_id,
+            "patterns",
             default_patterns
         )
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
         lines = source.splitlines()
-        
+
         for line_num, line in enumerate(lines, 1):
             for pattern_config in self.patterns:
                 pattern = pattern_config["pattern"]
                 severity_str = pattern_config.get("severity", "warning")
                 message = pattern_config.get("message", f"Pattern matched: {pattern}")
-                
+
                 if re.search(pattern, line, re.IGNORECASE):
                     severity = self._map_severity(severity_str)
-                    
+
                     issues.append(Issue(
                         rule_id=self.rule_id,
                         file=path,
@@ -112,19 +112,19 @@ class LLMHallucinationRule(BaseRule):
                         severity=severity,
                         original=line.strip()
                     ))
-        
+
         # Additional AST-based checks
         issues.extend(self._check_ast_patterns(path, source))
-        
+
         return issues
-    
+
     def _check_ast_patterns(self, path: Path, source: str) -> List[Issue]:
         """Check for patterns in AST."""
         issues = []
-        
+
         try:
             tree = ast.parse(source)
-            
+
             for node in ast.walk(tree):
                 # Check for suspicious function names
                 if isinstance(node, ast.FunctionDef):
@@ -138,7 +138,7 @@ class LLMHallucinationRule(BaseRule):
                             severity=Severity.WARNING,
                             original=node.name
                         ))
-                
+
                 # Check for suspicious imports
                 elif isinstance(node, ast.ImportFrom):
                     if self._is_suspicious_import(node):
@@ -152,12 +152,12 @@ class LLMHallucinationRule(BaseRule):
                             severity=Severity.ERROR,
                             original=module
                         ))
-                
+
         except SyntaxError:
             pass
-        
+
         return issues
-    
+
     def _is_suspicious_function_name(self, name: str) -> bool:
         """Check if function name looks suspicious."""
         suspicious_patterns = [
@@ -169,13 +169,13 @@ class LLMHallucinationRule(BaseRule):
             r"example_",
             r"sample_",
         ]
-        
+
         return any(re.match(pattern, name) for pattern in suspicious_patterns)
-    
+
     def _is_suspicious_import(self, node: ast.ImportFrom) -> bool:
         """Check if import looks suspicious."""
         module = node.module or ""
-        
+
         suspicious_modules = [
             "nonexistent",
             "fake",
@@ -186,9 +186,9 @@ class LLMHallucinationRule(BaseRule):
             "openai.api",  # Old API
             "langchain.experimental",  # Experimental features
         ]
-        
+
         return any(sus in module for sus in suspicious_modules)
-    
+
     def _map_severity(self, severity_str: str) -> Severity:
         """Map string severity to Severity enum."""
         mapping = {
@@ -197,15 +197,15 @@ class LLMHallucinationRule(BaseRule):
             "info": Severity.INFO,
         }
         return mapping.get(severity_str, Severity.WARNING)
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # Hallucinations usually require manual review
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         # Re-scan to check if issues remain
         remaining = self.scan_file(path, fixed)
-        
+
         return ValidationResult(
             file=path,
             passed=len(remaining) == 0,

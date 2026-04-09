@@ -14,13 +14,13 @@ from prefact.config import Config
 
 class GitHooks:
     """Manages Git hooks for prefact."""
-    
+
     def __init__(self, repo_root: Path, config: Optional[Config] = None):
         self.repo_root = repo_root.resolve()
         self.git_dir = self._find_git_dir()
         self.hooks_dir = self.git_dir / "hooks"
         self.config = config or Config(project_root=self.repo_root)
-    
+
     def _find_git_dir(self) -> Path:
         """Find the .git directory."""
         git_dir = self.repo_root / ".git"
@@ -29,38 +29,38 @@ class GitHooks:
             with open(git_dir) as f:
                 git_dir = self.repo_root / f.read().strip().split(" ")[1]
         return git_dir
-    
+
     def install_hooks(self, hook_types: Optional[List[str]] = None) -> None:
         """Install Git hooks for prefact."""
         if hook_types is None:
             hook_types = ["pre-commit", "pre-push", "commit-msg"]
-        
+
         # Ensure hooks directory exists
         self.hooks_dir.mkdir(exist_ok=True)
-        
+
         for hook_type in hook_types:
             hook_path = self.hooks_dir / hook_type
             self._install_hook(hook_type, hook_path)
-    
+
     def _install_hook(self, hook_type: str, hook_path: Path) -> None:
         """Install a specific Git hook."""
         hook_content = self._generate_hook_script(hook_type)
-        
+
         # Backup existing hook if it exists
         if hook_path.exists():
             backup_path = hook_path.with_suffix(".prefact.bak")
             hook_path.rename(backup_path)
             print(f"Backed up existing hook to {backup_path}")
-        
+
         # Write new hook
         hook_path.write_text(hook_content)
-        
+
         # Make hook executable
         current_permissions = hook_path.stat().st_mode
         hook_path.chmod(current_permissions | stat.S_IEXEC)
-        
+
         print(f"Installed {hook_type} hook")
-    
+
     def _generate_hook_script(self, hook_type: str) -> str:
         """Generate the script content for a hook."""
         if hook_type == "pre-commit":
@@ -71,10 +71,10 @@ class GitHooks:
             return self._commit_msg_hook()
         else:
             raise ValueError(f"Unsupported hook type: {hook_type}")
-    
+
     def _pre_commit_hook(self) -> str:
         """Generate pre-commit hook script."""
-        return f"""#!/bin/bash
+        return """#!/bin/bash
 # Pprefact pre-commit hook
 # Runs prefact on staged files before commit
 
@@ -115,7 +115,7 @@ fi
 echo "prefact check passed"
 exit 0
 """
-    
+
     def _pre_push_hook(self) -> str:
         """Generate pre-push hook script."""
         return f"""#!/bin/bash
@@ -145,10 +145,10 @@ fi
 echo "prefact check passed"
 exit 0
 """
-    
+
     def _commit_msg_hook(self) -> str:
         """Generate commit-msg hook script."""
-        return f"""#!/bin/bash
+        return """#!/bin/bash
 # Pprefact commit-msg hook
 # Validates commit messages
 
@@ -167,7 +167,7 @@ if [[ "$commit_msg" =~ ^[Ww][Ii][Pp] ]]; then
 fi
 
 # Check minimum length
-if [ ${{#commit_msg}} -lt 10 ]; then
+if [ ${#commit_msg} -lt 10 ]; then
     echo "Commit message too short (minimum 10 characters)"
     echo "Provide a more descriptive message or use --no-verify to bypass"
     exit 1
@@ -175,34 +175,34 @@ fi
 
 exit 0
 """
-    
+
     def uninstall_hooks(self, hook_types: Optional[List[str]] = None) -> None:
         """Uninstall Git hooks."""
         if hook_types is None:
             hook_types = ["pre-commit", "pre-push", "commit-msg"]
-        
+
         for hook_type in hook_types:
             hook_path = self.hooks_dir / hook_type
             backup_path = hook_path.with_suffix(".prefact.bak")
-            
+
             if hook_path.exists():
                 # Check if it's a prefact hook
                 content = hook_path.read_text()
                 if "prefact" in content:
                     hook_path.unlink()
-                    
+
                     # Restore backup if it exists
                     if backup_path.exists():
                         backup_path.rename(hook_path)
                         print(f"Restored original {hook_type} hook")
                     else:
                         print(f"Removed {hook_type} hook")
-    
+
     def list_hooks(self) -> Dict[str, bool]:
         """List status of all hooks."""
         hook_types = ["pre-commit", "pre-push", "commit-msg"]
         status = {}
-        
+
         for hook_type in hook_types:
             hook_path = self.hooks_dir / hook_type
             if hook_path.exists():
@@ -210,16 +210,16 @@ exit 0
                 status[hook_type] = "prefact" in content
             else:
                 status[hook_type] = False
-        
+
         return status
-    
+
     def test_hook(self, hook_type: str) -> bool:
         """Test if a hook is working correctly."""
         hook_path = self.hooks_dir / hook_type
-        
+
         if not hook_path.exists():
             return False
-        
+
         try:
             # Run the hook with --help or similar to test
             result = subprocess.run(
@@ -237,11 +237,11 @@ exit 0
 
 class PreCommitConfig:
     """Generate pre-commit configuration for prefact."""
-    
+
     @staticmethod
     def generate_config(repo_root: Path) -> str:
         """Generate .pre-commit-config.yaml content."""
-        return f"""# Pre-commit configuration for prefact
+        return """# Pre-commit configuration for prefact
 # See https://pre-commit.com for more information
 
 repos:
@@ -284,20 +284,20 @@ repos:
       - id: isort
         args: ["--profile", "black"]
 """
-    
+
     @staticmethod
     def install(repo_root: Path) -> None:
         """Install pre-commit configuration."""
         config_path = repo_root / ".pre-commit-config.yaml"
-        
+
         if config_path.exists():
             backup_path = config_path.with_suffix(".prefact.bak")
             config_path.rename(backup_path)
             print(f"Backed up existing config to {backup_path}")
-        
+
         config_path.write_text(PreCommitConfig.generate_config(repo_root))
         print(f"Installed pre-commit config at {config_path}")
-        
+
         # Install pre-commit hooks
         try:
             subprocess.run(
@@ -316,17 +316,17 @@ def install_git_hooks(repo_root: Optional[Path] = None) -> None:
     """Install Git hooks for the current repository."""
     if repo_root is None:
         repo_root = Path.cwd()
-    
+
     # Check if we're in a Git repository
     git_dir = repo_root / ".git"
     if not git_dir.exists() and not git_dir.is_file():
         print("Error: Not in a Git repository")
         return
-    
+
     # Install hooks
     hooks = GitHooks(repo_root)
     hooks.install_hooks()
-    
+
     print("\nGit hooks installed successfully!")
     print("They will run before each commit/push.")
     print("To bypass, use: git commit --no-verify")
@@ -336,10 +336,10 @@ def uninstall_git_hooks(repo_root: Optional[Path] = None) -> None:
     """Uninstall Git hooks for the current repository."""
     if repo_root is None:
         repo_root = Path.cwd()
-    
+
     hooks = GitHooks(repo_root)
     hooks.uninstall_hooks()
-    
+
     print("Git hooks uninstalled")
 
 
@@ -347,10 +347,10 @@ def list_git_hooks(repo_root: Optional[Path] = None) -> None:
     """List status of Git hooks."""
     if repo_root is None:
         repo_root = Path.cwd()
-    
+
     hooks = GitHooks(repo_root)
     status = hooks.list_hooks()
-    
+
     print("Git hooks status:")
     for hook_type, installed in status.items():
         status_str = "✓ Installed (prefact)" if installed else "✗ Not installed"
@@ -361,14 +361,14 @@ def list_git_hooks(repo_root: Optional[Path] = None) -> None:
 def main() -> None:
     """Main CLI for Git hooks management."""
     import argparse
-    
+
     parser = argparse.ArgumentParser(description="Manage Git hooks for prefact")
     parser.add_argument("command", choices=["install", "uninstall", "list", "test"])
     parser.add_argument("--path", type=Path, default=Path.cwd(), help="Repository path")
     parser.add_argument("--hooks", nargs="+", help="Specific hooks to manage")
-    
+
     args = parser.parse_args()
-    
+
     if args.command == "install":
         install_git_hooks(args.path)
     elif args.command == "uninstall":

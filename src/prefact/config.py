@@ -56,13 +56,13 @@ class Config:
     def from_yaml(cls, path: Path) -> "Config":
         """Load configuration from a YAML file."""
         raw = yaml.safe_load(path.read_text()) or {}
-        
+
         # Extract and parse rules
         rules = cls._parse_rules(raw.pop("rules", {}))
-        
+
         # Get default patterns
         defaults = cls._get_default_patterns()
-        
+
         return cls(
             project_root=Path(raw.pop("project_root", Path.cwd())),
             package_name=raw.pop("package_name", ""),
@@ -71,7 +71,7 @@ class Config:
             rules=rules,
             **{k: v for k, v in raw.items() if k in cls.__dataclass_fields__},
         )
-    
+
     @classmethod
     def _parse_rules(cls, rules_raw: dict) -> dict[str, RuleConfig]:
         """Parse rules configuration from YAML."""
@@ -82,7 +82,7 @@ class Config:
             elif isinstance(rule_raw, dict):
                 rules[rule_id] = RuleConfig(**rule_raw)
         return rules
-    
+
     @classmethod
     def _get_default_patterns(cls) -> dict[str, list[str]]:
         """Get default include/exclude patterns."""
@@ -97,7 +97,7 @@ class Config:
     def rule_enabled(self, rule_id: str) -> bool:
         rc = self.rules.get(rule_id)
         return rc.enabled if rc else True
-    
+
     def is_rule_enabled(self, rule_id: str) -> bool:
         """Alias for rule_enabled for compatibility."""
         return self.rule_enabled(rule_id)
@@ -105,11 +105,11 @@ class Config:
     def rule_options(self, rule_id: str) -> dict[str, Any]:
         rc = self.rules.get(rule_id)
         return rc.options if rc else {}
-    
+
     def get_rule_option(self, rule_id: str, option: str, default: Any = None) -> Any:
         """Get a specific option for a rule."""
         return self.rule_options(rule_id).get(option, default)
-    
+
     def set_rule_option(self, rule_id: str, option: str, value: Any) -> None:
         """Set a specific option for a rule."""
         if rule_id not in self.rules:
@@ -127,26 +127,26 @@ class Config:
             self._detect_from_src_layout,
             self._detect_from_root_layout
         ]
-        
+
         for strategy in strategies:
             name = strategy()
             if name:
                 self.package_name = name
                 return name
-        
+
         return ""
-    
+
     def _detect_from_pyproject(self) -> Optional[str]:
         """Detect package name from pyproject.toml."""
         pyproject = self.project_root / "pyproject.toml"
         if not pyproject.exists():
             return None
-        
+
         # Try different TOML libraries
         tomllib = self._get_tomllib()
         if tomllib is None:
             return None
-        
+
         try:
             data = tomllib.loads(pyproject.read_text())
             name = data.get("project", {}).get("name", "")
@@ -154,9 +154,9 @@ class Config:
                 return name.replace("-", "_")
         except Exception:
             pass
-        
+
         return None
-    
+
     def _get_tomllib(self) -> Optional[Any]:
         """Get available TOML library."""
         try:
@@ -164,23 +164,23 @@ class Config:
             return tomllib
         except ModuleNotFoundError:
             return None
-    
+
     def _detect_from_src_layout(self) -> Optional[str]:
         """Detect package name from src/ layout."""
         src = self.project_root / "src"
         if not src.is_dir():
             return None
-        
+
         for child in src.iterdir():
             if child.is_dir() and (child / "__init__.py").exists():
                 return child.name
-        
+
         return None
-    
+
     def _detect_from_root_layout(self) -> Optional[str]:
         """Detect package name from root layout."""
         excluded_dirs = {"tests", "test", "docs", "scripts"}
-        
+
         for child in self.project_root.iterdir():
             if (
                 child.is_dir()
@@ -188,5 +188,5 @@ class Config:
                 and child.name not in excluded_dirs
             ):
                 return child.name
-        
+
         return None

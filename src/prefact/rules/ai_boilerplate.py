@@ -19,13 +19,13 @@ except ImportError:
 @register
 class AIBoilerplateRule(BaseRule):
     """Detect AI boilerplate and template code."""
-    
+
     rule_id = "ai-boilerplate"
     description = "Detect AI boilerplate and template code"
-    
+
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
-        
+
         # Check for common AI boilerplate
         boilerplate_patterns = [
             (r"# (Copyright|License|MIT)", "boilerplate copyright"),
@@ -34,7 +34,7 @@ class AIBoilerplateRule(BaseRule):
             (r"def main\(\):", "standalone main function"),
             (r"if __name__ == ['\"]__main__['\"]:", "module execution block"),
         ]
-        
+
         lines = source.splitlines()
         for line_num, line in enumerate(lines, 1):
             for pattern, message in boilerplate_patterns:
@@ -48,16 +48,16 @@ class AIBoilerplateRule(BaseRule):
                         severity=Severity.INFO,
                         original=line.strip()
                     ))
-        
+
         return issues
-    
+
     def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
         # Boilerplate removal requires manual decision
         return source, []
-    
+
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         issues = self.scan_file(path, fixed)
-        
+
         return ValidationResult(
             file=path,
             passed=len(issues) == 0,
