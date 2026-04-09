@@ -312,7 +312,6 @@ function activate(context) {
         await diagnosticsProvider.fixWorkspace();
     });
     const configureCommand = vscode.commands.registerCommand('prefact.configure', async () => {
-        const config = vscode.workspace.getConfiguration('prefact');
         await vscode.commands.executeCommand('workbench.action.openSettings', 'prefact');
     });
     const installHooksCommand = vscode.commands.registerCommand('prefact.installHooks', async () => {

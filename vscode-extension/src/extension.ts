@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 import { spawn } from 'child_process';
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
 
 interface PrefactIssue {
     rule_id: string;
@@ -382,7 +380,6 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const configureCommand = vscode.commands.registerCommand('prefact.configure', async () => {
-        const config = vscode.workspace.getConfiguration('prefact');
         await vscode.commands.executeCommand('workbench.action.openSettings', 'prefact');
     });
 

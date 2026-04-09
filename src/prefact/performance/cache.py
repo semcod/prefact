@@ -7,7 +7,7 @@ by storing scan results, rule configurations, and other computed data.
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 # Constants for caching
 DEFAULT_CACHE_EXPIRE = 1800  # 30 minutes

@@ -15,7 +15,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from prefact.config import Config
 from prefact.engine import RefactoringEngine
-from prefact.models import ScanResult
 
 
 class ParallelScanTask:
@@ -42,7 +41,7 @@ class ParallelScanTask:
         except Exception:
             return ""
     
-    def execute(self) -> ScanResult:
+    def execute(self) -> Dict[str, Any]:
         """Execute the scan task."""
         # Check cache first if enabled
         if self.cache_enabled:
@@ -92,7 +91,7 @@ class ParallelEngine:
         self, 
         file_paths: List[Path], 
         rule_ids: Optional[List[str]] = None
-    ) -> List[ScanResult]:
+    ) -> List[Dict[str, Any]]:
         """Scan multiple files in parallel."""
         if not file_paths:
             return []
@@ -123,7 +122,7 @@ class ParallelEngine:
             # Large batch - use process pool for true parallelism
             return self._scan_with_process_pool(tasks)
     
-    def _scan_with_thread_pool(self, tasks: List[ParallelScanTask]) -> List[ScanResult]:
+    def _scan_with_thread_pool(self, tasks: List[ParallelScanTask]) -> List[Dict[str, Any]]:
         """Scan using thread pool (for small batches)."""
         results = []
         
@@ -140,17 +139,17 @@ class ParallelEngine:
                     results.append(result)
                 except Exception as e:
                     # Create error result
-                    error_result = ScanResult(
-                        file=task.file_path,
-                        issues=[],
-                        fixes=[],
-                        errors=[str(e)]
-                    )
+                    error_result = {
+                        "file": task.file_path,
+                        "issues": [],
+                        "fixes": [],
+                        "errors": [str(e)]
+                    }
                     results.append(error_result)
         
         return results
     
-    def _scan_with_process_pool(self, tasks: List[ParallelScanTask]) -> List[ScanResult]:
+    def _scan_with_process_pool(self, tasks: List[ParallelScanTask]) -> List[Dict[str, Any]]:
         """Scan using process pool (for large batches)."""
         results = []
         
@@ -171,18 +170,18 @@ class ParallelEngine:
                         results.append(result)
                     except Exception as e:
                         # Create error result
-                        error_result = ScanResult(
-                            file=task.file_path,
-                            issues=[],
-                            fixes=[],
-                            errors=[str(e)]
-                        )
+                        error_result = {
+                            "file": task.file_path,
+                            "issues": [],
+                            "fixes": [],
+                            "errors": [str(e)]
+                        }
                         results.append(error_result)
         
         return results
     
     @staticmethod
-    def _execute_task_wrapper(task: ParallelScanTask) -> ScanResult:
+    def _execute_task_wrapper(task: ParallelScanTask) -> Dict[str, Any]:
         """Wrapper for executing tasks in separate process."""
         return task.execute()
     
@@ -202,7 +201,7 @@ class ParallelEngine:
         self, 
         file_paths: List[Path], 
         rule_ids: Optional[List[str]] = None
-    ) -> List[ScanResult]:
+    ) -> List[Dict[str, Any]]:
         """Fix multiple files in parallel."""
         # For fixing, we need to be more careful about file conflicts
         # So we'll process sequentially but in parallel for scanning
@@ -215,12 +214,12 @@ class ParallelEngine:
                 result = engine.run_file(file_path, rule_ids)
                 results.append(result)
             except Exception as e:
-                error_result = ScanResult(
-                    file=file_path,
-                    issues=[],
-                    fixes=[],
-                    errors=[str(e)]
-                )
+                error_result = {
+                    "file": file_path,
+                    "issues": [],
+                    "fixes": [],
+                    "errors": [str(e)]
+                }
                 results.append(error_result)
         
         return results
@@ -239,7 +238,7 @@ class ParallelScanner:
         pattern: str = "**/*.py",
         rule_ids: Optional[List[str]] = None,
         exclude_patterns: Optional[List[str]] = None
-    ) -> List[ScanResult]:
+    ) -> List[Dict[str, Any]]:
         """Scan all Python files in a directory."""
         if exclude_patterns is None:
             exclude_patterns = self.config.exclude
@@ -259,7 +258,7 @@ class ParallelScanner:
     def scan_workspace(
         self, 
         rule_ids: Optional[List[str]] = None
-    ) -> List[ScanResult]:
+    ) -> List[Dict[str, Any]]:
         """Scan the entire workspace."""
         return self.scan_directory(self.config.project_root, rule_ids=rule_ids)
     
@@ -280,7 +279,7 @@ def init_worker() -> None:
     os.environ['PREFACT_WORKER'] = '1'
 
 
-def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> ScanResult:
+def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> Dict[str, Any]:
     """Worker function for scanning a single file."""
     file_path, config_dict, rule_ids = args
     

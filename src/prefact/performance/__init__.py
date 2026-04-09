@@ -3,6 +3,7 @@
 from prefact.performance.cache import (
     Cache,
     CacheContext,
+    ScanResultCache,
     cleanup_cache,
     clear_cache,
     get_cache,
@@ -16,7 +17,6 @@ from prefact.performance.parallel import (
     ParallelEngine,
     ParallelScanner,
     ParallelScanTask,
-    ScanResultCache,
     get_performance_monitor,
 )
 

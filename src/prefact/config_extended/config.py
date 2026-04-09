@@ -46,18 +46,7 @@ class ExtendedConfig(Config):
             env_config = raw["environments"].get(environment, {})
             raw = cls._deep_merge(raw, env_config)
 
-        rules = {}
-        for rule_id, rule_raw in raw.pop("rules", {}).items():
-            if isinstance(rule_raw, bool):
-                rules[rule_id] = RuleConfig(enabled=rule_raw)
-            elif isinstance(rule_raw, dict):
-                basic_fields = {k: v for k, v in rule_raw.items() if k in {"enabled", "severity", "options"}}
-                rules[rule_id] = RuleConfig(**basic_fields)
-                if hasattr(rules[rule_id], "_extended"):
-                    rules[rule_id]._extended.update(rule_raw)
-                else:
-                    rules[rule_id]._extended = {k: v for k, v in rule_raw.items() if k not in {"enabled", "severity", "options"}}
-
+        rules = cls._parse_rules(raw.pop("rules", {}))
         tools = raw.pop("tools", {})
         performance = raw.pop("performance", {})
         plugins = raw.pop("plugins", {})
@@ -77,6 +66,22 @@ class ExtendedConfig(Config):
             environments=environments,
             **{k: v for k, v in raw.items() if k in cls.__dataclass_fields__},
         )
+
+    @staticmethod
+    def _parse_rules(rules_raw: Dict[str, Any]) -> Dict[str, RuleConfig]:
+        """Parse rules from raw configuration."""
+        rules = {}
+        for rule_id, rule_raw in rules_raw.items():
+            if isinstance(rule_raw, bool):
+                rules[rule_id] = RuleConfig(enabled=rule_raw)
+            elif isinstance(rule_raw, dict):
+                basic_fields = {k: v for k, v in rule_raw.items() if k in {"enabled", "severity", "options"}}
+                rules[rule_id] = RuleConfig(**basic_fields)
+                if hasattr(rules[rule_id], "_extended"):
+                    rules[rule_id]._extended.update(rule_raw)
+                else:
+                    rules[rule_id]._extended = {k: v for k, v in rule_raw.items() if k not in {"enabled", "severity", "options"}}
+        return rules
 
     @staticmethod
     def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
