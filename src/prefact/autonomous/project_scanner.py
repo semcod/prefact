@@ -167,6 +167,7 @@ class ProjectScanner(BaseManager):
     def group_issues(self, issues: List[Any]) -> List[dict]:
         """Group issues by type and location."""
         grouped = {}
+        max_examples_per_issue = self.get_autonomous_limit("autonomous_max_examples_per_issue")
 
         for issue in issues:
             # Ensure file is a string
@@ -184,7 +185,7 @@ class ProjectScanner(BaseManager):
                 }
 
             grouped[key]["count"] += 1
-            if len(grouped[key]["examples"]) < 3:  # Limit examples
+            if len(grouped[key]["examples"]) < max_examples_per_issue:
                 grouped[key]["examples"].append({
                     "line": getattr(issue, 'line', 0),
                     "message": getattr(issue, 'message', 'No message')

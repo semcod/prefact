@@ -9,6 +9,14 @@ import yaml
 
 from .constants import DEFAULT_CACHE_SIZE, DEFAULT_MAX_LINE_LENGTH
 
+DEFAULT_AUTONOMOUS_LIMITS = {
+    "autonomous_max_examples_per_issue": 3,
+    "autonomous_max_tickets": 100,
+    "autonomous_max_todo_items": 200,
+    "autonomous_max_completed_todos": 100,
+    "autonomous_max_todo_execution_items": 50,
+}
+
 
 class ConfigGenerator:
     """Generate configuration files."""
@@ -49,6 +57,7 @@ class ConfigGenerator:
                 "max_workers": 4,
                 "cache_size": DEFAULT_CACHE_SIZE,
                 "chunk_size": 10,
+                **DEFAULT_AUTONOMOUS_LIMITS,
             },
             "rules": {},
             "plugins": {

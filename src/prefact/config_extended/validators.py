@@ -1,6 +1,15 @@
 from typing import Any, Dict, List
 
 
+AUTONOMOUS_PERFORMANCE_LIMIT_KEYS = (
+    "autonomous_max_examples_per_issue",
+    "autonomous_max_tickets",
+    "autonomous_max_todo_items",
+    "autonomous_max_completed_todos",
+    "autonomous_max_todo_execution_items",
+)
+
+
 class ConfigValidator:
     @staticmethod
     def validate(config) -> List[str]:
@@ -24,4 +33,8 @@ class ConfigValidator:
 
     @staticmethod
     def _validate_performance_config(config: Dict[str, Any]) -> List[str]:
-        return []
+        errors = []
+        for key in AUTONOMOUS_PERFORMANCE_LIMIT_KEYS:
+            if key in config and (not isinstance(config[key], int) or config[key] <= 0):
+                errors.append(f"performance.{key} must be a positive integer")
+        return errors

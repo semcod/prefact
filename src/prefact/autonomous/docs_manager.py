@@ -23,13 +23,14 @@ class DocsManager(BaseManager):
         # Load existing planfile or create new
         if self.planfile_path.exists():
             with open(self.planfile_path) as f:
-                planfile = yaml.safe_load(f)
+                planfile = yaml.safe_load(f) or {}
         else:
             planfile = self.create_default_planfile()
 
         # Add tickets for issues
         new_tickets = []
         seen_tickets = set()
+        max_tickets = self.get_autonomous_limit("autonomous_max_tickets")
         for issue_group in self.issues_found:
             ticket = self.create_ticket_from_issue(issue_group)
 
@@ -38,6 +39,12 @@ class DocsManager(BaseManager):
 
             # Check if ticket already exists in planfile or current run
             if ticket_key not in seen_tickets and not self.ticket_exists(planfile, ticket):
+                if self._count_existing_tickets(planfile) + len(new_tickets) >= max_tickets:
+                    console.print(
+                        f"⚠️ Ticket limit reached ({max_tickets}); skipping remaining autonomous tickets.",
+                        style="yellow",
+                    )
+                    break
                 new_tickets.append(ticket)
                 seen_tickets.add(ticket_key)
 
@@ -67,6 +74,12 @@ class DocsManager(BaseManager):
 
         self.tickets_created = new_tickets
         console.print(f"🎫 Created {len(new_tickets)} tickets in planfile.yaml")
+
+    def _count_existing_tickets(self, planfile: Dict[str, Any]) -> int:
+        total = 0
+        for sprint in planfile.get("sprints", []):
+            total += len(sprint.get("task_patterns", []))
+        return total
 
     def create_default_planfile(self) -> Dict[str, Any]:
         """Create default planfile structure."""
