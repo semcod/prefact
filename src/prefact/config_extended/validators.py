@@ -3,6 +3,9 @@ from typing import Any, Dict, List
 
 AUTONOMOUS_PERFORMANCE_LIMIT_KEYS = (
     "autonomous_max_examples_per_issue",
+    "autonomous_max_issues",
+    "autonomous_max_files_to_scan",
+    "autonomous_max_issues_per_file",
     "autonomous_max_tickets",
     "autonomous_max_todo_items",
     "autonomous_max_completed_todos",

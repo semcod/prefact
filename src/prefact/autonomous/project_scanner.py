@@ -28,6 +28,13 @@ class ProjectScanner(BaseManager):
             # Get list of files to scan
             scanner = Scanner(config)
             files_to_scan = list(scanner.collect_files())
+            max_files_to_scan = self.get_autonomous_limit("autonomous_max_files_to_scan")
+            if len(files_to_scan) > max_files_to_scan:
+                console.print(
+                    f"⚠️ File scan limit reached ({max_files_to_scan}); scanning only the first batch.",
+                    style="yellow",
+                )
+            files_to_scan = files_to_scan[:max_files_to_scan]
 
             console.print(f"📂 Found {len(files_to_scan)} files to scan")
 
@@ -168,6 +175,8 @@ class ProjectScanner(BaseManager):
         """Group issues by type and location."""
         grouped = {}
         max_examples_per_issue = self.get_autonomous_limit("autonomous_max_examples_per_issue")
+        max_issues_per_file = self.get_autonomous_limit("autonomous_max_issues_per_file")
+        file_issue_counts = {}
 
         for issue in issues:
             # Ensure file is a string
@@ -183,6 +192,10 @@ class ProjectScanner(BaseManager):
                     "severity": issue.severity.value if hasattr(issue, 'severity') else "warning",
                     "examples": []
                 }
+
+            file_issue_counts[file_path] = file_issue_counts.get(file_path, 0) + 1
+            if file_issue_counts[file_path] > max_issues_per_file:
+                continue
 
             grouped[key]["count"] += 1
             if len(grouped[key]["examples"]) < max_examples_per_issue:

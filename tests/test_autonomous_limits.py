@@ -8,6 +8,7 @@ from typing import Any
 import yaml
 
 from prefact.autonomous.docs_manager import DocsManager
+from prefact.autonomous import AutonomousRefact
 from prefact.autonomous.project_scanner import ProjectScanner
 from prefact.autonomous.todo_manager import TodoManager
 from prefact.config_extended import ConfigGenerator, ConfigValidator, ExtendedConfig
@@ -77,6 +78,65 @@ def test_project_scanner_respects_configured_example_limit(tmp_path: Path) -> No
     assert len(grouped[0]["examples"]) == 1
     assert grouped[0]["examples"][0]["message"] == "first"
 
+
+
+def test_project_scanner_caps_files_to_scan(tmp_path: Path) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_files_to_scan": 1})
+    first_file = tmp_path / "first.py"
+    second_file = tmp_path / "second.py"
+    first_file.write_text("print('one')\n")
+    second_file.write_text("print('two')\n")
+
+    scanner = ProjectScanner(tmp_path)
+    collected = []
+
+    class DummyScanner:
+        def collect_files(self):
+            return [first_file, second_file]
+
+    scanner._scan_files_with_progress = lambda _scanner, files, _config: collected.extend(files) or []  # type: ignore[method-assign]
+    scanner.scan_project = ProjectScanner.scan_project.__get__(scanner, ProjectScanner)
+
+    original_scanner_cls = __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner
+    try:
+        __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner = lambda config: DummyScanner()  # type: ignore[assignment]
+        scanner.scan_project()
+    finally:
+        __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner = original_scanner_cls  # type: ignore[assignment]
+
+    assert collected == [first_file]
+
+
+def test_project_scanner_caps_issues_per_file(tmp_path: Path) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_issues_per_file": 1})
+    scanner = ProjectScanner(tmp_path)
+    file_path = tmp_path / "module.py"
+
+    issues = [
+        Issue("demo-rule", file_path, 1, 1, "first", Severity.WARNING),
+        Issue("demo-rule", file_path, 2, 1, "second", Severity.WARNING),
+    ]
+
+    grouped = scanner.group_issues(issues)
+
+    assert len(grouped) == 1
+    assert grouped[0]["count"] == 1
+    assert grouped[0]["examples"][0]["message"] == "first"
+
+
+def test_autonomous_refact_caps_grouped_issues_before_distribution(tmp_path: Path) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_issues": 1})
+    refact = AutonomousRefact(tmp_path)
+    refact.scanner.scan_project = lambda: [
+        Issue("demo-rule", tmp_path / "a.py", 1, 1, "first", Severity.WARNING),
+        Issue("demo-rule", tmp_path / "b.py", 2, 1, "second", Severity.WARNING),
+    ]  # type: ignore[method-assign]
+
+    refact.scan_project()
+
+    assert len(refact.issues_found) == 1
+    assert refact.todo_manager.issues_found == refact.issues_found
+    assert refact.docs_manager.issues_found == refact.issues_found
 
 
 def test_docs_manager_respects_total_ticket_limit(tmp_path: Path) -> None:

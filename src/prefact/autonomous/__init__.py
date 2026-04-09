@@ -89,7 +89,14 @@ class AutonomousRefact:
         """Scan project for issues."""
         raw_issues = self.scanner.scan_project()
         # Group issues for other managers
-        self.issues_found = self.scanner.group_issues(raw_issues)
+        grouped_issues = self.scanner.group_issues(raw_issues)
+        max_issues = self.scanner.get_autonomous_limit("autonomous_max_issues")
+        if len(grouped_issues) > max_issues:
+            console.print(
+                f"⚠️ Issue limit reached ({max_issues}); trimming autonomous run results.",
+                style="yellow",
+            )
+        self.issues_found = grouped_issues[:max_issues]
         # Share issues with other managers
         self.todo_manager.issues_found = self.issues_found
         self.docs_manager.issues_found = self.issues_found

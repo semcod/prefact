@@ -11,6 +11,9 @@ from .constants import DEFAULT_CACHE_SIZE, DEFAULT_MAX_LINE_LENGTH
 
 DEFAULT_AUTONOMOUS_LIMITS = {
     "autonomous_max_examples_per_issue": 3,
+    "autonomous_max_issues": 500,
+    "autonomous_max_files_to_scan": 1000,
+    "autonomous_max_issues_per_file": 50,
     "autonomous_max_tickets": 100,
     "autonomous_max_todo_items": 200,
     "autonomous_max_completed_todos": 100,
