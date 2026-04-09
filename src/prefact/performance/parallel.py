@@ -16,6 +16,11 @@ from typing import Any, Dict, List, Optional, Tuple
 from prefact.config import Config
 from prefact.engine import RefactoringEngine
 
+MAX_1 = 1.5
+MAX_16 = 16
+CONSTANT_3600 = 3600
+
+
 
 class ParallelScanTask:
     """A task for parallel scanning."""
@@ -62,7 +67,7 @@ class ParallelScanTask:
 
         # Cache result if enabled
         if self.cache_enabled:
-            cache.set(cache_key, pickle.dumps(result), expire=3600)  # 1 hour
+            cache.set(cache_key, pickle.dumps(result), expire=CONSTANT_3600)  # 1 hour
 
         return result
 
@@ -75,7 +80,7 @@ class ParallelEngine:
         self.max_workers = config.get_rule_option(
             "_performance",
             "max_workers",
-            min(int(multiprocessing.cpu_count() * 1.5), 16)  # 1.5x CPU count, max 16
+            min(int(multiprocessing.cpu_count() * MAX_1), MAX_16)  # 1.5x CPU count, max MAX_16
         )
         self.chunk_size = config.get_rule_option(
             "_performance",

@@ -31,6 +31,15 @@ CONSTANT_11 = 11
 CONSTANT_60 = 60
 
 
+PORT_3 = PORT_3
+CONSTANT_5 = CONSTANT_5
+PORT_6 = PORT_6
+CONSTANT_8 = CONSTANT_8
+CONSTANT_9 = CONSTANT_9
+CONSTANT_11 = CONSTANT_11
+CONSTANT_60 = CONSTANT_60
+
+
 
 class IntegrationTestCase:
     """Base class for integration test cases."""

@@ -12,6 +12,9 @@ from prefact.scanner import Scanner
 
 from ._base import BaseManager, console
 
+CONSTANT_6 = 6
+
+
 
 class TodoManager(BaseManager):
     """Manages TODO.md file operations."""
@@ -50,7 +53,7 @@ class TodoManager(BaseManager):
             line = lines[i].strip()
 
             if line.startswith("- [ ] ") or line.startswith("- [x] "):
-                content = line[6:]  # Remove "- [ ] " or "- [x] "
+                content = line[CONSTANT_6:]  # Remove "- [ ] " or "- [x] "
 
                 # Handle multi-line messages
                 while i + 1 < len(lines) and not lines[i + 1].strip().startswith("- [") and lines[i + 1].strip():
@@ -119,7 +122,7 @@ class TodoManager(BaseManager):
         for key, todo_info in existing_todos.items():
             if key not in current_issues and todo_info['status'] == 'pending':
                 # Mark as completed
-                completed_tasks.append(f"- [x] {todo_info['original_line'][6:]}")
+                completed_tasks.append(f"- [x] {todo_info['original_line'][CONSTANT_6:]}")
 
         return completed_tasks
 
@@ -193,7 +196,7 @@ class TodoManager(BaseManager):
                 in_current_section = False
                 continue
             elif in_current_section and line.strip().startswith("- [ ]"):
-                task_line = line.strip()[6:]  # Remove "- [ ] "
+                task_line = line.strip()[CONSTANT_6:]  # Remove "- [ ] "
                 if " - " in task_line:
                     file_line_part = task_line.split(" - ")[0]
                     message = task_line.split(" - ", 1)[1]

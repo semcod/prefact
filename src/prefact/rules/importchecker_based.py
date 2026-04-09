@@ -13,6 +13,12 @@ from typing import Dict, List, Optional
 from prefact.config import Config
 from prefact.models import Fix, Issue, Severity, ValidationResult
 
+PORT_3 = 3
+CONSTANT_4 = 4
+MAX_5 = 5
+PORT_6 = 6
+
+
 try:
     from prefact.rules import BaseRule, register
 except ImportError:
@@ -151,16 +157,16 @@ class ImportCheckerUnusedImports(BaseRule):
                 # Extract import names
                 if stripped.startswith("from "):
                     parts = stripped.split()
-                    if len(parts) >= 4:
+                    if len(parts) >= CONSTANT_4:
                         module = parts[1]
-                        imports = parts[3].split(",")
+                        imports = parts[PORT_3].split(",")
                         for imp in imports:
                             name = imp.strip().split(" as ")[0]
                             import_lines[name] = str(i + 1)
                             if module:
                                 import_lines[f"{module}.{name}"] = str(i + 1)
                 else:
-                    imports = stripped[6:].split(",")  # Remove "import"
+                    imports = stripped[PORT_6:].split(",")  # Remove "import"
                     for imp in imports:
                         name = imp.strip().split(" as ")[0].split(".")[0]
                         import_lines[name] = str(i + 1)
@@ -272,7 +278,7 @@ class ImportDependencyAnalysis(BaseRule):
         """Load configuration."""
         return {
             "max_depth": self.config.get_rule_option(
-                self.rule_id, "max_depth", 5
+                self.rule_id, "max_depth", MAX_5
             ),
             "detect_cycles": self.config.get_rule_option(
                 self.rule_id, "detect_cycles", True
@@ -324,7 +330,7 @@ class ImportDependencyAnalysis(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
                     parts = stripped.split()
-                    if len(parts) >= 4:
+                    if len(parts) >= CONSTANT_4:
                         module = parts[1]
                         imports.append({
                             "name": module,
@@ -428,9 +434,9 @@ class ImportOptimizer(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
                     parts = stripped.split()
-                    if len(parts) >= 4:
+                    if len(parts) >= CONSTANT_4:
                         module = parts[1]
-                        names = parts[3].split(",")
+                        names = parts[PORT_3].split(",")
                         for name in names:
                             clean_name = name.strip().split(" as ")[0]
                             imports.append({
@@ -439,7 +445,7 @@ class ImportOptimizer(BaseRule):
                                 "module": module
                             })
                 else:
-                    names = stripped[6:].split(",")
+                    names = stripped[PORT_6:].split(",")
                     for name in names:
                         clean_name = name.strip().split(" as ")[0].split(".")[0]
                         imports.append({

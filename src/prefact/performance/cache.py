@@ -9,8 +9,14 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+CONSTANT_1024 = 1024
+MIN_1800 = 1800
+CONSTANT_3600 = 3600
+CONSTANT_86400 = 86400
+
+
 # Constants for caching
-DEFAULT_CACHE_EXPIRE = 1800  # 30 minutes
+DEFAULT_CACHE_EXPIRE = MIN_1800  # 30 minutes
 
 try:
     import diskcache
@@ -24,7 +30,7 @@ from prefact.config import Config
 class Cache:
     """Wrapper for diskcache with additional functionality."""
 
-    def __init__(self, cache_dir: Optional[Path] = None, size_limit: int = 1024 * 1024 * 100):  # 100MB
+    def __init__(self, cache_dir: Optional[Path] = None, size_limit: int = CONSTANT_1024 * CONSTANT_1024 * 100):  # 100MB
         if not DISKCACHE_AVAILABLE:
             raise ImportError("diskcache is required for caching. Install with: pip install diskcache")
 
@@ -138,7 +144,7 @@ class ScanResultCache:
         rule_ids: tuple[str, ...],
         config_hash: str,
         result: Any,
-        expire: int = 3600  # 1 hour
+        expire: int = CONSTANT_3600  # 1 hour
     ) -> None:
         """Cache scan result."""
         key = self.get_key(file_path, file_hash, rule_ids, config_hash)
@@ -170,7 +176,7 @@ class ConfigCache:
     def set(self, config: Config, processed_config: Dict[str, Any]) -> None:
         """Cache processed configuration."""
         key = self.get_key(config)
-        self.cache.set(key, processed_config, expire=86400)  # 24 hours
+        self.cache.set(key, processed_config, expire=CONSTANT_86400)  # 24 hours
 
 
 class RuleResultCache:
@@ -236,7 +242,7 @@ class FileHashCache:
         key = f"hash:{file_path}"
         mtime = file_path.stat().st_mtime
 
-        self.cache.set(key, {"hash": file_hash, "mtime": mtime}, expire=86400)
+        self.cache.set(key, {"hash": file_hash, "mtime": mtime}, expire=CONSTANT_86400)
 
 
 # Global cache instance
@@ -255,7 +261,7 @@ def initialize_cache(config: Config) -> None:
         return
 
     cache_dir = config.get_rule_option("_performance", "cache_dir")
-    size_limit = config.get_rule_option("_performance", "cache_size", 100 * 1024 * 1024)
+    size_limit = config.get_rule_option("_performance", "cache_size", 100 * CONSTANT_1024 * CONSTANT_1024)
 
     _cache = Cache(cache_dir, size_limit)
     _scan_cache = ScanResultCache(_cache)
@@ -314,7 +320,7 @@ def cleanup_cache() -> None:
 
 
 # Cache decorators
-def cached_result(expire: int = 3600, key_func=None) -> Any:
+def cached_result(expire: int = CONSTANT_3600, key_func=None) -> Any:
     """Decorator to cache function results."""
     def decorator(func) -> Any:
         def wrapper(*args, **kwargs) -> Any:
