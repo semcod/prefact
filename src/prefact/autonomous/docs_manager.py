@@ -31,6 +31,7 @@ class DocsManager(BaseManager):
         new_tickets = []
         seen_tickets = set()
         max_tickets = self.get_autonomous_limit("autonomous_max_tickets")
+        skipped_tickets = 0
         for issue_group in self.issues_found:
             ticket = self.create_ticket_from_issue(issue_group)
 
@@ -40,8 +41,9 @@ class DocsManager(BaseManager):
             # Check if ticket already exists in planfile or current run
             if ticket_key not in seen_tickets and not self.ticket_exists(planfile, ticket):
                 if self._count_existing_tickets(planfile) + len(new_tickets) >= max_tickets:
+                    skipped_tickets = len(self.issues_found) - len(new_tickets)
                     console.print(
-                        f"⚠️ Ticket limit reached ({max_tickets}); skipping remaining autonomous tickets.",
+                        f"⚠️ Ticket limit reached ({max_tickets}); skipping {max(0, skipped_tickets)} remaining autonomous tickets.",
                         style="yellow",
                     )
                     break
@@ -73,7 +75,13 @@ class DocsManager(BaseManager):
             yaml.dump(planfile, f, default_flow_style=False, sort_keys=False)
 
         self.tickets_created = new_tickets
-        console.print(f"🎫 Created {len(new_tickets)} tickets in planfile.yaml")
+        if skipped_tickets > 0:
+            console.print(
+                f"🎫 Created {len(new_tickets)} tickets in planfile.yaml ({skipped_tickets} issue groups skipped by limit)",
+                style="yellow",
+            )
+        else:
+            console.print(f"🎫 Created {len(new_tickets)} tickets in planfile.yaml")
 
     def _count_existing_tickets(self, planfile: Dict[str, Any]) -> int:
         total = 0

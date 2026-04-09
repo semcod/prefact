@@ -94,6 +94,7 @@ class TodoManager(BaseManager):
         total_active_todos = 0
         max_todo_items = self.get_autonomous_limit("autonomous_max_todo_items")
         limit_reached = False
+        skipped_active_todos = 0
 
         for issue_group in self.issues_found:
             rel_file = self._get_relative_file_path(issue_group['file'])
@@ -116,8 +117,9 @@ class TodoManager(BaseManager):
                     if len(new_todos) < max_todo_items:
                         new_todos.append(f"- {checkbox} {rel_file}:{example['line']} - {example['message']}")
                     elif not limit_reached:
+                        skipped_active_todos = total_active_todos - len(new_todos)
                         console.print(
-                            f"⚠️ TODO item limit reached ({max_todo_items}); omitting remaining active issues from TODO.md.",
+                            f"⚠️ TODO item limit reached ({max_todo_items}); omitting {max(0, skipped_active_todos)} remaining active issues from TODO.md.",
                             style="yellow",
                         )
                         limit_reached = True
@@ -131,6 +133,7 @@ class TodoManager(BaseManager):
         total_completed_todos = 0
         max_completed_todos = self.get_autonomous_limit("autonomous_max_completed_todos")
         limit_reached = False
+        skipped_completed_todos = 0
 
         for key, todo_info in existing_todos.items():
             if key not in current_issues and todo_info['status'] == 'pending':
@@ -138,8 +141,9 @@ class TodoManager(BaseManager):
                 if len(completed_tasks) < max_completed_todos:
                     completed_tasks.append(f"- [x] {todo_info['original_line'][CONSTANT_6:]}")
                 elif not limit_reached:
+                    skipped_completed_todos = total_completed_todos - len(completed_tasks)
                     console.print(
-                        f"⚠️ Completed TODO limit reached ({max_completed_todos}); omitting remaining completed tasks from TODO.md.",
+                        f"⚠️ Completed TODO limit reached ({max_completed_todos}); omitting {max(0, skipped_completed_todos)} remaining completed tasks from TODO.md.",
                         style="yellow",
                     )
                     limit_reached = True

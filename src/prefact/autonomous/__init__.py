@@ -76,6 +76,8 @@ class AutonomousRefact:
             console.print("📋 Managing documentation...")
             self.manage_documentation()
 
+            self._print_autonomous_summary()
+
             console.print("✅ Autonomous prefact completed successfully!", style="green")
             return True
 
@@ -151,6 +153,16 @@ class AutonomousRefact:
     def update_changelog_md(self) -> None:
         """Update CHANGELOG.md with recent changes."""
         self.docs_manager.update_changelog_md()
+
+    def _print_autonomous_summary(self) -> None:
+        """Print a compact summary of the autonomous run."""
+        console.print(
+            "📊 Autonomous summary: "
+            f"{len(self.issues_found)} issue groups processed, "
+            f"{len(self.tickets_created)} tickets created, "
+            f"{len(self.todo_manager.issues_found)} TODO issues shared",
+            style="blue",
+        )
 
     def run_tests(self) -> bool:
         """Run project tests."""

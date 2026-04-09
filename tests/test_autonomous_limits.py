@@ -170,6 +170,28 @@ def test_autonomous_refact_stops_before_docs_when_time_limit_exceeded(tmp_path: 
         autonomous_module.monotonic = original_monotonic  # type: ignore[assignment]
 
 
+def test_autonomous_refact_prints_final_summary(tmp_path: Path, capsys) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_run_seconds": 1})
+    refact = AutonomousRefact(tmp_path)
+
+    refact.run_examples = lambda: True  # type: ignore[method-assign]
+    refact.scan_project = lambda: None  # type: ignore[method-assign]
+    refact.update_planfile = lambda: None  # type: ignore[method-assign]
+    refact.manage_documentation = lambda: None  # type: ignore[method-assign]
+
+    import prefact.autonomous as autonomous_module
+
+    original_monotonic = autonomous_module.monotonic
+    try:
+        autonomous_module.monotonic = lambda: 0.0  # type: ignore[assignment]
+        assert refact.run_autonomous() is True
+    finally:
+        autonomous_module.monotonic = original_monotonic  # type: ignore[assignment]
+
+    output = capsys.readouterr().out
+    assert "Autonomous summary:" in output
+
+
 def test_docs_manager_respects_total_ticket_limit(tmp_path: Path) -> None:
     _write_prefact_config(tmp_path, {"autonomous_max_tickets": 2})
     planfile = {
@@ -203,6 +225,53 @@ def test_docs_manager_respects_total_ticket_limit(tmp_path: Path) -> None:
     assert len(task_patterns) == 2
     assert len(manager.tickets_created) == 1
     assert task_patterns[-1]["rule_id"] == "rule-a"
+
+
+def test_docs_manager_reports_skipped_ticket_count(tmp_path: Path, capsys) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_tickets": 1})
+    manager = DocsManager(tmp_path)
+    manager.issues_found = [
+        _issue_group(tmp_path / "a.py", "rule-a"),
+        _issue_group(tmp_path / "b.py", "rule-b"),
+    ]
+
+    manager.update_planfile()
+
+    output = capsys.readouterr().out
+    assert "skipping 1 remaining autonomous tickets" in output
+    assert "1 issue groups skipped by limit" in output
+
+
+def test_todo_manager_reports_skipped_todo_counts(tmp_path: Path, capsys) -> None:
+    _write_prefact_config(
+        tmp_path,
+        {
+            "autonomous_max_todo_items": 1,
+            "autonomous_max_completed_todos": 1,
+            "autonomous_max_todo_execution_items": 1,
+        },
+    )
+    current_file = tmp_path / "pkg" / "module.py"
+    current_file.parent.mkdir(parents=True)
+    current_file.write_text("print('demo')\n")
+    (tmp_path / "TODO.md").write_text(
+        "# TODO\n\n"
+        "## 📋 Current Issues\n\n"
+        f"- [ ] {current_file}:1 - issue 1\n"
+        "- [ ] other.py:1 - issue 2\n"
+        "## ✅ Completed Tasks\n\n"
+        "- [ ] old.py:1 - old issue\n"
+        "- [ ] old.py:2 - old issue 2\n"
+    )
+
+    manager = TodoManager(tmp_path)
+    manager.issues_found = [_issue_group(current_file, "rule-a", example_count=2)]
+
+    manager.update_todo_md()
+
+    output = capsys.readouterr().out
+    assert "omitting 1 remaining active issues" in output
+    assert "omitting 1 remaining completed tasks" in output
 
 
 
