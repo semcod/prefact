@@ -139,6 +139,37 @@ def test_autonomous_refact_caps_grouped_issues_before_distribution(tmp_path: Pat
     assert refact.docs_manager.issues_found == refact.issues_found
 
 
+def test_autonomous_refact_stops_before_docs_when_time_limit_exceeded(tmp_path: Path) -> None:
+    _write_prefact_config(tmp_path, {"autonomous_max_run_seconds": 1})
+    refact = AutonomousRefact(tmp_path)
+
+    refact.run_examples = lambda: True  # type: ignore[method-assign]
+    refact.scan_project = lambda: None  # type: ignore[method-assign]
+
+    called = {"planfile": False, "docs": False}
+
+    def fail_planfile() -> None:
+        called["planfile"] = True
+
+    def fail_docs() -> None:
+        called["docs"] = True
+
+    refact.update_planfile = fail_planfile  # type: ignore[method-assign]
+    refact.manage_documentation = fail_docs  # type: ignore[method-assign]
+
+    import prefact.autonomous as autonomous_module
+
+    original_monotonic = autonomous_module.monotonic
+    try:
+        times = iter([0.0, 1.0])
+        autonomous_module.monotonic = lambda: next(times)  # type: ignore[assignment]
+
+        assert refact.run_autonomous() is False
+        assert called == {"planfile": False, "docs": False}
+    finally:
+        autonomous_module.monotonic = original_monotonic  # type: ignore[assignment]
+
+
 def test_docs_manager_respects_total_ticket_limit(tmp_path: Path) -> None:
     _write_prefact_config(tmp_path, {"autonomous_max_tickets": 2})
     planfile = {

@@ -18,6 +18,7 @@ DEFAULT_AUTONOMOUS_LIMITS = {
     "autonomous_max_issues": 500,
     "autonomous_max_files_to_scan": 1000,
     "autonomous_max_issues_per_file": 50,
+    "autonomous_max_run_seconds": 300,
     "autonomous_max_tickets": 100,
     "autonomous_max_todo_items": 200,
     "autonomous_max_completed_todos": 100,

@@ -8,6 +8,7 @@ This module provides autonomous functionality for prefact including:
 """
 
 from pathlib import Path
+from time import monotonic
 from typing import Any, Dict, List, Optional
 
 from prefact.autonomous.docs_manager import DocsManager
@@ -41,6 +42,7 @@ class AutonomousRefact:
         from prefact import __version__
 
         console.print(Panel.fit(f" Prefact v {__version__} ", style="bold blue"))
+        run_started = monotonic()
 
         try:
             # Step 1: Initialize if needed
@@ -57,6 +59,14 @@ class AutonomousRefact:
             # Step 3: Scan project for issues
             console.print("🔍 Scanning project for issues...")
             self.scan_project()
+
+            max_run_seconds = self.scanner.get_autonomous_limit("autonomous_max_run_seconds")
+            if monotonic() - run_started >= max_run_seconds:
+                console.print(
+                    f"⚠️ Autonomous run time limit reached ({max_run_seconds}s); stopping before documentation updates.",
+                    style="yellow",
+                )
+                return False
 
             # Step 4: Update planfile.yaml with tickets
             console.print("🎫 Updating planfile.yaml...")
