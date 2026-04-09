@@ -66,7 +66,7 @@ class TodoManager(BaseManager):
 
                     # Parse file and line
                     if ":" in file_line_part:
-                        file_part = file_line_part.rsplit(":", 1)[0]
+                        file_part = self._get_relative_file_path(file_line_part.rsplit(":", 1)[0])
                         line_part = file_line_part.rsplit(":", 1)[1]
                         try:
                             line_num = int(line_part)
@@ -183,7 +183,10 @@ class TodoManager(BaseManager):
         """Convert file path to relative path for better portability."""
         path = Path(file_path)
         if path.is_absolute():
-            return str(path.relative_to(self.project_root))
+            try:
+                return str(path.relative_to(self.project_root))
+            except ValueError:
+                return str(file_path)
         return str(file_path)
 
     def execute_todos(self) -> None:
@@ -224,7 +227,7 @@ class TodoManager(BaseManager):
         in_current_section = False
 
         for line in lines:
-            if line.strip() == "## 📋 Current Issues":
+            if line.strip().startswith("## 📋 Current Issues"):
                 in_current_section = True
                 continue
             elif line.strip().startswith("##") and in_current_section:
@@ -358,4 +361,4 @@ class TodoManager(BaseManager):
             new_content += "\n\n"
 
         self.todo_path.write_text(new_content)
-        console.print(f"🎉 Execution complete: {executed_count}/{total_tasks} tasks processed")
+        console.print(f"🎉 Execution complete: {processed_tasks}/{total_tasks} tasks processed, {executed_count} fixed")

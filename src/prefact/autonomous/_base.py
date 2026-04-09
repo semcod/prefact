@@ -15,6 +15,7 @@ MIN_CODE_SIZE = 50
 HASH_BLOCK_SIZE = 65536
 DEFAULT_AUTONOMOUS_LIMITS = {
     "autonomous_max_examples_per_issue": 3,
+    "autonomous_max_issues": 500,
     "autonomous_max_tickets": 100,
     "autonomous_max_todo_items": 200,
     "autonomous_max_completed_todos": 100,
@@ -33,12 +34,14 @@ class BaseManager:
         self.changelog_path = project_root / "CHANGELOG.md"
         self.examples_dir = project_root / "examples"
         self._autonomous_limits: Optional[Dict[str, int]] = None
+        self._autonomous_limits_mtime: Optional[float] = None
 
     def get_autonomous_limit(self, key: str) -> int:
         return self._load_autonomous_limits()[key]
 
     def _load_autonomous_limits(self) -> Dict[str, int]:
-        if self._autonomous_limits is not None:
+        config_mtime = self.refact_config_path.stat().st_mtime if self.refact_config_path.exists() else None
+        if self._autonomous_limits is not None and self._autonomous_limits_mtime == config_mtime:
             return self._autonomous_limits
 
         limits = DEFAULT_AUTONOMOUS_LIMITS.copy()
@@ -56,4 +59,5 @@ class BaseManager:
                         limits[limit_key] = configured_value
 
         self._autonomous_limits = limits
+        self._autonomous_limits_mtime = config_mtime
         return self._autonomous_limits
