@@ -1,0 +1,25 @@
+# redsl | refactor | 2026-04-19
+# mode=executed | files=111 | lines=15065
+# CC̄=7.1 | critical=18 | decisions=1
+
+STATUS[success]
+
+DECISIONS[1]:
+  1. split_module → src/prefact/performance/cache.py (score=1.17) God module — zbyt duży plik z za dużą liczbą funkcji
+
+EXECUTION[applied=1, rejected=0, rate=1.0]:
+  ✓ split_module: src/prefact/performance/cache.py
+
+METRICS[10]:
+  🟢 test_large_files.py::None CC=8 LOC=48
+  🟢 benchmark_ram_optimization.py::None CC=7 LOC=222
+  🟢 test_ram_implementation.py::None CC=0 LOC=54
+  🟢 examples/generate_examples.py::None CC=0 LOC=233
+  🟢 examples/run_examples.py::None CC=8 LOC=119
+  🟢 tests/test_relative_imports.py::None CC=6 LOC=135
+  🟢 tests/test_engine.py::None CC=4 LOC=99
+  🟢 tests/test_config.py::None CC=4 LOC=64
+  🟢 tests/test_refactoring.py::None CC=2 LOC=11
+  🟢 tests/test_dependency_checker.py::None CC=8 LOC=133
+
+LOG: /home/tom/github/semcod/prefact/logs/redsl_20260419_185847.log

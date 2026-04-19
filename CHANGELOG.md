@@ -301,6 +301,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.43] - 2026-04-19
+
+### Docs
+- Update README.md
+- Update redsl_refactor_plan.md
+- Update redsl_refactor_report.md
+
+### Other
+- Update .redsl/history.jsonl
+- Update Makefile
+- Update planfile.yaml
+- Update redsl_refactor_plan.toon.yaml
+- Update redsl_refactor_report.toon.yaml
+
 ## [0.1.42] - 2026-04-19
 
 ### Docs
