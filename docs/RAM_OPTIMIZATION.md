@@ -1,10 +1,6 @@
-# RAM Preloading Optimization for Prefact
-
 ## Overview
 
 This optimization implements RAM preloading to eliminate redundant file I/O operations during the scan→fix→validate pipeline. Previously, each file was read 3 times (once per phase). Now files are loaded once into memory and reused.
-
-## Implementation Details
 
 ### 1. RefactoringEngine Changes (`src/prefact/engine.py`)
 
@@ -74,10 +70,6 @@ No configuration changes required - the optimization is automatically enabled.
 ```bash
 # Run with verbose output to see preloading in action
 prefact scan --path . --verbose
-
-# The output will show:
-# Preloaded 150 files into RAM (125000 bytes)
-```
 
 ## Memory Impact
 

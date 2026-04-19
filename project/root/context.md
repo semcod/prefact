@@ -4,12 +4,12 @@
 
 - **Project**: /home/tom/github/semcod/prefact
 - **Primary Language**: python
-- **Languages**: python: 99, shell: 3, typescript: 1
+- **Languages**: python: 98, shell: 2, typescript: 1
 - **Analysis Mode**: static
 - **Total Functions**: 743
 - **Total Classes**: 143
-- **Modules**: 103
-- **Entry Points**: 0
+- **Modules**: 101
+- **Entry Points**: 681
 
 ## Architecture by Module
 
@@ -117,9 +117,178 @@
 
 Main execution flows into the system:
 
+### src.prefact.rules.registry._initialize_built_in_rules
+> Initialize built-in rule mappings.
+- **Calls**: src.prefact.rules.registry.get_lazy_registry, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module
+
+### examples.run_examples.main
+> Run all examples and show results.
+- **Calls**: console.print, examples.run_examples.find_examples, console.print, Table, table.add_column, table.add_column, table.add_column, console.print
+
+### src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+> Update planfile.yaml with new tickets.
+- **Calls**: self.planfile_path.exists, src.prefact.performance.cache_adapters.ScanResultCache.set, self.get_autonomous_limit, None.extend, self.create_default_planfile, self.create_ticket_from_issue, None.append, open
+
+### src.prefact.reporters.console.print_report
+- **Calls**: Console, console.print, console.print, console.print, console.print, console.print, Panel, Table
+
+### src.prefact.config_extended.models.ExtendedConfig.from_yaml
+- **Calls**: None.items, cls, path.exists, cls, open, src.prefact.config_extended.utils.deep_merge, isinstance, yaml.safe_load
+
+### src.prefact.config_extended.config.ExtendedConfig.from_yaml
+> Load configuration from YAML file with environment support.
+- **Calls**: cls._parse_rules, raw.pop, raw.pop, raw.pop, raw.pop, raw.pop, raw.pop, cls
+
+### benchmark_ram_optimization.main
+> Run multiple benchmarks with different file counts and sizes.
+- **Calls**: print, print, print, print, print, print, print, print
+
+### src.prefact.rules.magic_numbers.MagicNumberRule.scan_file
+- **Calls**: any, ast.parse, ast.walk, re.match, isinstance, isinstance, isinstance, self._is_magic_number
+
+### src.prefact.autonomous.AutonomousRefact.run_autonomous
+> Run autonomous prefact process.
+- **Calls**: console.print, monotonic, Panel.fit, console.print, console.print, self.scan_project, self.scanner.get_autonomous_limit, console.print
+
+### src.prefact.rules.mypy_based.MyPyHelper.check_file
+> Run MyPy on a single file and return JSON results.
+- **Calls**: tempfile.TemporaryDirectory, Path, str, str, config.get, config.get, subprocess.run, report_file.exists
+
+### src.prefact.autonomous.todo_manager.TodoManager._parse_existing_todos
+> Parse existing TODO.md entries.
+- **Calls**: self.todo_path.read_text, existing_content.split, self.todo_path.exists, len, None.strip, line.startswith, line.startswith, None.strip
+
+### src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
+> Create a composite rule dynamically.
+- **Calls**: None.__init__, self._create_strategy, self._load_tools, src.prefact.rules.registry.LazyRuleRegistry.get_all_rules, self.strategy.scan, self.strategy.fix, ValidationResult, SequentialScanStrategy
+
+### vscode-extension.src.extension.PrefactTreeProvider.activate
+- **Calls**: vscode-extension.src.extension.log, vscode-extension.src.extension.PrefactDiagnosticsProvider, vscode-extension.src.extension.PrefactTreeProvider, vscode-extension.src.extension.createTreeView, vscode-extension.src.extension.registerCommand, vscode-extension.src.extension.openTextDocument, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanFile, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanWorkspace
+
+### src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate
+- **Calls**: ValidationResult, ast.parse, checks.append, ast.parse, ast.walk, sum, sum, errors.append
+
+### src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel
+> Scan files using parallel processing.
+- **Calls**: min, console.print, config.performance.get, len, ThreadPoolExecutor, as_completed, file_path.read_text, executor.submit
+
+### src.prefact.rules.composite_rules.CompositeImportRules._load_tools
+> Load all import-related tools.
+- **Calls**: self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, tools.extend, tools.append, tools.append
+
+### examples.sample-project.cli.main
+> Main CLI command.
+- **Calls**: click.command, click.option, click.option, print, User, print, DataProcessor, processor.add_item
+
+### src.prefact.benchmark.ScanProbe.run
+- **Calls**: textwrap.dedent, BenchmarkResult, tempfile.TemporaryDirectory, Path, vscode-extension.src.extension.PrefactDiagnosticsProvider.range, Config, RefactoringEngine, time.perf_counter
+
+### src.prefact.autonomous.project_scanner.ProjectScanner.scan_project
+> Scan project for issues.
+- **Calls**: ExtendedConfig.from_yaml, RefactoringEngine, Scanner, list, self.get_autonomous_limit, console.print, self._scan_files_with_progress, console.print
+
+### src.prefact.rules.importchecker_based.ImportCheckerUnusedImports._find_import_lines
+> Find line numbers for each import.
+- **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
+
+### src.prefact.engine.RefactoringEngine.run
+- **Calls**: PipelineResult, self.scanner.collect_files, self._preload_sources, issues_map.values, issues_map.items, issues_map.update, issues_map.update, result.issues_found.extend
+
+### src.prefact.performance.cache.cached_file_operation
+> Decorator to cache file operations.
+- **Calls**: src.prefact.performance.cache.get_hash_cache, hash_cache.get_hash, src.prefact.performance.cache.get_cache, cache.get, func, cache.set, func, hash_cache.set_hash
+
+### src.prefact.rules.importchecker_based.ImportOptimizer._extract_all_imports
+> Extract all imports with their locations.
+- **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
+
+### src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
+> Create a hybrid rule that can switch between AST and Ruff.
+- **Calls**: None.get, None.__init__, RuleMigrationManager, self.migration_manager.should_use_ruff, self.ast_rule.scan_file, self.migration_manager.should_use_ruff, self.ast_rule.fix, self.migration_manager.should_use_ruff
+
+### src.prefact.plugins.PluginManager.load_plugin
+> Load a plugin and register its rules.
+- **Calls**: print, PluginValidator.validate_plugin_module, metadata.entry_point.split, importlib.import_module, getattr, callable, self._loaded_modules.add, print
+
+### src.prefact.cli.autonomous_cmd
+> Run autonomous prefact mode (-a).
+
+Automatically initializes prefact.yaml if missing, runs examples,
+scans for issues, and creates tickets in planfile
+- **Calls**: main.command, click.option, click.option, click.option, click.option, Console, AutonomousRefact, auto.run_autonomous
+
+### src.prefact.autonomous.setup_manager.SetupManager.run_examples
+> Run all examples and verify they work.
+- **Calls**: list, self.examples_dir.exists, console.print, self.examples_dir.rglob, console.print, Progress, progress.add_task, progress.advance
+
+### src.prefact.autonomous.todo_manager.TodoManager._parse_todo_tasks
+> Parse active tasks from TODO.md.
+- **Calls**: self.todo_path.read_text, content.split, None.startswith, line.strip, None.startswith, None.startswith, line.strip, line.strip
+
+### src.prefact.rules.unimport_based.UnimportUnusedImports.scan_file
+- **Calls**: UnimportHelper.check_source, source.splitlines, enumerate, line.strip, stripped.startswith, item.get, import_lines.get, issues.append
+
+### src.prefact.plugins.PluginManager._discover_local_plugins
+> Discover plugins in a local directory.
+- **Calls**: plugin_dir.glob, PluginValidator.validate_plugin_path, importlib.util.spec_from_file_location, importlib.util.module_from_spec, spec.loader.exec_module, PluginMetadata, plugins.append, print
+
 ## Process Flows
 
 Key execution flows identified:
+
+### Flow 1: _initialize_built_in_rules
+```
+_initialize_built_in_rules [src.prefact.rules.registry]
+  └─> get_lazy_registry
+```
+
+### Flow 2: main
+```
+main [examples.run_examples]
+  └─> find_examples
+```
+
+### Flow 3: update_planfile
+```
+update_planfile [src.prefact.autonomous.docs_manager.DocsManager]
+  └─ →> set
+```
+
+### Flow 4: print_report
+```
+print_report [src.prefact.reporters.console]
+```
+
+### Flow 5: from_yaml
+```
+from_yaml [src.prefact.config_extended.models.ExtendedConfig]
+```
+
+### Flow 6: scan_file
+```
+scan_file [src.prefact.rules.magic_numbers.MagicNumberRule]
+```
+
+### Flow 7: run_autonomous
+```
+run_autonomous [src.prefact.autonomous.AutonomousRefact]
+```
+
+### Flow 8: check_file
+```
+check_file [src.prefact.rules.mypy_based.MyPyHelper]
+```
+
+### Flow 9: _parse_existing_todos
+```
+_parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
+```
+
+### Flow 10: create_composite_rule
+```
+create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
+  └─ →> get_all_rules
+```
 
 ## Key Classes
 
@@ -328,6 +497,43 @@ Key functions that process and transform data:
 > Validate that the code is still valid.
 - **Output to**: ast.parse, ValidationResult, ValidationResult
 
+## Behavioral Patterns
+
+### recursion_deep_merge
+- **Type**: recursion
+- **Confidence**: 0.90
+- **Functions**: src.prefact.config_extended.utils.deep_merge
+
+### recursion__flatten_add
+- **Type**: recursion
+- **Confidence**: 0.90
+- **Functions**: src.prefact.rules.string_concat._flatten_add
+
+### recursion__module_to_str
+- **Type**: recursion
+- **Confidence**: 0.90
+- **Functions**: src.prefact.rules.relative_imports._module_to_str
+
+### state_machine_CacheContext
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: src.prefact.performance.cache.CacheContext.__init__, src.prefact.performance.cache.CacheContext.__enter__, src.prefact.performance.cache.CacheContext.__exit__
+
+### state_machine_RuffPrintStatements
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: src.prefact.rules.ruff_based.RuffPrintStatements.scan_file, src.prefact.rules.ruff_based.RuffPrintStatements._should_ignore_file, src.prefact.rules.ruff_based.RuffPrintStatements.fix, src.prefact.rules.ruff_based.RuffPrintStatements.validate
+
+### state_machine_PylintPrintStatements
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: src.prefact.rules.pylint_based.PylintPrintStatements.__init__, src.prefact.rules.pylint_based.PylintPrintStatements._load_pylint_config, src.prefact.rules.pylint_based.PylintPrintStatements.scan_file, src.prefact.rules.pylint_based.PylintPrintStatements.fix, src.prefact.rules.pylint_based.PylintPrintStatements.validate
+
+### state_machine_PrintStatements
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: src.prefact.rules.print_statements.PrintStatements.scan_file, src.prefact.rules.print_statements.PrintStatements.fix, src.prefact.rules.print_statements.PrintStatements.validate
+
 ## Public API Surface
 
 Functions exposed as public API (no underscore prefix):
@@ -379,6 +585,36 @@ How components interact:
 
 ```mermaid
 graph TD
+    _initialize_built_in --> get_lazy_registry
+    _initialize_built_in --> register_rule_module
+    main --> print
+    main --> find_examples
+    main --> Table
+    main --> add_column
+    update_planfile --> exists
+    update_planfile --> set
+    update_planfile --> get_autonomous_limit
+    update_planfile --> extend
+    update_planfile --> create_default_planf
+    print_report --> Console
+    print_report --> print
+    from_yaml --> items
+    from_yaml --> cls
+    from_yaml --> exists
+    from_yaml --> open
+    from_yaml --> _parse_rules
+    from_yaml --> pop
+    scan_file --> any
+    scan_file --> parse
+    scan_file --> walk
+    scan_file --> match
+    scan_file --> isinstance
+    run_autonomous --> print
+    run_autonomous --> monotonic
+    run_autonomous --> fit
+    check_file --> TemporaryDirectory
+    check_file --> Path
+    check_file --> str
 ```
 
 ## Reverse Engineering Guidelines

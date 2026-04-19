@@ -9,8 +9,6 @@
 **License:** Apache-2.0[(LICENSE)](./LICENSE)  
 **Repository:** [https://github.com/semcod/refactoring](https://github.com/semcod/refactoring)
 
-## Installation
-
 ### From PyPI
 
 ```bash
@@ -43,11 +41,6 @@ pip install prefact[docs]    # documentation tools
 pip install prefact[all]    # all optional features
 ```
 
-## Quick Start
-
-### CLI Usage
-
-```bash
 # Generate full documentation for your project
 prefact ./my-project
 
@@ -159,8 +152,6 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 ```
 prefact/
 ├── project    ├── run_all    ├── generate_examples            ├── before            ├── after├── benchmark_ram_optimization            ├── after    ├── run_examples            ├── before            ├── after            ├── before            ├── after            ├── before            ├── after            ├── before            ├── after            ├── before            ├── after            ├── before        ├── messy_module        ├── cli        ├── utils        ├── core        ├── sample_code        ├── models        ├── custom_rules/            ├── no_todo_rule        ├── example        ├── engine        ├── validator        ├── git_hooks        ├── config        ├── autonomous/        ├── fixer    ├── prefact/            ├── after        ├── scanner            ├── before        ├── _base            ├── exceptions        ├── logging/        ├── models            ├── levels            ├── logger        ├── cli            ├── builtin            ├── cache_state        ├── plugins/        ├── performance/            ├── parallel            ├── cache_adapters        ├── reporters/            ├── console            ├── cache            ├── json_reporter            ├── docs_manager            ├── todo_manager            ├── setup_manager            ├── project_scanner            ├── dependency_checker            ├── _base            ├── config            ├── generator        ├── config_extended/            ├── validation            ├── utils            ├── validators            ├── models            ├── constants            ├── magic_numbers            ├── ruff_based            ├── unused_imports            ├── importchecker_based            ├── composite_factory            ├── pylint_based            ├── registry            ├── strategies            ├── type_hints        ├── rules/            ├── wildcard_imports            ├── string_concat            ├── ai_boilerplate            ├── _ast_cache            ├── import_linter_based            ├── formatters            ├── unimport_based            ├── llm_generated_code            ├── sorted_imports        ├── benchmark            ├── isort_based            ├── benchmark            ├── migration            ├── llm_hallucinations            ├── autoflake_based            ├── composite_rules            ├── duplicate_imports            ├── print_statements        ├── extension            ├── relative_imports            ├── string_transformations            ├── mypy_based```
-
-## API Overview
 
 ### Classes
 
@@ -539,21 +530,14 @@ prefact/
 - Tom Softreck <tom@sapletta.com>
 - Tom Sapletta <tom-sapletta-com@users.noreply.github.com>
 
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](https://github.com/wronai/prefact/blob/main/CONTRIBUTING.md) for guidelines.
 
-### Development Setup
-
-```bash
 # Clone the repository
 git clone https://github.com/semcod/refactoring
 cd prefact
 
 # Install in development mode
 pip install -e ".[dev]"
-
-# Run tests
-pytest
-```
 
 ## Documentation
 
@@ -568,15 +552,15 @@ pytest
 | Output | Description | Link |
 |--------|-------------|------|
 | `README.md` | Project overview (this file) | — |
-| `docs/api.md` | Consolidated API reference | [View](./docs/api.md) |
-| `docs/modules.md` | Module reference with metrics | [View](./docs/modules.md) |
-| `docs/architecture.md` | Architecture with diagrams | [View](./docs/architecture.md) |
-| `docs/dependency-graph.md` | Dependency graphs | [View](./docs/dependency-graph.md) |
-| `docs/coverage.md` | Docstring coverage report | [View](./docs/coverage.md) |
-| `docs/getting-started.md` | Getting started guide | [View](./docs/getting-started.md) |
-| `docs/configuration.md` | Configuration reference | [View](./docs/configuration.md) |
-| `docs/api-changelog.md` | API change tracking | [View](./docs/api-changelog.md) |
-| `CONTRIBUTING.md` | Contribution guidelines | [View](./CONTRIBUTING.md) |
+| `docs/api.md` | Consolidated API reference | [View](https://github.com/wronai/prefact/blob/main/docs/api.md) |
+| `docs/modules.md` | Module reference with metrics | [View](https://github.com/wronai/prefact/blob/main/docs/modules.md) |
+| `docs/architecture.md` | Architecture with diagrams | [View](https://github.com/wronai/prefact/blob/main/docs/architecture.md) |
+| `docs/dependency-graph.md` | Dependency graphs | [View](https://github.com/wronai/prefact/blob/main/docs/dependency-graph.md) |
+| `docs/coverage.md` | Docstring coverage report | [View](https://github.com/wronai/prefact/blob/main/docs/coverage.md) |
+| `docs/getting-started.md` | Getting started guide | [View](https://github.com/wronai/prefact/blob/main/docs/getting-started.md) |
+| `docs/configuration.md` | Configuration reference | [View](https://github.com/wronai/prefact/blob/main/docs/configuration.md) |
+| `docs/api-changelog.md` | API change tracking | [View](https://github.com/wronai/prefact/blob/main/docs/api-changelog.md) |
+| `CONTRIBUTING.md` | Contribution guidelines | [View](https://github.com/wronai/prefact/blob/main/CONTRIBUTING.md) |
 | `examples/` | Usage examples | [Browse](./examples) |
 | `mkdocs.yml` | MkDocs configuration | — |
 

@@ -1,4 +1,4 @@
-# code2llm | 73f 12601L | python:72,shell:2,typescript:1 | 2026-04-19
+# code2llm | 73f 12601L | python:71,shell:1,typescript:1 | 2026-04-19
 # CC̄=3.2 | critical:1/743 | dups:5 | cycles:0
 
 HEALTH[2]:
@@ -16,9 +16,9 @@ PIPELINES[588]:
       PURITY: 100% pure
   [3] Src [process]: process → format_data
       PURITY: 100% pure
-  [4] Src [main]: main → find_examples
+  [4] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [5] Src [process_user]: process_user → helper_function
+  [5] Src [__init__]: __init__
       PURITY: 100% pure
 
 LAYERS:

@@ -2,8 +2,6 @@
 
 This guide helps you migrate from AST-based rules to faster Ruff-based implementations in prefact.
 
-## Why Migrate to Ruff?
-
 ### Performance Benefits
 - **10-100x faster** than AST-based implementations
 - Single pass can detect multiple rule violations
@@ -13,8 +11,6 @@ This guide helps you migrate from AST-based rules to faster Ruff-based implement
 - Battle-tested implementation
 - Covers edge cases you might not have considered
 - Regular updates with new rule implementations
-
-## Migration Overview
 
 ### Rules That Can Be Migrated
 
@@ -33,8 +29,6 @@ This guide helps you migrate from AST-based rules to faster Ruff-based implement
 | relative-imports | Requires package context and complex path resolution |
 | string-concat | Requires transformation to f-strings |
 | missing-return-type | Requires type checking (mypy integration) |
-
-## Step-by-Step Migration
 
 ### Step 1: Install Ruff
 
@@ -146,8 +140,6 @@ MIGRATION_PHASES = {
 }
 ```
 
-## Custom Ruff Rules
-
 ### Creating Custom Ruff-based Rules
 
 ```python
@@ -185,8 +177,6 @@ ignore = ["E501"]  # Ignore line too long
 "__init__.py" = ["F401"]  # Allow unused imports in __init__.py
 "tests/*" = ["T201"]      # Allow print in tests
 ```
-
-## Troubleshooting
 
 ### Issue: Ruff doesn't detect some cases
 
@@ -245,11 +235,6 @@ def fix_with_preserved_formatting(path: Path, issues: List[Issue]) -> str:
     return path.read_text()
 ```
 
-## Best Practices
-
-### 1. Configuration Management
-
-```yaml
 # prefact.yaml
 rules:
   unused-imports:
@@ -287,8 +272,6 @@ def test_rule_equivalence():
             f"AST={len(ast_issues)}, Ruff={len(ruff_issues)}"
         )
 ```
-
-## Performance Optimization Tips
 
 ### 1. Parallel Processing
 

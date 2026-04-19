@@ -1,0 +1,406 @@
+{
+  "project_name": "prefact",
+  "description": "SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorization",
+  "files": [
+    {
+      "path": "test_large_files.py",
+      "type": "python"
+    },
+    {
+      "path": "benchmark_ram_optimization.py",
+      "type": "python"
+    },
+    {
+      "path": "test_ram_implementation.py",
+      "type": "python"
+    },
+    {
+      "path": "examples/generate_examples.py",
+      "type": "python"
+    },
+    {
+      "path": "examples/run_examples.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_relative_imports.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_engine.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_config.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_refactoring.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_dependency_checker.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_unused_imports.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_autonomous_limits.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_rules.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_integrations.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/py.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/parser_core.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/parser_block.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/_compat.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/token.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/ruler.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/parser_inline.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/utils.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/renderer.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/main.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/_punycode.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/markdown_it/tree.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/python_api.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/fixtures.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/_version.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/unraisableexception.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/scope.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/stepwise.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/doctest.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/debugging.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/cacheprovider.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/setuponly.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/skipping.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/python.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/capture.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/pytester_assertions.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/runner.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/pathlib.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/_argcomplete.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/raises.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/setupplan.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/hookspec.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/warning_types.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/pastebin.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/tmpdir.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/logging.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/junitxml.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/warnings.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/legacypath.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/terminalprogress.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/pytester.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/freeze_support.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/unittest.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/tracemalloc.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/helpconfig.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/monkeypatch.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/main.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/recwarn.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/threadexception.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/subtests.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/reports.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/terminal.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/compat.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/deprecated.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/faulthandler.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/timing.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/outcomes.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/nodes.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/_pytest/stash.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_manylinux.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/version.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_parser.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/requirements.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_elffile.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_structures.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/pylock.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/metadata.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/specifiers.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/utils.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_tokenizer.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/tags.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/markers.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/packaging/_musllinux.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/exceptions.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/termui.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/_textwrap.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/_utils.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/_compat.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/parser.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/formatting.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/globals.py",
+      "type": "python"
+    },
+    {
+      "path": ".algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/click/shell_completion.py",
+      "type": "python"
+    }
+  ]
+}

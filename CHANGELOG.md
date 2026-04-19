@@ -301,6 +301,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.42] - 2026-04-19
+
+### Docs
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update docs/MIGRATION_GUIDE.md
+- Update docs/RAM_OPTIMIZATION.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+- Update project/root/context.md
+- Update project/src_examples/context.md
+
+### Other
+- Update .redsl/history.jsonl
+- Update Taskfile.yml
+- Update app.doql.css
+- Update project/analysis.toon.yaml
+- Update project/evolution.toon.yaml
+- Update project/index.html
+- Update project/project.toon.yaml
+- Update project/prompt.txt
+- Update project/root/analysis.toon.yaml
+- Update project/root/evolution.toon.yaml
+- ... and 3 more files
+
 ## [0.1.41] - 2026-04-09
 
 ### Docs
