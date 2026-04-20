@@ -8,8 +8,8 @@ sources:
 - project/duplication.toon.yaml
 stats:
   total: 57
-  todo: 57
-  done: 0
+  todo: 55
+  done: 2
 tasks:
 - id: Q01
   title: 'reduce_complexity: importchecker_based (CC=14)'
@@ -682,13 +682,14 @@ tasks:
   action: extract_function
   priority: 2
   effort: low
-  status: todo
+  status: done
   labels:
   - refactor
   - duplication
   - extract-function
   source: project/duplication.toon.yaml
   priority_label: high
+  completed_at: '2026-04-20T06:36:41.234521+00:00'
 - id: D43
   title: 'extract_function: fix (saves 39L)'
   description: 'Duplicated ''fix'': 14 occurrences, 3 lines each, saves 39 lines.

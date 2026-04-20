@@ -301,6 +301,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.44] - 2026-04-20
+
+### Docs
+- Update README.md
+
+### Other
+- Update .redsl/history.jsonl
+- Update planfile.yaml
+- Update src/prefact/rules/ai_boilerplate.py.bak
+
 ## [0.1.43] - 2026-04-19
 
 ### Docs
