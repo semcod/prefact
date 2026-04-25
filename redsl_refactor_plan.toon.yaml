@@ -1,13 +1,12 @@
-# redsl | refactor | 2026-04-19
-# mode=dry-run | files=111 | lines=15065
-# CC̄=7.1 | critical=18 | decisions=3
+# redsl | refactor | 2026-04-20
+# mode=dry-run | files=118 | lines=15213
+# CC̄=6.8 | critical=17 | decisions=2
 
 STATUS[planned]
 
-DECISIONS[3]:
+DECISIONS[2]:
   1. split_module → src/prefact/performance/cache.py (score=1.17) God module — zbyt duży plik z za dużą liczbą funkcji
   2. split_module → src/prefact/rules/importchecker_based.py (score=1.17) God module — zbyt duży plik z za dużą liczbą funkcji
-  3. split_module → src/prefact/rules/import_linter_based.py (score=1.17) God module — zbyt duży plik z za dużą liczbą funkcji
 
 METRICS[10]:
   🟢 test_large_files.py::None CC=8 LOC=48
@@ -21,4 +20,4 @@ METRICS[10]:
   🟢 tests/test_refactoring.py::None CC=2 LOC=11
   🟢 tests/test_dependency_checker.py::None CC=8 LOC=133
 
-LOG: /home/tom/github/semcod/prefact/logs/redsl_20260419_185722.log
+LOG: /home/tom/github/semcod/prefact/logs/redsl_20260420_102504.log

@@ -238,3 +238,5 @@ examples/*/generated.yaml
 examples/*/external*.yaml
 examples/*/full-analysis.yaml
 examples/quick-start/quick-start.yaml
+.redsl/
+*.bak

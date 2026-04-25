@@ -8,8 +8,8 @@ sources:
 - project/duplication.toon.yaml
 stats:
   total: 57
-  todo: 55
-  done: 2
+  todo: 53
+  done: 4
 tasks:
 - id: Q01
   title: 'reduce_complexity: importchecker_based (CC=14)'
@@ -49,13 +49,14 @@ tasks:
   action: reduce_complexity
   priority: 3
   effort: medium
-  status: todo
+  status: done
   labels:
   - refactor
   - complexity
   - cc-11
   source: project/analysis.toon.yaml
   priority_label: medium
+  completed_at: '2026-04-20T07:47:37.353383+00:00'
 - id: Q04
   title: 'reduce_complexity: unimport_based (CC=14)'
   description: Module 'unimport_based' has cyclomatic complexity CC=14 (456 lines,
@@ -715,13 +716,14 @@ tasks:
   action: extract_function
   priority: 2
   effort: low
-  status: todo
+  status: done
   labels:
   - refactor
   - duplication
   - extract-function
   source: project/duplication.toon.yaml
   priority_label: high
+  completed_at: '2026-04-20T07:47:37.353383+00:00'
 - id: D45
   title: 'extract_function: fix (saves 36L)'
   description: 'Duplicated ''fix'': 3 occurrences, 18 lines each, saves 36 lines.

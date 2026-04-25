@@ -1,18 +1,18 @@
 # reDSL Refactor Plan
 
-> Generated: **2026-04-19 18:57**  
+> Generated: **2026-04-20 10:25**  
 > Project: `/home/tom/github/semcod/prefact`  
 > Mode: **dry-run**  
-> Log file: `/home/tom/github/semcod/prefact/logs/redsl_20260419_185722.log`  
+> Log file: `/home/tom/github/semcod/prefact/logs/redsl_20260420_102504.log`  
 
 ---
 
 ## Summary
 
 - Project: `prefact`
-- Files: **111** | Lines: **15065** | Avg CC: **7.13**
-- Critical: **18** | Alerts: **18**
-- Decisions selected: **3**
+- Files: **118** | Lines: **15213** | Avg CC: **6.82**
+- Critical: **17** | Alerts: **17**
+- Decisions selected: **2**
 
 ## Top Decisions
 
@@ -20,9 +20,6 @@
    - Score: `1.17`
    - Rationale: God module — zbyt duży plik z za dużą liczbą funkcji
 2. **split_module** → `src/prefact/rules/importchecker_based.py`
-   - Score: `1.17`
-   - Rationale: God module — zbyt duży plik z za dużą liczbą funkcji
-3. **split_module** → `src/prefact/rules/import_linter_based.py`
    - Score: `1.17`
    - Rationale: God module — zbyt duży plik z za dużą liczbą funkcji
 
