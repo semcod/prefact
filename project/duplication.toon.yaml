@@ -6,7 +6,7 @@ SUMMARY:
   dup_groups:    39
   dup_fragments: 107
   saved_lines:   379
-  scan_ms:       17642
+  scan_ms:       30372
 
 HOTSPOTS[7] (files with most duplication):
   src/prefact/rules/unimport_based.py  dup=84L  groups=3  frags=7  (0.6%)

@@ -181,11 +181,6 @@ class LLMGeneratedCodeRule(BaseRule):
         return source, []
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        issues = self.scan_file(path, fixed)
-
-        return ValidationResult(
-            file=path,
-            passed=len(issues) == 0,
-            checks=["no_llm_patterns"] if not issues else [],
-            errors=[f"Still has {len(issues)} LLM patterns"] if issues else []
+        return self._validate_by_rescan(
+            path, original, fixed, "no_llm_patterns", "Still has {count} LLM patterns"
         )

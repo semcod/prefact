@@ -7,19 +7,21 @@ flowchart TD
     examples__04_custom_rules["examples.04-custom-rules<br/>7 funcs"]
     examples__06_api_usage["examples.06-api-usage<br/>4 funcs"]
     examples__sample_project["examples.sample-project<br/>18 funcs"]
-    project__map["project.map<br/>65 funcs"]
+    project__map["project.map<br/>2716 funcs"]
     src__prefact["src.prefact<br/>635 funcs"]
     vscode_extension__src["vscode-extension.src<br/>48 funcs"]
     src__prefact ==>|46| vscode_extension__src
     src__prefact ==>|43| Taskfile
     examples__06_api_usage ==>|34| Taskfile
     benchmark_ram_optimization ==>|25| Taskfile
+    src__prefact ==>|19| project__map
     examples__sample_project ==>|17| Taskfile
-    src__prefact ==>|7| project__map
     examples__01_individual_rules ==>|6| Taskfile
     examples__02_multiple_rules ==>|6| Taskfile
-    examples__03_output_formats -->|2| Taskfile
     examples__01_individual_rules -->|2| examples__sample_project
-    examples__sample_project -->|1| examples__01_individual_rules
+    examples__01_individual_rules -->|2| project__map
+    examples__03_output_formats -->|2| Taskfile
     benchmark_ram_optimization -->|1| vscode_extension__src
+    examples__sample_project -->|1| examples__01_individual_rules
+    examples__sample_project -->|1| project__map
     examples__04_custom_rules -->|1| vscode_extension__src

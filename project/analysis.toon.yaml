@@ -1,5 +1,5 @@
-# code2llm | 151f 21047L | python:104,yaml:34,json:4,shell:2,txt:2,cfg:1,yml:1,toml:1,typescript:1 | 2026-04-25
-# CC̄=2.7 | critical:1/833 | dups:15 | cycles:0
+# code2llm | 154f 120629L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
+# CC̄=0.7 | critical:1/3484 | dups:15 | cycles:0
 
 HEALTH[2]:
   🔴 DUP   15 classes duplicated
@@ -9,16 +9,16 @@ REFACTOR[2]:
   1. rm duplicates  (-15 dup classes)
   2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[597]:
-  [1] Src [format_timestamp]: format_timestamp
+PIPELINES[596]:
+  [1] Src [main]: main → print
       PURITY: 100% pure
-  [2] Src [read_file]: read_file
+  [2] Src [main]: main → find_examples
       PURITY: 100% pure
-  [3] Src [__init__]: __init__
+  [3] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [4] Src [get_data]: get_data
+  [4] Src [__init__]: __init__
       PURITY: 100% pure
-  [5] Src [process_data]: process_data → print
+  [5] Src [process]: process → format_data
       PURITY: 100% pure
 
 LAYERS:
@@ -28,9 +28,9 @@ LAYERS:
   │ isort_based                470L  4C   23m  CC=13     ←0
   │ unimport_based             456L  5C   22m  CC=14     ←0
   │ import_linter_based        451L  5C   24m  CC=8      ←0
-  │ cache                      439L  6C   37m  CC=5      ←0  ×DUP
+  │ cache                      439L  6C   37m  CC=5      ←9  ×DUP
   │ mypy_based                 398L  6C   22m  CC=9      ←0
-  │ pylint_based               396L  5C   22m  CC=6      ←0
+  │ pylint_based               396L  5C   22m  CC=6      ←1
   │ git_hooks                  383L  2C   17m  CC=8      ←0
   │ todo_manager               368L  1C   15m  CC=13     ←0
   │ parallel                   353L  4C   23m  CC=7      ←0
@@ -39,11 +39,11 @@ LAYERS:
   │ benchmark                  293L  1C    6m  CC=7      ←0
   │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
-  │ registry                   255L  1C   13m  CC=8      ←1
-  │ cli                        247L  0C   10m  CC=7      ←0
+  │ registry                   255L  1C   13m  CC=8      ←8
+  │ cli                        247L  0C   10m  CC=7      ←1
   │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
-  │ __init__                   236L  1C    7m  CC=1      ←7
+  │ __init__                   236L  1C    7m  CC=1      ←0
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
@@ -61,7 +61,7 @@ LAYERS:
   │ config                     128L  1C    8m  CC=10     ←4
   │ setup_manager              120L  1C    3m  CC=9      ←0
   │ composite_factory          119L  1C    2m  CC=4      ←0
-  │ cache_adapters             106L  4C   16m  CC=3      ←9  ×DUP
+  │ cache_adapters             106L  4C   16m  CC=3      ←0  ×DUP
   │ base                        99L  1C    7m  CC=3      ←0  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
   │ duplicate_imports           80L  1C    3m  CC=11     ←0
@@ -93,6 +93,7 @@ LAYERS:
   │ constants                   24L  0C    0m  CC=0.0    ←0
   │ levels                      13L  1C    0m  CC=0.0    ←0
   │ builtin                     13L  0C    0m  CC=0.0    ←0
+  │ __init__                    13L  0C    0m  CC=0.0    ←0
   │ utils                       10L  0C    1m  CC=5      ←1
   │ _base                        6L  0C    0m  CC=0.0    ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
@@ -109,7 +110,6 @@ LAYERS:
   ./                              CC̄=2.2    ←in:0  →out:0
   │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
   │ goal.yaml                  480L  0C    0m  CC=0.0    ←0
-  │ sumd.json                  406L  0C    0m  CC=0.0    ←0
   │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
   │ Taskfile.yml               186L  0C    1m  CC=0.0    ←16
@@ -137,8 +137,8 @@ LAYERS:
   │ messy_module                67L  1C    4m  CC=2      ←0
   │ cli                         65L  0C    3m  CC=2      ←0
   │ models                      62L  2C    5m  CC=2      ←0
-  │ before                      41L  1C    6m  CC=2      ←1  ×DUP
   │ after                       41L  1C    6m  CC=2      ←0  ×DUP
+  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
@@ -158,55 +158,60 @@ LAYERS:
   │ after                       16L  1C    3m  CC=1      ←0
   │ before                      16L  1C    3m  CC=1      ←0
   │ before                      14L  0C    1m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
   │ before                      13L  0C    1m  CC=1      ←0
   │ after                       13L  0C    2m  CC=1      ←0
   │ before                      13L  0C    2m  CC=1      ←0
-  │ after                       13L  0C    1m  CC=1      ←0
   │ requirements.txt            13L  0C    0m  CC=0.0    ←0
-  │ after                       11L  0C    2m  CC=1      ←2
-  │ after                       11L  0C    1m  CC=1      ←0
-  │ before                      11L  0C    2m  CC=1      ←0
   │ after                       11L  0C    1m  CC=1      ←0
   │ before                      11L  0C    1m  CC=1      ←0
+  │ after                       11L  0C    1m  CC=1      ←1
+  │ after                       11L  0C    2m  CC=1      ←2
+  │ before                      11L  0C    2m  CC=1      ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ map.toon.yaml              427L  0C   65m  CC=0.0    ←2
-  │ duplication.toon.yaml      294L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml            96742L  0C  2716m  CC=0.0    ←19
+  │ !! calls.yaml                3201L  0C    0m  CC=0.0    ←0
+  │ calls.toon.yaml            347L  0C    0m  CC=0.0    ←0
+  │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         214L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
-  │ prompt.txt                  55L  0C    0m  CC=0.0    ←0
-  │ project.toon.yaml           50L  0C    0m  CC=0.0    ←0
+  │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
+  │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
+  │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
      Makefile                                  0L
 
 COUPLING:
-                                                    Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization       examples.sample-project  examples.01-individual-rules                   project.map    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
-                      Taskfile                            ──                           ←43                                                         ←34                           ←25                           ←17                            ←6                                                          ←6                            ←2                                hub
-                   src.prefact                            43                            ──                            46                            ←1                                                                                                                       7                                                                                            !! fan-out
+                                                    Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization                   project.map       examples.sample-project  examples.01-individual-rules    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
+                      Taskfile                            ──                           ←43                                                         ←34                           ←25                                                         ←17                            ←6                            ←6                            ←2                                hub
+                   src.prefact                            43                            ──                            46                            ←1                                                          19                                                                                                                                                        !! fan-out
           vscode-extension.src                                                         ←46                            ──                                                          ←1                                                                                                                                                                                  ←1  hub
          examples.06-api-usage                            34                             1                                                          ──                                                                                                                                                                                                                    !! fan-out
     benchmark_ram_optimization                            25                                                           1                                                          ──                                                                                                                                                                                      !! fan-out
-       examples.sample-project                            17                                                                                                                                                    ──                             1                                                                                                                          !! fan-out
-  examples.01-individual-rules                             6                                                                                                                                                     2                            ──                                                                                                                          !! fan-out
-                   project.map                                                          ←7                                                                                                                                                                                  ──                                                                                            hub
+                   project.map                                                         ←19                                                                                                                      ──                            ←1                            ←2                                                                                            hub
+       examples.sample-project                            17                                                                                                                                                     1                            ──                             1                                                                                            !! fan-out
+  examples.01-individual-rules                             6                                                                                                                                                     2                             2                            ──                                                                                            !! fan-out
     examples.02-multiple-rules                             6                                                                                                                                                                                                                                              ──                                                            
     examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
       examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
   HUB: Taskfile/ (fan-in=133)
-  HUB: project.map/ (fan-in=7)
+  HUB: project.map/ (fan-in=22)
   HUB: vscode-extension.src/ (fan-in=48)
-  SMELL: src.prefact/ fan-out=96 → split needed
   SMELL: examples.06-api-usage/ fan-out=35 → split needed
-  SMELL: examples.sample-project/ fan-out=18 → split needed
-  SMELL: examples.01-individual-rules/ fan-out=8 → split needed
+  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
+  SMELL: src.prefact/ fan-out=108 → split needed
+  SMELL: examples.sample-project/ fan-out=19 → split needed
   SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
 
 EXTERNAL:

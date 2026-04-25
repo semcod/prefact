@@ -293,14 +293,8 @@ class UnimportDuplicateImports(BaseRule):
         return fixed_source, fixes
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        # Re-scan for duplicate imports
-        issues = self.scan_file(path, fixed)
-
-        return ValidationResult(
-            file=path,
-            passed=len(issues) == 0,
-            checks=["no_duplicate_imports"] if not issues else [],
-            errors=[f"Still has {len(issues)} duplicate imports"] if issues else []
+        return self._validate_by_rescan(
+            path, original, fixed, "no_duplicate_imports", "Still has {count} duplicate imports"
         )
 
 
@@ -360,14 +354,8 @@ class UnimportStarImports(BaseRule):
         return fixed_source, fixes
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        # Check if star imports remain
-        issues = self.scan_file(path, fixed)
-
-        return ValidationResult(
-            file=path,
-            passed=len(issues) == 0,
-            checks=["no_star_imports"] if not issues else [],
-            errors=[f"Still has {len(issues)} star imports"] if issues else []
+        return self._validate_by_rescan(
+            path, original, fixed, "no_star_imports", "Still has {count} star imports"
         )
 
 

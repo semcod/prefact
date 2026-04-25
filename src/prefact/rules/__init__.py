@@ -46,6 +46,18 @@ class BaseRule(abc.ABC):
     def validate(self, path: Path, original: str, fixed: str) -> "ValidationResult":
         """Check that the fix didn't break anything."""
 
+    def _validate_by_rescan(self, path: Path, original: str, fixed: str, check_name: str, error_template: str) -> "ValidationResult":
+        """Re-scan *fixed* and return a ValidationResult using *check_name* and *error_template*."""
+        from prefact.models import ValidationResult
+
+        issues = self.scan_file(path, fixed)
+        return ValidationResult(
+            file=path,
+            passed=len(issues) == 0,
+            checks=[check_name] if not issues else [],
+            errors=[error_template.format(count=len(issues))] if issues else [],
+        )
+
 
 # Import lazy registry
 from prefact.rules.registry import get_all_rules as _get_all_rules

@@ -97457,7 +97457,7 @@ D:
     dump(result)
   src/prefact/rules/__init__.py:
     e: register,get_all_rules,get_rule,BaseRule
-    BaseRule: __init__(1),scan_file(2),fix(3),validate(3)  # Base class every prefactoring rule must implement.
+    BaseRule: __init__(1),scan_file(2),fix(3),validate(3),_validate_by_rescan(5)  # Base class every prefactoring rule must implement.
     register(cls)
     get_all_rules()
     get_rule(rule_id)
@@ -97529,7 +97529,7 @@ D:
     LLMHallucinationRule: __init__(1),_load_patterns(0),scan_file(2),_check_ast_patterns(2),_is_suspicious_function_name(1),_is_suspicious_import(1),_map_severity(1),fix(3),validate(3)  # Detect LLM hallucination patterns in code.
   src/prefact/rules/magic_numbers.py:
     e: MagicNumberRule
-    MagicNumberRule: __init__(1),_load_allowed_numbers(0),scan_file(2),_is_magic_number(1),fix(3),validate(3)  # Detect magic numbers in code.
+    MagicNumberRule: __init__(1),_load_allowed_numbers(0),scan_file(2),_extract_literal_issues(2),_extract_comparison_issues(2),_is_magic_number(1),fix(3),validate(3)  # Detect magic numbers in code.
   src/prefact/rules/migration.py:
     e: add_ruff_config_to_prefact_yaml,RuleMigrationManager,HybridScanner,PerformanceProfiler
     RuleMigrationManager: __init__(1),get_migrated_rule(1),should_use_ruff(1),create_hybrid_rule(1)  # Manages migration from AST-based rules to Ruff-based rules.
@@ -97702,7 +97702,7 @@ D:
 
 ## Call Graph
 
-*217 nodes · 211 edges · 62 modules · CC̄=2.7*
+*229 nodes · 229 edges · 65 modules · CC̄=0.7*
 
 ### Hubs (by degree)
 
@@ -97713,14 +97713,14 @@ D:
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
-| `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
 | `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
+| `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
 | `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 24 | **24** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 217 | edges: 211 | modules: 62
-# CC̄=2.7
+# nodes: 229 | edges: 229 | modules: 65
+# CC̄=0.7
 
 HUBS[20]:
   Taskfile.print
@@ -97733,36 +97733,36 @@ HUBS[20]:
     CC=11  in:1  out:28  total:29
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
-  examples.run_examples.main
-    CC=8  in:0  out:25  total:25
   src.prefact.autonomous.docs_manager.DocsManager.update_planfile
     CC=11  in:0  out:25  total:25
+  examples.run_examples.main
+    CC=8  in:0  out:25  total:25
   src.prefact.config_extended.models.ExtendedConfig.from_yaml
     CC=13  in:0  out:24  total:24
-  src.prefact.rules.benchmark.benchmark_file
-    CC=6  in:1  out:21  total:22
+  project.map.toon.open
+    CC=0  in:22  out:0  total:22
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
-  vscode-extension.src.extension.PrefactTreeProvider.activate
-    CC=14  in:0  out:20  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
-    CC=1  in:0  out:20  total:20
+  src.prefact.rules.benchmark.benchmark_file
+    CC=6  in:1  out:21  total:22
   examples.06-api-usage.example.batch_processing_example
     CC=6  in:1  out:19  total:20
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:2  out:18  total:20
+  vscode-extension.src.extension.PrefactTreeProvider.activate
+    CC=14  in:0  out:20  total:20
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
+    CC=1  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
+  src.prefact.benchmark.ScanProbe.run
+    CC=5  in:0  out:17  total:17
   src.prefact.cli._build_config
     CC=7  in:3  out:14  total:17
-  src.prefact.rules.benchmark.print_benchmark_results
-    CC=4  in:1  out:16  total:17
   examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
-  src.prefact.benchmark.ScanProbe.run
-    CC=5  in:0  out:17  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -97773,6 +97773,8 @@ MODULES:
     create_test_files  CC=3  out:5
     main  CC=7  out:22
     run_benchmark  CC=1  out:16
+  examples.01-individual-rules.duplicate-imports.after  [1 funcs]
+    process_data  CC=1  out:1
   examples.01-individual-rules.print-statements.after  [2 funcs]
     calculate  CC=1  out:1
     process_data  CC=1  out:2
@@ -97787,8 +97789,10 @@ MODULES:
     process_user  CC=1  out:2
   examples.01-individual-rules.string-concat.after  [1 funcs]
     format_data  CC=1  out:0
+  examples.01-individual-rules.unused-imports.after  [1 funcs]
+    read_file  CC=1  out:2
   examples.01-individual-rules.unused-imports.before  [1 funcs]
-    process_data  CC=2  out:2
+    read_file  CC=1  out:2
   examples.02-multiple-rules.messy_module  [4 funcs]
     __init__  CC=1  out:1
     process  CC=1  out:4
@@ -97815,18 +97819,17 @@ MODULES:
     __init__  CC=1  out:1
     calculate_sum  CC=2  out:2
     process_data  CC=1  out:2
-  examples.sample-project.models  [2 funcs]
+  examples.sample-project.models  [3 funcs]
     __post_init__  CC=2  out:3
     __post_init__  CC=2  out:3
+    load_users_from_file  CC=2  out:4
   examples.sample-project.utils  [4 funcs]
     __init__  CC=1  out:1
     format_name  CC=1  out:1
     helper_function  CC=1  out:1
     validate_email  CC=2  out:3
-  project.map.toon  [3 funcs]
-    _module_to_str  CC=0  out:0
-    _str_to_module  CC=0  out:0
-    check  CC=0  out:0
+  project.map.toon  [1 funcs]
+    open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
@@ -97835,6 +97838,8 @@ MODULES:
     update_planfile  CC=11  out:25
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
+  src.prefact.autonomous.setup_manager  [1 funcs]
+    create_refact_config  CC=2  out:7
   src.prefact.autonomous.todo_manager  [2 funcs]
     __init__  CC=1  out:2
     _generate_current_todos  CC=8  out:11
@@ -97852,6 +97857,8 @@ MODULES:
   src.prefact.config_extended.config  [2 funcs]
     __init__  CC=10  out:5
     to_dict  CC=1  out:3
+  src.prefact.config_extended.generator  [1 funcs]
+    save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
     from_yaml  CC=13  out:24
@@ -97862,7 +97869,8 @@ MODULES:
     _preload_sources  CC=9  out:10
   src.prefact.fixer  [1 funcs]
     __init__  CC=3  out:4
-  src.prefact.git_hooks  [7 funcs]
+  src.prefact.git_hooks  [8 funcs]
+    _find_git_dir  CC=2  out:5
     _install_hook  CC=2  out:9
     uninstall_hooks  CC=6  out:8
     install  CC=3  out:11
@@ -97874,7 +97882,8 @@ MODULES:
     __init__  CC=1  out:2
     __init__  CC=2  out:3
     __init__  CC=1  out:2
-  src.prefact.performance.cache  [9 funcs]
+  src.prefact.performance.cache  [10 funcs]
+    set  CC=1  out:1
     __enter__  CC=1  out:1
     __exit__  CC=1  out:1
     cached_file_operation  CC=1  out:16
@@ -97884,14 +97893,13 @@ MODULES:
     get_cache  CC=2  out:1
     get_cache_info  CC=4  out:7
     get_hash_cache  CC=2  out:1
-  src.prefact.performance.cache_adapters  [1 funcs]
-    set  CC=1  out:2
   src.prefact.performance.cache_state  [2 funcs]
     get_cache  CC=2  out:1
     initialize_cache  CC=2  out:8
-  src.prefact.performance.parallel  [3 funcs]
+  src.prefact.performance.parallel  [4 funcs]
     _get_enabled_rule_ids  CC=3  out:4
     _scan_with_process_pool  CC=5  out:9
+    _calculate_file_hash  CC=2  out:4
     execute  CC=4  out:10
   src.prefact.plugins  [4 funcs]
     __init__  CC=1  out:4
@@ -97901,9 +97909,6 @@ MODULES:
   src.prefact.reporters.json_reporter  [2 funcs]
     dump  CC=2  out:3
     to_dict  CC=4  out:3
-  src.prefact.rules  [2 funcs]
-    get_all_rules  CC=1  out:1
-    register  CC=1  out:1
   src.prefact.rules.autoflake_based  [18 funcs]
     check_file  CC=3  out:4
     check_source  CC=1  out:4
@@ -97927,11 +97932,13 @@ MODULES:
     __init__  CC=1  out:4
     __init__  CC=1  out:3
     __init__  CC=1  out:4
-  src.prefact.rules.import_linter_based  [4 funcs]
+  src.prefact.rules.import_linter_based  [6 funcs]
+    __init__  CC=1  out:3
+    create_config  CC=5  out:4
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-    __init__  CC=1  out:3
+    generate_import_linter_config  CC=7  out:7
   src.prefact.rules.importchecker_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
@@ -97948,29 +97955,36 @@ MODULES:
   src.prefact.rules.magic_numbers  [2 funcs]
     __init__  CC=1  out:5
     _load_allowed_numbers  CC=1  out:3
-  src.prefact.rules.migration  [3 funcs]
+  src.prefact.rules.migration  [4 funcs]
     _load_rules  CC=5  out:6
     compare_implementations  CC=5  out:8
     create_hybrid_rule  CC=2  out:16
+    add_ruff_config_to_prefact_yaml  CC=3  out:4
   src.prefact.rules.mypy_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     _analyze_return_types  CC=4  out:5
-  src.prefact.rules.pylint_based  [3 funcs]
+  src.prefact.rules.pylint_based  [4 funcs]
+    register  CC=1  out:0
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-  src.prefact.rules.registry  [6 funcs]
+  src.prefact.rules.registry  [7 funcs]
     _load_module  CC=3  out:2
+    get_all_rules  CC=3  out:1
     _initialize_built_in_rules  CC=1  out:31
     get_all_rules  CC=1  out:2
     get_lazy_registry  CC=2  out:1
     get_rule  CC=1  out:2
     register  CC=2  out:3
-  src.prefact.rules.relative_imports  [3 funcs]
+  src.prefact.rules.relative_imports  [5 funcs]
     __init__  CC=1  out:3
     _resolve  CC=9  out:9
     leave_ImportFrom  CC=6  out:9
+    _module_to_str  CC=4  out:3
+    _str_to_module  CC=2  out:4
+  src.prefact.rules.ruff_based  [1 funcs]
+    fix_source  CC=2  out:7
   src.prefact.rules.sorted_imports  [2 funcs]
     scan_file  CC=7  out:8
     _sort_key  CC=6  out:5
@@ -97983,9 +97997,10 @@ MODULES:
   src.prefact.rules.string_transformations  [2 funcs]
     __init__  CC=1  out:2
     _is_string_concat  CC=2  out:9
-  src.prefact.rules.unimport_based  [4 funcs]
+  src.prefact.rules.unimport_based  [5 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:2
+    fix_source  CC=2  out:7
     __init__  CC=1  out:2
     __init__  CC=1  out:3
   src.prefact.rules.unused_imports  [5 funcs]
@@ -98015,6 +98030,19 @@ MODULES:
     range  CC=1  out:1
 
 EDGES:
+  benchmark_ram_optimization.create_test_files → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  benchmark_ram_optimization.run_benchmark → Taskfile.print
+  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
+  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
+  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
+  benchmark_ram_optimization.main → Taskfile.print
+  examples.run_examples.main → examples.run_examples.find_examples
+  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  examples.01-individual-rules.unused-imports.after.read_file → project.map.toon.open
+  examples.01-individual-rules.unused-imports.before.read_file → project.map.toon.open
   examples.01-individual-rules.print-statements.after.process_data → Taskfile.print
   examples.01-individual-rules.print-statements.after.calculate → Taskfile.print
   examples.01-individual-rules.print-statements.before.process_data → Taskfile.print
@@ -98023,48 +98051,35 @@ EDGES:
   examples.02-multiple-rules.messy_module.generate_report → Taskfile.print
   examples.02-multiple-rules.messy_module.DataProcessor.__init__ → Taskfile.print
   examples.02-multiple-rules.messy_module.DataProcessor.process → Taskfile.print
+  examples.sample-project.cli.main → Taskfile.print
+  examples.sample-project.cli.main → examples.01-individual-rules.duplicate-imports.after.process_data
+  examples.sample-project.cli.admin → Taskfile.print
+  examples.sample-project.cli.users → Taskfile.print
   examples.sample-project.utils.format_name → Taskfile.print
   examples.sample-project.utils.validate_email → Taskfile.print
   examples.sample-project.utils.UtilClass.__init__ → Taskfile.print
-  examples.sample-project.cli.main → Taskfile.print
-  examples.sample-project.cli.main → examples.01-individual-rules.unused-imports.before.process_data
-  examples.sample-project.cli.admin → Taskfile.print
-  examples.sample-project.cli.users → Taskfile.print
-  examples.03-output-formats.sample_code.process_data → Taskfile.print
-  examples.03-output-formats.sample_code.calculate_sum → Taskfile.print
+  examples.sample-project.models.User.__post_init__ → Taskfile.print
+  examples.sample-project.models.Post.__post_init__ → Taskfile.print
+  examples.sample-project.models.load_users_from_file → project.map.toon.open
   examples.sample-project.core.process_data → Taskfile.print
   examples.sample-project.core.calculate_sum → Taskfile.print
   examples.sample-project.core.DataProcessor.__init__ → Taskfile.print
-  examples.run_examples.main → examples.run_examples.find_examples
-  benchmark_ram_optimization.create_test_files → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  benchmark_ram_optimization.run_benchmark → Taskfile.print
-  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
-  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
-  benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
-  benchmark_ram_optimization.main → Taskfile.print
-  src.prefact.validator.Validator.__init__ → src.prefact.rules.get_all_rules
-  src.prefact.engine.RefactoringEngine._preload_sources → Taskfile.print
+  examples.03-output-formats.sample_code.process_data → Taskfile.print
+  examples.03-output-formats.sample_code.calculate_sum → Taskfile.print
+  examples.06-api-usage.example.run_prefact_example → Taskfile.print
+  examples.06-api-usage.example.custom_rule_example → Taskfile.print
+  examples.06-api-usage.example.batch_processing_example → Taskfile.print
+  examples.06-api-usage.example.main → examples.06-api-usage.example.run_prefact_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.custom_rule_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.batch_processing_example
   examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.get_all_rules
+  src.prefact.engine.RefactoringEngine._preload_sources → Taskfile.print
+  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.git_hooks.GitHooks._find_git_dir → project.map.toon.open
   src.prefact.git_hooks.GitHooks._install_hook → Taskfile.print
   src.prefact.git_hooks.GitHooks.uninstall_hooks → Taskfile.print
   src.prefact.git_hooks.PreCommitConfig.install → Taskfile.print
   src.prefact.git_hooks.install_git_hooks → Taskfile.print
-  src.prefact.git_hooks.uninstall_git_hooks → Taskfile.print
-  src.prefact.git_hooks.list_git_hooks → Taskfile.print
-  src.prefact.git_hooks.main → src.prefact.git_hooks.install_git_hooks
-  src.prefact.git_hooks.main → src.prefact.git_hooks.uninstall_git_hooks
-  src.prefact.git_hooks.main → src.prefact.git_hooks.list_git_hooks
-  src.prefact.logging.exceptions.PprefactException.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.logging.exceptions.RuleError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.logging.exceptions.PluginError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
-  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.get_all_rules
-  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.scanner.Scanner._excluded → src.prefact.scanner._match_gitignore_pattern
-  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
-  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
 ```
 
 ## Test Contracts

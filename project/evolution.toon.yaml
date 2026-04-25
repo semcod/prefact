@@ -1,4 +1,4 @@
-# code2llm/evolution | 754 func | 70f | 2026-04-25
+# code2llm/evolution | 3405 func | 70f | 2026-04-25
 
 NEXT[1] (ranked by impact):
   [1] !  SPLIT-FUNC      MagicNumberRule.scan_file  CC=15  fan=9
@@ -9,7 +9,7 @@ NEXT[1] (ranked by impact):
 RISKS[0]: none
 
 METRICS-TARGET:
-  CC̄:          2.8 → ≤2.0
+  CC̄:          0.6 → ≤0.4
   max-CC:      15 → ≤7
   god-modules: 0 → 0
   high-CC(≥15): 1 → ≤0
@@ -40,4 +40,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=3.2 → now CC̄=2.8
+  prev CC̄=2.8 → now CC̄=0.6

@@ -55,52 +55,53 @@ class MagicNumberRule(BaseRule):
 
         try:
             tree = ast.parse(source)
-
             for node in ast.walk(tree):
-                if isinstance(node, ast.Constant):
-                    if isinstance(node.value, (int, float)):
-                        if self._is_magic_number(node.value):
-                            issues.append(Issue(
-                                rule_id=self.rule_id,
-                                file=path,
-                                line=node.lineno,
-                                col=node.col_offset,
-                                message=f"Magic number: {node.value} - use named constant",
-                                severity=Severity.INFO,
-                                original=str(node.value),
-                                suggested="CONSTANT_NAME"
-                            ))
-                elif isinstance(node, ast.Num):  # For older Python versions
-                    if self._is_magic_number(node.n):
-                        issues.append(Issue(
-                            rule_id=self.rule_id,
-                            file=path,
-                            line=node.lineno,
-                            col=node.col_offset,
-                            message=f"Magic number: {node.n} - use named constant",
-                            severity=Severity.INFO,
-                            original=str(node.n),
-                            suggested="CONSTANT_NAME"
-                        ))
-
-                # Check for magic numbers in comparisons
-                elif isinstance(node, ast.Compare):
-                    for comparator in node.comparators:
-                        if isinstance(comparator, ast.Constant) and isinstance(comparator.value, (int, float)):
-                            if self._is_magic_number(comparator.value):
-                                issues.append(Issue(
-                                    rule_id=self.rule_id,
-                                    file=path,
-                                    line=node.lineno,
-                                    col=node.col_offset,
-                                    message=f"Magic number in comparison: {comparator.value}",
-                                    severity=Severity.INFO,
-                                    original=str(comparator.value)
-                                ))
-
+                issues.extend(self._extract_literal_issues(path, node))
+                issues.extend(self._extract_comparison_issues(path, node))
         except SyntaxError:
             pass
 
+        return issues
+
+    def _extract_literal_issues(self, path: Path, node: ast.AST) -> List[Issue]:
+        """Extract issues from literal numeric constants."""
+        value = None
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            value = node.value
+        elif isinstance(node, ast.Num):  # For older Python versions
+            value = node.n
+
+        if value is not None and self._is_magic_number(value):
+            return [Issue(
+                rule_id=self.rule_id,
+                file=path,
+                line=node.lineno,
+                col=node.col_offset,
+                message=f"Magic number: {value} - use named constant",
+                severity=Severity.INFO,
+                original=str(value),
+                suggested="CONSTANT_NAME",
+            )]
+        return []
+
+    def _extract_comparison_issues(self, path: Path, node: ast.AST) -> List[Issue]:
+        """Extract issues from numeric constants in comparisons."""
+        if not isinstance(node, ast.Compare):
+            return []
+
+        issues = []
+        for comparator in node.comparators:
+            if isinstance(comparator, ast.Constant) and isinstance(comparator.value, (int, float)):
+                if self._is_magic_number(comparator.value):
+                    issues.append(Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=node.lineno,
+                        col=node.col_offset,
+                        message=f"Magic number in comparison: {comparator.value}",
+                        severity=Severity.INFO,
+                        original=str(comparator.value),
+                    ))
         return issues
 
     def _is_magic_number(self, value: int | float) -> bool:
@@ -128,11 +129,6 @@ class MagicNumberRule(BaseRule):
         return source, []
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        issues = self.scan_file(path, fixed)
-
-        return ValidationResult(
-            file=path,
-            passed=len(issues) == 0,
-            checks=["no_magic_numbers"] if not issues else [],
-            errors=[f"Still has {len(issues)} magic numbers"] if issues else []
+        return self._validate_by_rescan(
+            path, original, fixed, "no_magic_numbers", "Still has {count} magic numbers"
         )
