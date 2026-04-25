@@ -1,31 +1,59 @@
-flowchart LR
+flowchart TD
     subgraph Taskfile
         Taskfile__print["print"]
     end
     subgraph benchmark_ram_optimization
-        benchmark_ram_optimization__benchmark_without_rampreload["benchmark_without_rampreload"]
         benchmark_ram_optimization__create_test_files["create_test_files"]
+        benchmark_ram_optimization__benchmark_without_rampreload["benchmark_without_rampreload"]
+        benchmark_ram_optimization__benchmark_with_rampreload["benchmark_with_rampreload"]
         benchmark_ram_optimization__run_benchmark["run_benchmark"]
         benchmark_ram_optimization__main["main"]
-        benchmark_ram_optimization__benchmark_with_rampreload["benchmark_with_rampreload"]
     end
     subgraph examples__01_individual_rules
-        examples__01_individual_rules__string_concat__after__format_data["format_data"]
-        examples__01_individual_rules__print_statements__after__calculate["calculate"]
         examples__01_individual_rules__unused_imports__before__process_data["process_data"]
-        examples__01_individual_rules__relative_imports__after__process_user["process_user"]
-        examples__01_individual_rules__print_statements__before__process_data["process_data"]
-        examples__01_individual_rules__relative_imports__before__process_user["process_user"]
-        examples__01_individual_rules__print_statements__before__calculate["calculate"]
+        examples__01_individual_rules__unused_imports__before__format_timestamp["format_timestamp"]
+        examples__01_individual_rules__unused_imports__before__read_file["read_file"]
+        examples__01_individual_rules__unused_imports__before__DataProcessor____init__["__init__"]
+        examples__01_individual_rules__unused_imports__before__DataProcessor__add_data["add_data"]
+        examples__01_individual_rules__unused_imports__before__DataProcessor__get_data["get_data"]
+        examples__01_individual_rules__sorted_imports__before__process["process"]
         examples__01_individual_rules__print_statements__after__process_data["process_data"]
-        examples__01_individual_rules__relative_imports__before__Processor__process["process"]
+        examples__01_individual_rules__print_statements__after__calculate["calculate"]
+        examples__01_individual_rules__print_statements__before__process_data["process_data"]
+        examples__01_individual_rules__print_statements__before__calculate["calculate"]
+        examples__01_individual_rules__string_concat__after__greet["greet"]
+        examples__01_individual_rules__string_concat__after__format_data["format_data"]
+        examples__01_individual_rules__duplicate_imports__after__process_data["process_data"]
+        examples__01_individual_rules__missing_return_type__after__add["add"]
+        examples__01_individual_rules__missing_return_type__after__get_user["get_user"]
+        examples__01_individual_rules__missing_return_type__after__Processor__process["process"]
+        examples__01_individual_rules__missing_return_type__before__add["add"]
+        examples__01_individual_rules__missing_return_type__before__get_user["get_user"]
+        examples__01_individual_rules__missing_return_type__before__Processor__process["process"]
+        examples__01_individual_rules__duplicate_imports__before__process_data["process_data"]
+        examples__01_individual_rules__relative_imports__after__process_user["process_user"]
+        examples__01_individual_rules__relative_imports__after__Processor____init__["__init__"]
         examples__01_individual_rules__relative_imports__after__Processor__process["process"]
+        examples__01_individual_rules__sorted_imports__after__process["process"]
+        examples__01_individual_rules__relative_imports__before__process_user["process_user"]
+        examples__01_individual_rules__relative_imports__before__Processor____init__["__init__"]
+        examples__01_individual_rules__relative_imports__before__Processor__process["process"]
+        examples__01_individual_rules__unused_imports__after__process_data["process_data"]
+        examples__01_individual_rules__unused_imports__after__format_timestamp["format_timestamp"]
+        examples__01_individual_rules__unused_imports__after__read_file["read_file"]
+        examples__01_individual_rules__unused_imports__after__DataProcessor____init__["__init__"]
+        examples__01_individual_rules__unused_imports__after__DataProcessor__add_data["add_data"]
+        examples__01_individual_rules__unused_imports__after__DataProcessor__get_data["get_data"]
+        examples__01_individual_rules__string_concat__before__greet["greet"]
+        examples__01_individual_rules__string_concat__before__format_data["format_data"]
+        examples__01_individual_rules__wildcard_imports__after__process["process"]
+        examples__01_individual_rules__wildcard_imports__before__process["process"]
     end
     subgraph examples__02_multiple_rules
-        examples__02_multiple_rules__messy_module__generate_report["generate_report"]
-        examples__02_multiple_rules__messy_module__DataProcessor__process["process"]
-        examples__02_multiple_rules__messy_module__DataProcessor____init__["__init__"]
         examples__02_multiple_rules__messy_module__process_users["process_users"]
+        examples__02_multiple_rules__messy_module__generate_report["generate_report"]
+        examples__02_multiple_rules__messy_module__DataProcessor____init__["__init__"]
+        examples__02_multiple_rules__messy_module__DataProcessor__process["process"]
     end
     subgraph examples__03_output_formats
         examples__03_output_formats__sample_code__process_data["process_data"]
@@ -33,212 +61,222 @@ flowchart LR
     end
     subgraph examples__04_custom_rules
         examples__04_custom_rules__custom_rules__no_todo_rule__NoTodoRule____init__["__init__"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoTodoRule__scan_file["scan_file"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoTodoRule__fix["fix"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoTodoRule__validate["validate"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoPrintRule__scan_file["scan_file"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoPrintRule__fix["fix"]
+        examples__04_custom_rules__custom_rules__no_todo_rule__NoPrintRule__validate["validate"]
     end
     subgraph examples__06_api_usage
-        examples__06_api_usage__example__main["main"]
+        examples__06_api_usage__example__run_prefact_example("run_prefact_example CC=11")
         examples__06_api_usage__example__custom_rule_example["custom_rule_example"]
-        examples__06_api_usage__example__run_prefact_example["run_prefact_example"]
         examples__06_api_usage__example__batch_processing_example["batch_processing_example"]
+        examples__06_api_usage__example__main["main"]
+    end
+    subgraph examples__run_all
+        examples__run_all__print_status["print_status"]
+        examples__run_all__print_warning["print_warning"]
+        examples__run_all__print_error["print_error"]
     end
     subgraph examples__run_examples
+        examples__run_examples__run_example["run_example"]
         examples__run_examples__find_examples["find_examples"]
-        examples__run_examples__main["main"]
+        examples__run_examples__main("main CC=8")
     end
     subgraph examples__sample_project
-        examples__sample_project__utils__UtilClass____init__["__init__"]
-        examples__sample_project__cli__main["main"]
-        examples__sample_project__core__process_data["process_data"]
-        examples__sample_project__cli__admin["admin"]
-        examples__sample_project__core__DataProcessor____init__["__init__"]
-        examples__sample_project__core__calculate_sum["calculate_sum"]
-        examples__sample_project__cli__users["users"]
-        examples__sample_project__models__User____post_init__["__post_init__"]
         examples__sample_project__utils__format_name["format_name"]
-        examples__sample_project__utils__helper_function["helper_function"]
         examples__sample_project__utils__validate_email["validate_email"]
+        examples__sample_project__utils__helper_function["helper_function"]
+        examples__sample_project__utils__UtilClass____init__["__init__"]
+        examples__sample_project__utils__UtilClass__get_cached["get_cached"]
+        examples__sample_project__cli__main["main"]
+        examples__sample_project__cli__admin["admin"]
+        examples__sample_project__cli__users["users"]
+        examples__sample_project__core__process_data["process_data"]
+        examples__sample_project__core__calculate_sum["calculate_sum"]
+        examples__sample_project__core__DataProcessor____init__["__init__"]
+        examples__sample_project__core__DataProcessor__add_item["add_item"]
+        examples__sample_project__core__DataProcessor__get_summary["get_summary"]
+        examples__sample_project__models__User____post_init__["__post_init__"]
         examples__sample_project__models__Post____post_init__["__post_init__"]
+        examples__sample_project__models__Post__get_summary["get_summary"]
+        examples__sample_project__models__create_user["create_user"]
+        examples__sample_project__models__load_users_from_file["load_users_from_file"]
     end
     subgraph project__map
-        project__map__toon___str_to_module["_str_to_module"]
-        project__map__toon__check["check"]
+        project__map__toon__print_report["print_report"]
         project__map__toon___module_to_str["_module_to_str"]
+        project__map__toon___str_to_module["_str_to_module"]
+        project__map__toon___load_gitignore["_load_gitignore"]
+        project__map__toon___match_gitignore_pattern["_match_gitignore_pattern"]
+        project__map__toon__get_plugin_manager["get_plugin_manager"]
+        project__map__toon__register_plugin_rule["register_plugin_rule"]
+        project__map__toon___collect_imported_names["_collect_imported_names"]
+        project__map__toon___collect_used_names["_collect_used_names"]
+        project__map__toon___collect_all_exports["_collect_all_exports"]
+        project__map__toon__install_git_hooks["install_git_hooks"]
+        project__map__toon__uninstall_git_hooks["uninstall_git_hooks"]
+        project__map__toon__list_git_hooks["list_git_hooks"]
+        project__map__toon__main["main"]
+        project__map__toon__get_lazy_registry["get_lazy_registry"]
+        project__map__toon__get_all_rules["get_all_rules"]
+        project__map__toon__get_rule["get_rule"]
+        project__map__toon__register["register"]
+        project__map__toon___initialize_built_in_rules["_initialize_built_in_rules"]
+        project__map__toon__generate_import_linter_config["generate_import_linter_config"]
+        project__map__toon__create_test_files["create_test_files"]
+        project__map__toon__benchmark_without_rampreload["benchmark_without_rampreload"]
+        project__map__toon__benchmark_with_rampreload["benchmark_with_rampreload"]
+        project__map__toon__run_benchmark["run_benchmark"]
+        project__map__toon__init_worker["init_worker"]
+        project__map__toon__scan_file_worker["scan_file_worker"]
+        project__map__toon__get_performance_monitor["get_performance_monitor"]
+        project__map__toon___make_inprocess_probe["_make_inprocess_probe"]
+        project__map__toon__build_prefact_suite["build_prefact_suite"]
+        project__map__toon__benchmark_library["benchmark_library"]
+        project__map__toon___sort_key["_sort_key"]
+        project__map__toon__benchmark_file["benchmark_file"]
+        project__map__toon__benchmark_project["benchmark_project"]
+        project__map__toon__print_benchmark_results["print_benchmark_results"]
+        project__map__toon___common_options["_common_options"]
+        project__map__toon___build_config["_build_config"]
+        project__map__toon__scan["scan"]
+        project__map__toon__fix["fix"]
+        project__map__toon__check["check"]
+        project__map__toon__init["init"]
+        project__map__toon__autonomous_cmd["autonomous_cmd"]
+        project__map__toon__rules["rules"]
+        project__map__toon___output["_output"]
+        project__map__toon__generate_pylint_rc["generate_pylint_rc"]
+        project__map__toon___is_str_concat["_is_str_concat"]
+        project__map__toon___flatten_add["_flatten_add"]
+        project__map__toon__initialize_cache["initialize_cache"]
+        project__map__toon__get_cache["get_cache"]
+        project__map__toon__get_scan_cache["get_scan_cache"]
+        project__map__toon__get_config_cache["get_config_cache"]
+        project__map__toon__get_rule_cache["get_rule_cache"]
+        project__map__toon__get_hash_cache["get_hash_cache"]
+        project__map__toon__cleanup_cache["cleanup_cache"]
+        project__map__toon__cached_result["cached_result"]
+        project__map__toon__cached_file_operation["cached_file_operation"]
+        project__map__toon__clear_cache["clear_cache"]
+        project__map__toon__get_cache_info["get_cache_info"]
+        project__map__toon__deep_merge["deep_merge"]
+        project__map__toon__add_ruff_config_to_prefact_yaml["add_ruff_config_to_prefact_yaml"]
+        project__map__toon__to_dict["to_dict"]
     end
     subgraph src__prefact
-        src__prefact__rules__get_all_rules["get_all_rules"]
-        src__prefact__rules__autoflake_based__AutoflakeHelper__check_source["check_source"]
-        src__prefact__rules__autoflake_based__AutoflakeHelper__fix_source["fix_source"]
-        src__prefact__plugins__PluginManager____init__["__init__"]
-        src__prefact__logging__exceptions__PluginError____init__["__init__"]
-        src__prefact__performance__cache_state__initialize_cache["initialize_cache"]
-        src__prefact__rules__strategies__ParallelScanStrategy__scan["scan"]
-        src__prefact__scanner___load_gitignore["_load_gitignore"]
-        src__prefact__autonomous__docs_manager__DocsManager____init__["__init__"]
-        src__prefact__config_extended__models__ExtendedConfig__to_dict["to_dict"]
-        src__prefact__rules__autoflake_based__AutoflakeUnusedImports__validate["validate"]
-        src__prefact__logging__exceptions__PprefactException____init__["__init__"]
-        src__prefact__cli__check["check"]
-        src__prefact__rules__relative_imports___RelativeImportFixer___resolve["_resolve"]
-        src__prefact__rules__relative_imports___RelativeImportFixer__leave_ImportFrom["leave_ImportFrom"]
-        src__prefact__rules__autoflake_based__extract_import_name["extract_import_name"]
-        src__prefact__fixer__Fixer____init__["__init__"]
-        src__prefact__logging__exceptions__RuleError____init__["__init__"]
-        src__prefact__rules__pylint_based__PylintPrintStatements____init__["__init__"]
-        src__prefact__rules__string_concat__StringConcatToFstring__scan_file["scan_file"]
-        src__prefact__config_extended__models__ExtendedConfig__from_yaml["from_yaml"]
-        src__prefact__performance__cache__CacheContext____enter__["__enter__"]
-        src__prefact__engine__RefactoringEngine___preload_sources["_preload_sources"]
-        src__prefact__scanner__Scanner____init__["__init__"]
-        src__prefact__performance__cache__get_hash_cache["get_hash_cache"]
-        src__prefact__performance__cache__get_cache_info["get_cache_info"]
-        src__prefact__rules__registry__get_all_rules["get_all_rules"]
-        src__prefact__rules__autoflake_based__create_issues_from_results["create_issues_from_results"]
-        src__prefact__scanner___match_gitignore_pattern["_match_gitignore_pattern"]
-        src__prefact__config_extended__models__ExtendedConfig____init__["__init__"]
-        src__prefact__performance__cache__clear_cache["clear_cache"]
-        src__prefact__rules__pylint_based__PylintStringConcat____init__["__init__"]
-        src__prefact__git_hooks__list_git_hooks["list_git_hooks"]
-        src__prefact__performance__cache__cached_file_operation["cached_file_operation"]
-        src__prefact__cli___build_config["_build_config"]
-        src__prefact__rules__sorted_imports__SortedImports__scan_file["scan_file"]
-        src__prefact__rules__pylint_based__PylintComprehensive____init__["__init__"]
-        src__prefact__rules__autoflake_based__create_temp_file_with_source["create_temp_file_with_source"]
-        src__prefact__rules__isort_based__ISortedImports____init__["__init__"]
-        src__prefact__rules__mypy_based__ReturnTypeInferrer___analyze_return_types["_analyze_return_types"]
-        src__prefact__rules__import_linter_based__ImportLinterIndependence____init__["__init__"]
-        src__prefact__plugins__PluginManager__load_plugin["load_plugin"]
-        src__prefact__rules__autoflake_based__build_autoflake_check_command["build_autoflake_check_command"]
-        src__prefact__rules__sorted_imports___sort_key["_sort_key"]
-        src__prefact__performance__cache__CacheContext____exit__["__exit__"]
-        src__prefact__rules__magic_numbers__MagicNumberRule____init__["__init__"]
-        src__prefact__rules__autoflake_based__create_fixes_from_issues["create_fixes_from_issues"]
-        src__prefact__rules__composite_rules__CompositeImportRules____init__["__init__"]
-        src__prefact__rules__composite_rules__CompositeUnusedImports____init__["__init__"]
-        src__prefact__rules__autoflake_based__build_autoflake_fix_command["build_autoflake_fix_command"]
-        src__prefact__rules__mypy_based__MyPyMissingReturnType____init__["__init__"]
-        src__prefact__rules__unused_imports__UnusedImports__scan_file["scan_file"]
-        src__prefact__rules__autoflake_based__validate_unused_imports["validate_unused_imports"]
-        src__prefact__rules__benchmark__benchmark_file["benchmark_file"]
-        src__prefact__reporters__json_reporter__dump["dump"]
-        src__prefact__cli___output["_output"]
-        src__prefact__autonomous__dependency_checker__DependencyChecker___query_pip_outdated["_query_pip_outdated"]
-        src__prefact__performance__parallel__ParallelEngine___scan_with_process_pool["_scan_with_process_pool"]
-        src__prefact__performance__cache_state__get_cache["get_cache"]
         src__prefact__validator__Validator____init__["__init__"]
-        src__prefact__plugins__PluginManager___discover_entry_point_plugins["_discover_entry_point_plugins"]
-        src__prefact__rules__benchmark__print_benchmark_results["print_benchmark_results"]
-        src__prefact__rules__string_concat___flatten_add["_flatten_add"]
-        src__prefact__rules__import_linter_based__ImportLinterNoRelative____init__["__init__"]
-        src__prefact__config_extended__utils__deep_merge["deep_merge"]
-        src__prefact__rules__importchecker_based__ImportCheckerUnusedImports____init__["__init__"]
-        src__prefact__rules__import_linter_based__ImportLinterLayers____init__["__init__"]
-        src__prefact__rules__unimport_based__UnimportDuplicateImports____init__["__init__"]
-        src__prefact__rules__import_linter_based__ImportLinterCustomArchitecture____init__["__init__"]
-        src__prefact__autonomous__todo_manager__TodoManager___generate_current_todos["_generate_current_todos"]
-        src__prefact__rules__composite_factory__CompositeRuleFactory__create_composite_rule["create_composite_rule"]
-        src__prefact__rules__importchecker_based__ImportOptimizer___count_usage["_count_usage"]
-        src__prefact__rules__registry___initialize_built_in_rules["_initialize_built_in_rules"]
-        src__prefact__rules__autoflake_based__AutoflakeHelper__check_file["check_file"]
-        src__prefact__rules__autoflake_based__AutoflakeUnusedVariables____init__["__init__"]
-        src__prefact__rules__llm_hallucinations__LLMHallucinationRule____init__["__init__"]
-        src__prefact__autonomous__project_scanner__ProjectScanner____init__["__init__"]
-        src__prefact__git_hooks__PreCommitConfig__install["install"]
-        src__prefact__git_hooks__GitHooks__uninstall_hooks["uninstall_hooks"]
-        src__prefact__rules__migration__HybridScanner___load_rules["_load_rules"]
-        src__prefact__autonomous__todo_manager__TodoManager____init__["__init__"]
+        src__prefact__validator__Validator__validate_file["validate_file"]
+        src__prefact__engine__RefactoringEngine____init__["__init__"]
+        src__prefact__engine__RefactoringEngine__run("run CC=13")
+        src__prefact__engine__RefactoringEngine__scan_only["scan_only"]
+        src__prefact__engine__RefactoringEngine__run_file["run_file"]
+        src__prefact__engine__RefactoringEngine___preload_sources("_preload_sources CC=9")
+        src__prefact__fixer__Fixer____init__["__init__"]
+        src__prefact__fixer__Fixer__fix_file["fix_file"]
+        src__prefact__fixer__Fixer__fix_file_with_source["fix_file_with_source"]
+        src__prefact__git_hooks__GitHooks____init__["__init__"]
+        src__prefact__git_hooks__GitHooks___find_git_dir["_find_git_dir"]
+        src__prefact__git_hooks__GitHooks__install_hooks["install_hooks"]
         src__prefact__git_hooks__GitHooks___install_hook["_install_hook"]
-        src__prefact__git_hooks__main["main"]
-        src__prefact__performance__parallel__ParallelScanTask__execute["execute"]
-        src__prefact__plugins__PluginManager___discover_local_plugins["_discover_local_plugins"]
-        src__prefact__config_extended__config__ExtendedConfig__to_dict["to_dict"]
-        src__prefact__rules__migration__RuleMigrationManager__create_hybrid_rule["create_hybrid_rule"]
-        src__prefact__rules__autoflake_based__run_autoflake_command["run_autoflake_command"]
-        src__prefact__rules__string_concat___is_str_concat["_is_str_concat"]
-        src__prefact__rules__registry__register["register"]
-        src__prefact__rules__magic_numbers__MagicNumberRule___load_allowed_numbers["_load_allowed_numbers"]
+        src__prefact__git_hooks__GitHooks___generate_hook_script["_generate_hook_script"]
+        src__prefact__git_hooks__GitHooks___pre_commit_hook["_pre_commit_hook"]
+        src__prefact__git_hooks__GitHooks___pre_push_hook["_pre_push_hook"]
+        src__prefact__git_hooks__GitHooks___commit_msg_hook["_commit_msg_hook"]
+        src__prefact__git_hooks__GitHooks__uninstall_hooks["uninstall_hooks"]
+        src__prefact__git_hooks__GitHooks__list_hooks["list_hooks"]
+        src__prefact__git_hooks__GitHooks__test_hook["test_hook"]
+        src__prefact__git_hooks__PreCommitConfig__generate_config["generate_config"]
+        src__prefact__git_hooks__PreCommitConfig__install["install"]
         src__prefact__git_hooks__install_git_hooks["install_git_hooks"]
-        src__prefact__rules__unused_imports___collect_used_names["_collect_used_names"]
-        src__prefact__performance__parallel__ParallelEngine___get_enabled_rule_ids["_get_enabled_rule_ids"]
-        src__prefact__rules__relative_imports__RelativeToAbsoluteImports____init__["__init__"]
-        src__prefact__rules__isort_based__ISortHelper___find_import_blocks["_find_import_blocks"]
-        src__prefact__rules__unused_imports___collect_imported_names["_collect_imported_names"]
-        src__prefact__rules__composite_rules__CompositeTypeChecking____init__["__init__"]
-        src__prefact__rules__registry__LazyRuleRegistry___load_module["_load_module"]
-        src__prefact__rules__string_transformations__StringConcatToFString___is_string_concat["_is_string_concat"]
-        src__prefact__rules__register["register"]
-        src__prefact__rules__unimport_based__UnimportUnusedImports____init__["__init__"]
-        src__prefact__scanner__Scanner___excluded["_excluded"]
-        src__prefact__rules__llm_generated_code__LLMGeneratedCodeRule____init__["__init__"]
-        src__prefact__rules__unimport_based__UnimportAll____init__["__init__"]
-        src__prefact__benchmark__main["main"]
-        src__prefact__benchmark__build_prefact_suite["build_prefact_suite"]
-        src__prefact__rules__isort_based__ImportSectionSeparator____init__["__init__"]
-        src__prefact__rules__unimport_based__UnimportStarImports____init__["__init__"]
         src__prefact__git_hooks__uninstall_git_hooks["uninstall_git_hooks"]
-        src__prefact__performance__cache__cached_result["cached_result"]
-        src__prefact__rules__autoflake_based__AutoflakeHelper__fix_file["fix_file"]
-        src__prefact__rules__isort_based__CustomImportOrganization____init__["__init__"]
-        src__prefact__performance__cache__get_cache["get_cache"]
-        src__prefact__rules__benchmark__benchmark_project["benchmark_project"]
-        src__prefact__rules__string_transformations__ContextAwareStringConcat____init__["__init__"]
-        src__prefact__rules__importchecker_based__ImportDependencyAnalysis____init__["__init__"]
-        src__prefact__benchmark__ScanProbe__run["run"]
-        src__prefact__rules__registry__get_lazy_registry["get_lazy_registry"]
-        src__prefact__config_extended__config__ExtendedConfig____init__["__init__"]
-        src__prefact__cli__scan["scan"]
-        src__prefact__performance__cache__cleanup_cache["cleanup_cache"]
-        src__prefact__autonomous__dependency_checker__DependencyChecker____init__["__init__"]
-        src__prefact__cli__fix["fix"]
-        src__prefact__rules__benchmark__main["main"]
-        src__prefact__rules__mypy_based__MyPyTypeChecking____init__["__init__"]
-        src__prefact__rules__autoflake_based__AutoflakeUnusedImports____init__["__init__"]
-        src__prefact__rules__autoflake_based__parse_autoflake_output["parse_autoflake_output"]
-        src__prefact__rules__migration__PerformanceProfiler__compare_implementations["compare_implementations"]
-        src__prefact__reporters__json_reporter__to_dict["to_dict"]
-        src__prefact__rules__composite_factory__register_composite_rules["register_composite_rules"]
-        src__prefact__rules__autoflake_based__AutoflakeUnusedImports__fix["fix"]
-        src__prefact__benchmark___make_inprocess_probe["_make_inprocess_probe"]
-        src__prefact__rules__unused_imports___collect_all_exports["_collect_all_exports"]
+        src__prefact__git_hooks__list_git_hooks["list_git_hooks"]
+        src__prefact__git_hooks__main("main CC=8")
+        src__prefact__logging__exceptions__PprefactException____init__["__init__"]
+        src__prefact__logging__exceptions__RuleError____init__["__init__"]
+        src__prefact__logging__exceptions__PluginError____init__["__init__"]
+        src__prefact__scanner___load_gitignore["_load_gitignore"]
+        src__prefact__scanner___match_gitignore_pattern("_match_gitignore_pattern CC=12")
+        src__prefact__scanner__Scanner____init__["__init__"]
         src__prefact__scanner__Scanner__collect_files["collect_files"]
-        src__prefact__rules__unused_imports__UnusedImports__fix["fix"]
-        src__prefact__autonomous__docs_manager__DocsManager__update_planfile["update_planfile"]
-        src__prefact__performance__cache_adapters__ScanResultCache__set["set"]
-        src__prefact__rules__registry__get_rule["get_rule"]
-        src__prefact__rules__autoflake_based__AutoflakeUnusedImports__scan_file["scan_file"]
+        src__prefact__scanner__Scanner__scan["scan"]
+        src__prefact__scanner__Scanner__scan_sources["scan_sources"]
+        src__prefact__scanner__Scanner___excluded("_excluded CC=12")
+        src__prefact__plugins__PluginMetadata____init__["__init__"]
+        src__prefact__plugins__PluginMetadata___check_compatibility["_check_compatibility"]
+        src__prefact__plugins__PluginValidator__validate_plugin_module["validate_plugin_module"]
+        src__prefact__plugins__PluginValidator__validate_plugin_path["validate_plugin_path"]
+        src__prefact__plugins__PluginManager____init__["__init__"]
+        src__prefact__plugins__PluginManager__discover_plugins["discover_plugins"]
+        src__prefact__plugins__PluginManager___discover_entry_point_plugins["_discover_entry_point_plugins"]
+        src__prefact__plugins__PluginManager___discover_local_plugins["_discover_local_plugins"]
+        src__prefact__plugins__PluginManager__load_plugin("load_plugin CC=10")
+        src__prefact__plugins__PluginManager__load_all_plugins["load_all_plugins"]
+        src__prefact__plugins__PluginManager__get_rule["get_rule"]
+        src__prefact__plugins__PluginManager___load_plugin_for_rule["_load_plugin_for_rule"]
+        src__prefact__plugins__PluginManager__list_plugins["list_plugins"]
+        src__prefact__plugins__PluginManager___is_rule_from_plugin["_is_rule_from_plugin"]
+        src__prefact__plugins__PluginManager__unload_plugin["unload_plugin"]
+        src__prefact__plugins__get_plugin_manager["get_plugin_manager"]
+        src__prefact__plugins__register_plugin_rule["register_plugin_rule"]
+        src__prefact__performance__cache_state__initialize_cache["initialize_cache"]
+        src__prefact__performance__cache_state__get_cache["get_cache"]
+        src__prefact__performance__cache_state__get_scan_cache["get_scan_cache"]
+        src__prefact__performance__cache_state__get_config_cache["get_config_cache"]
+        src__prefact__performance__cache_state__get_rule_cache["get_rule_cache"]
+        src__prefact__performance__cache_state__get_hash_cache["get_hash_cache"]
     end
     subgraph vscode_extension__src
-        vscode_extension__src__extension__PrefactTreeProvider__activate["activate"]
-        vscode_extension__src__extension__PrefactTreeProvider__fixCommand["fixCommand"]
-        vscode_extension__src__extension__PrefactTreeProvider__scanWorkspaceCommand["scanWorkspaceCommand"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity["getSeverity"]
-        vscode_extension__src__extension__PrefactTreeProvider__fixWorkspaceCommand["fixWorkspaceCommand"]
-        vscode_extension__src__extension__PrefactTreeProvider__scanCommand["scanCommand"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__range["range"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__updateWorkspaceDiagnostics["updateWorkspaceDiagnostics"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostic["diagnostic"]
-        vscode_extension__src__extension__PrefactTreeProvider__file["file"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__showOutput["showOutput"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__entries["entries"]
         vscode_extension__src__extension__PrefactDiagnosticsProvider__scanFile["scanFile"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostics["diagnostics"]
-        vscode_extension__src__extension__PrefactTreeProvider__fileIssues["fileIssues"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__runPrefact["runPrefact"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__reject["reject"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnosticsByFile["diagnosticsByFile"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__resolve["resolve"]
-        vscode_extension__src__extension__PrefactTreeProvider__onSave["onSave"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__updateDiagnostics["updateDiagnostics"]
-        vscode_extension__src__extension__PrefactTreeProvider__config["config"]
-        vscode_extension__src__extension__PrefactTreeProvider__refresh["refresh"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__executablePath["executablePath"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__severity["severity"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__fixWorkspace["fixWorkspace"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__config("config CC=9")
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__result["result"]
         vscode_extension__src__extension__PrefactDiagnosticsProvider__scanWorkspace["scanWorkspace"]
-        vscode_extension__src__extension__PrefactTreeItem__super["super"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__workspaceFolders["workspaceFolders"]
         vscode_extension__src__extension__PrefactDiagnosticsProvider__fixFile["fixFile"]
-        vscode_extension__src__extension__PrefactTreeProvider__setInterval["setInterval"]
-        vscode_extension__src__extension__PrefactTreeProvider__document["document"]
-        vscode_extension__src__extension__PrefactDiagnosticsProvider__config["config"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__doc["doc"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__fixWorkspace["fixWorkspace"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__runPrefact("runPrefact CC=9")
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__executablePath("executablePath CC=9")
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__child["child"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__resolve["resolve"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__reject["reject"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__updateDiagnostics["updateDiagnostics"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__range["range"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__severity["severity"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostic["diagnostic"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__updateWorkspaceDiagnostics["updateWorkspaceDiagnostics"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnosticsByFile["diagnosticsByFile"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostics["diagnostics"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__entries["entries"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity["getSeverity"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__showOutput["showOutput"]
+        vscode_extension__src__extension__PrefactDiagnosticsProvider__dispose["dispose"]
+        vscode_extension__src__extension__PrefactTreeItem__super["super"]
+        vscode_extension__src__extension__PrefactTreeProvider__refresh["refresh"]
+        vscode_extension__src__extension__PrefactTreeProvider__getTreeItem["getTreeItem"]
         vscode_extension__src__extension__PrefactTreeProvider__getChildren["getChildren"]
+        vscode_extension__src__extension__PrefactTreeProvider__issuesByFile["issuesByFile"]
+        vscode_extension__src__extension__PrefactTreeProvider__file["file"]
+        vscode_extension__src__extension__PrefactTreeProvider__item["item"]
+        vscode_extension__src__extension__PrefactTreeProvider__fileIssues["fileIssues"]
+        vscode_extension__src__extension__PrefactTreeProvider__activate("activate CC=14")
+        vscode_extension__src__extension__PrefactTreeProvider__diagnosticsProvider["diagnosticsProvider"]
+        vscode_extension__src__extension__PrefactTreeProvider__treeProvider["treeProvider"]
+        vscode_extension__src__extension__PrefactTreeProvider__treeView["treeView"]
+        vscode_extension__src__extension__PrefactTreeProvider__scanCommand["scanCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__document["document"]
+        vscode_extension__src__extension__PrefactTreeProvider__scanWorkspaceCommand["scanWorkspaceCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__fixCommand["fixCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__fixWorkspaceCommand["fixWorkspaceCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__configureCommand["configureCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__installHooksCommand["installHooksCommand"]
+        vscode_extension__src__extension__PrefactTreeProvider__workspaceFolders["workspaceFolders"]
+        vscode_extension__src__extension__PrefactTreeProvider__onSave["onSave"]
+        vscode_extension__src__extension__PrefactTreeProvider__config["config"]
+        vscode_extension__src__extension__PrefactTreeProvider__setInterval["setInterval"]
+        vscode_extension__src__extension__PrefactTreeProvider__deactivate["deactivate"]
     end
     examples__01_individual_rules__print_statements__after__process_data --> Taskfile__print
     examples__01_individual_rules__print_statements__after__calculate --> Taskfile__print
@@ -253,6 +291,7 @@ flowchart LR
     examples__sample_project__utils__UtilClass____init__ --> Taskfile__print
     examples__sample_project__cli__main --> Taskfile__print
     examples__sample_project__cli__main --> examples__01_individual_rules__unused_imports__before__process_data
+    examples__sample_project__cli__main --> examples__sample_project__utils__validate_email
     examples__sample_project__cli__admin --> Taskfile__print
     examples__sample_project__cli__users --> Taskfile__print
     examples__03_output_formats__sample_code__process_data --> Taskfile__print
@@ -267,6 +306,7 @@ flowchart LR
     benchmark_ram_optimization__run_benchmark --> benchmark_ram_optimization__benchmark_without_rampreload
     benchmark_ram_optimization__run_benchmark --> benchmark_ram_optimization__benchmark_with_rampreload
     benchmark_ram_optimization__main --> Taskfile__print
+    benchmark_ram_optimization__main --> benchmark_ram_optimization__run_benchmark
     src__prefact__validator__Validator____init__ --> src__prefact__rules__get_all_rules
     src__prefact__engine__RefactoringEngine___preload_sources --> Taskfile__print
     examples__04_custom_rules__custom_rules__no_todo_rule__NoTodoRule____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
@@ -280,6 +320,7 @@ flowchart LR
     src__prefact__git_hooks__main --> src__prefact__git_hooks__install_git_hooks
     src__prefact__git_hooks__main --> src__prefact__git_hooks__uninstall_git_hooks
     src__prefact__git_hooks__main --> src__prefact__git_hooks__list_git_hooks
+    src__prefact__git_hooks__main --> Taskfile__print
     src__prefact__logging__exceptions__PprefactException____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__logging__exceptions__RuleError____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__logging__exceptions__PluginError____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
@@ -322,6 +363,7 @@ flowchart LR
     src__prefact__rules__magic_numbers__MagicNumberRule____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__magic_numbers__MagicNumberRule___load_allowed_numbers --> src__prefact__performance__cache_adapters__ScanResultCache__set
     src__prefact__rules__composite_factory__CompositeRuleFactory__create_composite_rule --> src__prefact__rules__get_all_rules
+    src__prefact__rules__composite_factory__CompositeRuleFactory__create_composite_rule --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__composite_factory__register_composite_rules --> src__prefact__rules__register
     src__prefact__rules__importchecker_based__ImportCheckerUnusedImports____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__importchecker_based__ImportDependencyAnalysis____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
@@ -356,6 +398,7 @@ flowchart LR
     src__prefact__rules__isort_based__ImportSectionSeparator____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__isort_based__CustomImportOrganization____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__migration__RuleMigrationManager__create_hybrid_rule --> src__prefact__rules__get_all_rules
+    src__prefact__rules__migration__RuleMigrationManager__create_hybrid_rule --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__rules__migration__HybridScanner___load_rules --> src__prefact__rules__get_all_rules
     src__prefact__rules__migration__PerformanceProfiler__compare_implementations --> src__prefact__rules__get_all_rules
     src__prefact__rules__import_linter_based__ImportLinterLayers____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
@@ -407,6 +450,7 @@ flowchart LR
     vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostic --> vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity
     vscode_extension__src__extension__PrefactDiagnosticsProvider__updateWorkspaceDiagnostics --> vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity
     vscode_extension__src__extension__PrefactDiagnosticsProvider__updateWorkspaceDiagnostics --> vscode_extension__src__extension__PrefactDiagnosticsProvider__entries
+    vscode_extension__src__extension__PrefactDiagnosticsProvider__updateWorkspaceDiagnostics --> vscode_extension__src__extension__PrefactTreeProvider__file
     vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnosticsByFile --> vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity
     vscode_extension__src__extension__PrefactDiagnosticsProvider__diagnostics --> vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity
     vscode_extension__src__extension__PrefactDiagnosticsProvider__entries --> vscode_extension__src__extension__PrefactDiagnosticsProvider__getSeverity
@@ -433,6 +477,7 @@ flowchart LR
     src__prefact__cli__fix --> src__prefact__cli___output
     src__prefact__cli__check --> src__prefact__cli___build_config
     src__prefact__cli__check --> src__prefact__cli___output
+    src__prefact__cli__rules --> src__prefact__rules__get_all_rules
     src__prefact__config_extended__models__ExtendedConfig____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
     src__prefact__config_extended__models__ExtendedConfig__from_yaml --> src__prefact__config_extended__utils__deep_merge
     src__prefact__config_extended__models__ExtendedConfig__to_dict --> vscode_extension__src__extension__PrefactTreeItem__super
@@ -451,3 +496,8 @@ flowchart LR
     src__prefact__rules__mypy_based__ReturnTypeInferrer___analyze_return_types --> src__prefact__performance__cache_adapters__ScanResultCache__set
     src__prefact__rules__string_transformations__StringConcatToFString___is_string_concat --> project__map__toon__check
     src__prefact__rules__string_transformations__ContextAwareStringConcat____init__ --> vscode_extension__src__extension__PrefactTreeItem__super
+
+    classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
+    class src__prefact__rules__magic_numbers__MagicNumberRule__scan_file highCC
+    class examples__run_examples__main,src__prefact__engine__RefactoringEngine__run,src__prefact__engine__RefactoringEngine___preload_sources,src__prefact__git_hooks__main,src__prefact__scanner___match_gitignore_pattern,src__prefact__scanner__Scanner___excluded,src__prefact__plugins__PluginManager__load_plugin,src__prefact__reporters__console__print_report,src__prefact__autonomous__setup_manager__SetupManager__detect_project_info,src__prefact__autonomous___base__BaseManager___load_autonomous_limits,src__prefact__autonomous__docs_manager__DocsManager__update_planfile,src__prefact__config_extended__generator__ConfigGenerator__generate_extended_config,src__prefact__autonomous__dependency_checker__DependencyChecker___parse_requirements_files,examples__06_api_usage__example__run_prefact_example,src__prefact__rules__importchecker_based__ImportCheckerUnusedImports___find_import_lines,src__prefact__rules__importchecker_based__ImportCheckerDuplicateImports__scan_file,src__prefact__rules__unused_imports__UnusedImports__process_import_from,src__prefact__rules__unused_imports__UnusedImports__process_import,src__prefact__rules__unused_imports___collect_imported_names,src__prefact__rules__unused_imports___collect_all_exports,src__prefact__rules__registry__LazyRuleRegistry___find_rule_class,src__prefact__rules__isort_based__ISortHelper___find_import_blocks,src__prefact__rules__isort_based__CustomImportOrganization__scan_file,src__prefact__rules__import_linter_based__ImportLinterHelper__run_linter,src__prefact__rules__unimport_based__UnimportHelper__check_file,src__prefact__rules__unimport_based__UnimportDuplicateImports__scan_file,src__prefact__rules__llm_hallucinations__LLMHallucinationRule___check_ast_patterns,src__prefact__rules__print_statements__PrintStatements__scan_file,src__prefact__rules__duplicate_imports__DuplicateImports__scan_file,src__prefact__config_extended__config__ExtendedConfig____init__ medCC

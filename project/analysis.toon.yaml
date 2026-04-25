@@ -1,54 +1,54 @@
-# code2llm | 73f 12601L | python:72,shell:2,typescript:1 | 2026-04-19
-# CC̄=3.2 | critical:1/743 | dups:5 | cycles:0
+# code2llm | 151f 21047L | python:104,yaml:34,json:4,shell:2,txt:2,cfg:1,yml:1,toml:1,typescript:1 | 2026-04-25
+# CC̄=2.7 | critical:1/833 | dups:15 | cycles:0
 
 HEALTH[2]:
-  🔴 DUP   5 classes duplicated
+  🔴 DUP   15 classes duplicated
   🟡 CC    scan_file CC=15 (limit:15)
 
 REFACTOR[2]:
-  1. rm duplicates  (-5 dup classes)
+  1. rm duplicates  (-15 dup classes)
   2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[588]:
-  [1] Src [process_user]: process_user → helper_function
+PIPELINES[597]:
+  [1] Src [format_timestamp]: format_timestamp
       PURITY: 100% pure
-  [2] Src [__init__]: __init__
+  [2] Src [read_file]: read_file
       PURITY: 100% pure
-  [3] Src [process]: process → format_data
+  [3] Src [__init__]: __init__
       PURITY: 100% pure
-  [4] Src [main]: main → find_examples
+  [4] Src [get_data]: get_data
       PURITY: 100% pure
-  [5] Src [process_user]: process_user → helper_function
+  [5] Src [process_data]: process_data → print
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
+  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
   │ importchecker_based        490L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
-  │ autoflake_based            470L  5C   23m  CC=11     ←0
   │ unimport_based             456L  5C   22m  CC=14     ←0
   │ import_linter_based        451L  5C   24m  CC=8      ←0
   │ cache                      439L  6C   37m  CC=5      ←0  ×DUP
   │ mypy_based                 398L  6C   22m  CC=9      ←0
-  │ pylint_based               396L  5C   22m  CC=6      ←1
+  │ pylint_based               396L  5C   22m  CC=6      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
   │ todo_manager               368L  1C   15m  CC=13     ←0
   │ parallel                   353L  4C   23m  CC=7      ←0
   │ __init__                   320L  3C   17m  CC=10     ←0
   │ ruff_based                 311L  6C   19m  CC=4      ←0
   │ benchmark                  293L  1C    6m  CC=7      ←0
+  │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
-  │ registry                   255L  1C   13m  CC=8      ←8
-  │ cli                        237L  0C   10m  CC=6      ←1
+  │ registry                   255L  1C   13m  CC=8      ←1
+  │ cli                        247L  0C   10m  CC=7      ←0
+  │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
-  │ __init__                   236L  1C    7m  CC=1      ←0
+  │ __init__                   236L  1C    7m  CC=1      ←7
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
-  │ __init__                   214L  1C   17m  CC=7      ←0
+  │ __init__                   218L  1C   17m  CC=7      ←0
   │ llm_hallucinations         214L  1C    9m  CC=8      ←0
-  │ project_scanner            207L  1C    7m  CC=7      ←0
   │ config                     192L  2C   13m  CC=5      ←3
   │ llm_generated_code         191L  1C    9m  CC=7      ←0
   │ docs_manager               189L  1C    7m  CC=11     ←0
@@ -58,29 +58,35 @@ LAYERS:
   │ scanner                    153L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
   │ !! magic_numbers              138L  1C    6m  CC=15     ←0
+  │ config                     128L  1C    8m  CC=10     ←4
   │ setup_manager              120L  1C    3m  CC=9      ←0
   │ composite_factory          119L  1C    2m  CC=4      ←0
-  │ config                     117L  1C    8m  CC=9      ←4
-  │ cache_adapters             106L  4C   16m  CC=3      ←10  ×DUP
+  │ cache_adapters             106L  4C   16m  CC=3      ←9  ×DUP
+  │ base                        99L  1C    7m  CC=3      ←0  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
   │ duplicate_imports           80L  1C    3m  CC=11     ←0
+  │ ai_boilerplate              77L  1C    5m  CC=3      ←0
   │ cache_state                 74L  0C    7m  CC=2      ←2
   │ _base                       66L  1C    3m  CC=10     ←0
   │ string_concat               66L  1C    5m  CC=6      ←0
-  │ ai_boilerplate              66L  1C    3m  CC=4      ←0
   │ logger                      65L  2C   15m  CC=3      ←0
   │ validation                  65L  1C    6m  CC=6      ←1  ×DUP
   │ console                     64L  0C    1m  CC=14     ←0
   │ sorted_imports              63L  1C    4m  CC=7      ←0
+  │ scan                        59L  1C    5m  CC=1      ←0  ×DUP
   │ print_statements            58L  1C    3m  CC=9      ←0
   │ json_reporter               57L  0C    2m  CC=4      ←1
   │ _ast_cache                  51L  0C    2m  CC=4      ←0
+  │ globals                     50L  0C    3m  CC=2      ←0
   │ fixer                       49L  1C    3m  CC=7      ←0
+  │ rule                        47L  1C    4m  CC=1      ←0  ×DUP
   │ type_hints                  46L  1C    3m  CC=6      ←0
   │ wildcard_imports            45L  1C    3m  CC=7      ←0
   │ validators                  44L  1C    4m  CC=5      ←1  ×DUP
   │ __init__                    41L  0C    0m  CC=0.0    ←0
   │ models                      38L  1C    3m  CC=13     ←0
+  │ config                      31L  1C    4m  CC=1      ←0  ×DUP
+  │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
   │ validator                   29L  1C    2m  CC=4      ←0
   │ exceptions                  24L  4C    3m  CC=2      ←0
   │ formatters                  24L  1C    1m  CC=2      ←0
@@ -96,20 +102,112 @@ LAYERS:
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
   │ extension.ts               437L  5C   48m  CC=14     ←27
+  │ package.json               187L  0C    0m  CC=0.0    ←0
+  │ .eslintrc.json              19L  0C    0m  CC=0.0    ←0
+  │ tsconfig.json               16L  0C    0m  CC=0.0    ←0
   │
-  ./                              CC̄=2.6    ←in:0  →out:0
+  ./                              CC̄=2.2    ←in:0  →out:0
+  │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
+  │ goal.yaml                  480L  0C    0m  CC=0.0    ←0
+  │ sumd.json                  406L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
-  │ project.sh                  36L  0C    0m  CC=0.0    ←0
+  │ Taskfile.yml               186L  0C    1m  CC=0.0    ←16
+  │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                84L  0C    0m  CC=0.0    ←0
+  │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
+  │ project.sh                  46L  0C    0m  CC=0.0    ←0
+  │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
+  │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
+  │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
+  │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
+  examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
+  │ prefact.yaml               344L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml               281L  0C    0m  CC=0.0    ←0
+  │ generate_examples          233L  0C    0m  CC=0.0    ←0
+  │ example                    185L  0C    4m  CC=11     ←0
+  │ run_all.sh                 143L  0C    3m  CC=0.0    ←0
+  │ prefact.yaml               129L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml               123L  0C    0m  CC=0.0    ←0
+  │ run_examples               119L  0C    3m  CC=8      ←0
+  │ no_todo_rule               108L  2C    7m  CC=6      ←0
+  │ prefact.yaml               101L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
+  │ messy_module                67L  1C    4m  CC=2      ←0
+  │ cli                         65L  0C    3m  CC=2      ←0
+  │ models                      62L  2C    5m  CC=2      ←0
+  │ before                      41L  1C    6m  CC=2      ←1  ×DUP
+  │ after                       41L  1C    6m  CC=2      ←0  ×DUP
+  │ utils                       40L  1C    5m  CC=2      ←3
+  │ core                        36L  1C    5m  CC=2      ←0
+  │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
+  │ after                       27L  1C    3m  CC=1      ←0
+  │ before                      27L  1C    3m  CC=1      ←0
+  │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
+  │ sample_code                 21L  0C    2m  CC=2      ←0
+  │ prefact.yaml                18L  0C    0m  CC=0.0    ←0
+  │ after                       16L  1C    3m  CC=1      ←0
+  │ before                      16L  1C    3m  CC=1      ←0
+  │ before                      14L  0C    1m  CC=1      ←0
+  │ before                      13L  0C    1m  CC=1      ←0
+  │ after                       13L  0C    2m  CC=1      ←0
+  │ before                      13L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
+  │ requirements.txt            13L  0C    0m  CC=0.0    ←0
+  │ after                       11L  0C    2m  CC=1      ←2
+  │ after                       11L  0C    1m  CC=1      ←0
+  │ before                      11L  0C    2m  CC=1      ←0
+  │ after                       11L  0C    1m  CC=1      ←0
+  │ before                      11L  0C    1m  CC=1      ←0
+  │ __init__                     6L  0C    0m  CC=0.0    ←0
+  │
+  project/                        CC̄=0.0    ←in:0  →out:0
+  │ map.toon.yaml              427L  0C   65m  CC=0.0    ←2
+  │ duplication.toon.yaml      294L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
+  │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
+  │ prompt.txt                  55L  0C    0m  CC=0.0    ←0
+  │ project.toon.yaml           50L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │
+  ── zero ──
+     Makefile                                  0L
 
 COUPLING:
-                                    vscode-extension.src                 src.prefact  benchmark_ram_optimization
-        vscode-extension.src                          ──                         ←47                          ←1  hub
-                 src.prefact                          47                          ──                              !! fan-out
-  benchmark_ram_optimization                           1                                                      ──
+                                                    Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization       examples.sample-project  examples.01-individual-rules                   project.map    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
+                      Taskfile                            ──                           ←43                                                         ←34                           ←25                           ←17                            ←6                                                          ←6                            ←2                                hub
+                   src.prefact                            43                            ──                            46                            ←1                                                                                                                       7                                                                                            !! fan-out
+          vscode-extension.src                                                         ←46                            ──                                                          ←1                                                                                                                                                                                  ←1  hub
+         examples.06-api-usage                            34                             1                                                          ──                                                                                                                                                                                                                    !! fan-out
+    benchmark_ram_optimization                            25                                                           1                                                          ──                                                                                                                                                                                      !! fan-out
+       examples.sample-project                            17                                                                                                                                                    ──                             1                                                                                                                          !! fan-out
+  examples.01-individual-rules                             6                                                                                                                                                     2                            ──                                                                                                                          !! fan-out
+                   project.map                                                          ←7                                                                                                                                                                                  ──                                                                                            hub
+    examples.02-multiple-rules                             6                                                                                                                                                                                                                                              ──                                                            
+    examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
+      examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
+  HUB: Taskfile/ (fan-in=133)
+  HUB: project.map/ (fan-in=7)
   HUB: vscode-extension.src/ (fan-in=48)
-  SMELL: src.prefact/ fan-out=47 → split needed
+  SMELL: src.prefact/ fan-out=96 → split needed
+  SMELL: examples.06-api-usage/ fan-out=35 → split needed
+  SMELL: examples.sample-project/ fan-out=18 → split needed
+  SMELL: examples.01-individual-rules/ fan-out=8 → split needed
+  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

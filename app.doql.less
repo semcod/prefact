@@ -1,0 +1,423 @@
+// LESS format — define @variables here as needed
+
+app {
+  name: prefact;
+  version: 0.0.0;
+}
+
+dependencies {
+  runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
+  dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
+}
+
+interface[type="cli"] {
+  framework: click;
+}
+interface[type="cli"] page[name="prefact"] {
+
+}
+
+workflow[name="venv"] {
+  trigger: manual;
+  step-1: run cmd=if [ ! -x "$(PYTHON)" ]; then \;
+  step-2: run cmd=echo "Creating virtual environment in $(VENV)..."; \;
+  step-3: run cmd=python3 -m venv "$(VENV)"; \;
+  step-4: run cmd=fi;
+}
+
+workflow[name="install"] {
+  trigger: manual;
+  step-1: run cmd=$(PIP) install -e .;
+  step-2: run cmd=echo "✓ code2llm installed with TOON format support";
+}
+
+workflow[name="dev-install"] {
+  trigger: manual;
+  step-1: run cmd=$(PIP) install -e ".[dev]";
+  step-2: run cmd=echo "✓ code2llm installed with dev dependencies";
+}
+
+workflow[name="test"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest tests/ -v --tb=short;
+}
+
+workflow[name="test-fast"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest -m "not slow and not integration" -v --tb=short -n auto;
+}
+
+workflow[name="test-slow"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest -m "slow" -v --tb=short;
+}
+
+workflow[name="test-integration"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest -m "integration" -v --tb=short;
+}
+
+workflow[name="test-unit"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest -m "unit" -v --tb=short;
+}
+
+workflow[name="test-cov"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m pytest tests/ --cov=code2llm --cov-report=html --cov-report=term 2>/dev/null || echo "No tests yet";
+}
+
+workflow[name="test-toon"] {
+  trigger: manual;
+  step-1: run cmd=echo "🎯 Testing TOON format...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./test_toon -m hybrid -f toon;
+  step-3: run cmd=$(PYTHON) validate_toon.py test_toon/analysis.toon;
+  step-4: run cmd=echo "✓ TOON format test complete";
+}
+
+workflow[name="validate-toon"] {
+  trigger: manual;
+  step-1: depend target=test-toon;
+}
+
+workflow[name="test-all-formats"] {
+  trigger: manual;
+  step-1: run cmd=echo "📊 Testing all output formats...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./test_all -m hybrid -f all;
+  step-3: run cmd=$(PYTHON) validate_toon.py test_all/analysis.toon;
+  step-4: run cmd=echo "✓ All formats test complete";
+}
+
+workflow[name="test-comprehensive"] {
+  trigger: manual;
+  step-1: run cmd=echo "🚀 Running comprehensive test suite...";
+  step-2: run cmd=bash project.sh;
+  step-3: run cmd=echo "✓ Comprehensive tests complete";
+}
+
+workflow[name="lint"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m flake8 code2llm/ --max-line-length=100 --ignore=E203,W503 2>/dev/null || echo "flake8 not installed";
+  step-2: run cmd=$(PYTHON) -m black --check code2llm/ 2>/dev/null || echo "black not installed";
+  step-3: run cmd=echo "✓ Linting complete";
+}
+
+workflow[name="format"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m black code2llm/ --line-length=100 2>/dev/null || echo "black not installed, run: pip install black";
+  step-2: run cmd=echo "✓ Code formatted";
+}
+
+workflow[name="typecheck"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m mypy code2llm/ --ignore-missing-imports 2>/dev/null || echo "mypy not installed";
+}
+
+workflow[name="check"] {
+  trigger: manual;
+  step-1: run cmd=echo "✓ All checks passed";
+}
+
+workflow[name="run"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m code2llm ../python/stts_core -v -o ./output;
+}
+
+workflow[name="analyze"] {
+  trigger: manual;
+  step-1: run cmd=echo "🎯 Running TOON format analysis on current project...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./analysis -m hybrid -f toon;
+  step-3: run cmd=$(PYTHON) validate_toon.py analysis/analysis.toon;
+  step-4: run cmd=echo "✓ TOON analysis complete - check analysis/analysis.toon";
+}
+
+workflow[name="analyze-all"] {
+  trigger: manual;
+  step-1: run cmd=echo "📊 Running analysis with all formats...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./analysis_all -m hybrid -f all;
+  step-3: run cmd=$(PYTHON) validate_toon.py analysis_all/analysis.toon;
+  step-4: run cmd=echo "✓ All formats analysis complete - check analysis_all/";
+}
+
+workflow[name="toon-demo"] {
+  trigger: manual;
+  step-1: run cmd=echo "🎯 Quick TOON format demo...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./demo -m hybrid -f toon;
+  step-3: run cmd=echo "📁 Generated: demo/analysis.toon";
+  step-4: run cmd=echo "📊 Size: $$(du -h demo/analysis.toon | cut -f1)";
+  step-5: run cmd=echo "🔍 Preview:";
+  step-6: run cmd=head -20 demo/analysis.toon;
+}
+
+workflow[name="toon-compare"] {
+  trigger: manual;
+  step-1: run cmd=echo "📊 Comparing TOON vs YAML formats...";
+  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./compare -m hybrid -f toon,yaml;
+  step-3: run cmd=echo "📁 Files generated:";
+  step-4: run cmd=echo "  - TOON:  compare/analysis.toon  ($$(du -h compare/analysis.toon | cut -f1))";
+  step-5: run cmd=echo "  - YAML:  compare/analysis.yaml  ($$(du -h compare/analysis.yaml | cut -f1))";
+  step-6: run cmd=echo "  - Ratio: $$(echo "scale=1; $$(du -k compare/analysis.yaml | cut -f1) / $$(du -k compare/analysis.toon | cut -f1)" | bc)x smaller";
+  step-7: run cmd=$(PYTHON) validate_toon.py compare/analysis.yaml compare/analysis.toon;
+}
+
+workflow[name="toon-validate"] {
+  trigger: manual;
+  step-1: run cmd=echo "🔍 Validating TOON format structure...";
+  step-2: run cmd=$(PYTHON) validate_toon.py analysis/analysis.toon 2>/dev/null || $(PYTHON) validate_toon.py test_toon/analysis.toon 2>/dev/null || echo "Run 'make test-toon' first";
+}
+
+workflow[name="build"] {
+  trigger: manual;
+  step-1: run cmd=rm -rf build/ dist/ *.egg-info;
+  step-2: run cmd=$(PYTHON) -m build;
+  step-3: run cmd=echo "✓ Build complete - check dist/";
+}
+
+workflow[name="publish-test"] {
+  trigger: manual;
+  step-1: run cmd=echo "🚀 Publishing to TestPyPI...";
+  step-2: run cmd=bash -c 'if [ -z "$${TWINE_USERNAME}" ] && [ -z "$${TWINE_PASSWORD}" ] && [ -z "$${PYPI_API_TOKEN}" ]; then \;
+  step-3: run cmd=echo "⚠️  No PyPI credentials found. Set TWINE_USERNAME and TWINE_PASSWORD or PYPI_API_TOKEN"; \;
+  step-4: run cmd=echo "   Example: TWINE_USERNAME=__token__ TWINE_PASSWORD=pypi-xxx make publish-test"; \;
+  step-5: run cmd=echo "   Skipping publish-test."; \;
+  step-6: run cmd=else \;
+  step-7: run cmd=$(PYTHON) -m venv publish-test-env && \;
+  step-8: run cmd=publish-test-env/bin/pip install twine && \;
+  step-9: run cmd=publish-test-env/bin/python -m twine upload --repository testpypi dist/* && \;
+  step-10: run cmd=rm -rf publish-test-env && \;
+  step-11: run cmd=echo "✓ Published to TestPyPI"; \;
+  step-12: run cmd=fi';
+}
+
+workflow[name="bump-patch"] {
+  trigger: manual;
+  step-1: run cmd=echo "🔢 Bumping patch version...";
+  step-2: run cmd=$(PYTHON) scripts/bump_version.py patch 2>/dev/null || echo "Create scripts/bump_version.py or edit pyproject.toml manually";
+}
+
+workflow[name="bump-minor"] {
+  trigger: manual;
+  step-1: run cmd=echo "🔢 Bumping minor version...";
+  step-2: run cmd=$(PYTHON) scripts/bump_version.py minor 2>/dev/null || echo "Create scripts/bump_version.py or edit pyproject.toml manually";
+}
+
+workflow[name="bump-major"] {
+  trigger: manual;
+  step-1: run cmd=echo "🔢 Bumping major version...";
+  step-2: run cmd=$(PYTHON) scripts/bump_version.py major 2>/dev/null || echo "Create scripts/bump_version.py or edit pyproject.toml manually";
+}
+
+workflow[name="publish"] {
+  trigger: manual;
+  step-1: run cmd=echo "🚀 Publishing to PyPI...";
+  step-2: run cmd=bash -c 'if [ -z "$${TWINE_USERNAME}" ] && [ -z "$${TWINE_PASSWORD}" ] && [ -z "$${PYPI_API_TOKEN}" ]; then \;
+  step-3: run cmd=echo "⚠️  No PyPI credentials found. Set TWINE_USERNAME and TWINE_PASSWORD or PYPI_API_TOKEN"; \;
+  step-4: run cmd=echo "   Example: TWINE_USERNAME=__token__ TWINE_PASSWORD=pypi-xxx make publish"; \;
+  step-5: run cmd=echo "   Skipping publish."; \;
+  step-6: run cmd=else \;
+  step-7: run cmd=echo "🔢 Bumping patch version..."; \;
+  step-8: run cmd=$(MAKE) bump-patch; \;
+  step-9: run cmd=echo "🔨 Rebuilding package with new version..."; \;
+  step-10: run cmd=$(MAKE) build; \;
+  step-11: run cmd=echo "📦 Publishing to PyPI..."; \;
+  step-12: run cmd=$(PYTHON) -m venv publish-env; \;
+  step-13: run cmd=publish-env/bin/pip install twine; \;
+  step-14: run cmd=publish-env/bin/python -m twine upload dist/*; \;
+  step-15: run cmd=rm -rf publish-env; \;
+  step-16: run cmd=echo "✓ Published to PyPI"; \;
+  step-17: run cmd=fi';
+}
+
+workflow[name="mermaid-png"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) mermaid_to_png.py --batch output output;
+}
+
+workflow[name="install-mermaid"] {
+  trigger: manual;
+  step-1: run cmd=npm install -g @mermaid-js/mermaid-cli;
+}
+
+workflow[name="check-mermaid"] {
+  trigger: manual;
+  step-1: run cmd=echo "Checking available Mermaid renderers...";
+  step-2: run cmd=which mmdc > /dev/null && echo "✓ mmdc (mermaid-cli)" || echo "✗ mmdc (run: npm install -g @mermaid-js/mermaid-cli)";
+  step-3: run cmd=which npx > /dev/null && echo "✓ npx (for @mermaid-js/mermaid-cli)" || echo "✗ npx (install Node.js)";
+  step-4: run cmd=which puppeteer > /dev/null && echo "✓ puppeteer" || echo "✗ puppeteer (run: npm install -g puppeteer)";
+}
+
+workflow[name="clean"] {
+  trigger: manual;
+  step-1: run cmd=rm -rf build/ dist/ *.egg-info;
+  step-2: run cmd=rm -rf .pytest_cache .coverage htmlcov/;
+  step-3: run cmd=rm -rf code2llm/__pycache__ code2llm/*/__pycache__;
+  step-4: run cmd=rm -rf test_* demo compare analysis analysis_all output_* 2>/dev/null || true;
+  step-5: run cmd=find . -name "*.pyc" -delete 2>/dev/null || true;
+  step-6: run cmd=find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true;
+  step-7: run cmd=echo "✓ Cleaned build artifacts and test outputs";
+}
+
+workflow[name="clean-png"] {
+  trigger: manual;
+  step-1: run cmd=rm -f output/*.png;
+  step-2: run cmd=echo "✓ Cleaned PNG files";
+}
+
+workflow[name="quickstart"] {
+  trigger: manual;
+  step-1: run cmd=echo "🚀 Quick Start with code2llm TOON format:";
+  step-2: run cmd=echo "";
+  step-3: run cmd=echo "1. Install:        make install";
+  step-4: run cmd=echo "2. Test TOON:      make test-toon";
+  step-5: run cmd=echo "3. Analyze:        make analyze";
+  step-6: run cmd=echo "4. Compare:        make toon-compare";
+  step-7: run cmd=echo "5. All formats:    make test-all-formats";
+  step-8: run cmd=echo "";
+  step-9: run cmd=echo "📖 For more: make help";
+}
+
+workflow[name="fmt"] {
+  trigger: manual;
+  step-1: run cmd=ruff format .;
+}
+
+workflow[name="health"] {
+  trigger: manual;
+  step-1: run cmd=docker compose ps;
+  step-2: run cmd=docker compose exec app echo "Health check passed";
+}
+
+workflow[name="all"] {
+  trigger: manual;
+  step-1: run cmd=taskfile run install;
+  step-2: run cmd=taskfile run lint;
+  step-3: run cmd=taskfile run test;
+}
+
+workflow[name="help"] {
+  trigger: manual;
+  step-1: run cmd=echo "prefact — available tasks:";
+  step-2: run cmd=echo "";
+  step-3: run cmd=taskfile list;
+}
+
+workflow[name="sumd"] {
+  trigger: manual;
+  step-1: run cmd=echo "# $(basename $(pwd))" > SUMD.md
+echo "" >> SUMD.md
+echo "$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d.get('project',{}).get('description','Project description'))" 2>/dev/null || echo 'Project description')" >> SUMD.md
+echo "" >> SUMD.md
+echo "## Contents" >> SUMD.md
+echo "" >> SUMD.md
+echo "- [Metadata](#metadata)" >> SUMD.md
+echo "- [Architecture](#architecture)" >> SUMD.md
+echo "- [Dependencies](#dependencies)" >> SUMD.md
+echo "- [Source Map](#source-map)" >> SUMD.md
+echo "- [Intent](#intent)" >> SUMD.md
+echo "" >> SUMD.md
+echo "## Metadata" >> SUMD.md
+echo "" >> SUMD.md
+echo "- **name**: \`$(basename $(pwd))\`" >> SUMD.md
+echo "- **version**: \`$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d.get('project',{}).get('version','unknown'))" 2>/dev/null || echo 'unknown')\`" >> SUMD.md
+echo "- **python_requires**: \`>=$(python3 --version 2>/dev/null | cut -d' ' -f2 | cut -d. -f1,2)\`" >> SUMD.md
+echo "- **license**: $(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d.get('project',{}).get('license',{}).get('text','MIT'))" 2>/dev/null || echo 'MIT')" >> SUMD.md
+echo "- **ecosystem**: SUMD + DOQL + testql + taskfile" >> SUMD.md
+echo "- **generated_from**: pyproject.toml, Taskfile.yml, Makefile, src/" >> SUMD.md
+echo "" >> SUMD.md
+echo "## Architecture" >> SUMD.md
+echo "" >> SUMD.md
+echo '```' >> SUMD.md
+echo "SUMD (description) → DOQL/source (code) → taskfile (automation) → testql (verification)" >> SUMD.md
+echo '```' >> SUMD.md
+echo "" >> SUMD.md
+echo "## Source Map" >> SUMD.md
+echo "" >> SUMD.md
+find . -name '*.py' -not -path './.venv/*' -not -path './venv/*' -not -path './__pycache__/*' -not -path './.git/*' | head -50 | sed 's|^./||' | sed 's|^|- |' >> SUMD.md
+echo "Generated SUMD.md";
+  step-2: run cmd=python3 -c "
+import json, os, subprocess
+from pathlib import Path
+project_name = Path.cwd().name
+py_files = list(Path('.').rglob('*.py'))
+py_files = [f for f in py_files if not any(x in str(f) for x in ['.venv', 'venv', '__pycache__', '.git'])]
+data = {
+    'project_name': project_name,
+    'description': 'SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorization',
+    'files': [{'path': str(f), 'type': 'python'} for f in py_files[:100]]
+}
+with open('sumd.json', 'w') as f:
+    json.dump(data, f, indent=2)
+print('Generated sumd.json')
+" 2>/dev/null || echo 'Python generation failed, using fallback';
+}
+
+workflow[name="sumr"] {
+  trigger: manual;
+  step-1: run cmd=echo "# $(basename $(pwd)) - Summary Report" > SUMR.md
+echo "" >> SUMR.md
+echo "SUMR - Summary Report for project analysis" >> SUMR.md
+echo "" >> SUMR.md
+echo "## Contents" >> SUMR.md
+echo "" >> SUMR.md
+echo "- [Metadata](#metadata)" >> SUMR.md
+echo "- [Quality Status](#quality-status)" >> SUMR.md
+echo "- [Metrics](#metrics)" >> SUMR.md
+echo "- [Refactoring Analysis](#refactoring-analysis)" >> SUMR.md
+echo "- [Intent](#intent)" >> SUMR.md
+echo "" >> SUMR.md
+echo "## Metadata" >> SUMR.md
+echo "" >> SUMR.md
+echo "- **name**: \`$(basename $(pwd))\`" >> SUMR.md
+echo "- **version**: \`$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d.get('project',{}).get('version','unknown'))" 2>/dev/null || echo 'unknown')\`" >> SUMR.md
+echo "- **generated_at**: \`$(date -Iseconds)\`" >> SUMR.md
+echo "" >> SUMR.md
+echo "## Quality Status" >> SUMR.md
+echo "" >> SUMR.md
+if [ -f pyqual.yaml ]; then
+  echo "- **pyqual_config**: ✅ Present" >> SUMR.md
+  echo "- **last_run**: $(stat -c %y .pyqual/pipeline.db 2>/dev/null | cut -d' ' -f1 || echo 'N/A')" >> SUMR.md
+else
+  echo "- **pyqual_config**: ❌ Missing" >> SUMR.md
+fi
+echo "" >> SUMR.md
+echo "## Metrics" >> SUMR.md
+echo "" >> SUMR.md
+py_files=$(find . -name '*.py' -not -path './.venv/*' -not -path './venv/*' | wc -l)
+echo "- **python_files**: $py_files" >> SUMR.md
+lines=$(find . -name '*.py' -not -path './.venv/*' -not -path './venv/*' -exec cat {} \; 2>/dev/null | wc -l)
+echo "- **total_lines**: $lines" >> SUMR.md
+echo "" >> SUMR.md
+echo "## Refactoring Analysis" >> SUMR.md
+echo "" >> SUMR.md
+echo "Run \`code2llm ./ -f evolution\` for detailed refactoring queue." >> SUMR.md
+echo "Generated SUMR.md";
+  step-2: run cmd=python3 -c "
+import json, os, subprocess
+from pathlib import Path
+from datetime import datetime
+project_name = Path.cwd().name
+py_files = len([f for f in Path('.').rglob('*.py') if not any(x in str(f) for x in ['.venv', 'venv', '__pycache__', '.git'])])
+data = {
+    'project_name': project_name,
+    'report_type': 'SUMR',
+    'generated_at': datetime.now().isoformat(),
+    'metrics': {
+        'python_files': py_files,
+        'has_pyqual_config': Path('pyqual.yaml').exists()
+    }
+}
+with open('SUMR.json', 'w') as f:
+    json.dump(data, f, indent=2)
+print('Generated SUMR.json')
+" 2>/dev/null || echo 'Python generation failed, using fallback';
+}
+
+deploy {
+  target: makefile;
+}
+
+environment[name="local"] {
+  runtime: docker-compose;
+  env_file: .env;
+  python_version: >=3.8;
+}

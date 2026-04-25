@@ -1,0 +1,14 @@
+# SCENARIO: Auto-generated from Python Tests
+# TYPE: integration
+# GENERATED: true
+
+LOG[2]{message}:
+  "Test: ScopeProviderTest_test_except_handler"
+  "Test: test_except_handler"
+
+INCLUDE[7]{file}:
+  "/home/tom/github/semcod/prefact/tests/test_integrations.py"
+  "/home/tom/github/semcod/prefact/tests/test_integrations.py"
+  "/home/tom/github/semcod/prefact/tests/test_integrations.py"
+  "/home/tom/github/semcod/prefact/tests/test_integrations.py"
+  "/home/tom/github/semcod/prefact/.algitex/backups/batch_20260328_174839/examples/test_env/lib/python3.13/site-packages/libcst/tests/test_pyre_integration.py"

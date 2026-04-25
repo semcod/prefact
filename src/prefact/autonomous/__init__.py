@@ -22,12 +22,13 @@ from ._base import console
 class AutonomousRefact:
     """Autonomous prefact manager."""
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Optional[Path] = None, exclude_patterns: Optional[List[str]] = None):
         self.project_root = project_root or Path.cwd()
+        self.exclude_patterns = exclude_patterns or []
 
         # Initialize sub-managers
         self.setup_manager = SetupManager(self.project_root)
-        self.scanner = ProjectScanner(self.project_root)
+        self.scanner = ProjectScanner(self.project_root, exclude_patterns=self.exclude_patterns)
         self.todo_manager = TodoManager(self.project_root)
         self.docs_manager = DocsManager(self.project_root)
 
@@ -35,7 +36,7 @@ class AutonomousRefact:
         self.issues_found: List[Dict[str, Any]] = []
         self.tickets_created: List[Dict[str, Any]] = []
 
-    def run_autonomous(self) -> bool:
+    def run_autonomous(self, skip_examples: bool = False) -> bool:
         """Run autonomous prefact process."""
         from rich.panel import Panel
 
@@ -51,10 +52,13 @@ class AutonomousRefact:
                 self.create_refact_config()
 
             # Step 2: Run examples and verify
-            console.print("🧪 Running examples verification...")
-            if not self.run_examples():
-                console.print("❌ Examples verification failed", style="red")
-                return False
+            if not skip_examples:
+                console.print("🧪 Running examples verification...")
+                if not self.run_examples():
+                    console.print("❌ Examples verification failed", style="red")
+                    return False
+            else:
+                console.print("⏭️ Skipping examples verification")
 
             # Step 3: Scan project for issues
             console.print("🔍 Scanning project for issues...")

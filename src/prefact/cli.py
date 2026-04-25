@@ -18,8 +18,9 @@ from prefact.reporters import json_reporter
 @click.option("--init-only", is_flag=True, help="Only initialize prefact.yaml without running full process.")
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
+@click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
 @click.version_option(package_name="prefact")
-def main(ctx, autonomous, init_only, skip_tests, skip_examples) -> None:
+def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude) -> None:
     """prefact – automatic Python prefactoring toolkit.
 
     Detect, fix, and validate common code issues – especially those
@@ -28,8 +29,12 @@ def main(ctx, autonomous, init_only, skip_tests, skip_examples) -> None:
     Use 'prefact -a' for autonomous mode.
     """
     if autonomous:
+        # Auto-skip examples if exclude pattern matches examples directory
+        auto_skip_examples = skip_examples
+        if exclude and any("examples" in pattern or pattern.startswith("examples") for pattern in exclude):
+            auto_skip_examples = True
         # Run autonomous command directly with all options
-        ctx.invoke(autonomous_cmd, project_path=".", init_only=init_only, skip_tests=skip_tests, skip_examples=skip_examples)
+        ctx.invoke(autonomous_cmd, project_path=".", init_only=init_only, skip_tests=skip_tests, skip_examples=auto_skip_examples, exclude=exclude)
 
 
 # ── shared options ────────────────────────────────────────────────────
@@ -39,13 +44,14 @@ def _common_options(fn):
     fn = click.option("-p", "--path", "project_path", default=".", help="Project root directory.")(fn)
     fn = click.option("--package", "package_name", default="", help="Package name (auto-detected if omitted).")(fn)
     fn = click.option("-c", "--config", "config_file", default=None, help="Path to prefact.yaml config.")(fn)
+    fn = click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")(fn)
     fn = click.option("--verbose", is_flag=True, help="Show detailed output.")(fn)
     fn = click.option("--format", "output_format", type=click.Choice(["console", "json"]), default="console")(fn)
     fn = click.option("-o", "--output", "output_file", default=None, help="Write JSON report to file.")(fn)
     return fn
 
 
-def _build_config(project_path, package_name, config_file, verbose, **_kw) -> Config:
+def _build_config(project_path, package_name, config_file, verbose, exclude=None, **_kw) -> Config:
     if config_file:
         # Try extended config first, fall back to basic config
         try:
@@ -67,6 +73,9 @@ def _build_config(project_path, package_name, config_file, verbose, **_kw) -> Co
     if package_name:
         cfg.package_name = package_name
     cfg.verbose = verbose
+    # Merge CLI exclude patterns with config file patterns
+    if exclude:
+        cfg.exclude = list(cfg.exclude) + list(exclude)
     return cfg
 
 
@@ -169,9 +178,10 @@ rules:
 @click.option("--init-only", is_flag=True, help="Only initialize prefact.yaml without running full process.")
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
-def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
+@click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
+def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude) -> None:
     """Run autonomous prefact mode (-a).
-    
+
     Automatically initializes prefact.yaml if missing, runs examples,
     scans for issues, and creates tickets in planfile.yaml.
     """
@@ -180,7 +190,7 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
     console = Console()
 
     # Initialize autonomous prefact
-    auto = AutonomousRefact(Path(project_path))
+    auto = AutonomousRefact(Path(project_path), exclude_patterns=list(exclude) if exclude else None)
 
     if init_only:
         if not auto.refact_config_path.exists():
@@ -192,7 +202,7 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples) -> None:
         return
 
     # Run full autonomous process
-    success = auto.run_autonomous()
+    success = auto.run_autonomous(skip_examples=skip_examples)
 
     if not success:
         raise SystemExit(1)

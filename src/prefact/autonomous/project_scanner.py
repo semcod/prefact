@@ -3,7 +3,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple
 
 from prefact.autonomous._base import MIN_CODE_SIZE, BaseManager, console
 from prefact.config_extended import ExtendedConfig
@@ -14,8 +14,9 @@ from prefact.scanner import Scanner
 class ProjectScanner(BaseManager):
     """Handles project scanning operations."""
 
-    def __init__(self, project_root: Path):
+    def __init__(self, project_root: Path, exclude_patterns: Optional[List[str]] = None):
         super().__init__(project_root)
+        self.exclude_patterns = exclude_patterns or []
         self.issues_found: List[Any] = []
 
     def scan_project(self) -> List[Any]:
@@ -23,6 +24,32 @@ class ProjectScanner(BaseManager):
         try:
             # Load configuration
             config = ExtendedConfig.from_yaml(self.refact_config_path)
+            # Force set include from YAML if it's None
+            if config.include is None:
+                config.include = ["**/*.py"]
+            if config.exclude is None:
+                config.exclude = []
+            from rich.markdown import Markdown
+
+            info_md = f"""## Scan Configuration
+
+**Project root:** `{config.project_root}`
+
+**Include patterns:**
+```
+{chr(10).join(f"- `{p}`" for p in config.include)}
+```
+"""
+            # Merge CLI exclude patterns with config file patterns
+            if self.exclude_patterns:
+                config.exclude = list(config.exclude or []) + list(self.exclude_patterns)
+                info_md += f"""
+**Exclude patterns:**
+```
+{chr(10).join(f"- `{p}`" for p in config.exclude)}
+```
+"""
+            console.print(Markdown(info_md))
             engine = RefactoringEngine(config)
 
             # Get list of files to scan
@@ -31,12 +58,22 @@ class ProjectScanner(BaseManager):
             max_files_to_scan = self.get_autonomous_limit("autonomous_max_files_to_scan")
             if len(files_to_scan) > max_files_to_scan:
                 console.print(
-                    f"⚠️ File scan limit reached ({max_files_to_scan}); scanning only the first batch.",
+                    Markdown(f"> ⚠️ **File scan limit reached** ({max_files_to_scan}); scanning only the first batch."),
                     style="yellow",
                 )
             files_to_scan = files_to_scan[:max_files_to_scan]
 
-            console.print(f"📂 Found {len(files_to_scan)} files to scan")
+            if len(files_to_scan) > 0:
+                files_md = f"""📂 **Found {len(files_to_scan)} files to scan**
+
+**Sample files:**
+```
+{chr(10).join(str(f.relative_to(self.project_root)) for f in files_to_scan[:5])}
+```
+"""
+                console.print(Markdown(files_md))
+            else:
+                console.print(Markdown("> ⚠️ No files matched include patterns or all were excluded"), style="yellow")
 
             # Show progress bar and scan files
             issues_found = self._scan_files_with_progress(scanner, files_to_scan, config)

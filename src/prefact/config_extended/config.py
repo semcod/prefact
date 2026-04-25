@@ -26,7 +26,14 @@ class ExtendedConfig(Config):
         environments: Optional[Dict[str, Any]] = None,
         **kwargs,
     ):
-        super().__init__(project_root, package_name, include, exclude, rules)
+        # Call parent dataclass __init__ with proper values
+        super().__init__(
+            project_root=project_root or Path.cwd(),
+            package_name=package_name,
+            include=include or ["**/*.py"],
+            exclude=exclude or [],
+            rules=rules or {}
+        )
         self.tools: Dict[str, Any] = tools or {}
         self.performance: Dict[str, Any] = performance or {}
         self.plugins: Dict[str, Any] = plugins or {}
@@ -52,14 +59,14 @@ class ExtendedConfig(Config):
         performance = raw.pop("performance", {})
         plugins = raw.pop("plugins", {})
         environments = raw.pop("environments", {})
-        defaults_include = raw.pop("include", DEFAULT_INCLUDE)
-        defaults_exclude = raw.pop("exclude", DEFAULT_EXCLUDE)
+        include = raw.pop("include", DEFAULT_INCLUDE)
+        exclude = raw.pop("exclude", DEFAULT_EXCLUDE)
 
-        return cls(
+        instance = cls(
             project_root=Path(raw.pop("project_root", Path.cwd())),
             package_name=raw.pop("package_name", ""),
-            include=raw.pop("include", defaults_include),
-            exclude=raw.pop("exclude", defaults_exclude),
+            include=include,
+            exclude=exclude,
             rules=rules,
             tools=tools,
             performance=performance,
@@ -67,6 +74,10 @@ class ExtendedConfig(Config):
             environments=environments,
             **{k: v for k, v in raw.items() if k in cls.__dataclass_fields__},
         )
+        # Force set include/exclude to ensure they're not None
+        instance.include = include
+        instance.exclude = exclude
+        return instance
 
     @staticmethod
     def _parse_rules(rules_raw: Dict[str, Any]) -> Dict[str, RuleConfig]:

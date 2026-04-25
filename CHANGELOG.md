@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-04-25
+
+### Fixed
+- Fix relative-imports issues (ticket-8920ec64)
+- Fix magic-numbers issues (ticket-02dc0d73)
+- Fix ai-boilerplate issues (ticket-b38b2991)
+- Fix magic-numbers issues (ticket-29beceb4)
+- Fix string-concat issues (ticket-2334c68e)
+- Fix duplicate-imports issues (ticket-028f9b29)
+- Fix magic-numbers issues (ticket-c7c61163)
+
 ## [0.1.10] - 2026-03-27
 
 ### Fixed
@@ -300,6 +311,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix unused-imports issues (ticket-c1ba2cf8)
 
 ## [Unreleased]
+
+## [0.1.46] - 2026-04-25
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update TODO.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update testql-scenarios/generated-cli-tests.testql.toon.yaml
+- Update testql-scenarios/generated-from-pytests.testql.toon.yaml
+
+### Other
+- Update app.doql.less
+- Update planfile.yaml
+- Update project.sh
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/calls.toon.yaml
+- Update project/calls.yaml
+- Update project/compact_flow.mmd
+- Update project/compact_flow.png
+- ... and 9 more files
 
 ## [0.1.45] - 2026-04-25
 
