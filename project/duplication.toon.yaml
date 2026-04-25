@@ -1,15 +1,15 @@
-# redup/duplication | 39 groups | 99f 13256L | 2026-04-25
+# redup/duplication | 39 groups | 99f 13236L | 2026-04-25
 
 SUMMARY:
   files_scanned: 99
-  total_lines:   13256
+  total_lines:   13236
   dup_groups:    39
   dup_fragments: 107
-  saved_lines:   379
-  scan_ms:       30372
+  saved_lines:   354
+  scan_ms:       21366
 
 HOTSPOTS[7] (files with most duplication):
-  src/prefact/rules/unimport_based.py  dup=84L  groups=3  frags=7  (0.6%)
+  src/prefact/rules/unimport_based.py  dup=72L  groups=3  frags=7  (0.5%)
   src/prefact/rules/composite_rules.py  dup=56L  groups=3  frags=6  (0.4%)
   src/prefact/rules/import_linter_based.py  dup=54L  groups=3  frags=9  (0.4%)
   src/prefact/performance/cache.py  dup=41L  groups=3  frags=7  (0.3%)
@@ -18,24 +18,17 @@ HOTSPOTS[7] (files with most duplication):
   examples/04-custom-rules/custom_rules/no_todo_rule.py  dup=28L  groups=2  frags=4  (0.2%)
 
 DUPLICATES[39] (ranked by impact):
-  [1343b32626b1ecd1] ! STRU  validate  L=9 N=6 saved=45 sim=1.00
-      src/prefact/rules/ai_boilerplate.py:69-77  (validate)
-      src/prefact/rules/importchecker_based.py:253-262  (validate)
-      src/prefact/rules/llm_generated_code.py:183-191  (validate)
-      src/prefact/rules/magic_numbers.py:130-138  (validate)
-      src/prefact/rules/unimport_based.py:295-304  (validate)
-      src/prefact/rules/unimport_based.py:362-371  (validate)
   [fb8a4c52c4513ef3] ! EXAC  fix  L=3 N=14 saved=39 sim=1.00
       examples/04-custom-rules/custom_rules/no_todo_rule.py:46-48  (fix)
       examples/04-custom-rules/custom_rules/no_todo_rule.py:94-96  (fix)
       src/prefact/rules/ai_boilerplate.py:65-67  (fix)
       src/prefact/rules/import_linter_based.py:168-171  (fix)
       src/prefact/rules/import_linter_based.py:307-309  (fix)
-      src/prefact/rules/importchecker_based.py:372-374  (fix)
-      src/prefact/rules/importchecker_based.py:480-482  (fix)
+      src/prefact/rules/importchecker_based.py:366-368  (fix)
+      src/prefact/rules/importchecker_based.py:474-476  (fix)
       src/prefact/rules/llm_generated_code.py:179-181  (fix)
       src/prefact/rules/llm_hallucinations.py:201-203  (fix)
-      src/prefact/rules/magic_numbers.py:126-128  (fix)
+      src/prefact/rules/magic_numbers.py:127-129  (fix)
       src/prefact/rules/mypy_based.py:146-149  (fix)
       src/prefact/rules/mypy_based.py:210-212  (fix)
       src/prefact/rules/ruff_based.py:93-95  (fix)
@@ -43,7 +36,7 @@ DUPLICATES[39] (ranked by impact):
   [fd9736dd4e8df736] ! STRU  fix  L=18 N=3 saved=36 sim=1.00
       src/prefact/rules/unimport_based.py:185-202  (fix)
       src/prefact/rules/unimport_based.py:276-293  (fix)
-      src/prefact/rules/unimport_based.py:409-426  (fix)
+      src/prefact/rules/unimport_based.py:397-414  (fix)
   [fe7129d46d801afa]   STRU  validate  L=10 N=4 saved=30 sim=1.00
       src/prefact/rules/import_linter_based.py:173-182  (validate)
       src/prefact/rules/import_linter_based.py:255-264  (validate)
@@ -55,6 +48,13 @@ DUPLICATES[39] (ranked by impact):
       src/prefact/performance/cache.py:287-291  (get_config_cache)
       src/prefact/performance/cache.py:294-298  (get_rule_cache)
       src/prefact/performance/cache.py:301-305  (get_hash_cache)
+  [90331f4920e98fd7]   STRU  validate  L=4 N=6 saved=20 sim=1.00
+      src/prefact/rules/ai_boilerplate.py:69-72  (validate)
+      src/prefact/rules/importchecker_based.py:253-256  (validate)
+      src/prefact/rules/llm_generated_code.py:183-186  (validate)
+      src/prefact/rules/magic_numbers.py:131-134  (validate)
+      src/prefact/rules/unimport_based.py:295-298  (validate)
+      src/prefact/rules/unimport_based.py:356-359  (validate)
   [9e61a0169b46b783]   EXAC  validate  L=16 N=2 saved=16 sim=1.00
       src/prefact/rules/composite_rules.py:185-200  (validate)
       src/prefact/rules/composite_rules.py:261-276  (validate)
@@ -118,7 +118,7 @@ DUPLICATES[39] (ranked by impact):
       examples/01-individual-rules/relative-imports/before.py:11-15  (process_user)
   [b2a3226830ad4536]   STRU  __init__  L=5 N=2 saved=5 sim=1.00
       src/prefact/rules/unimport_based.py:223-227  (__init__)
-      src/prefact/rules/unimport_based.py:315-319  (__init__)
+      src/prefact/rules/unimport_based.py:309-313  (__init__)
   [8c3b4878cda6c2a9]   EXAC  calculate  L=4 N=2 saved=4 sim=1.00
       examples/01-individual-rules/print-statements/after.py:10-13  (calculate)
       examples/01-individual-rules/print-statements/before.py:10-13  (calculate)
@@ -160,27 +160,27 @@ DUPLICATES[39] (ranked by impact):
       examples/01-individual-rules/unused-imports/before.py:39-41  (get_data)
   [89f4308d864bd180]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
       src/prefact/rules/importchecker_based.py:102-104  (__init__)
-      src/prefact/rules/importchecker_based.py:273-275  (__init__)
+      src/prefact/rules/importchecker_based.py:267-269  (__init__)
   [53e9ef8f2a396333]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
       src/prefact/rules/mypy_based.py:99-101  (__init__)
       src/prefact/rules/mypy_based.py:174-176  (__init__)
 
 REFACTOR[39] (ranked by priority):
-  [1] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 6 occurrences of 9-line block across 5 files — saves 45 lines
-      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
-  [2] ○ extract_function   → utils/fix.py
+  [1] ○ extract_function   → utils/fix.py
       WHY: 14 occurrences of 3-line block across 9 files — saves 39 lines
       FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py, src/prefact/rules/ai_boilerplate.py, src/prefact/rules/import_linter_based.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py +4 more
-  [3] ○ extract_function   → src/prefact/rules/utils/fix.py
+  [2] ○ extract_function   → src/prefact/rules/utils/fix.py
       WHY: 3 occurrences of 18-line block across 1 files — saves 36 lines
       FILES: src/prefact/rules/unimport_based.py
-  [4] ○ extract_function   → src/prefact/rules/utils/validate.py
+  [3] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 4 occurrences of 10-line block across 1 files — saves 30 lines
       FILES: src/prefact/rules/import_linter_based.py
-  [5] ○ extract_function   → src/prefact/performance/utils/get_cache.py
+  [4] ○ extract_function   → src/prefact/performance/utils/get_cache.py
       WHY: 5 occurrences of 5-line block across 1 files — saves 20 lines
       FILES: src/prefact/performance/cache.py
+  [5] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 6 occurrences of 4-line block across 5 files — saves 20 lines
+      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
   [6] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 2 occurrences of 16-line block across 1 files — saves 16 lines
       FILES: src/prefact/rules/composite_rules.py
@@ -285,16 +285,16 @@ REFACTOR[39] (ranked by priority):
       FILES: src/prefact/rules/mypy_based.py
 
 QUICK_WINS[22] (low risk, high savings — do first):
-  [1] extract_function   saved=45L  → src/prefact/rules/utils/validate.py
-      FILES: ai_boilerplate.py, importchecker_based.py, llm_generated_code.py +2
-  [2] extract_function   saved=39L  → utils/fix.py
+  [1] extract_function   saved=39L  → utils/fix.py
       FILES: no_todo_rule.py, ai_boilerplate.py, import_linter_based.py +6
-  [3] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
+  [2] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
       FILES: unimport_based.py
-  [4] extract_function   saved=30L  → src/prefact/rules/utils/validate.py
+  [3] extract_function   saved=30L  → src/prefact/rules/utils/validate.py
       FILES: import_linter_based.py
-  [5] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
+  [4] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
       FILES: cache.py
+  [5] extract_function   saved=20L  → src/prefact/rules/utils/validate.py
+      FILES: ai_boilerplate.py, importchecker_based.py, llm_generated_code.py +2
   [6] extract_function   saved=16L  → src/prefact/rules/utils/validate.py
       FILES: composite_rules.py
   [7] extract_function   saved=16L  → src/prefact/performance/utils/get_cache.py
@@ -314,12 +314,12 @@ DEPENDENCY_RISK[1] (duplicates spanning multiple packages):
       src/prefact/rules/importchecker_based.py
       +5 more
 
-EFFORT_ESTIMATE (total ≈ 13.9h):
-  hard   validate                            saved=45L  ~90min
+EFFORT_ESTIMATE (total ≈ 13.1h):
   hard   fix                                 saved=39L  ~156min
   medium fix                                 saved=36L  ~72min
   medium validate                            saved=30L  ~60min
   medium get_cache                           saved=20L  ~40min
+  medium validate                            saved=20L  ~40min
   medium validate                            saved=16L  ~32min
   medium get_cache                           saved=16L  ~32min
   easy   validate                            saved=14L  ~28min
@@ -329,4 +329,4 @@ EFFORT_ESTIMATE (total ≈ 13.9h):
 
 METRICS-TARGET:
   dup_groups:  39 → 0
-  saved_lines: 379 lines recoverable
+  saved_lines: 354 lines recoverable

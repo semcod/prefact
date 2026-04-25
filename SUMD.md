@@ -956,13 +956,13 @@ pip install -e .[dev]
 ### `project/map.toon.yaml`
 
 ```toon markpact:analysis path=project/map.toon.yaml
-# prefact | 13247f 4519834L | python:13240,shell:2,javascript:2,css:1,less:1,typescript:1 | 2026-04-25
-# stats: 28684 func | 30253 cls | 13247 mod | CC̄=4.2 | critical:2551 | cycles:0
+# prefact | 13248f 4519817L | python:13240,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-04-25
+# stats: 28684 func | 30253 cls | 13248 mod | CC̄=4.2 | critical:2551 | cycles:0
 # alerts[5]: CC process=177; fan-out _install_wheel=75
 # hotspots[5]: _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75
 # evolution: baseline
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[13247]:
+M[13248]:
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/__init__.py,14
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_argcomplete.py,118
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_code/__init__.py,27
@@ -14117,7 +14117,7 @@ M[13247]:
   examples/sample-project/models.py,63
   examples/sample-project/utils.py,41
   examples/tests/test_examples.py,7
-  project.sh,46
+  project.sh,47
   src/prefact/__init__.py,4
   src/prefact/_base.py,7
   src/prefact/autonomous/__init__.py,219
@@ -14165,20 +14165,20 @@ M[13247]:
   src/prefact/reporters/__init__.py,2
   src/prefact/reporters/console.py,65
   src/prefact/reporters/json_reporter.py,58
-  src/prefact/rules/__init__.py,237
+  src/prefact/rules/__init__.py,249
   src/prefact/rules/_ast_cache.py,52
-  src/prefact/rules/ai_boilerplate.py,78
+  src/prefact/rules/ai_boilerplate.py,73
   src/prefact/rules/autoflake_based.py,278
   src/prefact/rules/benchmark.py,162
   src/prefact/rules/composite_factory.py,120
   src/prefact/rules/composite_rules.py,277
   src/prefact/rules/duplicate_imports.py,81
   src/prefact/rules/import_linter_based.py,452
-  src/prefact/rules/importchecker_based.py,491
+  src/prefact/rules/importchecker_based.py,485
   src/prefact/rules/isort_based.py,471
-  src/prefact/rules/llm_generated_code.py,192
+  src/prefact/rules/llm_generated_code.py,187
   src/prefact/rules/llm_hallucinations.py,215
-  src/prefact/rules/magic_numbers.py,139
+  src/prefact/rules/magic_numbers.py,135
   src/prefact/rules/migration.py,233
   src/prefact/rules/mypy_based.py,399
   src/prefact/rules/print_statements.py,59
@@ -14191,7 +14191,7 @@ M[13247]:
   src/prefact/rules/string_concat.py,67
   src/prefact/rules/string_transformations.py,496
   src/prefact/rules/type_hints.py,47
-  src/prefact/rules/unimport_based.py,457
+  src/prefact/rules/unimport_based.py,445
   src/prefact/rules/unused_imports.py,233
   src/prefact/rules/wildcard_imports.py,46
   src/prefact/scanner.py,154
@@ -14207,6 +14207,7 @@ M[13247]:
   tests/test_relative_imports.py,136
   tests/test_rules.py,164
   tests/test_unused_imports.py,68
+  tree.sh,2
   vscode-extension/out/extension.js,355
   vscode-extension/src/extension.ts,438
   vscode-extension/test/prefact.test.js,6
@@ -97702,7 +97703,7 @@ D:
 
 ## Call Graph
 
-*229 nodes · 229 edges · 65 modules · CC̄=0.7*
+*229 nodes · 229 edges · 65 modules · CC̄=0.6*
 
 ### Hubs (by degree)
 
@@ -97713,14 +97714,14 @@ D:
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
-| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
+| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
 | `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 24 | **24** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
 # nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.7
+# CC̄=0.6
 
 HUBS[20]:
   Taskfile.print
@@ -97733,36 +97734,36 @@ HUBS[20]:
     CC=11  in:1  out:28  total:29
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=11  in:0  out:25  total:25
   src.prefact.config_extended.models.ExtendedConfig.from_yaml
     CC=13  in:0  out:24  total:24
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:21  total:22
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  vscode-extension.src.extension.PrefactTreeProvider.activate
-    CC=14  in:0  out:20  total:20
+  project.map.toon.open
+    CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:2  out:18  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
+  vscode-extension.src.extension.PrefactTreeProvider.activate
+    CC=14  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  src.prefact.cli._build_config
-    CC=7  in:3  out:14  total:17
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
 
 MODULES:
   Taskfile  [1 funcs]

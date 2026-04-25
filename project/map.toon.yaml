@@ -1,10 +1,10 @@
-# prefact | 13247f 4519826L | python:13240,shell:2,javascript:2,css:1,less:1,typescript:1 | 2026-04-25
-# stats: 28684 func | 30253 cls | 13247 mod | CC̄=4.2 | critical:2551 | cycles:0
+# prefact | 13248f 4519817L | python:13240,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-04-25
+# stats: 28684 func | 30253 cls | 13248 mod | CC̄=4.2 | critical:2551 | cycles:0
 # alerts[5]: CC process=177; fan-out _install_wheel=75
 # hotspots[5]: _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75
 # evolution: baseline
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[13247]:
+M[13248]:
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/__init__.py,14
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_argcomplete.py,118
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_code/__init__.py,27
@@ -13159,7 +13159,7 @@ M[13247]:
   examples/sample-project/models.py,63
   examples/sample-project/utils.py,41
   examples/tests/test_examples.py,7
-  project.sh,46
+  project.sh,47
   src/prefact/__init__.py,4
   src/prefact/_base.py,7
   src/prefact/autonomous/__init__.py,219
@@ -13233,7 +13233,7 @@ M[13247]:
   src/prefact/rules/string_concat.py,67
   src/prefact/rules/string_transformations.py,496
   src/prefact/rules/type_hints.py,47
-  src/prefact/rules/unimport_based.py,457
+  src/prefact/rules/unimport_based.py,445
   src/prefact/rules/unused_imports.py,233
   src/prefact/rules/wildcard_imports.py,46
   src/prefact/scanner.py,154
@@ -13249,6 +13249,7 @@ M[13247]:
   tests/test_relative_imports.py,136
   tests/test_rules.py,164
   tests/test_unused_imports.py,68
+  tree.sh,2
   vscode-extension/out/extension.js,355
   vscode-extension/src/extension.ts,438
   vscode-extension/test/prefact.test.js,6

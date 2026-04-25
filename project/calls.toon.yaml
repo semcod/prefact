@@ -1,6 +1,6 @@
 # code2llm call graph | /home/tom/github/semcod/prefact
 # nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.7
+# CC̄=0.6
 
 HUBS[20]:
   Taskfile.print
@@ -13,36 +13,36 @@ HUBS[20]:
     CC=11  in:1  out:28  total:29
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=11  in:0  out:25  total:25
   src.prefact.config_extended.models.ExtendedConfig.from_yaml
     CC=13  in:0  out:24  total:24
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:21  total:22
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  vscode-extension.src.extension.PrefactTreeProvider.activate
-    CC=14  in:0  out:20  total:20
+  project.map.toon.open
+    CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:2  out:18  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
+  vscode-extension.src.extension.PrefactTreeProvider.activate
+    CC=14  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  src.prefact.cli._build_config
-    CC=7  in:3  out:14  total:17
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
 
 MODULES:
   Taskfile  [1 funcs]

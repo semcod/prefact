@@ -814,7 +814,7 @@ pfix>=0.1.60
 
 ## Call Graph
 
-*229 nodes · 229 edges · 65 modules · CC̄=0.7*
+*229 nodes · 229 edges · 65 modules · CC̄=0.6*
 
 ### Hubs (by degree)
 
@@ -825,14 +825,14 @@ pfix>=0.1.60
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
-| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
+| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
 | `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 24 | **24** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
 # nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.7
+# CC̄=0.6
 
 HUBS[20]:
   Taskfile.print
@@ -845,36 +845,36 @@ HUBS[20]:
     CC=11  in:1  out:28  total:29
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=11  in:0  out:25  total:25
   src.prefact.config_extended.models.ExtendedConfig.from_yaml
     CC=13  in:0  out:24  total:24
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:21  total:22
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  vscode-extension.src.extension.PrefactTreeProvider.activate
-    CC=14  in:0  out:20  total:20
+  project.map.toon.open
+    CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:2  out:18  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
+  vscode-extension.src.extension.PrefactTreeProvider.activate
+    CC=14  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  src.prefact.cli._build_config
-    CC=7  in:3  out:14  total:17
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -1215,7 +1215,7 @@ EDGES:
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
 # nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.7
+# CC̄=0.6
 
 HUBS[20]:
   Taskfile.print
@@ -1228,36 +1228,36 @@ HUBS[20]:
     CC=11  in:1  out:28  total:29
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=11  in:0  out:25  total:25
   src.prefact.config_extended.models.ExtendedConfig.from_yaml
     CC=13  in:0  out:24  total:24
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:21  total:22
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  vscode-extension.src.extension.PrefactTreeProvider.activate
-    CC=14  in:0  out:20  total:20
+  project.map.toon.open
+    CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:2  out:18  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
+  vscode-extension.src.extension.PrefactTreeProvider.activate
+    CC=14  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  src.prefact.cli._build_config
-    CC=7  in:3  out:14  total:17
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -1580,18 +1580,16 @@ EDGES:
 ### Code Analysis (`project/analysis.toon.yaml`)
 
 ```toon markpact:analysis path=project/analysis.toon.yaml
-# code2llm | 154f 120629L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
-# CC̄=0.7 | critical:1/3484 | dups:15 | cycles:0
+# code2llm | 154f 123434L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
+# CC̄=0.6 | critical:0/3487 | dups:15 | cycles:0
 
-HEALTH[2]:
+HEALTH[1]:
   🔴 DUP   15 classes duplicated
-  🟡 CC    scan_file CC=15 (limit:15)
 
-REFACTOR[2]:
+REFACTOR[1]:
   1. rm duplicates  (-15 dup classes)
-  2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[596]:
+PIPELINES[599]:
   [1] Src [main]: main → print
       PURITY: 100% pure
   [2] Src [main]: main → find_examples
@@ -1606,10 +1604,10 @@ PIPELINES[596]:
 LAYERS:
   src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
-  │ importchecker_based        490L  5C   24m  CC=14     ←0
+  │ importchecker_based        484L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
-  │ unimport_based             456L  5C   22m  CC=14     ←0
   │ import_linter_based        451L  5C   24m  CC=8      ←0
+  │ unimport_based             444L  5C   22m  CC=14     ←0
   │ cache                      439L  6C   37m  CC=5      ←9  ×DUP
   │ mypy_based                 398L  6C   22m  CC=9      ←0
   │ pylint_based               396L  5C   22m  CC=6      ←1
@@ -1622,24 +1620,24 @@ LAYERS:
   │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
   │ registry                   255L  1C   13m  CC=8      ←8
+  │ __init__                   248L  1C    8m  CC=3      ←0
   │ cli                        247L  0C   10m  CC=7      ←1
   │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
-  │ __init__                   236L  1C    7m  CC=1      ←0
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
   │ __init__                   218L  1C   17m  CC=7      ←0
   │ llm_hallucinations         214L  1C    9m  CC=8      ←0
   │ config                     192L  2C   13m  CC=5      ←3
-  │ llm_generated_code         191L  1C    9m  CC=7      ←0
   │ docs_manager               189L  1C    7m  CC=11     ←0
+  │ llm_generated_code         186L  1C    9m  CC=7      ←0
   │ generator                  171L  1C    3m  CC=12     ←1
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
   │ scanner                    153L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
-  │ !! magic_numbers              138L  1C    6m  CC=15     ←0
+  │ magic_numbers              134L  1C    8m  CC=7      ←0
   │ config                     128L  1C    8m  CC=10     ←4
   │ setup_manager              120L  1C    3m  CC=9      ←0
   │ composite_factory          119L  1C    2m  CC=4      ←0
@@ -1647,8 +1645,8 @@ LAYERS:
   │ base                        99L  1C    7m  CC=3      ←0  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
   │ duplicate_imports           80L  1C    3m  CC=11     ←0
-  │ ai_boilerplate              77L  1C    5m  CC=3      ←0
   │ cache_state                 74L  0C    7m  CC=2      ←2
+  │ ai_boilerplate              72L  1C    5m  CC=3      ←0
   │ _base                       66L  1C    3m  CC=10     ←0
   │ string_concat               66L  1C    5m  CC=6      ←0
   │ logger                      65L  2C   15m  CC=3      ←0
@@ -1698,7 +1696,7 @@ LAYERS:
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                84L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
-  │ project.sh                  46L  0C    0m  CC=0.0    ←0
+  │ project.sh                  47L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
@@ -1754,10 +1752,10 @@ LAYERS:
   │
   project/                        CC̄=0.0    ←in:0  →out:0
   │ !! map.toon.yaml            96742L  0C  2716m  CC=0.0    ←19
-  │ !! calls.yaml                3201L  0C    0m  CC=0.0    ←0
-  │ calls.toon.yaml            347L  0C    0m  CC=0.0    ←0
+  │ !! calls.yaml                6005L  0C    0m  CC=0.0    ←0
+  │ calls.toon.yaml            362L  0C    0m  CC=0.0    ←0
   │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         214L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         219L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
@@ -1787,14 +1785,14 @@ COUPLING:
     examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
       examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
-  HUB: Taskfile/ (fan-in=133)
-  HUB: project.map/ (fan-in=22)
   HUB: vscode-extension.src/ (fan-in=48)
+  HUB: project.map/ (fan-in=22)
+  HUB: Taskfile/ (fan-in=133)
   SMELL: examples.06-api-usage/ fan-out=35 → split needed
+  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
   SMELL: examples.01-individual-rules/ fan-out=10 → split needed
   SMELL: src.prefact/ fan-out=108 → split needed
   SMELL: examples.sample-project/ fan-out=19 → split needed
-  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
@@ -1804,18 +1802,18 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 39 groups | 99f 13256L | 2026-04-25
+# redup/duplication | 39 groups | 99f 13236L | 2026-04-25
 
 SUMMARY:
   files_scanned: 99
-  total_lines:   13256
+  total_lines:   13236
   dup_groups:    39
   dup_fragments: 107
-  saved_lines:   379
-  scan_ms:       30372
+  saved_lines:   354
+  scan_ms:       21366
 
 HOTSPOTS[7] (files with most duplication):
-  src/prefact/rules/unimport_based.py  dup=84L  groups=3  frags=7  (0.6%)
+  src/prefact/rules/unimport_based.py  dup=72L  groups=3  frags=7  (0.5%)
   src/prefact/rules/composite_rules.py  dup=56L  groups=3  frags=6  (0.4%)
   src/prefact/rules/import_linter_based.py  dup=54L  groups=3  frags=9  (0.4%)
   src/prefact/performance/cache.py  dup=41L  groups=3  frags=7  (0.3%)
@@ -1824,24 +1822,17 @@ HOTSPOTS[7] (files with most duplication):
   examples/04-custom-rules/custom_rules/no_todo_rule.py  dup=28L  groups=2  frags=4  (0.2%)
 
 DUPLICATES[39] (ranked by impact):
-  [1343b32626b1ecd1] ! STRU  validate  L=9 N=6 saved=45 sim=1.00
-      src/prefact/rules/ai_boilerplate.py:69-77  (validate)
-      src/prefact/rules/importchecker_based.py:253-262  (validate)
-      src/prefact/rules/llm_generated_code.py:183-191  (validate)
-      src/prefact/rules/magic_numbers.py:130-138  (validate)
-      src/prefact/rules/unimport_based.py:295-304  (validate)
-      src/prefact/rules/unimport_based.py:362-371  (validate)
   [fb8a4c52c4513ef3] ! EXAC  fix  L=3 N=14 saved=39 sim=1.00
       examples/04-custom-rules/custom_rules/no_todo_rule.py:46-48  (fix)
       examples/04-custom-rules/custom_rules/no_todo_rule.py:94-96  (fix)
       src/prefact/rules/ai_boilerplate.py:65-67  (fix)
       src/prefact/rules/import_linter_based.py:168-171  (fix)
       src/prefact/rules/import_linter_based.py:307-309  (fix)
-      src/prefact/rules/importchecker_based.py:372-374  (fix)
-      src/prefact/rules/importchecker_based.py:480-482  (fix)
+      src/prefact/rules/importchecker_based.py:366-368  (fix)
+      src/prefact/rules/importchecker_based.py:474-476  (fix)
       src/prefact/rules/llm_generated_code.py:179-181  (fix)
       src/prefact/rules/llm_hallucinations.py:201-203  (fix)
-      src/prefact/rules/magic_numbers.py:126-128  (fix)
+      src/prefact/rules/magic_numbers.py:127-129  (fix)
       src/prefact/rules/mypy_based.py:146-149  (fix)
       src/prefact/rules/mypy_based.py:210-212  (fix)
       src/prefact/rules/ruff_based.py:93-95  (fix)
@@ -1849,7 +1840,7 @@ DUPLICATES[39] (ranked by impact):
   [fd9736dd4e8df736] ! STRU  fix  L=18 N=3 saved=36 sim=1.00
       src/prefact/rules/unimport_based.py:185-202  (fix)
       src/prefact/rules/unimport_based.py:276-293  (fix)
-      src/prefact/rules/unimport_based.py:409-426  (fix)
+      src/prefact/rules/unimport_based.py:397-414  (fix)
   [fe7129d46d801afa]   STRU  validate  L=10 N=4 saved=30 sim=1.00
       src/prefact/rules/import_linter_based.py:173-182  (validate)
       src/prefact/rules/import_linter_based.py:255-264  (validate)
@@ -1861,6 +1852,13 @@ DUPLICATES[39] (ranked by impact):
       src/prefact/performance/cache.py:287-291  (get_config_cache)
       src/prefact/performance/cache.py:294-298  (get_rule_cache)
       src/prefact/performance/cache.py:301-305  (get_hash_cache)
+  [90331f4920e98fd7]   STRU  validate  L=4 N=6 saved=20 sim=1.00
+      src/prefact/rules/ai_boilerplate.py:69-72  (validate)
+      src/prefact/rules/importchecker_based.py:253-256  (validate)
+      src/prefact/rules/llm_generated_code.py:183-186  (validate)
+      src/prefact/rules/magic_numbers.py:131-134  (validate)
+      src/prefact/rules/unimport_based.py:295-298  (validate)
+      src/prefact/rules/unimport_based.py:356-359  (validate)
   [9e61a0169b46b783]   EXAC  validate  L=16 N=2 saved=16 sim=1.00
       src/prefact/rules/composite_rules.py:185-200  (validate)
       src/prefact/rules/composite_rules.py:261-276  (validate)
@@ -1924,7 +1922,7 @@ DUPLICATES[39] (ranked by impact):
       examples/01-individual-rules/relative-imports/before.py:11-15  (process_user)
   [b2a3226830ad4536]   STRU  __init__  L=5 N=2 saved=5 sim=1.00
       src/prefact/rules/unimport_based.py:223-227  (__init__)
-      src/prefact/rules/unimport_based.py:315-319  (__init__)
+      src/prefact/rules/unimport_based.py:309-313  (__init__)
   [8c3b4878cda6c2a9]   EXAC  calculate  L=4 N=2 saved=4 sim=1.00
       examples/01-individual-rules/print-statements/after.py:10-13  (calculate)
       examples/01-individual-rules/print-statements/before.py:10-13  (calculate)
@@ -1966,27 +1964,27 @@ DUPLICATES[39] (ranked by impact):
       examples/01-individual-rules/unused-imports/before.py:39-41  (get_data)
   [89f4308d864bd180]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
       src/prefact/rules/importchecker_based.py:102-104  (__init__)
-      src/prefact/rules/importchecker_based.py:273-275  (__init__)
+      src/prefact/rules/importchecker_based.py:267-269  (__init__)
   [53e9ef8f2a396333]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
       src/prefact/rules/mypy_based.py:99-101  (__init__)
       src/prefact/rules/mypy_based.py:174-176  (__init__)
 
 REFACTOR[39] (ranked by priority):
-  [1] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 6 occurrences of 9-line block across 5 files — saves 45 lines
-      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
-  [2] ○ extract_function   → utils/fix.py
+  [1] ○ extract_function   → utils/fix.py
       WHY: 14 occurrences of 3-line block across 9 files — saves 39 lines
       FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py, src/prefact/rules/ai_boilerplate.py, src/prefact/rules/import_linter_based.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py +4 more
-  [3] ○ extract_function   → src/prefact/rules/utils/fix.py
+  [2] ○ extract_function   → src/prefact/rules/utils/fix.py
       WHY: 3 occurrences of 18-line block across 1 files — saves 36 lines
       FILES: src/prefact/rules/unimport_based.py
-  [4] ○ extract_function   → src/prefact/rules/utils/validate.py
+  [3] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 4 occurrences of 10-line block across 1 files — saves 30 lines
       FILES: src/prefact/rules/import_linter_based.py
-  [5] ○ extract_function   → src/prefact/performance/utils/get_cache.py
+  [4] ○ extract_function   → src/prefact/performance/utils/get_cache.py
       WHY: 5 occurrences of 5-line block across 1 files — saves 20 lines
       FILES: src/prefact/performance/cache.py
+  [5] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 6 occurrences of 4-line block across 5 files — saves 20 lines
+      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
   [6] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 2 occurrences of 16-line block across 1 files — saves 16 lines
       FILES: src/prefact/rules/composite_rules.py
@@ -2091,16 +2089,16 @@ REFACTOR[39] (ranked by priority):
       FILES: src/prefact/rules/mypy_based.py
 
 QUICK_WINS[22] (low risk, high savings — do first):
-  [1] extract_function   saved=45L  → src/prefact/rules/utils/validate.py
-      FILES: ai_boilerplate.py, importchecker_based.py, llm_generated_code.py +2
-  [2] extract_function   saved=39L  → utils/fix.py
+  [1] extract_function   saved=39L  → utils/fix.py
       FILES: no_todo_rule.py, ai_boilerplate.py, import_linter_based.py +6
-  [3] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
+  [2] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
       FILES: unimport_based.py
-  [4] extract_function   saved=30L  → src/prefact/rules/utils/validate.py
+  [3] extract_function   saved=30L  → src/prefact/rules/utils/validate.py
       FILES: import_linter_based.py
-  [5] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
+  [4] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
       FILES: cache.py
+  [5] extract_function   saved=20L  → src/prefact/rules/utils/validate.py
+      FILES: ai_boilerplate.py, importchecker_based.py, llm_generated_code.py +2
   [6] extract_function   saved=16L  → src/prefact/rules/utils/validate.py
       FILES: composite_rules.py
   [7] extract_function   saved=16L  → src/prefact/performance/utils/get_cache.py
@@ -2120,12 +2118,12 @@ DEPENDENCY_RISK[1] (duplicates spanning multiple packages):
       src/prefact/rules/importchecker_based.py
       +5 more
 
-EFFORT_ESTIMATE (total ≈ 13.9h):
-  hard   validate                            saved=45L  ~90min
+EFFORT_ESTIMATE (total ≈ 13.1h):
   hard   fix                                 saved=39L  ~156min
   medium fix                                 saved=36L  ~72min
   medium validate                            saved=30L  ~60min
   medium get_cache                           saved=20L  ~40min
+  medium validate                            saved=20L  ~40min
   medium validate                            saved=16L  ~32min
   medium get_cache                           saved=16L  ~32min
   easy   validate                            saved=14L  ~28min
@@ -2135,27 +2133,23 @@ EFFORT_ESTIMATE (total ≈ 13.9h):
 
 METRICS-TARGET:
   dup_groups:  39 → 0
-  saved_lines: 379 lines recoverable
+  saved_lines: 354 lines recoverable
 ```
 
 ### Evolution / Churn (`project/evolution.toon.yaml`)
 
 ```toon markpact:analysis path=project/evolution.toon.yaml
-# code2llm/evolution | 3405 func | 70f | 2026-04-25
+# code2llm/evolution | 3408 func | 70f | 2026-04-25
 
-NEXT[1] (ranked by impact):
-  [1] !  SPLIT-FUNC      MagicNumberRule.scan_file  CC=15  fan=9
-      WHY: CC=15 exceeds 15
-      EFFORT: ~1h  IMPACT: 135
-
+NEXT[0]: no refactoring needed
 
 RISKS[0]: none
 
 METRICS-TARGET:
   CC̄:          0.6 → ≤0.4
-  max-CC:      15 → ≤7
+  max-CC:      14 → ≤7
   god-modules: 0 → 0
-  high-CC(≥15): 1 → ≤0
+  high-CC(≥15): 0 → ≤0
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):
@@ -2183,7 +2177,7 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=2.8 → now CC̄=0.6
+  prev CC̄=0.6 → now CC̄=0.6
 ```
 
 ### Validation (`project/validation.toon.yaml`)

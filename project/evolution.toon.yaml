@@ -1,18 +1,14 @@
-# code2llm/evolution | 3405 func | 70f | 2026-04-25
+# code2llm/evolution | 3408 func | 70f | 2026-04-25
 
-NEXT[1] (ranked by impact):
-  [1] !  SPLIT-FUNC      MagicNumberRule.scan_file  CC=15  fan=9
-      WHY: CC=15 exceeds 15
-      EFFORT: ~1h  IMPACT: 135
-
+NEXT[0]: no refactoring needed
 
 RISKS[0]: none
 
 METRICS-TARGET:
   CC̄:          0.6 → ≤0.4
-  max-CC:      15 → ≤7
+  max-CC:      14 → ≤7
   god-modules: 0 → 0
-  high-CC(≥15): 1 → ≤0
+  high-CC(≥15): 0 → ≤0
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):
@@ -40,4 +36,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=2.8 → now CC̄=0.6
+  prev CC̄=0.6 → now CC̄=0.6

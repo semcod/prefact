@@ -1,15 +1,13 @@
-# code2llm | 154f 120629L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
-# CC̄=0.7 | critical:1/3484 | dups:15 | cycles:0
+# code2llm | 154f 123434L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
+# CC̄=0.6 | critical:0/3487 | dups:15 | cycles:0
 
-HEALTH[2]:
+HEALTH[1]:
   🔴 DUP   15 classes duplicated
-  🟡 CC    scan_file CC=15 (limit:15)
 
-REFACTOR[2]:
+REFACTOR[1]:
   1. rm duplicates  (-15 dup classes)
-  2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[596]:
+PIPELINES[599]:
   [1] Src [main]: main → print
       PURITY: 100% pure
   [2] Src [main]: main → find_examples
@@ -24,10 +22,10 @@ PIPELINES[596]:
 LAYERS:
   src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
-  │ importchecker_based        490L  5C   24m  CC=14     ←0
+  │ importchecker_based        484L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
-  │ unimport_based             456L  5C   22m  CC=14     ←0
   │ import_linter_based        451L  5C   24m  CC=8      ←0
+  │ unimport_based             444L  5C   22m  CC=14     ←0
   │ cache                      439L  6C   37m  CC=5      ←9  ×DUP
   │ mypy_based                 398L  6C   22m  CC=9      ←0
   │ pylint_based               396L  5C   22m  CC=6      ←1
@@ -40,24 +38,24 @@ LAYERS:
   │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
   │ registry                   255L  1C   13m  CC=8      ←8
+  │ __init__                   248L  1C    8m  CC=3      ←0
   │ cli                        247L  0C   10m  CC=7      ←1
   │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
-  │ __init__                   236L  1C    7m  CC=1      ←0
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
   │ __init__                   218L  1C   17m  CC=7      ←0
   │ llm_hallucinations         214L  1C    9m  CC=8      ←0
   │ config                     192L  2C   13m  CC=5      ←3
-  │ llm_generated_code         191L  1C    9m  CC=7      ←0
   │ docs_manager               189L  1C    7m  CC=11     ←0
+  │ llm_generated_code         186L  1C    9m  CC=7      ←0
   │ generator                  171L  1C    3m  CC=12     ←1
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
   │ scanner                    153L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
-  │ !! magic_numbers              138L  1C    6m  CC=15     ←0
+  │ magic_numbers              134L  1C    8m  CC=7      ←0
   │ config                     128L  1C    8m  CC=10     ←4
   │ setup_manager              120L  1C    3m  CC=9      ←0
   │ composite_factory          119L  1C    2m  CC=4      ←0
@@ -65,8 +63,8 @@ LAYERS:
   │ base                        99L  1C    7m  CC=3      ←0  ×DUP
   │ models                      91L  6C    0m  CC=0.0    ←0
   │ duplicate_imports           80L  1C    3m  CC=11     ←0
-  │ ai_boilerplate              77L  1C    5m  CC=3      ←0
   │ cache_state                 74L  0C    7m  CC=2      ←2
+  │ ai_boilerplate              72L  1C    5m  CC=3      ←0
   │ _base                       66L  1C    3m  CC=10     ←0
   │ string_concat               66L  1C    5m  CC=6      ←0
   │ logger                      65L  2C   15m  CC=3      ←0
@@ -116,7 +114,7 @@ LAYERS:
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                84L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
-  │ project.sh                  46L  0C    0m  CC=0.0    ←0
+  │ project.sh                  47L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
@@ -172,10 +170,10 @@ LAYERS:
   │
   project/                        CC̄=0.0    ←in:0  →out:0
   │ !! map.toon.yaml            96742L  0C  2716m  CC=0.0    ←19
-  │ !! calls.yaml                3201L  0C    0m  CC=0.0    ←0
-  │ calls.toon.yaml            347L  0C    0m  CC=0.0    ←0
+  │ !! calls.yaml                6005L  0C    0m  CC=0.0    ←0
+  │ calls.toon.yaml            362L  0C    0m  CC=0.0    ←0
   │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         214L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         219L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
@@ -205,14 +203,14 @@ COUPLING:
     examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
       examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
-  HUB: Taskfile/ (fan-in=133)
-  HUB: project.map/ (fan-in=22)
   HUB: vscode-extension.src/ (fan-in=48)
+  HUB: project.map/ (fan-in=22)
+  HUB: Taskfile/ (fan-in=133)
   SMELL: examples.06-api-usage/ fan-out=35 → split needed
+  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
   SMELL: examples.01-individual-rules/ fan-out=10 → split needed
   SMELL: src.prefact/ fan-out=108 → split needed
   SMELL: examples.sample-project/ fan-out=19 → split needed
-  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

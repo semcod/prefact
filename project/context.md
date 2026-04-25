@@ -6,10 +6,10 @@
 - **Primary Language**: python
 - **Languages**: python: 104, yaml: 37, json: 3, shell: 2, txt: 2
 - **Analysis Mode**: static
-- **Total Functions**: 3484
+- **Total Functions**: 3487
 - **Total Classes**: 146
 - **Modules**: 153
-- **Entry Points**: 3411
+- **Entry Points**: 3414
 
 ## Architecture by Module
 
@@ -27,15 +27,15 @@
 - **Classes**: 6
 - **File**: `string_transformations.py`
 
-### src.prefact.rules.importchecker_based
-- **Functions**: 24
-- **Classes**: 5
-- **File**: `importchecker_based.py`
-
 ### src.prefact.rules.import_linter_based
 - **Functions**: 24
 - **Classes**: 5
 - **File**: `import_linter_based.py`
+
+### src.prefact.rules.importchecker_based
+- **Functions**: 24
+- **Classes**: 5
+- **File**: `importchecker_based.py`
 
 ### src.prefact.performance.parallel
 - **Functions**: 23
@@ -52,15 +52,15 @@
 - **Classes**: 5
 - **File**: `pylint_based.py`
 
-### src.prefact.rules.unimport_based
-- **Functions**: 22
-- **Classes**: 5
-- **File**: `unimport_based.py`
-
 ### src.prefact.rules.mypy_based
 - **Functions**: 22
 - **Classes**: 6
 - **File**: `mypy_based.py`
+
+### src.prefact.rules.unimport_based
+- **Functions**: 22
+- **Classes**: 5
+- **File**: `unimport_based.py`
 
 ### src.prefact.rules.ruff_based
 - **Functions**: 19
@@ -146,9 +146,6 @@ Main execution flows into the system:
 > Run autonomous prefact process.
 - **Calls**: console.print, monotonic, Panel.fit, console.print, self.scan_project, self.scanner.get_autonomous_limit, console.print, self.update_planfile
 
-### src.prefact.rules.magic_numbers.MagicNumberRule.scan_file
-- **Calls**: any, ast.parse, ast.walk, re.match, isinstance, isinstance, isinstance, self._is_magic_number
-
 ### src.prefact.config_extended.config.ExtendedConfig.from_yaml
 > Load configuration from YAML file with environment support.
 - **Calls**: cls._parse_rules, raw.pop, raw.pop, raw.pop, raw.pop, raw.pop, raw.pop, cls
@@ -204,13 +201,13 @@ scans for issues, and creates tickets in planfile
 > Decorator to cache file operations.
 - **Calls**: src.prefact.performance.cache.get_hash_cache, hash_cache.get_hash, src.prefact.performance.cache.get_cache, cache.get, func, cache.set, func, hash_cache.set_hash
 
-### src.prefact.rules.importchecker_based.ImportOptimizer._extract_all_imports
-> Extract all imports with their locations.
-- **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
-
 ### src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
 > Create a hybrid rule that can switch between AST and Ruff.
 - **Calls**: None.get, None.__init__, RuleMigrationManager, self.migration_manager.should_use_ruff, self.ast_rule.scan_file, self.migration_manager.should_use_ruff, self.ast_rule.fix, self.migration_manager.should_use_ruff
+
+### src.prefact.rules.importchecker_based.ImportOptimizer._extract_all_imports
+> Extract all imports with their locations.
+- **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
 
 ### src.prefact.plugins.PluginManager.load_plugin
 > Load a plugin and register its rules.
@@ -230,6 +227,10 @@ scans for issues, and creates tickets in planfile
 ### src.prefact.plugins.PluginManager._discover_local_plugins
 > Discover plugins in a local directory.
 - **Calls**: plugin_dir.glob, PluginValidator.validate_plugin_path, importlib.util.spec_from_file_location, importlib.util.module_from_spec, spec.loader.exec_module, PluginMetadata, plugins.append, Taskfile.print
+
+### src.prefact.performance.cache.cached_result
+> Decorator to cache function results.
+- **Calls**: src.prefact.performance.cache.get_cache, cache.get, func, cache.set, func, key_func, None.hexdigest, None.hexdigest
 
 ## Process Flows
 
@@ -274,19 +275,20 @@ from_yaml [src.prefact.config_extended.models.ExtendedConfig]
 run_autonomous [src.prefact.autonomous.AutonomousRefact]
 ```
 
-### Flow 8: scan_file
-```
-scan_file [src.prefact.rules.magic_numbers.MagicNumberRule]
-```
-
-### Flow 9: check_file
+### Flow 8: check_file
 ```
 check_file [src.prefact.rules.mypy_based.MyPyHelper]
 ```
 
-### Flow 10: _parse_existing_todos
+### Flow 9: _parse_existing_todos
 ```
 _parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
+```
+
+### Flow 10: create_composite_rule
+```
+create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
+  └─ →> get_all_rules
 ```
 
 ## Key Classes
@@ -335,16 +337,16 @@ _parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
 - **Key Methods**: src.prefact.autonomous.dependency_checker.DependencyChecker.__init__, src.prefact.autonomous.dependency_checker.DependencyChecker.check_dependencies, src.prefact.autonomous.dependency_checker.DependencyChecker._collect_declared_deps, src.prefact.autonomous.dependency_checker.DependencyChecker._parse_pyproject_toml, src.prefact.autonomous.dependency_checker.DependencyChecker._parse_requirements_files, src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated, src.prefact.autonomous.dependency_checker.DependencyChecker._build_issue_groups, src.prefact.autonomous.dependency_checker.DependencyChecker._find_dep_source_file, src.prefact.autonomous.dependency_checker.DependencyChecker._find_dep_line, src.prefact.autonomous.dependency_checker.DependencyChecker._normalize
 - **Inherits**: BaseManager
 
-### src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule
-> Detect code that appears to be LLM-generated.
-- **Methods**: 9
-- **Key Methods**: src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._load_indicators, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.scan_file, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_comment_ratio, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_docstring_patterns, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._has_llm_docstring_pattern, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._map_severity, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.fix, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.validate
-- **Inherits**: BaseRule
-
 ### src.prefact.rules.llm_hallucinations.LLMHallucinationRule
 > Detect LLM hallucination patterns in code.
 - **Methods**: 9
 - **Key Methods**: src.prefact.rules.llm_hallucinations.LLMHallucinationRule.__init__, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._load_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.scan_file, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._check_ast_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_function_name, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_import, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._map_severity, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.fix, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.validate
+- **Inherits**: BaseRule
+
+### src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule
+> Detect code that appears to be LLM-generated.
+- **Methods**: 9
+- **Key Methods**: src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._load_indicators, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.scan_file, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_comment_ratio, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_docstring_patterns, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._has_llm_docstring_pattern, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._map_severity, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.fix, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.validate
 - **Inherits**: BaseRule
 
 ### src.prefact.config_extended.config.ExtendedConfig
@@ -369,6 +371,12 @@ _parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
 - **Key Methods**: src.prefact.rules.string_transformations.ContextAwareStringTransformer.__init__, src.prefact.rules.string_transformations.ContextAwareStringTransformer.visit_FunctionDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_FunctionDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.visit_ClassDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_ClassDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_BinaryOperation, src.prefact.rules.string_transformations.ContextAwareStringTransformer._should_skip_context, src.prefact.rules.string_transformations.ContextAwareStringTransformer._is_in_logging_statement
 - **Inherits**: cst.CSTTransformer
 
+### src.prefact.rules.magic_numbers.MagicNumberRule
+> Detect magic numbers in code.
+- **Methods**: 8
+- **Key Methods**: src.prefact.rules.magic_numbers.MagicNumberRule.__init__, src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers, src.prefact.rules.magic_numbers.MagicNumberRule.scan_file, src.prefact.rules.magic_numbers.MagicNumberRule._extract_literal_issues, src.prefact.rules.magic_numbers.MagicNumberRule._extract_comparison_issues, src.prefact.rules.magic_numbers.MagicNumberRule._is_magic_number, src.prefact.rules.magic_numbers.MagicNumberRule.fix, src.prefact.rules.magic_numbers.MagicNumberRule.validate
+- **Inherits**: BaseRule
+
 ### src.prefact.performance.parallel.ParallelEngine
 > Parallel processing engine for prefact.
 - **Methods**: 7
@@ -388,12 +396,6 @@ _parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
 > Manages documentation files - planfile.yaml and CHANGELOG.md.
 - **Methods**: 7
 - **Key Methods**: src.prefact.autonomous.docs_manager.DocsManager.__init__, src.prefact.autonomous.docs_manager.DocsManager.update_planfile, src.prefact.autonomous.docs_manager.DocsManager._count_existing_tickets, src.prefact.autonomous.docs_manager.DocsManager.create_default_planfile, src.prefact.autonomous.docs_manager.DocsManager.create_ticket_from_issue, src.prefact.autonomous.docs_manager.DocsManager.ticket_exists, src.prefact.autonomous.docs_manager.DocsManager.update_changelog_md
-- **Inherits**: BaseManager
-
-### src.prefact.autonomous.project_scanner.ProjectScanner
-> Handles project scanning operations.
-- **Methods**: 7
-- **Key Methods**: src.prefact.autonomous.project_scanner.ProjectScanner.__init__, src.prefact.autonomous.project_scanner.ProjectScanner.scan_project, src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_with_progress, src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel, src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_sequential, src.prefact.autonomous.project_scanner.ProjectScanner._scan_single_file, src.prefact.autonomous.project_scanner.ProjectScanner.group_issues
 - **Inherits**: BaseManager
 
 ## Data Transformation Functions
@@ -545,7 +547,6 @@ Functions exposed as public API (no underscore prefix):
 - `src.prefact.config_extended.models.ExtendedConfig.from_yaml` - 24 calls
 - `benchmark_ram_optimization.main` - 22 calls
 - `src.prefact.autonomous.AutonomousRefact.run_autonomous` - 22 calls
-- `src.prefact.rules.magic_numbers.MagicNumberRule.scan_file` - 22 calls
 - `src.prefact.config_extended.config.ExtendedConfig.from_yaml` - 21 calls
 - `src.prefact.rules.mypy_based.MyPyHelper.check_file` - 21 calls
 - `src.prefact.rules.benchmark.benchmark_file` - 21 calls
@@ -576,6 +577,7 @@ Functions exposed as public API (no underscore prefix):
 - `src.prefact.benchmark.main` - 12 calls
 - `src.prefact.config_extended.validation.ConfigValidator.validate` - 12 calls
 - `src.prefact.rules.import_linter_based.ImportLinterNoRelative.scan_file` - 12 calls
+- `src.prefact.rules.benchmark.main` - 12 calls
 
 ## System Interactions
 
@@ -609,10 +611,10 @@ graph TD
     run_autonomous --> monotonic
     run_autonomous --> fit
     run_autonomous --> scan_project
-    scan_file --> any
-    scan_file --> parse
-    scan_file --> walk
-    scan_file --> match
+    from_yaml --> _parse_rules
+    from_yaml --> pop
+    check_file --> TemporaryDirectory
+    check_file --> Path
 ```
 
 ## Reverse Engineering Guidelines
