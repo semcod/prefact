@@ -8,11 +8,11 @@
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.53-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$7.50-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-19.5h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.54-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$7.50-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-19.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $7.5000 (57 commits)
-- 👤 **Human dev:** ~$1949 (19.5h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $7.5000 (58 commits)
+- 👤 **Human dev:** ~$1974 (19.7h @ $100/h, 30min dedup)
 
 Generated on 2026-04-26 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
@@ -186,6 +186,7 @@ Prefact includes an autonomous mode that automatically:
 - Generates TODO.md with all found issues
 - Creates tickets in planfile.yaml for tracking
 - Updates CHANGELOG.md with fixes
+- Optionally runs TestQL scenarios and bridges failures into tickets
 
 ```bash
 # Run full autonomous workflow
@@ -193,7 +194,58 @@ prefact -a
 
 # Or skip tests/examples for faster runs
 prefact -a --skip-tests --skip-examples
+
+# Include TestQL validation as the final step
+prefact -a --with-testql
+
+# Use a custom directory for *.testql.toon.yaml scenarios
+prefact -a --with-testql --testql-dir ./testql-scenarios
 ```
+
+## TestQL Integration
+
+Prefact can run TestQL DSL validation scenarios and bridge failing checks directly into planfile tickets, TODO.md, and configured backends (GitHub, GitLab, Jira).
+
+### `prefact testql` — Run a Single Scenario
+
+```bash
+# Validate a scenario and create/sync tickets
+prefact testql testql-scenarios/smoke.testql.toon.yaml
+
+# Dry-run: validate without creating tickets
+prefact testql testql-scenarios/smoke.testql.toon.yaml --dry-run
+
+# Custom project root and strategy
+prefact testql scenarios/api.testql.toon.yaml -p ./my-api -s my-api/planfile.yaml
+
+# Limit ticket generation and disable sync
+prefact testql scenarios/api.testql.toon.yaml --max-tickets 10 --no-sync
+```
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `-p`, `--path` | `.` | Project root directory |
+| `--url` | `http://localhost:8101` | TestQL service base URL |
+| `--dry-run` | `False` | Parse/validate only |
+| `-s`, `--strategy` | `<project>/planfile.yaml` | Target planfile YAML |
+| `--create-tickets` / `--no-create-tickets` | `True` | Create tickets for failures |
+| `--sync` / `--no-sync` | `True` | Sync to TODO.md and integrations |
+| `--max-tickets` | `25` | Max tickets per run |
+| `--testql-bin` | `testql` | TestQL CLI executable |
+| `--testql-repo-path` | `/home/tom/github/oqlos/testql` | Fallback local repo path |
+
+### Identity-Aware Deduplication
+
+When creating tickets, prefact uses identity-aware deduplication based on:
+- Ticket `id` / `ticket_id`
+- Integration-specific IDs (`github_id`, `gitlab_id`, `jira_id`)
+- Keys (`github_key`, `gitlab_key`, `jira_key`)
+- URLs (`github_url`, `gitlab_url`, `jira_url`, `external_url`)
+- `source` and `external_refs` metadata
+
+If a ticket already exists with any matching identity key, it is skipped to avoid duplicates.
 
 ## Performance Improvements
 
