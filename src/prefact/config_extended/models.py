@@ -30,7 +30,18 @@ class ExtendedConfig(Config):
                 basic = {k: v for k, v in rule_raw.items() if k in ['enabled', 'severity', 'options']}
                 rules[rule_id] = RuleConfig(**basic)
                 if not hasattr(rules[rule_id], '_extended'): rules[rule_id]._extended = {k: v for k, v in rule_raw.items() if k not in ['enabled', 'severity', 'options']}
-        return cls(project_root=Path(raw.pop("project_root", Path.cwd())), rules=rules, tools=raw.pop("tools", {}), performance=raw.pop("performance", {}), plugins=raw.pop("plugins", {}), environments=raw.pop("environments", {}))
+        return cls(
+            project_root=Path(raw.pop("project_root", Path.cwd())),
+            package_name=raw.pop("package_name", ""),
+            include=raw.pop("include", None),
+            exclude=raw.pop("exclude", None),
+            rules=rules,
+            tools=raw.pop("tools", {}),
+            performance=raw.pop("performance", {}),
+            plugins=raw.pop("plugins", {}),
+            environments=raw.pop("environments", {}),
+            **raw
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         result = super().to_dict()

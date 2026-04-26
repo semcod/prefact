@@ -188,7 +188,7 @@ class TodoManager(BaseManager):
         path = Path(file_path)
         if path.is_absolute():
             try:
-                return str(path.relative_to(self.project_root))
+                return str(path.resolve().relative_to(self.project_root.resolve()))
             except ValueError:
                 return str(file_path)
         return str(file_path)

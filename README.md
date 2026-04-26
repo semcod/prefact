@@ -8,13 +8,13 @@
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.48-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$7.50-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-17.2h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.49-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$7.50-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-18.4h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $7.5000 (51 commits)
-- 👤 **Human dev:** ~$1723 (17.2h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $7.5000 (53 commits)
+- 👤 **Human dev:** ~$1842 (18.4h @ $100/h, 30min dedup)
 
-Generated on 2026-04-25 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
+Generated on 2026-04-26 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
 ---
 
@@ -275,3 +275,17 @@ Licensed under Apache-2.0.
 ## Author
 
 Tom Sapletta
+## Status
+
+_Last updated by [taskill](https://github.com/oqlos/taskill) at 2026-04-25 13:43 UTC_
+
+| Metric | Value |
+|---|---|
+| HEAD | `0aac827` |
+| Coverage | — |
+| Failing tests | — |
+| Commits in last cycle | 50 |
+
+> Primarily documentation and refactoring work: the docs and README were updated, the code-analysis engine and configuration/CLI were refactored and improved, and Markdown output and example modules were added. Minor fixes include suppressing mypy errors with type: ignore and auto-fixing ruff formatting and imports.
+
+<!-- taskill:status:end -->

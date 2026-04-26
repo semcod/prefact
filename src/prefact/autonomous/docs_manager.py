@@ -27,6 +27,36 @@ class DocsManager(BaseManager):
         else:
             planfile = self.create_default_planfile()
 
+        # Cleanup: Remove tickets for issues that are no longer present
+        current_issue_keys = set()
+        for issue_group in self.issues_found:
+            rel_file = self._get_relative_file_path(issue_group['file'])
+            current_issue_keys.add((issue_group["rule_id"], tuple([rel_file])))
+
+        removed_count = 0
+        # Cleanup backlog
+        if "backlog" in planfile and isinstance(planfile["backlog"], list):
+            patterns = planfile["backlog"]
+            planfile["backlog"] = [
+                t for t in patterns
+                if not self._should_remove_obsolete_ticket(t, current_issue_keys)
+            ]
+            removed_count += len(patterns) - len(planfile["backlog"])
+
+        # Cleanup sprints
+        for sprint in planfile.get("sprints", []):
+            for field in ["tasks", "task_patterns"]:
+                if field in sprint and isinstance(sprint[field], list):
+                    patterns = sprint[field]
+                    sprint[field] = [
+                        t for t in patterns
+                        if not self._should_remove_obsolete_ticket(t, current_issue_keys)
+                    ]
+                    removed_count += len(patterns) - len(sprint[field])
+
+        if removed_count > 0:
+            console.print(f"🧹 Removed {removed_count} obsolete tickets from planfile.yaml")
+
         # Add tickets for issues
         new_tickets = []
         seen_tickets = set()
@@ -50,25 +80,32 @@ class DocsManager(BaseManager):
                 new_tickets.append(ticket)
                 seen_tickets.add(ticket_key)
 
-        # Add tickets to planfile
-        if "sprints" not in planfile:
-            planfile["sprints"] = []
+        # Add new tickets to planfile
+        if new_tickets:
+            if "backlog" in planfile:
+                if not isinstance(planfile["backlog"], list):
+                    planfile["backlog"] = []
+                planfile["backlog"].extend(new_tickets)
+            else:
+                if "sprints" not in planfile:
+                    planfile["sprints"] = []
 
-        if not planfile["sprints"]:
-            planfile["sprints"].append({
-                "id": "sprint-1",
-                "name": "Code Quality Improvements",
-                "duration": "2 weeks",
-                "objectives": ["Fix code quality issues"],
-                "task_patterns": []
-            })
+                if not planfile["sprints"]:
+                    planfile["sprints"].append({
+                        "id": "sprint-1",
+                        "name": "Code Quality Improvements",
+                        "duration": "2 weeks",
+                        "objectives": ["Fix code quality issues"],
+                        "task_patterns": []
+                    })
 
-        # Add new tickets to first sprint
-        sprint = planfile["sprints"][0]
-        if "task_patterns" not in sprint:
-            sprint["task_patterns"] = []
+                # Add new tickets to first sprint
+                sprint = planfile["sprints"][0]
+                field = "tasks" if "tasks" in sprint else "task_patterns"
+                if field not in sprint:
+                    sprint[field] = []
 
-        sprint["task_patterns"].extend(new_tickets)
+                sprint[field].extend(new_tickets)
 
         # Save planfile
         with open(self.planfile_path, 'w') as f:
@@ -86,8 +123,28 @@ class DocsManager(BaseManager):
     def _count_existing_tickets(self, planfile: Dict[str, Any]) -> int:
         total = 0
         for sprint in planfile.get("sprints", []):
+            total += len(sprint.get("tasks", []))
             total += len(sprint.get("task_patterns", []))
         return total
+
+    def _should_remove_obsolete_ticket(self, ticket: Any, current_issue_keys: set[tuple[str, tuple[str, ...]]]) -> bool:
+        if not isinstance(ticket, dict):
+            return False
+        if not self._is_autonomous_ticket(ticket):
+            return False
+        rule_id = ticket.get("rule_id")
+        files = tuple(ticket.get("files", []))
+        return (rule_id, files) not in current_issue_keys
+
+    @staticmethod
+    def _is_autonomous_ticket(ticket: dict[str, Any]) -> bool:
+        return (
+            isinstance(ticket.get("rule_id"), str)
+            and isinstance(ticket.get("files"), list)
+            and ticket.get("id", "").startswith("ticket-")
+            and isinstance(ticket.get("count"), int)
+            and isinstance(ticket.get("model_hints"), dict)
+        )
 
     def create_default_planfile(self) -> Dict[str, Any]:
         """Create default planfile structure."""
@@ -114,7 +171,10 @@ class DocsManager(BaseManager):
         # Use relative path for consistent hashing across different environments
         file_path = Path(issue_group['file'])
         if file_path.is_absolute():
-            rel_file = str(file_path.relative_to(self.project_root))
+            try:
+                rel_file = str(file_path.resolve().relative_to(self.project_root.resolve()))
+            except ValueError:
+                rel_file = str(file_path)
         else:
             rel_file = str(file_path)
 
@@ -151,10 +211,12 @@ class DocsManager(BaseManager):
     def ticket_exists(self, planfile: Dict[str, Any], ticket: Dict[str, Any]) -> bool:
         """Check if ticket already exists in planfile."""
         for sprint in planfile.get("sprints", []):
-            for existing in sprint.get("task_patterns", []):
-                if (existing.get("rule_id") == ticket["rule_id"] and
-                    existing.get("files") == ticket["files"]):
-                    return True
+            # Check both 'tasks' and legacy 'task_patterns'
+            for field in ["tasks", "task_patterns"]:
+                for existing in sprint.get(field, []):
+                    if (existing.get("rule_id") == ticket["rule_id"] and
+                        existing.get("files") == ticket["files"]):
+                        return True
         return False
 
     def update_changelog_md(self) -> None:
@@ -187,3 +249,13 @@ class DocsManager(BaseManager):
 
         self.changelog_path.write_text(new_content)
         console.print(f"📝 Updated CHANGELOG.md with {len(self.tickets_created)} changes")
+
+    def _get_relative_file_path(self, file_path: str) -> str:
+        """Convert file path to relative path for better portability."""
+        path = Path(file_path)
+        if path.is_absolute():
+            try:
+                return str(path.resolve().relative_to(self.project_root.resolve()))
+            except ValueError:
+                return str(file_path)
+        return str(file_path)

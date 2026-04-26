@@ -12,7 +12,7 @@ stats:
   done: 4
 tasks:
 - id: Q01
-  title: 'reduce_complexity: importchecker_based (CC=14)'
+  name: 'reduce_complexity: importchecker_based (CC=14)'
   description: Module 'importchecker_based' has cyclomatic complexity CC=14 (490 lines,
     5 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/importchecker_based.py
@@ -27,7 +27,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q02
-  title: 'reduce_complexity: isort_based (CC=13)'
+  name: 'reduce_complexity: isort_based (CC=13)'
   description: Module 'isort_based' has cyclomatic complexity CC=13 (470 lines, 4
     complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/isort_based.py
@@ -42,7 +42,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q03
-  title: 'reduce_complexity: autoflake_based (CC=11)'
+  name: 'reduce_complexity: autoflake_based (CC=11)'
   description: Module 'autoflake_based' has cyclomatic complexity CC=11 (470 lines,
     5 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/autoflake_based.py
@@ -58,7 +58,7 @@ tasks:
   priority_label: medium
   completed_at: '2026-04-20T07:47:37.353383+00:00'
 - id: Q04
-  title: 'reduce_complexity: unimport_based (CC=14)'
+  name: 'reduce_complexity: unimport_based (CC=14)'
   description: Module 'unimport_based' has cyclomatic complexity CC=14 (456 lines,
     5 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/unimport_based.py
@@ -73,7 +73,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q05
-  title: 'reduce_complexity: todo_manager (CC=13)'
+  name: 'reduce_complexity: todo_manager (CC=13)'
   description: Module 'todo_manager' has cyclomatic complexity CC=13 (368 lines, 1
     complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/todo_manager.py
@@ -88,7 +88,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q06
-  title: 'reduce_complexity: __init__ (CC=10)'
+  name: 'reduce_complexity: __init__ (CC=10)'
   description: Module '__init__' has cyclomatic complexity CC=10 (320 lines, 3 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/__init__.py
@@ -103,7 +103,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q07
-  title: 'reduce_complexity: composite_rules (CC=12)'
+  name: 'reduce_complexity: composite_rules (CC=12)'
   description: Module 'composite_rules' has cyclomatic complexity CC=12 (276 lines,
     3 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/composite_rules.py
@@ -118,7 +118,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q08
-  title: 'reduce_complexity: dependency_checker (CC=10)'
+  name: 'reduce_complexity: dependency_checker (CC=10)'
   description: Module 'dependency_checker' has cyclomatic complexity CC=10 (237 lines,
     1 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/dependency_checker.py
@@ -133,7 +133,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q09
-  title: 'reduce_complexity: unused_imports (CC=10)'
+  name: 'reduce_complexity: unused_imports (CC=10)'
   description: Module 'unused_imports' has cyclomatic complexity CC=10 (232 lines,
     1 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/unused_imports.py
@@ -148,7 +148,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q10
-  title: 'reduce_complexity: relative_imports (CC=14)'
+  name: 'reduce_complexity: relative_imports (CC=14)'
   description: Module 'relative_imports' has cyclomatic complexity CC=14 (219 lines,
     2 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/relative_imports.py
@@ -163,7 +163,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q11
-  title: 'reduce_complexity: docs_manager (CC=11)'
+  name: 'reduce_complexity: docs_manager (CC=11)'
   description: Module 'docs_manager' has cyclomatic complexity CC=11 (189 lines, 1
     complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/docs_manager.py
@@ -178,7 +178,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q12
-  title: 'reduce_complexity: generator (CC=12)'
+  name: 'reduce_complexity: generator (CC=12)'
   description: Module 'generator' has cyclomatic complexity CC=12 (171 lines, 1 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/generator.py
@@ -193,7 +193,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q13
-  title: 'reduce_complexity: engine (CC=13)'
+  name: 'reduce_complexity: engine (CC=13)'
   description: Module 'engine' has cyclomatic complexity CC=13 (158 lines, 1 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/engine.py
@@ -208,7 +208,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q14
-  title: 'reduce_complexity: scanner (CC=12)'
+  name: 'reduce_complexity: scanner (CC=12)'
   description: Module 'scanner' has cyclomatic complexity CC=12 (153 lines, 1 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/scanner.py
@@ -223,7 +223,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q15
-  title: 'reduce_complexity: duplicate_imports (CC=11)'
+  name: 'reduce_complexity: duplicate_imports (CC=11)'
   description: Module 'duplicate_imports' has cyclomatic complexity CC=11 (80 lines,
     1 complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/duplicate_imports.py
@@ -238,7 +238,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q16
-  title: 'reduce_complexity: _base (CC=10)'
+  name: 'reduce_complexity: _base (CC=10)'
   description: Module '_base' has cyclomatic complexity CC=10 (66 lines, 1 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/_base.py
@@ -253,7 +253,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q17
-  title: 'reduce_complexity: console (CC=14)'
+  name: 'reduce_complexity: console (CC=14)'
   description: Module 'console' has cyclomatic complexity CC=14 (64 lines, 0 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/console.py
@@ -268,7 +268,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q18
-  title: 'reduce_complexity: models (CC=13)'
+  name: 'reduce_complexity: models (CC=13)'
   description: Module 'models' has cyclomatic complexity CC=13 (38 lines, 1 complex
     functions). Apply guard clauses, extract helpers, reduce nesting.
   file: src/models.py
@@ -283,7 +283,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: Q19
-  title: 'reduce_complexity: extension.ts (CC=14)'
+  name: 'reduce_complexity: extension.ts (CC=14)'
   description: Module 'extension.ts' has cyclomatic complexity CC=14 (437 lines, 5
     complex functions). Apply guard clauses, extract helpers, reduce nesting.
   file: vscode-extension/extension.ts.py
@@ -298,7 +298,7 @@ tasks:
   source: project/analysis.toon.yaml
   priority_label: medium
 - id: R01
-  title: 'extract_function: validate.py'
+  name: 'extract_function: validate.py'
   description: "7 occurrences of 9-line block across 6 files \u2014 saves 54 lines"
   file: src/prefact/rules/utils/validate.py
   action: extract_function
@@ -311,7 +311,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R02
-  title: 'extract_function: fix.py'
+  name: 'extract_function: fix.py'
   description: "14 occurrences of 3-line block across 9 files \u2014 saves 39 lines"
   file: utils/fix.py
   action: extract_function
@@ -324,7 +324,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R03
-  title: 'extract_function: fix.py'
+  name: 'extract_function: fix.py'
   description: "3 occurrences of 18-line block across 1 files \u2014 saves 36 lines"
   file: src/prefact/rules/utils/fix.py
   action: extract_function
@@ -337,7 +337,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R06
-  title: 'extract_function: get_cache.py'
+  name: 'extract_function: get_cache.py'
   description: "5 occurrences of 5-line block across 1 files \u2014 saves 20 lines"
   file: src/prefact/performance/utils/get_cache.py
   action: extract_function
@@ -350,7 +350,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R09
-  title: 'extract_function: initialize_cache.py'
+  name: 'extract_function: initialize_cache.py'
   description: "2 occurrences of 15-line block across 2 files \u2014 saves 15 lines"
   file: src/prefact/performance/utils/initialize_cache.py
   action: extract_function
@@ -363,7 +363,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R11
-  title: 'extract_function: validate.py'
+  name: 'extract_function: validate.py'
   description: "2 occurrences of 11-line block across 1 files \u2014 saves 11 lines"
   file: examples/04-custom-rules/custom_rules/utils/validate.py
   action: extract_function
@@ -376,7 +376,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R12
-  title: 'extract_class: get_hash.py'
+  name: 'extract_class: get_hash.py'
   description: "2 occurrences of 10-line block across 2 files \u2014 saves 10 lines"
   file: src/prefact/performance/utils/get_hash.py
   action: extract_class
@@ -389,7 +389,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R13
-  title: 'extract_function: process_data.py'
+  name: 'extract_function: process_data.py'
   description: "2 occurrences of 8-line block across 2 files \u2014 saves 8 lines"
   file: examples/01-individual-rules/unused-imports/utils/process_data.py
   action: extract_function
@@ -402,7 +402,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R14
-  title: 'extract_function: scan_file.py'
+  name: 'extract_function: scan_file.py'
   description: "3 occurrences of 4-line block across 2 files \u2014 saves 8 lines"
   file: src/prefact/rules/utils/scan_file.py
   action: extract_function
@@ -415,7 +415,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R17
-  title: 'extract_function: _load_mypy_config.py'
+  name: 'extract_function: _load_mypy_config.py'
   description: "2 occurrences of 8-line block across 1 files \u2014 saves 8 lines"
   file: src/prefact/rules/utils/_load_mypy_config.py
   action: extract_function
@@ -428,7 +428,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R18
-  title: 'extract_function: calculate_sum.py'
+  name: 'extract_function: calculate_sum.py'
   description: "2 occurrences of 7-line block across 2 files \u2014 saves 7 lines"
   file: examples/utils/calculate_sum.py
   action: extract_function
@@ -441,7 +441,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R19
-  title: 'extract_function: process_data.py'
+  name: 'extract_function: process_data.py'
   description: "2 occurrences of 6-line block across 2 files \u2014 saves 6 lines"
   file: examples/01-individual-rules/print-statements/utils/process_data.py
   action: extract_function
@@ -454,7 +454,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R20
-  title: 'extract_function: __init__.py'
+  name: 'extract_function: __init__.py'
   description: "2 occurrences of 6-line block across 2 files \u2014 saves 6 lines"
   file: src/prefact/utils/__init__.py
   action: extract_function
@@ -467,7 +467,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R21
-  title: 'extract_function: __init__.py'
+  name: 'extract_function: __init__.py'
   description: "3 occurrences of 3-line block across 1 files \u2014 saves 6 lines"
   file: src/prefact/rules/utils/__init__.py
   action: extract_function
@@ -480,7 +480,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R23
-  title: 'extract_function: get_performance_monitor.py'
+  name: 'extract_function: get_performance_monitor.py'
   description: "2 occurrences of 6-line block across 2 files \u2014 saves 6 lines"
   file: src/prefact/utils/get_performance_monitor.py
   action: extract_function
@@ -493,7 +493,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R24
-  title: 'extract_function: process_user.py'
+  name: 'extract_function: process_user.py'
   description: "2 occurrences of 5-line block across 2 files \u2014 saves 5 lines"
   file: examples/01-individual-rules/relative-imports/utils/process_user.py
   action: extract_function
@@ -506,7 +506,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R26
-  title: 'extract_function: calculate.py'
+  name: 'extract_function: calculate.py'
   description: "2 occurrences of 4-line block across 2 files \u2014 saves 4 lines"
   file: examples/01-individual-rules/print-statements/utils/calculate.py
   action: extract_function
@@ -519,7 +519,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R27
-  title: 'extract_function: read_file.py'
+  name: 'extract_function: read_file.py'
   description: "2 occurrences of 4-line block across 2 files \u2014 saves 4 lines"
   file: examples/01-individual-rules/unused-imports/utils/read_file.py
   action: extract_function
@@ -532,7 +532,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R28
-  title: 'extract_function: process.py'
+  name: 'extract_function: process.py'
   description: "2 occurrences of 4-line block across 2 files \u2014 saves 4 lines"
   file: examples/01-individual-rules/wildcard-imports/utils/process.py
   action: extract_function
@@ -545,7 +545,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R29
-  title: 'extract_function: format_data.py'
+  name: 'extract_function: format_data.py'
   description: "2 occurrences of 4-line block across 2 files \u2014 saves 4 lines"
   file: examples/utils/format_data.py
   action: extract_function
@@ -558,7 +558,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R30
-  title: 'extract_function: process_data.py'
+  name: 'extract_function: process_data.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/duplicate-imports/utils/process_data.py
   action: extract_function
@@ -571,7 +571,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R31
-  title: 'extract_function: add.py'
+  name: 'extract_function: add.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/missing-return-type/utils/add.py
   action: extract_function
@@ -584,7 +584,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R32
-  title: 'extract_function: get_user.py'
+  name: 'extract_function: get_user.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/missing-return-type/utils/get_user.py
   action: extract_function
@@ -597,7 +597,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R33
-  title: 'extract_class: process.py'
+  name: 'extract_class: process.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/missing-return-type/utils/process.py
   action: extract_class
@@ -610,7 +610,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R34
-  title: 'extract_function: process.py'
+  name: 'extract_function: process.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/sorted-imports/utils/process.py
   action: extract_function
@@ -623,7 +623,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R35
-  title: 'extract_function: format_timestamp.py'
+  name: 'extract_function: format_timestamp.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/unused-imports/utils/format_timestamp.py
   action: extract_function
@@ -636,7 +636,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R36
-  title: 'extract_class: __init__.py'
+  name: 'extract_class: __init__.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/unused-imports/utils/__init__.py
   action: extract_class
@@ -649,7 +649,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R37
-  title: 'extract_class: add_data.py'
+  name: 'extract_class: add_data.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/unused-imports/utils/add_data.py
   action: extract_class
@@ -662,7 +662,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: R38
-  title: 'extract_class: get_data.py'
+  name: 'extract_class: get_data.py'
   description: "2 occurrences of 3-line block across 2 files \u2014 saves 3 lines"
   file: examples/01-individual-rules/unused-imports/utils/get_data.py
   action: extract_class
@@ -675,7 +675,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: D42
-  title: 'extract_function: validate (saves 54L)'
+  name: 'extract_function: validate (saves 54L)'
   description: 'Duplicated ''validate'': 7 occurrences, 9 lines each, saves 54 lines.
     Files: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/autoflake_based.py,
     src/prefact/rules/importchecker_based.py'
@@ -692,7 +692,7 @@ tasks:
   priority_label: high
   completed_at: '2026-04-20T06:36:41.234521+00:00'
 - id: D43
-  title: 'extract_function: fix (saves 39L)'
+  name: 'extract_function: fix (saves 39L)'
   description: 'Duplicated ''fix'': 14 occurrences, 3 lines each, saves 39 lines.
     Files: examples/04-custom-rules/custom_rules/no_todo_rule.py, examples/04-custom-rules/custom_rules/no_todo_rule.py,
     src/prefact/rules/ai_boilerplate.py'
@@ -708,7 +708,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: high
 - id: D44
-  title: 'extract_function: fix (saves 36L)'
+  name: 'extract_function: fix (saves 36L)'
   description: 'Duplicated ''fix'': 3 occurrences, 18 lines each, saves 36 lines.
     Files: src/prefact/rules/autoflake_based.py, src/prefact/rules/autoflake_based.py,
     src/prefact/rules/autoflake_based.py'
@@ -725,7 +725,7 @@ tasks:
   priority_label: high
   completed_at: '2026-04-20T07:47:37.353383+00:00'
 - id: D45
-  title: 'extract_function: fix (saves 36L)'
+  name: 'extract_function: fix (saves 36L)'
   description: 'Duplicated ''fix'': 3 occurrences, 18 lines each, saves 36 lines.
     Files: src/prefact/rules/unimport_based.py, src/prefact/rules/unimport_based.py,
     src/prefact/rules/unimport_based.py'
@@ -741,7 +741,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: high
 - id: D46
-  title: 'extract_function: validate (saves 30L)'
+  name: 'extract_function: validate (saves 30L)'
   description: 'Duplicated ''validate'': 4 occurrences, 10 lines each, saves 30 lines.
     Files: src/prefact/rules/import_linter_based.py, src/prefact/rules/import_linter_based.py,
     src/prefact/rules/import_linter_based.py'
@@ -757,7 +757,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: high
 - id: D47
-  title: 'extract_function: get_cache (saves 20L)'
+  name: 'extract_function: get_cache (saves 20L)'
   description: 'Duplicated ''get_cache'': 5 occurrences, 5 lines each, saves 20 lines.
     Files: src/prefact/performance/cache.py, src/prefact/performance/cache.py, src/prefact/performance/cache.py'
   file: src/prefact/performance/cache.py
@@ -772,7 +772,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: D48
-  title: 'extract_function: validate (saves 16L)'
+  name: 'extract_function: validate (saves 16L)'
   description: 'Duplicated ''validate'': 2 occurrences, 16 lines each, saves 16 lines.
     Files: src/prefact/rules/composite_rules.py, src/prefact/rules/composite_rules.py'
   file: src/prefact/rules/composite_rules.py
@@ -787,7 +787,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: D49
-  title: 'extract_function: get_cache (saves 16L)'
+  name: 'extract_function: get_cache (saves 16L)'
   description: 'Duplicated ''get_cache'': 5 occurrences, 4 lines each, saves 16 lines.
     Files: src/prefact/performance/cache_state.py, src/prefact/performance/cache_state.py,
     src/prefact/performance/cache_state.py'
@@ -803,7 +803,7 @@ tasks:
   source: project/duplication.toon.yaml
   priority_label: medium
 - id: D51
-  title: 'extract_function: validate (saves 14L)'
+  name: 'extract_function: validate (saves 14L)'
   description: 'Duplicated ''validate'': 2 occurrences, 14 lines each, saves 14 lines.
     Files: src/prefact/rules/pylint_based.py, src/prefact/rules/pylint_based.py'
   file: src/prefact/rules/pylint_based.py

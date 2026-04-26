@@ -89,9 +89,10 @@ class Scanner:
                 self._rules.append(rule_cls(config))
 
     def collect_files(self) -> list[Path]:
-        root = self.config.project_root
+        root = self.config.project_root.resolve()
         files: list[Path] = []
         for pattern in self.config.include or []:
+            # Path.glob already handles ** patterns
             for p in root.glob(pattern):
                 if p.is_file() and not self._excluded(p):
                     files.append(p)
@@ -123,31 +124,34 @@ class Scanner:
 
     def _excluded(self, path: Path) -> bool:
         """Check if a path should be excluded based on patterns."""
-        rel = str(path.relative_to(self.config.project_root))
-        # Also check the full path string for pattern matching
-        path_str = str(path)
+        try:
+            root = self.config.project_root.resolve()
+            abs_path = path.resolve()
+            rel = abs_path.relative_to(root)
+            rel_str = str(rel)
+        except ValueError:
+            # Not under project root, skip
+            return True
 
+        import fnmatch
         for pat in self._exclude_patterns:
-            # Skip empty patterns
             if not pat:
                 continue
-
-            # Check if pattern matches the relative path
-            if _match_gitignore_pattern(rel, pat):
+            
+            # Match directly
+            if fnmatch.fnmatch(rel_str, pat) or fnmatch.fnmatch(rel_str, f"*/{pat}"):
                 return True
-            # Check if pattern matches with leading components
-            if _match_gitignore_pattern(rel, f"**/{pat}"):
-                return True
-            # Check full path for virtual env patterns
-            if ".venv" in pat and ".venv" in path_str:
-                return True
-            if "venv" in pat and "venv" in path_str:
-                return True
-            if "site-packages" in path_str:
-                return True
-            if "__pycache__" in path_str:
-                return True
-            if "node_modules" in path_str:
-                return True
-
+                
+            # Match parents
+            for parent in rel.parents:
+                parent_str = str(parent)
+                if parent_str == "." : continue
+                if fnmatch.fnmatch(parent_str, pat) or fnmatch.fnmatch(parent_str, f"*/{pat}"):
+                    return True
+                    
+        # Hardcoded safety for common folders if not caught by patterns
+        path_str = str(abs_path)
+        if any(x in path_str for x in ["/.venv/", "/venv/", "/node_modules/", "/__pycache__/", "/.git/"]):
+            return True
+            
         return False

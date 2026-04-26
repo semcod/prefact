@@ -312,6 +312,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+- feat(docs): add Markdown output and update changelog generation
+- feat(examples): add deep code analysis engine example with supporting modules
+- feat(config): update configuration docs and CLI improvements
+- refactor(docs): large refactor of the code analysis engine and CLI/interface improvements
+- refactor: configuration management system improvements and duplicate-class removal
+- fix: add type: ignore comments to suppress mypy errors in parallel.py
+- fix: auto-fix ruff formatting issues and add missing imports
+- chore(docs): update README and other documentation
+
+## [0.1.49] - 2026-04-26
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .taskill/state.json
+- Update planfile.yaml
+
 ## [0.1.48] - 2026-04-25
 
 ### Docs

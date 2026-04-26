@@ -68,7 +68,7 @@ class ProjectScanner(BaseManager):
 
 **Sample files:**
 ```
-{chr(10).join(str(f.relative_to(self.project_root)) for f in files_to_scan[:5])}
+{chr(10).join(str(f.resolve().relative_to(self.project_root.resolve())) for f in files_to_scan[:5])}
 ```
 """
                 console.print(Markdown(files_md))
