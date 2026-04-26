@@ -38,7 +38,13 @@ class AutonomousRefact:
         self.issues_found: List[Dict[str, Any]] = []
         self.tickets_created: List[Dict[str, Any]] = []
 
-    def run_autonomous(self, skip_examples: bool = False) -> bool:
+    def run_autonomous(
+        self,
+        skip_examples: bool = False,
+        *,
+        with_testql: bool = False,
+        testql_scenarios_dir: Optional[str] = None,
+    ) -> bool:
         """Run autonomous prefact process."""
         from rich.panel import Panel
 
@@ -79,8 +85,20 @@ class AutonomousRefact:
             self.update_planfile()
 
             # Step 5: Manage TODO.md and CHANGELOG.md
-            console.print("📋 Managing documentation...")
+            console.print("\U0001f4cb Managing documentation...")
             self.manage_documentation()
+
+            # Step 6 (optional): Run TestQL scenarios and bridge to planfile/TODO
+            if with_testql:
+                console.print("\U0001f9ea Running TestQL scenarios...")
+                testql_summary = self.run_testql_all(scenarios_dir=testql_scenarios_dir)
+                summary = testql_summary.get("summary", {})
+                console.print(
+                    f"\U0001f9ea TestQL summary: scenarios={testql_summary.get('scenarios_found', 0)} "
+                    f"failed={summary.get('failed', 0)} "
+                    f"created={summary.get('created', 0)} "
+                    f"skipped={summary.get('skipped', 0)}"
+                )
 
             self._print_autonomous_summary()
 
@@ -176,6 +194,32 @@ class AutonomousRefact:
         """Run TestQL DSL validation and bridge to planfile/TODO/integrations."""
         return self.testql_manager.run(
             scenario_path=scenario_path,
+            url=url,
+            dry_run=dry_run,
+            create_tickets=create_tickets,
+            sync_targets=sync_targets,
+            max_tickets=max_tickets,
+            testql_bin=testql_bin,
+            testql_repo_path=testql_repo_path,
+            strategy_path=strategy_path,
+        )
+
+    def run_testql_all(
+        self,
+        *,
+        scenarios_dir: Optional[str] = None,
+        url: str = "http://localhost:8101",
+        dry_run: bool = False,
+        create_tickets: bool = True,
+        sync_targets: bool = True,
+        max_tickets: int = 25,
+        testql_bin: str = "testql",
+        testql_repo_path: str = "/home/tom/github/oqlos/testql",
+        strategy_path=None,
+    ) -> Dict[str, Any]:
+        """Discover and run all TestQL scenarios in the project."""
+        return self.testql_manager.run_all(
+            scenarios_dir=scenarios_dir,
             url=url,
             dry_run=dry_run,
             create_tickets=create_tickets,

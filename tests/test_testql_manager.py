@@ -125,3 +125,100 @@ def test_run_testql_respects_no_create_tickets(tmp_path: Path, planfile_stub: di
     assert planfile_stub["build"] == []
     assert planfile_stub["upsert"] == []
     assert planfile_stub["sync"] == []
+
+
+def test_discover_scenarios_returns_sorted_glob(tmp_path: Path) -> None:
+    from prefact.autonomous import AutonomousRefact
+
+    scenarios_dir = tmp_path / "testql-scenarios"
+    scenarios_dir.mkdir()
+    (scenarios_dir / "b.testql.toon.yaml").write_text("---\n", encoding="utf-8")
+    (scenarios_dir / "a.testql.toon.yaml").write_text("---\n", encoding="utf-8")
+    (scenarios_dir / "ignored.txt").write_text("x", encoding="utf-8")
+
+    auto = AutonomousRefact(tmp_path)
+    found = auto.testql_manager.discover_scenarios()
+
+    assert [p.name for p in found] == ["a.testql.toon.yaml", "b.testql.toon.yaml"]
+
+
+def test_run_testql_all_skips_when_no_scenarios(tmp_path: Path, planfile_stub: dict) -> None:
+    from prefact.autonomous import AutonomousRefact
+
+    auto = AutonomousRefact(tmp_path)
+
+    summary = auto.run_testql_all()
+
+    assert summary["scenarios_found"] == 0
+    assert summary["summary"]["ok"] is True
+    assert planfile_stub["run"] == []
+
+
+def test_run_testql_all_aggregates_results(tmp_path: Path, planfile_stub: dict) -> None:
+    from prefact.autonomous import AutonomousRefact
+
+    scenarios_dir = tmp_path / "testql-scenarios"
+    scenarios_dir.mkdir()
+    (scenarios_dir / "a.testql.toon.yaml").write_text("---\n", encoding="utf-8")
+    (scenarios_dir / "b.testql.toon.yaml").write_text("---\n", encoding="utf-8")
+
+    auto = AutonomousRefact(tmp_path)
+    summary = auto.run_testql_all()
+
+    assert summary["scenarios_found"] == 2
+    assert summary["summary"]["failed"] == 2
+    assert summary["summary"]["created"] == 2
+    assert summary["summary"]["ok"] is False
+    assert len(planfile_stub["run"]) == 2
+
+
+def _stub_pipeline_steps(auto, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(auto, "create_refact_config", lambda: None)
+    monkeypatch.setattr(auto, "run_examples", lambda: True)
+    monkeypatch.setattr(auto, "scan_project", lambda: None)
+    monkeypatch.setattr(auto, "update_planfile", lambda: None)
+    monkeypatch.setattr(auto, "manage_documentation", lambda: None)
+    monkeypatch.setattr(auto.scanner, "get_autonomous_limit", lambda key: 10_000)
+
+
+def test_run_autonomous_with_testql_invokes_run_all(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from prefact.autonomous import AutonomousRefact
+
+    (tmp_path / "prefact.yaml").write_text("include: []\n", encoding="utf-8")
+
+    auto = AutonomousRefact(tmp_path)
+    calls: dict = {"all": []}
+
+    _stub_pipeline_steps(auto, monkeypatch)
+    monkeypatch.setattr(
+        auto,
+        "run_testql_all",
+        lambda scenarios_dir=None: calls["all"].append(scenarios_dir) or {
+            "scenarios_found": 0,
+            "scenarios": [],
+            "summary": {"ok": True, "failed": 0, "created": 0, "skipped": 0},
+        },
+    )
+
+    assert auto.run_autonomous(skip_examples=True, with_testql=True, testql_scenarios_dir="custom") is True
+    assert calls["all"] == ["custom"]
+
+
+def test_run_autonomous_default_skips_testql(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from prefact.autonomous import AutonomousRefact
+
+    (tmp_path / "prefact.yaml").write_text("include: []\n", encoding="utf-8")
+
+    auto = AutonomousRefact(tmp_path)
+    calls: dict = {"all": 0}
+
+    _stub_pipeline_steps(auto, monkeypatch)
+
+    def fail_all(*_args, **_kwargs):
+        calls["all"] += 1
+        return {}
+
+    monkeypatch.setattr(auto, "run_testql_all", fail_all)
+
+    assert auto.run_autonomous(skip_examples=True) is True
+    assert calls["all"] == 0

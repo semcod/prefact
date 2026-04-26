@@ -19,13 +19,15 @@ from prefact.reporters import json_reporter
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
 @click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
+@click.option("--with-testql/--no-testql", "with_testql", default=False, help="Include TestQL scenarios run as final autonomous step.")
+@click.option("--testql-dir", default=None, help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).")
 @click.version_option(package_name="prefact")
-def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude) -> None:
+def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude, with_testql, testql_dir) -> None:
     """prefact – automatic Python prefactoring toolkit.
 
-    Detect, fix, and validate common code issues – especially those
+    Detect, fix, and validate common code issues - especially those
     introduced by LLMs (e.g. relative imports, unused imports).
-    
+
     Use 'prefact -a' for autonomous mode.
     """
     if autonomous:
@@ -34,7 +36,16 @@ def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude) -> None
         if exclude and any("examples" in pattern or pattern.startswith("examples") for pattern in exclude):
             auto_skip_examples = True
         # Run autonomous command directly with all options
-        ctx.invoke(autonomous_cmd, project_path=".", init_only=init_only, skip_tests=skip_tests, skip_examples=auto_skip_examples, exclude=exclude)
+        ctx.invoke(
+            autonomous_cmd,
+            project_path=".",
+            init_only=init_only,
+            skip_tests=skip_tests,
+            skip_examples=auto_skip_examples,
+            exclude=exclude,
+            with_testql=with_testql,
+            testql_dir=testql_dir,
+        )
 
 
 # ── shared options ────────────────────────────────────────────────────
@@ -179,7 +190,9 @@ rules:
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
 @click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
-def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude) -> None:
+@click.option("--with-testql/--no-testql", "with_testql", default=False, help="Include TestQL scenarios run as final autonomous step.")
+@click.option("--testql-dir", default=None, help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).")
+def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude, with_testql, testql_dir) -> None:
     """Run autonomous prefact mode (-a).
 
     Automatically initializes prefact.yaml if missing, runs examples,
@@ -202,7 +215,11 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude) 
         return
 
     # Run full autonomous process
-    success = auto.run_autonomous(skip_examples=skip_examples)
+    success = auto.run_autonomous(
+        skip_examples=skip_examples,
+        with_testql=with_testql,
+        testql_scenarios_dir=testql_dir,
+    )
 
     if not success:
         raise SystemExit(1)
@@ -252,6 +269,7 @@ def testql_cmd(
 @main.command()
 def rules() -> None:
     """List all available rules."""
+    from rich.console import Console
     from rich.table import Table
 
     from prefact.rules import get_all_rules

@@ -11,6 +11,9 @@ from typing import Any
 
 from prefact.autonomous._base import BaseManager, console
 
+DEFAULT_SCENARIOS_DIR = "testql-scenarios"
+SCENARIO_GLOB = "*.testql.toon.yaml"
+
 
 class TestQLManager(BaseManager):
     """Run TestQL DSL validation and bridge results into planfile."""
@@ -121,4 +124,92 @@ class TestQLManager(BaseManager):
         return payload
 
 
-__all__ = ["TestQLManager"]
+    def discover_scenarios(
+        self,
+        scenarios_dir: str | Path | None = None,
+    ) -> list[Path]:
+        """Return sorted list of TestQL scenarios found in the project."""
+        base = Path(scenarios_dir) if scenarios_dir else self.project_root / DEFAULT_SCENARIOS_DIR
+        if not base.is_absolute():
+            base = (self.project_root / base).resolve()
+        if not base.exists() or not base.is_dir():
+            return []
+        return sorted(base.glob(SCENARIO_GLOB))
+
+    def run_all(
+        self,
+        *,
+        scenarios_dir: str | Path | None = None,
+        url: str = "http://localhost:8101",
+        dry_run: bool = False,
+        create_tickets: bool = True,
+        sync_targets: bool = True,
+        max_tickets: int = 25,
+        testql_bin: str = "testql",
+        testql_repo_path: str | Path = "/home/tom/github/oqlos/testql",
+        strategy_path: str | Path | None = None,
+    ) -> dict[str, Any]:
+        """Run all discovered TestQL scenarios and aggregate the results."""
+        scenarios = self.discover_scenarios(scenarios_dir)
+        results: list[dict[str, Any]] = []
+
+        if not scenarios:
+            console.print(
+                "\u26a0\ufe0f No TestQL scenarios found; skipping TestQL step.",
+                style="yellow",
+            )
+            return {
+                "scenarios_found": 0,
+                "scenarios": [],
+                "summary": {
+                    "ok": True,
+                    "failed": 0,
+                    "created": 0,
+                    "skipped": 0,
+                },
+            }
+
+        aggregate_failed = 0
+        aggregate_created = 0
+        aggregate_skipped = 0
+        any_failed = False
+
+        for scenario in scenarios:
+            try:
+                payload = self.run(
+                    scenario_path=scenario,
+                    url=url,
+                    dry_run=dry_run,
+                    create_tickets=create_tickets,
+                    sync_targets=sync_targets,
+                    max_tickets=max_tickets,
+                    testql_bin=testql_bin,
+                    testql_repo_path=testql_repo_path,
+                    strategy_path=strategy_path,
+                )
+            except Exception as exc:  # pragma: no cover - resilience
+                console.print(f"\u274c TestQL error on {scenario}: {exc}", style="red")
+                results.append({"scenario": str(scenario), "error": str(exc)})
+                any_failed = True
+                continue
+
+            results.append(payload)
+            if not payload["validation"]["ok"]:
+                any_failed = True
+            aggregate_failed += int(payload["validation"].get("failed") or 0)
+            aggregate_created += int(payload["tickets"].get("created") or 0)
+            aggregate_skipped += int(payload["tickets"].get("skipped") or 0)
+
+        return {
+            "scenarios_found": len(scenarios),
+            "scenarios": results,
+            "summary": {
+                "ok": not any_failed,
+                "failed": aggregate_failed,
+                "created": aggregate_created,
+                "skipped": aggregate_skipped,
+            },
+        }
+
+
+__all__ = ["TestQLManager", "DEFAULT_SCENARIOS_DIR", "SCENARIO_GLOB"]
