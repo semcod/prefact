@@ -322,6 +322,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: auto-fix ruff formatting issues and add missing imports
 - chore(docs): update README and other documentation
 
+## [0.1.52] - 2026-04-26
+
+### Docs
+- Update README.md
+
 ## [0.1.51] - 2026-04-26
 
 ### Docs
