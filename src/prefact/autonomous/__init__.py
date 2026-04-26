@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 from prefact.autonomous.docs_manager import DocsManager
 from prefact.autonomous.project_scanner import ProjectScanner
 from prefact.autonomous.setup_manager import SetupManager
+from prefact.autonomous.testql_manager import TestQLManager
 from prefact.autonomous.todo_manager import TodoManager
 
 from ._base import console
@@ -31,6 +32,7 @@ class AutonomousRefact:
         self.scanner = ProjectScanner(self.project_root, exclude_patterns=self.exclude_patterns)
         self.todo_manager = TodoManager(self.project_root)
         self.docs_manager = DocsManager(self.project_root)
+        self.testql_manager = TestQLManager(self.project_root)
 
         # Initialize state for backward compatibility
         self.issues_found: List[Dict[str, Any]] = []
@@ -157,6 +159,32 @@ class AutonomousRefact:
     def update_changelog_md(self) -> None:
         """Update CHANGELOG.md with recent changes."""
         self.docs_manager.update_changelog_md()
+
+    def run_testql(
+        self,
+        scenario_path,
+        *,
+        url: str = "http://localhost:8101",
+        dry_run: bool = False,
+        create_tickets: bool = True,
+        sync_targets: bool = True,
+        max_tickets: int = 25,
+        testql_bin: str = "testql",
+        testql_repo_path: str = "/home/tom/github/oqlos/testql",
+        strategy_path=None,
+    ):
+        """Run TestQL DSL validation and bridge to planfile/TODO/integrations."""
+        return self.testql_manager.run(
+            scenario_path=scenario_path,
+            url=url,
+            dry_run=dry_run,
+            create_tickets=create_tickets,
+            sync_targets=sync_targets,
+            max_tickets=max_tickets,
+            testql_bin=testql_bin,
+            testql_repo_path=testql_repo_path,
+            strategy_path=strategy_path,
+        )
 
     def _print_autonomous_summary(self) -> None:
         """Print a compact summary of the autonomous run."""

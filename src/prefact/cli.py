@@ -208,6 +208,47 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude) 
         raise SystemExit(1)
 
 
+@main.command("testql")
+@click.argument("scenario_path")
+@click.option("-p", "--path", "project_path", default=".", help="Project root directory.")
+@click.option("--url", default="http://localhost:8101", help="Base API URL for TestQL.")
+@click.option("--dry-run", is_flag=True, help="Parse/validate scenario without full execution.")
+@click.option("-s", "--strategy", "strategy_path", default=None, help="Target planfile YAML (default: <project>/planfile.yaml).")
+@click.option("--create-tickets/--no-create-tickets", default=True, help="Create planfile tickets for TestQL failures.")
+@click.option("--sync/--no-sync", "sync_targets", default=True, help="Sync generated tickets to TODO.md and configured integrations.")
+@click.option("--max-tickets", default=25, type=int, show_default=True, help="Maximum tickets generated from one TestQL run.")
+@click.option("--testql-bin", default="testql", help="TestQL CLI executable name/path.")
+@click.option("--testql-repo-path", default="/home/tom/github/oqlos/testql", help="Fallback path to local TestQL repository.")
+def testql_cmd(
+    scenario_path,
+    project_path,
+    url,
+    dry_run,
+    strategy_path,
+    create_tickets,
+    sync_targets,
+    max_tickets,
+    testql_bin,
+    testql_repo_path,
+) -> None:
+    """Run TestQL DSL validation and bridge results into planfile/TODO."""
+    auto = AutonomousRefact(Path(project_path))
+    payload = auto.run_testql(
+        scenario_path=scenario_path,
+        url=url,
+        dry_run=dry_run,
+        create_tickets=create_tickets,
+        sync_targets=sync_targets,
+        max_tickets=max_tickets,
+        testql_bin=testql_bin,
+        testql_repo_path=testql_repo_path,
+        strategy_path=strategy_path,
+    )
+
+    if not payload.get("validation", {}).get("ok", True):
+        raise SystemExit(1)
+
+
 @main.command()
 def rules() -> None:
     """List all available rules."""
