@@ -336,7 +336,7 @@ class PerformanceMonitor:
 
         total_cache_operations = stats["cache_hits"] + stats["cache_misses"]
         if total_cache_operations > 0:
-            stats["cache_hit_rate"] = f"{stats['cache_hits'] / total_cache_operations}"  # type: ignore[assignment]
+            stats["cache_hit_rate"] = stats["cache_hits"] / total_cache_operations  # type: ignore[assignment]
 
         return stats
 

@@ -25,37 +25,43 @@ class DuplicateImports(BaseRule):
             return issues
 
         seen: dict[str, int] = {}
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom):
-                for alias in node.names:
-                    name = alias.asname or alias.name
-                    if name in seen:
-                        issues.append(
-                            Issue(
-                                rule_id=self.rule_id, file=path,
-                                line=node.lineno, col=node.col_offset,
-                                message=f"Duplicate import: '{name}' (first at line {seen[name]})",
-                                severity=Severity.WARNING, original=name,
-                                meta={"first_line": seen[name]},
+
+        def _collect_imports(nodes: list[ast.stmt]) -> None:
+            for node in nodes:
+                if isinstance(node, ast.ImportFrom):
+                    for alias in node.names:
+                        name = alias.asname or alias.name
+                        if name in seen:
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id, file=path,
+                                    line=node.lineno, col=node.col_offset,
+                                    message=f"Duplicate import: '{name}' (first at line {seen[name]})",
+                                    severity=Severity.WARNING, original=name,
+                                    meta={"first_line": seen[name]},
+                                )
                             )
-                        )
-                    else:
-                        seen[name] = node.lineno
-            elif isinstance(node, ast.Import):
-                for alias in node.names:
-                    name = alias.asname or alias.name.split(".")[0]
-                    if name in seen:
-                        issues.append(
-                            Issue(
-                                rule_id=self.rule_id, file=path,
-                                line=node.lineno, col=node.col_offset,
-                                message=f"Duplicate import: '{name}' (first at line {seen[name]})",
-                                severity=Severity.WARNING, original=name,
-                                meta={"first_line": seen[name]},
+                        else:
+                            seen[name] = node.lineno
+                elif isinstance(node, ast.Import):
+                    for alias in node.names:
+                        name = alias.asname or alias.name.split(".")[0]
+                        if name in seen:
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id, file=path,
+                                    line=node.lineno, col=node.col_offset,
+                                    message=f"Duplicate import: '{name}' (first at line {seen[name]})",
+                                    severity=Severity.WARNING, original=name,
+                                    meta={"first_line": seen[name]},
+                                )
                             )
-                        )
-                    else:
-                        seen[name] = node.lineno
+                        else:
+                            seen[name] = node.lineno
+
+        # Only scan top-level statements to avoid flagging try/except ImportError
+        # compatibility patterns (e.g. try: import tomllib / except: import tomli)
+        _collect_imports(list(ast.iter_child_nodes(tree)))  # type: ignore[arg-type]
         return issues
 
     def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:

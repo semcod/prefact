@@ -3,6 +3,8 @@
 Run this module to see performance comparisons for your project.
 """
 
+import argparse
+import json
 import time
 from pathlib import Path
 from typing import Dict
@@ -20,7 +22,7 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
     results = {
         "file": str(file_path),
         "file_size_bytes": len(source),
-        "lines": source.count(chr(10)) + 1,
+        "lines": source.count("\n") + 1,
         "rules": {}
     }
 
@@ -138,8 +140,6 @@ def print_benchmark_results(results: Dict) -> None:
 
 def main() -> None:
     """Run benchmark on current project."""
-    import argparse
-
     parser = argparse.ArgumentParser(description="Benchmark AST vs Ruff implementations")
     parser.add_argument("--path", default=".", help="Path to benchmark")
     args = parser.parse_args()
@@ -154,7 +154,6 @@ def main() -> None:
     print_benchmark_results(results)
 
     # Save detailed results
-    import json
     output_file = Path("benchmark_results.json")
     with open(output_file, "w") as f:
         json.dump(results, f, indent=2)

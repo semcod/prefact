@@ -1,6 +1,5 @@
 """Global cache instances and initialization."""
 
-from pathlib import Path
 from typing import Optional
 
 from .base import Cache, CONSTANT_1024

@@ -1,6 +1,5 @@
 """Tests for prefact TestQL integration via planfile API."""
 
-from __future__ import annotations
 
 import sys
 import types

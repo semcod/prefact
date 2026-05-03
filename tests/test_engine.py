@@ -1,6 +1,5 @@
 """Tests for the engine (full scan → fix → validate pipeline)."""
 
-from __future__ import annotations
 
 import textwrap
 from pathlib import Path

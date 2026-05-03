@@ -1,7 +1,5 @@
 """Global cache state and public cache initialization helpers."""
 
-from __future__ import annotations
-
 from typing import Optional
 
 from prefact.config import Config

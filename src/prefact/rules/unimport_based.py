@@ -71,7 +71,6 @@ class UnimportHelper:
         try:
             return UnimportHelper.check_file(Path(tmp_path), config)
         finally:
-            import os
             os.unlink(tmp_path)
 
     @staticmethod

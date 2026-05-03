@@ -14,7 +14,6 @@ Usage:
     python -m prefact.benchmark --threshold 2.0   # fail if any probe > 2.0s
 """
 
-from __future__ import annotations
 
 import argparse
 import sys

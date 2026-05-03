@@ -1,9 +1,7 @@
 """Base caching utilities for prefact."""
 
-import hashlib
-import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 CONSTANT_1024 = 1024
 MIN_1800 = 1800

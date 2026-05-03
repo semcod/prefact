@@ -1,7 +1,5 @@
 """Specialized cache adapters for prefact performance caching."""
 
-from __future__ import annotations
-
 import hashlib
 import json
 from pathlib import Path

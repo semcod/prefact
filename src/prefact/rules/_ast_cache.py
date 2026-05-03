@@ -5,7 +5,6 @@ scan pass.  This module caches parsed trees by content hash so the expensive
 parse is done at most once per unique source text per scan session.
 """
 
-from __future__ import annotations
 
 import ast
 import threading

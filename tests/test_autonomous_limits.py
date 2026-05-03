@@ -1,6 +1,5 @@
 """Tests for autonomous mode limits and batching."""
 
-from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

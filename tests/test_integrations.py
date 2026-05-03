@@ -8,7 +8,6 @@ This module tests the integration of various Python libraries with prefact:
 - String transformation rules
 """
 
-from __future__ import annotations
 
 import tempfile
 from pathlib import Path

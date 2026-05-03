@@ -1,4 +1,5 @@
 import ast
+import re
 from pathlib import Path
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
@@ -157,7 +158,6 @@ class UnusedImports(BaseRule):
 
     def _remove_unused_from_line(self, line: str, used_names: list[str]) -> str:
         """Remove unused names from a 'from ... import ...' line."""
-        import re
         # Match the import part after 'from ... import'
         match = re.match(r'(\s*from\s+[^\s]+\s+import\s+)(.+)', line)
         if match:
@@ -174,7 +174,6 @@ class UnusedImports(BaseRule):
 
     def _remove_unused_from_import_line(self, line: str, used_aliases: list[str]) -> str:
         """Remove unused imports from an 'import ...' line."""
-        import re
         # Match the import part after 'import'
         match = re.match(r'(\s*import\s+)(.+)', line)
         if match:
