@@ -2,218 +2,15 @@ project: /home/tom/github/semcod/prefact
 generated_from: code2llm call graph analysis
 stats:
   total_nodes: 229
-  total_edges: 229
+  total_edges: 227
   modules_count: 65
 nodes:
-  src.prefact.rules.composite_factory.register_composite_rules:
-    name: register_composite_rules
-    module: src.prefact.rules.composite_factory
-    line: 105
-    cyclomatic_complexity: 4
-    calls_out: 7
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnosticsByFile:
-    name: diagnosticsByFile
-    module: vscode-extension.src.extension
-    line: 191
-    cyclomatic_complexity: 3
-    calls_out: 7
-    calls_in: 0
-  src.prefact.cli.fix:
-    name: fix
-    module: src.prefact.cli
-    line: 99
-    cyclomatic_complexity: 2
-    calls_out: 8
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeItem.super:
-    name: super
-    module: vscode-extension.src.extension
-    line: 268
-    cyclomatic_complexity: 1
-    calls_out: 0
-    calls_in: 42
-  src.prefact.config_extended.config.ExtendedConfig.to_dict:
-    name: to_dict
-    module: src.prefact.config_extended.config
-    line: 118
+  src.prefact.rules.unimport_based.UnimportUnusedImports.__init__:
+    name: __init__
+    module: src.prefact.rules.unimport_based
+    line: 128
     cyclomatic_complexity: 1
     calls_out: 3
-    calls_in: 0
-  benchmark_ram_optimization.benchmark_with_rampreload:
-    name: benchmark_with_rampreload
-    module: benchmark_ram_optimization
-    line: 111
-    cyclomatic_complexity: 1
-    calls_out: 4
-    calls_in: 1
-  src.prefact.cli.check:
-    name: check
-    module: src.prefact.cli
-    line: 114
-    cyclomatic_complexity: 1
-    calls_out: 7
-    calls_in: 4
-  src.prefact.rules.autoflake_based.AutoflakeHelper.check_file:
-    name: check_file
-    module: src.prefact.rules.autoflake_based
-    line: 172
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 0
-  src.prefact.scanner._load_gitignore:
-    name: _load_gitignore
-    module: src.prefact.scanner
-    line: 13
-    cyclomatic_complexity: 6
-    calls_out: 5
-    calls_in: 1
-  src.prefact.rules.benchmark.main:
-    name: main
-    module: src.prefact.rules.benchmark
-    line: 139
-    cyclomatic_complexity: 1
-    calls_out: 12
-    calls_in: 0
-  src.prefact.reporters.json_reporter.dump:
-    name: dump
-    module: src.prefact.reporters.json_reporter
-    line: 53
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.isort_based.ImportSectionSeparator.__init__:
-    name: __init__
-    module: src.prefact.rules.isort_based
-    line: 259
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.file:
-    name: file
-    module: vscode-extension.src.extension
-    line: 292
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 3
-  src.prefact.autonomous.docs_manager.DocsManager.__init__:
-    name: __init__
-    module: src.prefact.autonomous.docs_manager
-    line: 16
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.import_linter_based.ImportLinterHelper.create_config:
-    name: create_config
-    module: src.prefact.rules.import_linter_based
-    line: 28
-    cyclomatic_complexity: 5
-    calls_out: 4
-    calls_in: 0
-  src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__:
-    name: __init__
-    module: src.prefact.rules.llm_generated_code
-    line: 28
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.magic_numbers.MagicNumberRule.__init__:
-    name: __init__
-    module: src.prefact.rules.magic_numbers
-    line: 28
-    cyclomatic_complexity: 1
-    calls_out: 5
-    calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeUnusedVariables.__init__:
-    name: __init__
-    module: src.prefact.rules.autoflake_based
-    line: 276
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnostic:
-    name: diagnostic
-    module: vscode-extension.src.extension
-    line: 202
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  examples.sample-project.models.Post.__post_init__:
-    name: __post_init__
-    module: examples.sample-project.models
-    line: 32
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.ruff_based.RuffHelper.fix_source:
-    name: fix_source
-    module: src.prefact.rules.ruff_based
-    line: 50
-    cyclomatic_complexity: 2
-    calls_out: 7
-    calls_in: 0
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule:
-    name: create_composite_rule
-    module: src.prefact.rules.composite_factory
-    line: 30
-    cyclomatic_complexity: 1
-    calls_out: 20
-    calls_in: 0
-  src.prefact.rules.string_concat.StringConcatToFstring.scan_file:
-    name: scan_file
-    module: src.prefact.rules.string_concat
-    line: 44
-    cyclomatic_complexity: 5
-    calls_out: 6
-    calls_in: 0
-  src.prefact.performance.cache.CacheContext.__enter__:
-    name: __enter__
-    module: src.prefact.performance.cache
-    line: 434
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.scanner._match_gitignore_pattern:
-    name: _match_gitignore_pattern
-    module: src.prefact.scanner
-    line: 30
-    cyclomatic_complexity: 12
-    calls_out: 18
-    calls_in: 2
-  examples.sample-project.utils.UtilClass.__init__:
-    name: __init__
-    module: examples.sample-project.utils
-    line: 32
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.git_hooks.GitHooks._install_hook:
-    name: _install_hook
-    module: src.prefact.git_hooks
-    line: 45
-    cyclomatic_complexity: 2
-    calls_out: 9
-    calls_in: 0
-  benchmark_ram_optimization.create_test_files:
-    name: create_test_files
-    module: benchmark_ram_optimization
-    line: 30
-    cyclomatic_complexity: 3
-    calls_out: 5
-    calls_in: 1
-  src.prefact.autonomous.todo_manager.TodoManager.__init__:
-    name: __init__
-    module: src.prefact.autonomous.todo_manager
-    line: 22
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  benchmark_ram_optimization.main:
-    name: main
-    module: benchmark_ram_optimization
-    line: 167
-    cyclomatic_complexity: 7
-    calls_out: 22
     calls_in: 0
   vscode-extension.src.extension.PrefactDiagnosticsProvider.updateWorkspaceDiagnostics:
     name: updateWorkspaceDiagnostics
@@ -222,26 +19,12 @@ nodes:
     cyclomatic_complexity: 3
     calls_out: 11
     calls_in: 1
-  examples.sample-project.cli.users:
-    name: users
-    module: examples.sample-project.cli
-    line: 51
-    cyclomatic_complexity: 2
-    calls_out: 7
-    calls_in: 0
-  src.prefact.git_hooks.install_git_hooks:
-    name: install_git_hooks
-    module: src.prefact.git_hooks
-    line: 315
-    cyclomatic_complexity: 4
-    calls_out: 9
-    calls_in: 1
-  src.prefact.logging.exceptions.RuleError.__init__:
+  src.prefact.fixer.Fixer.__init__:
     name: __init__
-    module: src.prefact.logging.exceptions
-    line: 16
-    cyclomatic_complexity: 1
-    calls_out: 2
+    module: src.prefact.fixer
+    line: 12
+    cyclomatic_complexity: 3
+    calls_out: 4
     calls_in: 0
   src.prefact.rules.unused_imports._collect_imported_names:
     name: _collect_imported_names
@@ -250,12 +33,40 @@ nodes:
     cyclomatic_complexity: 8
     calls_out: 4
     calls_in: 1
-  src.prefact.config_extended.models.ExtendedConfig.__init__:
-    name: __init__
-    module: src.prefact.config_extended.models
-    line: 12
+  examples.01-individual-rules.relative-imports.after.Processor.process:
+    name: process
+    module: examples.01-individual-rules.relative-imports.after
+    line: 25
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated:
+    name: _query_pip_outdated
+    module: src.prefact.autonomous.dependency_checker
+    line: 120
     cyclomatic_complexity: 6
+    calls_out: 10
+    calls_in: 0
+  src.prefact.rules.relative_imports._str_to_module:
+    name: _str_to_module
+    module: src.prefact.rules.relative_imports
+    line: 42
+    cyclomatic_complexity: 2
     calls_out: 4
+    calls_in: 1
+  src.prefact.performance.cache_state.get_cache:
+    name: get_cache
+    module: src.prefact.performance.cache_state
+    line: 36
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  examples.sample-project.cli.admin:
+    name: admin
+    module: examples.sample-project.cli
+    line: 45
+    cyclomatic_complexity: 1
+    calls_out: 2
     calls_in: 0
   src.prefact.rules.pylint_based.PylintStringConcat.__init__:
     name: __init__
@@ -264,12 +75,61 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.prefact.rules.strategies.ParallelScanStrategy.scan:
-    name: scan
-    module: src.prefact.rules.strategies
-    line: 41
+  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.validate:
+    name: validate
+    module: src.prefact.rules.autoflake_based
+    line: 265
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.prefact.benchmark.main:
+    name: main
+    module: src.prefact.benchmark
+    line: 249
+    cyclomatic_complexity: 7
+    calls_out: 12
+    calls_in: 0
+  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.fix:
+    name: fix
+    module: src.prefact.rules.autoflake_based
+    line: 253
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 0
+  benchmark_ram_optimization.create_test_files:
+    name: create_test_files
+    module: benchmark_ram_optimization
+    line: 30
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__:
+    name: __init__
+    module: src.prefact.autonomous.dependency_checker
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.autoflake_based.create_fixes_from_issues:
+    name: create_fixes_from_issues
+    module: src.prefact.rules.autoflake_based
+    line: 141
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.scanWorkspace:
+    name: scanWorkspace
+    module: vscode-extension.src.extension
+    line: 50
     cyclomatic_complexity: 4
     calls_out: 6
+    calls_in: 3
+  src.prefact.rules.composite_factory.register_composite_rules:
+    name: register_composite_rules
+    module: src.prefact.rules.composite_factory
+    line: 105
+    cyclomatic_complexity: 4
+    calls_out: 7
     calls_in: 0
   src.prefact.rules.relative_imports._RelativeImportFixer.leave_ImportFrom:
     name: leave_ImportFrom
@@ -278,234 +138,87 @@ nodes:
     cyclomatic_complexity: 6
     calls_out: 9
     calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.config:
-    name: config
-    module: vscode-extension.src.extension
-    line: 112
-    cyclomatic_complexity: 9
-    calls_out: 8
-    calls_in: 0
-  src.prefact.git_hooks.GitHooks._find_git_dir:
-    name: _find_git_dir
-    module: src.prefact.git_hooks
-    line: 24
-    cyclomatic_complexity: 2
-    calls_out: 5
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.range:
-    name: range
-    module: vscode-extension.src.extension
-    line: 196
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 6
-  examples.03-output-formats.sample_code.process_data:
-    name: process_data
-    module: examples.03-output-formats.sample_code
-    line: 9
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.benchmark.print_benchmark_results:
-    name: print_benchmark_results
-    module: src.prefact.rules.benchmark
-    line: 110
-    cyclomatic_complexity: 4
-    calls_out: 16
-    calls_in: 1
-  src.prefact.rules.autoflake_based.create_temp_file_with_source:
-    name: create_temp_file_with_source
-    module: src.prefact.rules.autoflake_based
-    line: 69
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 2
-  src.prefact.fixer.Fixer.__init__:
+  examples.sample-project.core.DataProcessor.__init__:
     name: __init__
-    module: src.prefact.fixer
-    line: 12
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 0
-  src.prefact.rules.unused_imports.UnusedImports.fix:
-    name: fix
-    module: src.prefact.rules.unused_imports
-    line: 56
-    cyclomatic_complexity: 7
-    calls_out: 10
-    calls_in: 0
-  src.prefact.rules.autoflake_based.validate_unused_imports:
-    name: validate_unused_imports
-    module: src.prefact.rules.autoflake_based
-    line: 155
-    cyclomatic_complexity: 5
-    calls_out: 4
-    calls_in: 1
-  src.prefact.rules.migration.add_ruff_config_to_prefact_yaml:
-    name: add_ruff_config_to_prefact_yaml
-    module: src.prefact.rules.migration
-    line: 210
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 0
-  src.prefact.rules.relative_imports.RelativeToAbsoluteImports.__init__:
-    name: __init__
-    module: src.prefact.rules.relative_imports
-    line: 114
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.config:
-    name: config
-    module: vscode-extension.src.extension
-    line: 406
-    cyclomatic_complexity: 4
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.composite_rules.CompositeImportRules.__init__:
-    name: __init__
-    module: src.prefact.rules.composite_rules
-    line: 116
-    cyclomatic_complexity: 1
-    calls_out: 4
-    calls_in: 0
-  src.prefact.autonomous.todo_manager.TodoManager._generate_current_todos:
-    name: _generate_current_todos
-    module: src.prefact.autonomous.todo_manager
-    line: 89
-    cyclomatic_complexity: 8
-    calls_out: 11
-    calls_in: 0
-  src.prefact.config_extended.models.ExtendedConfig.to_dict:
-    name: to_dict
-    module: src.prefact.config_extended.models
-    line: 35
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.registry._initialize_built_in_rules:
-    name: _initialize_built_in_rules
-    module: src.prefact.rules.registry
-    line: 206
-    cyclomatic_complexity: 1
-    calls_out: 31
-    calls_in: 0
-  examples.06-api-usage.example.batch_processing_example:
-    name: batch_processing_example
-    module: examples.06-api-usage.example
-    line: 117
-    cyclomatic_complexity: 6
-    calls_out: 19
-    calls_in: 1
-  src.prefact.performance.cache.get_hash_cache:
-    name: get_hash_cache
-    module: src.prefact.performance.cache
-    line: 301
-    cyclomatic_complexity: 2
-    calls_out: 1
-    calls_in: 1
-  src.prefact.performance.cache.CacheContext.__exit__:
-    name: __exit__
-    module: src.prefact.performance.cache
-    line: 438
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.rules.pylint_based.PprefactPylintPlugin.register:
-    name: register
-    module: src.prefact.rules.pylint_based
-    line: 231
-    cyclomatic_complexity: 1
-    calls_out: 0
-    calls_in: 1
-  examples.sample-project.utils.helper_function:
-    name: helper_function
-    module: examples.sample-project.utils
-    line: 23
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 2
-  src.prefact.rules.autoflake_based.build_autoflake_check_command:
-    name: build_autoflake_check_command
-    module: src.prefact.rules.autoflake_based
-    line: 22
-    cyclomatic_complexity: 3
-    calls_out: 3
-    calls_in: 1
-  vscode-extension.src.extension.PrefactTreeProvider.scanWorkspaceCommand:
-    name: scanWorkspaceCommand
-    module: vscode-extension.src.extension
-    line: 364
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.entries:
-    name: entries
-    module: vscode-extension.src.extension
-    line: 215
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 2
-  src.prefact.rules.registry.get_lazy_registry:
-    name: get_lazy_registry
-    module: src.prefact.rules.registry
-    line: 179
-    cyclomatic_complexity: 2
-    calls_out: 1
-    calls_in: 5
-  src.prefact.rules.mypy_based.MyPyTypeChecking.__init__:
-    name: __init__
-    module: src.prefact.rules.mypy_based
-    line: 174
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  examples.01-individual-rules.relative-imports.before.Processor.process:
-    name: process
-    module: examples.01-individual-rules.relative-imports.before
+    module: examples.sample-project.core
     line: 25
     cyclomatic_complexity: 1
     calls_out: 1
     calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnostics:
-    name: diagnostics
-    module: vscode-extension.src.extension
-    line: 194
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.rules.autoflake_based.extract_import_name:
-    name: extract_import_name
-    module: src.prefact.rules.autoflake_based
-    line: 121
-    cyclomatic_complexity: 6
+  src.prefact.autonomous.setup_manager.SetupManager.create_refact_config:
+    name: create_refact_config
+    module: src.prefact.autonomous.setup_manager
+    line: 18
+    cyclomatic_complexity: 2
     calls_out: 7
-    calls_in: 1
-  src.prefact.rules.registry.LazyRuleRegistry.get_all_rules:
-    name: get_all_rules
-    module: src.prefact.rules.registry
-    line: 153
-    cyclomatic_complexity: 3
-    calls_out: 1
-    calls_in: 10
-  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated:
-    name: _query_pip_outdated
-    module: src.prefact.autonomous.dependency_checker
-    line: 120
-    cyclomatic_complexity: 6
-    calls_out: 10
     calls_in: 0
-  examples.06-api-usage.example.run_prefact_example:
-    name: run_prefact_example
-    module: examples.06-api-usage.example
-    line: 13
-    cyclomatic_complexity: 11
-    calls_out: 28
+  src.prefact.config_extended.generator.ConfigGenerator.save_config:
+    name: save_config
+    module: src.prefact.config_extended.generator
+    line: 168
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.import_linter_based.ImportLinterIndependence.__init__:
+    name: __init__
+    module: src.prefact.rules.import_linter_based
+    line: 274
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.autoflake_based.AutoflakeHelper.fix_file:
+    name: fix_file
+    module: src.prefact.rules.autoflake_based
+    line: 202
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.file:
+    name: file
+    module: vscode-extension.src.extension
+    line: 292
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 3
+  benchmark_ram_optimization.main:
+    name: main
+    module: benchmark_ram_optimization
+    line: 167
+    cyclomatic_complexity: 7
+    calls_out: 22
+    calls_in: 0
+  src.prefact.rules.relative_imports._RelativeImportFixer._resolve:
+    name: _resolve
+    module: src.prefact.rules.relative_imports
+    line: 84
+    cyclomatic_complexity: 9
+    calls_out: 9
+    calls_in: 0
+  src.prefact.benchmark._make_inprocess_probe:
+    name: _make_inprocess_probe
+    module: src.prefact.benchmark
+    line: 125
+    cyclomatic_complexity: 1
+    calls_out: 10
     calls_in: 1
-  src.prefact.rules.registry.get_all_rules:
-    name: get_all_rules
-    module: src.prefact.rules.registry
-    line: 188
+  src.prefact.cli.check:
+    name: check
+    module: src.prefact.cli
+    line: 125
+    cyclomatic_complexity: 1
+    calls_out: 7
+    calls_in: 0
+  src.prefact.rules.relative_imports._module_to_str:
+    name: _module_to_str
+    module: src.prefact.rules.relative_imports
+    line: 31
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 3
+  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.scan_file:
+    name: scan_file
+    module: src.prefact.rules.autoflake_based
+    line: 249
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
@@ -516,82 +229,26 @@ nodes:
     cyclomatic_complexity: 2
     calls_out: 1
     calls_in: 4
-  src.prefact.rules.mypy_based.ReturnTypeInferrer._analyze_return_types:
-    name: _analyze_return_types
-    module: src.prefact.rules.mypy_based
-    line: 247
-    cyclomatic_complexity: 4
-    calls_out: 5
-    calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.fix:
-    name: fix
-    module: src.prefact.rules.autoflake_based
-    line: 253
-    cyclomatic_complexity: 3
-    calls_out: 2
-    calls_in: 0
-  src.prefact.performance.cache.cached_result:
-    name: cached_result
-    module: src.prefact.performance.cache
-    line: 323
-    cyclomatic_complexity: 1
-    calls_out: 14
-    calls_in: 0
-  examples.01-individual-rules.duplicate-imports.after.process_data:
-    name: process_data
-    module: examples.01-individual-rules.duplicate-imports.after
-    line: 9
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 1
-  src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids:
-    name: _get_enabled_rule_ids
-    module: src.prefact.performance.parallel
-    line: 194
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.scanCommand:
-    name: scanCommand
-    module: vscode-extension.src.extension
-    line: 354
-    cyclomatic_complexity: 5
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.autoflake_based.run_autoflake_command:
-    name: run_autoflake_command
-    module: src.prefact.rules.autoflake_based
-    line: 59
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 1
-  src.prefact.rules.string_concat._is_str_concat:
-    name: _is_str_concat
-    module: src.prefact.rules.string_concat
-    line: 22
-    cyclomatic_complexity: 6
-    calls_out: 7
-    calls_in: 1
-  examples.sample-project.models.User.__post_init__:
-    name: __post_init__
-    module: examples.sample-project.models
-    line: 17
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.runPrefact:
-    name: runPrefact
-    module: vscode-extension.src.extension
-    line: 111
-    cyclomatic_complexity: 9
-    calls_out: 9
-    calls_in: 4
   src.prefact.rules.string_transformations.ContextAwareStringConcat.__init__:
     name: __init__
     module: src.prefact.rules.string_transformations
     line: 453
     cyclomatic_complexity: 1
     calls_out: 2
+    calls_in: 0
+  src.prefact.cli.scan:
+    name: scan
+    module: src.prefact.cli
+    line: 98
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids:
+    name: _get_enabled_rule_ids
+    module: src.prefact.performance.parallel
+    line: 194
+    cyclomatic_complexity: 3
+    calls_out: 4
     calls_in: 0
   examples.01-individual-rules.relative-imports.before.process_user:
     name: process_user
@@ -600,145 +257,33 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeHelper.fix_file:
-    name: fix_file
-    module: src.prefact.rules.autoflake_based
-    line: 202
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  src.prefact.performance.cache.cleanup_cache:
-    name: cleanup_cache
-    module: src.prefact.performance.cache
-    line: 308
-    cyclomatic_complexity: 2
-    calls_out: 1
-    calls_in: 1
-  src.prefact.git_hooks.GitHooks.uninstall_hooks:
-    name: uninstall_hooks
-    module: src.prefact.git_hooks
-    line: 179
-    cyclomatic_complexity: 6
-    calls_out: 8
-    calls_in: 0
-  src.prefact.rules.migration.HybridScanner._load_rules:
-    name: _load_rules
-    module: src.prefact.rules.migration
-    line: 119
-    cyclomatic_complexity: 5
-    calls_out: 6
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.setInterval:
-    name: setInterval
-    module: vscode-extension.src.extension
-    line: 418
+  examples.sample-project.utils.format_name:
+    name: format_name
+    module: examples.sample-project.utils
+    line: 6
     cyclomatic_complexity: 1
     calls_out: 1
-    calls_in: 1
-  vscode-extension.src.extension.PrefactTreeProvider.activate:
-    name: activate
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.scanWorkspaceCommand:
+    name: scanWorkspaceCommand
     module: vscode-extension.src.extension
-    line: 342
-    cyclomatic_complexity: 14
-    calls_out: 20
+    line: 364
+    cyclomatic_complexity: 1
+    calls_out: 2
     calls_in: 0
-  src.prefact.rules.relative_imports._str_to_module:
-    name: _str_to_module
-    module: src.prefact.rules.relative_imports
-    line: 42
-    cyclomatic_complexity: 2
-    calls_out: 4
-    calls_in: 1
-  src.prefact.scanner.Scanner.__init__:
-    name: __init__
-    module: src.prefact.scanner
-    line: 79
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 0
-  src.prefact.rules.benchmark.benchmark_file:
-    name: benchmark_file
+  src.prefact.rules.benchmark.benchmark_project:
+    name: benchmark_project
     module: src.prefact.rules.benchmark
-    line: 15
-    cyclomatic_complexity: 6
-    calls_out: 21
+    line: 76
+    cyclomatic_complexity: 7
+    calls_out: 10
     calls_in: 1
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.updateDiagnostics:
-    name: updateDiagnostics
-    module: vscode-extension.src.extension
-    line: 157
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 2
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml:
-    name: from_yaml
-    module: src.prefact.config_extended.models
-    line: 21
-    cyclomatic_complexity: 13
-    calls_out: 24
-    calls_in: 0
-  examples.01-individual-rules.print-statements.after.process_data:
-    name: process_data
-    module: examples.01-individual-rules.print-statements.after
-    line: 3
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.performance.parallel.ParallelScanTask._calculate_file_hash:
-    name: _calculate_file_hash
-    module: src.prefact.performance.parallel
-    line: 41
-    cyclomatic_complexity: 2
-    calls_out: 4
-    calls_in: 0
-  src.prefact.performance.cache.get_cache_info:
-    name: get_cache_info
-    module: src.prefact.performance.cache
-    line: 408
-    cyclomatic_complexity: 4
-    calls_out: 7
-    calls_in: 0
-  src.prefact.logging.exceptions.PluginError.__init__:
-    name: __init__
-    module: src.prefact.logging.exceptions
-    line: 22
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.string_transformations.StringConcatToFString._is_string_concat:
-    name: _is_string_concat
-    module: src.prefact.rules.string_transformations
-    line: 186
-    cyclomatic_complexity: 2
-    calls_out: 9
-    calls_in: 0
-  src.prefact.rules.isort_based.CustomImportOrganization.__init__:
-    name: __init__
-    module: src.prefact.rules.isort_based
-    line: 326
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeHelper.fix_source:
-    name: fix_source
-    module: src.prefact.rules.autoflake_based
-    line: 213
-    cyclomatic_complexity: 2
-    calls_out: 6
-    calls_in: 0
-  src.prefact.benchmark.ScanProbe.run:
-    name: run
-    module: src.prefact.benchmark
-    line: 61
-    cyclomatic_complexity: 5
-    calls_out: 17
-    calls_in: 0
-  src.prefact.scanner.Scanner._excluded:
-    name: _excluded
-    module: src.prefact.scanner
-    line: 124
-    cyclomatic_complexity: 12
-    calls_out: 5
+  src.prefact.git_hooks.main:
+    name: main
+    module: src.prefact.git_hooks
+    line: 361
+    cyclomatic_complexity: 8
+    calls_out: 12
     calls_in: 0
   src.prefact.rules.import_linter_based.ImportLinterLayers.__init__:
     name: __init__
@@ -747,153 +292,125 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.prefact.rules.unused_imports._collect_used_names:
-    name: _collect_used_names
-    module: src.prefact.rules.unused_imports
-    line: 208
-    cyclomatic_complexity: 5
-    calls_out: 7
-    calls_in: 1
-  src.prefact.benchmark.build_prefact_suite:
-    name: build_prefact_suite
-    module: src.prefact.benchmark
-    line: 168
-    cyclomatic_complexity: 3
-    calls_out: 26
-    calls_in: 1
-  src.prefact.rules.import_linter_based.ImportLinterNoRelative.__init__:
-    name: __init__
-    module: src.prefact.rules.import_linter_based
-    line: 192
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  examples.01-individual-rules.print-statements.before.calculate:
-    name: calculate
-    module: examples.01-individual-rules.print-statements.before
-    line: 10
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.rules.autoflake_based.parse_autoflake_output:
-    name: parse_autoflake_output
-    module: src.prefact.rules.autoflake_based
-    line: 38
-    cyclomatic_complexity: 7
-    calls_out: 4
-    calls_in: 1
-  src.prefact.rules.unimport_based.UnimportHelper.fix_source:
-    name: fix_source
-    module: src.prefact.rules.unimport_based
-    line: 105
+  examples.sample-project.utils.validate_email:
+    name: validate_email
+    module: examples.sample-project.utils
+    line: 13
     cyclomatic_complexity: 2
-    calls_out: 7
-    calls_in: 0
-  src.prefact.rules.importchecker_based.ImportOptimizer._count_usage:
-    name: _count_usage
-    module: src.prefact.rules.importchecker_based
-    line: 453
+    calls_out: 3
+    calls_in: 1
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.runPrefact:
+    name: runPrefact
+    module: vscode-extension.src.extension
+    line: 111
+    cyclomatic_complexity: 9
+    calls_out: 9
+    calls_in: 4
+  src.prefact.performance.cache.get_hash_cache:
+    name: get_hash_cache
+    module: src.prefact.performance.cache
+    line: 301
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  src.prefact.rules.string_concat.StringConcatToFstring.scan_file:
+    name: scan_file
+    module: src.prefact.rules.string_concat
+    line: 44
     cyclomatic_complexity: 5
+    calls_out: 6
+    calls_in: 0
+  examples.01-individual-rules.print-statements.before.process_data:
+    name: process_data
+    module: examples.01-individual-rules.print-statements.before
+    line: 3
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeItem.super:
+    name: super
+    module: vscode-extension.src.extension
+    line: 268
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 42
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.config:
+    name: config
+    module: vscode-extension.src.extension
+    line: 112
+    cyclomatic_complexity: 9
     calls_out: 8
     calls_in: 0
-  src.prefact.rules.autoflake_based.create_issues_from_results:
-    name: create_issues_from_results
-    module: src.prefact.rules.autoflake_based
-    line: 99
-    cyclomatic_complexity: 3
-    calls_out: 3
-    calls_in: 1
-  examples.run_examples.find_examples:
-    name: find_examples
-    module: examples.run_examples
-    line: 54
-    cyclomatic_complexity: 4
-    calls_out: 5
-    calls_in: 1
-  benchmark_ram_optimization.run_benchmark:
-    name: run_benchmark
-    module: benchmark_ram_optimization
-    line: 122
-    cyclomatic_complexity: 1
-    calls_out: 16
-    calls_in: 1
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.scanWorkspace:
-    name: scanWorkspace
-    module: vscode-extension.src.extension
-    line: 50
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 3
-  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.scan_file:
-    name: scan_file
-    module: src.prefact.rules.autoflake_based
-    line: 249
+  src.prefact.rules.registry.get_rule:
+    name: get_rule
+    module: src.prefact.rules.registry
+    line: 193
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
-  src.prefact.rules.autoflake_based.build_autoflake_fix_command:
-    name: build_autoflake_fix_command
-    module: src.prefact.rules.autoflake_based
-    line: 78
-    cyclomatic_complexity: 5
-    calls_out: 7
-    calls_in: 1
-  src.prefact.rules.relative_imports._module_to_str:
-    name: _module_to_str
-    module: src.prefact.rules.relative_imports
-    line: 31
-    cyclomatic_complexity: 4
-    calls_out: 3
-    calls_in: 3
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.fixFile:
-    name: fixFile
-    module: vscode-extension.src.extension
-    line: 70
-    cyclomatic_complexity: 3
-    calls_out: 7
-    calls_in: 5
-  src.prefact.performance.cache_state.get_cache:
-    name: get_cache
-    module: src.prefact.performance.cache_state
-    line: 36
-    cyclomatic_complexity: 2
+  src.prefact.performance.cache.Cache.set:
+    name: set
+    module: src.prefact.performance.cache
+    line: 67
+    cyclomatic_complexity: 1
     calls_out: 1
-    calls_in: 1
-  src.prefact.plugins.PluginManager._discover_entry_point_plugins:
-    name: _discover_entry_point_plugins
-    module: src.prefact.plugins
-    line: 119
+    calls_in: 13
+  src.prefact.git_hooks.GitHooks.uninstall_hooks:
+    name: uninstall_hooks
+    module: src.prefact.git_hooks
+    line: 179
     cyclomatic_complexity: 6
-    calls_out: 7
+    calls_out: 8
     calls_in: 0
-  src.prefact.rules.autoflake_based.create_fixes_from_issues:
-    name: create_fixes_from_issues
-    module: src.prefact.rules.autoflake_based
-    line: 141
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 1
-  examples.06-api-usage.example.custom_rule_example:
-    name: custom_rule_example
-    module: examples.06-api-usage.example
-    line: 69
-    cyclomatic_complexity: 4
-    calls_out: 16
-    calls_in: 1
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.reject:
-    name: reject
-    module: vscode-extension.src.extension
-    line: 152
+  src.prefact.performance.cache.CacheContext.__enter__:
+    name: __enter__
+    module: src.prefact.performance.cache
+    line: 434
     cyclomatic_complexity: 1
     calls_out: 1
-    calls_in: 3
-  project.map.toon.open:
-    name: open
-    module: project.map.toon
-    line: 95772
-    cyclomatic_complexity: 0
-    calls_out: 0
-    calls_in: 22
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.getChildren:
+    name: getChildren
+    module: vscode-extension.src.extension
+    line: 287
+    cyclomatic_complexity: 5
+    calls_out: 13
+    calls_in: 0
+  src.prefact.rules.benchmark.main:
+    name: main
+    module: src.prefact.rules.benchmark
+    line: 139
+    cyclomatic_complexity: 1
+    calls_out: 12
+    calls_in: 0
+  src.prefact.rules.magic_numbers.MagicNumberRule.__init__:
+    name: __init__
+    module: src.prefact.rules.magic_numbers
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  src.prefact.rules.unimport_based.UnimportStarImports.__init__:
+    name: __init__
+    module: src.prefact.rules.unimport_based
+    line: 309
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.document:
+    name: document
+    module: vscode-extension.src.extension
+    line: 369
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 0
+  src.prefact.plugins.PluginManager.__init__:
+    name: __init__
+    module: src.prefact.plugins
+    line: 92
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 0
   src.prefact.performance.cache.clear_cache:
     name: clear_cache
     module: src.prefact.performance.cache
@@ -901,12 +418,12 @@ nodes:
     cyclomatic_complexity: 5
     calls_out: 5
     calls_in: 0
-  src.prefact.rules.registry.LazyRuleRegistry._load_module:
-    name: _load_module
-    module: src.prefact.rules.registry
-    line: 120
-    cyclomatic_complexity: 3
-    calls_out: 2
+  src.prefact.rules.strategies.ParallelScanStrategy.scan:
+    name: scan
+    module: src.prefact.rules.strategies
+    line: 41
+    cyclomatic_complexity: 4
+    calls_out: 6
     calls_in: 0
   examples.01-individual-rules.relative-imports.after.process_user:
     name: process_user
@@ -915,13 +432,118 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
-  src.prefact.engine.RefactoringEngine._preload_sources:
-    name: _preload_sources
-    module: src.prefact.engine
-    line: 121
-    cyclomatic_complexity: 9
-    calls_out: 10
+  src.prefact.rules.import_linter_based.ImportLinterHelper.create_config:
+    name: create_config
+    module: src.prefact.rules.import_linter_based
+    line: 28
+    cyclomatic_complexity: 5
+    calls_out: 4
     calls_in: 0
+  src.prefact.rules.composite_rules.CompositeImportRules.__init__:
+    name: __init__
+    module: src.prefact.rules.composite_rules
+    line: 116
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 0
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule:
+    name: create_composite_rule
+    module: src.prefact.rules.composite_factory
+    line: 30
+    cyclomatic_complexity: 1
+    calls_out: 20
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.fixWorkspaceCommand:
+    name: fixWorkspaceCommand
+    module: vscode-extension.src.extension
+    line: 378
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers:
+    name: _load_allowed_numbers
+    module: src.prefact.rules.magic_numbers
+    line: 38
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.isort_based.CustomImportOrganization.__init__:
+    name: __init__
+    module: src.prefact.rules.isort_based
+    line: 326
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.string_transformations.StringConcatToFString._is_string_concat:
+    name: _is_string_concat
+    module: src.prefact.rules.string_transformations
+    line: 186
+    cyclomatic_complexity: 2
+    calls_out: 9
+    calls_in: 0
+  src.prefact.config_extended.models.ExtendedConfig.__init__:
+    name: __init__
+    module: src.prefact.config_extended.models
+    line: 12
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  examples.03-output-formats.sample_code.calculate_sum:
+    name: calculate_sum
+    module: examples.03-output-formats.sample_code
+    line: 15
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml:
+    name: from_yaml
+    module: src.prefact.config_extended.models
+    line: 21
+    cyclomatic_complexity: 13
+    calls_out: 27
+    calls_in: 0
+  benchmark_ram_optimization.benchmark_without_rampreload:
+    name: benchmark_without_rampreload
+    module: benchmark_ram_optimization
+    line: 69
+    cyclomatic_complexity: 1
+    calls_out: 14
+    calls_in: 1
+  src.prefact.rules.autoflake_based.extract_import_name:
+    name: extract_import_name
+    module: src.prefact.rules.autoflake_based
+    line: 121
+    cyclomatic_complexity: 6
+    calls_out: 7
+    calls_in: 1
+  examples.01-individual-rules.print-statements.before.calculate:
+    name: calculate
+    module: examples.01-individual-rules.print-statements.before
+    line: 10
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.showOutput:
+    name: showOutput
+    module: vscode-extension.src.extension
+    line: 235
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 2
+  src.prefact.autonomous.todo_manager.TodoManager._generate_current_todos:
+    name: _generate_current_todos
+    module: src.prefact.autonomous.todo_manager
+    line: 89
+    cyclomatic_complexity: 8
+    calls_out: 11
+    calls_in: 0
+  examples.sample-project.utils.helper_function:
+    name: helper_function
+    module: examples.sample-project.utils
+    line: 23
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
   examples.01-individual-rules.string-concat.after.format_data:
     name: format_data
     module: examples.01-individual-rules.string-concat.after
@@ -929,38 +551,94 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 0
     calls_in: 2
-  src.prefact.plugins.PluginManager._discover_local_plugins:
-    name: _discover_local_plugins
-    module: src.prefact.plugins
-    line: 143
-    cyclomatic_complexity: 4
-    calls_out: 14
-    calls_in: 0
-  src.prefact.performance.parallel.ParallelScanTask.execute:
-    name: execute
-    module: src.prefact.performance.parallel
-    line: 49
-    cyclomatic_complexity: 4
-    calls_out: 10
-    calls_in: 0
-  src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool:
-    name: _scan_with_process_pool
-    module: src.prefact.performance.parallel
-    line: 158
-    cyclomatic_complexity: 5
-    calls_out: 9
-    calls_in: 0
-  src.prefact.rules.importchecker_based.ImportDependencyAnalysis.__init__:
+  src.prefact.rules.unimport_based.UnimportAll.__init__:
     name: __init__
-    module: src.prefact.rules.importchecker_based
-    line: 267
+    module: src.prefact.rules.unimport_based
+    line: 370
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.prefact.config_extended.generator.ConfigGenerator.save_config:
-    name: save_config
-    module: src.prefact.config_extended.generator
-    line: 168
+  src.prefact.performance.cache.cached_file_operation:
+    name: cached_file_operation
+    module: src.prefact.performance.cache
+    line: 353
+    cyclomatic_complexity: 1
+    calls_out: 16
+    calls_in: 0
+  src.prefact.git_hooks.install_git_hooks:
+    name: install_git_hooks
+    module: src.prefact.git_hooks
+    line: 315
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 1
+  src.prefact.rules.unused_imports.UnusedImports.fix:
+    name: fix
+    module: src.prefact.rules.unused_imports
+    line: 56
+    cyclomatic_complexity: 7
+    calls_out: 10
+    calls_in: 0
+  src.prefact.rules.import_linter_based.generate_import_linter_config:
+    name: generate_import_linter_config
+    module: src.prefact.rules.import_linter_based
+    line: 409
+    cyclomatic_complexity: 7
+    calls_out: 7
+    calls_in: 0
+  project.map.toon.check:
+    name: check
+    module: project.map.toon
+    line: 96352
+    cyclomatic_complexity: 0
+    calls_out: 0
+    calls_in: 4
+  src.prefact.rules.migration.HybridScanner._load_rules:
+    name: _load_rules
+    module: src.prefact.rules.migration
+    line: 119
+    cyclomatic_complexity: 5
+    calls_out: 6
+    calls_in: 0
+  src.prefact.rules.autoflake_based.validate_unused_imports:
+    name: validate_unused_imports
+    module: src.prefact.rules.autoflake_based
+    line: 155
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 1
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.getSeverity:
+    name: getSeverity
+    module: vscode-extension.src.extension
+    line: 222
+    cyclomatic_complexity: 5
+    calls_out: 0
+    calls_in: 8
+  examples.06-api-usage.example.custom_rule_example:
+    name: custom_rule_example
+    module: examples.06-api-usage.example
+    line: 69
+    cyclomatic_complexity: 4
+    calls_out: 16
+    calls_in: 1
+  examples.02-multiple-rules.messy_module.process_users:
+    name: process_users
+    module: examples.02-multiple-rules.messy_module
+    line: 16
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  src.prefact.engine.RefactoringEngine._preload_sources:
+    name: _preload_sources
+    module: src.prefact.engine
+    line: 121
+    cyclomatic_complexity: 9
+    calls_out: 10
+    calls_in: 0
+  src.prefact.autonomous.todo_manager.TodoManager.__init__:
+    name: __init__
+    module: src.prefact.autonomous.todo_manager
+    line: 22
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
@@ -971,90 +649,76 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  examples.03-output-formats.sample_code.calculate_sum:
-    name: calculate_sum
-    module: examples.03-output-formats.sample_code
-    line: 15
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  examples.sample-project.core.DataProcessor.__init__:
+  src.prefact.rules.composite_rules.CompositeUnusedImports.__init__:
     name: __init__
-    module: examples.sample-project.core
-    line: 25
+    module: src.prefact.rules.composite_rules
+    line: 28
     cyclomatic_complexity: 1
-    calls_out: 1
+    calls_out: 4
     calls_in: 0
-  src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule:
-    name: create_hybrid_rule
-    module: src.prefact.rules.migration
-    line: 77
-    cyclomatic_complexity: 2
-    calls_out: 16
-    calls_in: 0
-  src.prefact.rules.benchmark.benchmark_project:
-    name: benchmark_project
-    module: src.prefact.rules.benchmark
-    line: 76
-    cyclomatic_complexity: 7
-    calls_out: 10
-    calls_in: 1
-  src.prefact.rules.import_linter_based.generate_import_linter_config:
-    name: generate_import_linter_config
-    module: src.prefact.rules.import_linter_based
-    line: 409
-    cyclomatic_complexity: 7
-    calls_out: 7
-    calls_in: 0
-  benchmark_ram_optimization.benchmark_without_rampreload:
-    name: benchmark_without_rampreload
-    module: benchmark_ram_optimization
-    line: 69
-    cyclomatic_complexity: 1
-    calls_out: 14
-    calls_in: 1
-  src.prefact.plugins.PluginManager.load_plugin:
-    name: load_plugin
-    module: src.prefact.plugins
-    line: 181
-    cyclomatic_complexity: 10
-    calls_out: 15
-    calls_in: 0
-  src.prefact.rules.mypy_based.MyPyMissingReturnType.__init__:
-    name: __init__
-    module: src.prefact.rules.mypy_based
-    line: 99
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.severity:
-    name: severity
-    module: vscode-extension.src.extension
-    line: 201
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.cli.scan:
-    name: scan
-    module: src.prefact.cli
-    line: 87
-    cyclomatic_complexity: 1
-    calls_out: 5
-    calls_in: 0
-  examples.02-multiple-rules.messy_module.DataProcessor.__init__:
-    name: __init__
+  examples.02-multiple-rules.messy_module.DataProcessor.process:
+    name: process
     module: examples.02-multiple-rules.messy_module
-    line: 57
+    line: 62
     cyclomatic_complexity: 1
-    calls_out: 1
+    calls_out: 4
     calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.__init__:
+  src.prefact.rules.composite_rules.CompositeTypeChecking.__init__:
     name: __init__
-    module: src.prefact.rules.autoflake_based
-    line: 234
+    module: src.prefact.rules.composite_rules
+    line: 210
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.setInterval:
+    name: setInterval
+    module: vscode-extension.src.extension
+    line: 418
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.prefact.git_hooks.PreCommitConfig.install:
+    name: install
+    module: src.prefact.git_hooks
+    line: 289
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 0
+  src.prefact.performance.parallel.ParallelScanTask.execute:
+    name: execute
+    module: src.prefact.performance.parallel
+    line: 49
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  src.prefact.rules.benchmark.benchmark_file:
+    name: benchmark_file
+    module: src.prefact.rules.benchmark
+    line: 15
+    cyclomatic_complexity: 6
+    calls_out: 21
+    calls_in: 1
+  src.prefact.config_extended.utils.deep_merge:
+    name: deep_merge
+    module: src.prefact.config_extended.utils
+    line: 4
+    cyclomatic_complexity: 5
+    calls_out: 5
+    calls_in: 2
+  src.prefact.rules.importchecker_based.ImportDependencyAnalysis.__init__:
+    name: __init__
+    module: src.prefact.rules.importchecker_based
+    line: 267
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.git_hooks.uninstall_git_hooks:
+    name: uninstall_git_hooks
+    module: src.prefact.git_hooks
+    line: 335
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 1
   src.prefact.reporters.json_reporter.to_dict:
     name: to_dict
     module: src.prefact.reporters.json_reporter
@@ -1062,41 +726,34 @@ nodes:
     cyclomatic_complexity: 4
     calls_out: 3
     calls_in: 1
-  vscode-extension.src.extension.PrefactTreeProvider.getChildren:
-    name: getChildren
-    module: vscode-extension.src.extension
-    line: 287
-    cyclomatic_complexity: 5
-    calls_out: 13
-    calls_in: 0
-  src.prefact.validator.Validator.__init__:
+  src.prefact.logging.exceptions.PluginError.__init__:
     name: __init__
-    module: src.prefact.validator
-    line: 12
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.fixWorkspaceCommand:
-    name: fixWorkspaceCommand
-    module: vscode-extension.src.extension
-    line: 378
+    module: src.prefact.logging.exceptions
+    line: 22
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
-  src.prefact.autonomous.setup_manager.SetupManager.create_refact_config:
-    name: create_refact_config
-    module: src.prefact.autonomous.setup_manager
-    line: 18
-    cyclomatic_complexity: 2
-    calls_out: 7
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.resolve:
-    name: resolve
-    module: vscode-extension.src.extension
-    line: 136
-    cyclomatic_complexity: 2
-    calls_out: 0
+  src.prefact.rules.string_concat._flatten_add:
+    name: _flatten_add
+    module: src.prefact.rules.string_concat
+    line: 32
+    cyclomatic_complexity: 3
+    calls_out: 4
     calls_in: 3
+  src.prefact.benchmark.ScanProbe.run:
+    name: run
+    module: src.prefact.benchmark
+    line: 61
+    cyclomatic_complexity: 5
+    calls_out: 17
+    calls_in: 0
+  src.prefact.autonomous.docs_manager.DocsManager.__init__:
+    name: __init__
+    module: src.prefact.autonomous.docs_manager
+    line: 16
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
   vscode-extension.src.extension.PrefactTreeProvider.refresh:
     name: refresh
     module: vscode-extension.src.extension
@@ -1111,20 +768,363 @@ nodes:
     cyclomatic_complexity: 2
     calls_out: 18
     calls_in: 0
-  src.prefact.rules.unimport_based.UnimportUnusedImports.__init__:
-    name: __init__
+  src.prefact.rules.unimport_based.UnimportHelper.fix_source:
+    name: fix_source
     module: src.prefact.rules.unimport_based
-    line: 128
+    line: 105
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule:
+    name: create_hybrid_rule
+    module: src.prefact.rules.migration
+    line: 77
+    cyclomatic_complexity: 2
+    calls_out: 16
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnostics:
+    name: diagnostics
+    module: vscode-extension.src.extension
+    line: 194
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.config:
+    name: config
+    module: vscode-extension.src.extension
+    line: 406
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.scanFile:
+    name: scanFile
+    module: vscode-extension.src.extension
+    line: 31
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 5
+  src.prefact.rules.benchmark.print_benchmark_results:
+    name: print_benchmark_results
+    module: src.prefact.rules.benchmark
+    line: 110
+    cyclomatic_complexity: 4
+    calls_out: 16
+    calls_in: 1
+  src.prefact.rules.autoflake_based.AutoflakeUnusedVariables.__init__:
+    name: __init__
+    module: src.prefact.rules.autoflake_based
+    line: 276
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.registry._initialize_built_in_rules:
+    name: _initialize_built_in_rules
+    module: src.prefact.rules.registry
+    line: 206
+    cyclomatic_complexity: 1
+    calls_out: 31
+    calls_in: 0
+  examples.sample-project.models.load_users_from_file:
+    name: load_users_from_file
+    module: examples.sample-project.models
+    line: 54
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 0
+  examples.01-individual-rules.print-statements.after.calculate:
+    name: calculate
+    module: examples.01-individual-rules.print-statements.after
+    line: 10
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.prefact.rules.autoflake_based.parse_autoflake_output:
+    name: parse_autoflake_output
+    module: src.prefact.rules.autoflake_based
+    line: 38
+    cyclomatic_complexity: 7
+    calls_out: 4
+    calls_in: 1
+  src.prefact.rules.autoflake_based.AutoflakeHelper.fix_source:
+    name: fix_source
+    module: src.prefact.rules.autoflake_based
+    line: 213
+    cyclomatic_complexity: 2
+    calls_out: 6
+    calls_in: 0
+  src.prefact.rules.registry.LazyRuleRegistry._load_module:
+    name: _load_module
+    module: src.prefact.rules.registry
+    line: 120
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.importchecker_based.ImportOptimizer._count_usage:
+    name: _count_usage
+    module: src.prefact.rules.importchecker_based
+    line: 453
+    cyclomatic_complexity: 5
+    calls_out: 8
+    calls_in: 0
+  Taskfile.print:
+    name: print
+    module: Taskfile
+    line: 185
+    cyclomatic_complexity: 0
+    calls_out: 0
+    calls_in: 133
+  src.prefact.rules.autoflake_based.create_temp_file_with_source:
+    name: create_temp_file_with_source
+    module: src.prefact.rules.autoflake_based
+    line: 69
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 2
+  src.prefact.scanner._load_gitignore:
+    name: _load_gitignore
+    module: src.prefact.scanner
+    line: 13
+    cyclomatic_complexity: 6
+    calls_out: 5
+    calls_in: 1
+  src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__:
+    name: __init__
+    module: src.prefact.rules.llm_generated_code
+    line: 28
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.prefact.git_hooks.uninstall_git_hooks:
-    name: uninstall_git_hooks
-    module: src.prefact.git_hooks
-    line: 335
+  src.prefact.reporters.json_reporter.dump:
+    name: dump
+    module: src.prefact.reporters.json_reporter
+    line: 53
     cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.pylint_based.PylintPrintStatements.__init__:
+    name: __init__
+    module: src.prefact.rules.pylint_based
+    line: 87
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  examples.01-individual-rules.unused-imports.before.read_file:
+    name: read_file
+    module: examples.01-individual-rules.unused-imports.before
+    line: 22
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.autoflake_based.create_issues_from_results:
+    name: create_issues_from_results
+    module: src.prefact.rules.autoflake_based
+    line: 99
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 1
+  src.prefact.performance.cache.cached_result:
+    name: cached_result
+    module: src.prefact.performance.cache
+    line: 323
+    cyclomatic_complexity: 1
+    calls_out: 14
+    calls_in: 0
+  src.prefact.rules.migration.PerformanceProfiler.compare_implementations:
+    name: compare_implementations
+    module: src.prefact.rules.migration
+    line: 171
+    cyclomatic_complexity: 5
+    calls_out: 8
+    calls_in: 0
+  src.prefact.rules.mypy_based.MyPyTypeChecking.__init__:
+    name: __init__
+    module: src.prefact.rules.mypy_based
+    line: 174
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  project.map.toon.open:
+    name: open
+    module: project.map.toon
+    line: 95773
+    cyclomatic_complexity: 0
+    calls_out: 0
+    calls_in: 22
+  vscode-extension.src.extension.PrefactTreeProvider.onSave:
+    name: onSave
+    module: vscode-extension.src.extension
+    line: 405
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 0
+  examples.01-individual-rules.unused-imports.after.read_file:
+    name: read_file
+    module: examples.01-individual-rules.unused-imports.after
+    line: 22
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  examples.sample-project.utils.UtilClass.__init__:
+    name: __init__
+    module: examples.sample-project.utils
+    line: 32
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  examples.06-api-usage.example.main:
+    name: main
+    module: examples.06-api-usage.example
+    line: 158
+    cyclomatic_complexity: 4
+    calls_out: 11
+    calls_in: 0
+  src.prefact.plugins.PluginManager._discover_entry_point_plugins:
+    name: _discover_entry_point_plugins
+    module: src.prefact.plugins
+    line: 119
+    cyclomatic_complexity: 6
+    calls_out: 7
+    calls_in: 0
+  src.prefact.git_hooks.GitHooks._install_hook:
+    name: _install_hook
+    module: src.prefact.git_hooks
+    line: 45
+    cyclomatic_complexity: 2
+    calls_out: 9
+    calls_in: 0
+  src.prefact.logging.exceptions.RuleError.__init__:
+    name: __init__
+    module: src.prefact.logging.exceptions
+    line: 16
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  examples.sample-project.cli.users:
+    name: users
+    module: examples.sample-project.cli
+    line: 51
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  src.prefact.rules.registry.LazyRuleRegistry.get_all_rules:
+    name: get_all_rules
+    module: src.prefact.rules.registry
+    line: 153
+    cyclomatic_complexity: 3
+    calls_out: 1
+    calls_in: 10
+  src.prefact.benchmark.build_prefact_suite:
+    name: build_prefact_suite
+    module: src.prefact.benchmark
+    line: 168
+    cyclomatic_complexity: 3
+    calls_out: 26
+    calls_in: 1
+  src.prefact.rules.registry.get_lazy_registry:
+    name: get_lazy_registry
+    module: src.prefact.rules.registry
+    line: 179
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 5
+  src.prefact.git_hooks.list_git_hooks:
+    name: list_git_hooks
+    module: src.prefact.git_hooks
+    line: 346
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 1
+  src.prefact.rules.ruff_based.RuffHelper.fix_source:
+    name: fix_source
+    module: src.prefact.rules.ruff_based
+    line: 50
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  src.prefact.rules.unused_imports._collect_used_names:
+    name: _collect_used_names
+    module: src.prefact.rules.unused_imports
+    line: 208
+    cyclomatic_complexity: 5
+    calls_out: 7
+    calls_in: 1
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.updateDiagnostics:
+    name: updateDiagnostics
+    module: vscode-extension.src.extension
+    line: 157
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 2
+  benchmark_ram_optimization.benchmark_with_rampreload:
+    name: benchmark_with_rampreload
+    module: benchmark_ram_optimization
+    line: 111
+    cyclomatic_complexity: 1
     calls_out: 4
     calls_in: 1
+  vscode-extension.src.extension.PrefactTreeProvider.scanCommand:
+    name: scanCommand
+    module: vscode-extension.src.extension
+    line: 354
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.fixCommand:
+    name: fixCommand
+    module: vscode-extension.src.extension
+    line: 368
+    cyclomatic_complexity: 5
+    calls_out: 3
+    calls_in: 0
+  examples.01-individual-rules.print-statements.after.process_data:
+    name: process_data
+    module: examples.01-individual-rules.print-statements.after
+    line: 3
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.severity:
+    name: severity
+    module: vscode-extension.src.extension
+    line: 201
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  examples.sample-project.models.User.__post_init__:
+    name: __post_init__
+    module: examples.sample-project.models
+    line: 17
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  vscode-extension.src.extension.PrefactTreeProvider.activate:
+    name: activate
+    module: vscode-extension.src.extension
+    line: 342
+    cyclomatic_complexity: 14
+    calls_out: 20
+    calls_in: 0
+  src.prefact.config_extended.models.ExtendedConfig.to_dict:
+    name: to_dict
+    module: src.prefact.config_extended.models
+    line: 46
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.relative_imports.RelativeToAbsoluteImports.__init__:
+    name: __init__
+    module: src.prefact.rules.relative_imports
+    line: 114
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.scanner.Scanner.__init__:
+    name: __init__
+    module: src.prefact.scanner
+    line: 79
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 0
   src.prefact.rules.isort_based.ISortHelper._find_import_blocks:
     name: _find_import_blocks
     module: src.prefact.rules.isort_based
@@ -1132,18 +1132,123 @@ nodes:
     cyclomatic_complexity: 9
     calls_out: 12
     calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.document:
-    name: document
-    module: vscode-extension.src.extension
-    line: 369
+  src.prefact.autonomous.project_scanner.ProjectScanner.__init__:
+    name: __init__
+    module: src.prefact.autonomous.project_scanner
+    line: 17
     cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile:
+    name: update_planfile
+    module: src.prefact.autonomous.docs_manager
+    line: 21
+    cyclomatic_complexity: 27
+    calls_out: 41
+    calls_in: 0
+  src.prefact.rules.unimport_based.UnimportDuplicateImports.__init__:
+    name: __init__
+    module: src.prefact.rules.unimport_based
+    line: 223
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.config_extended.config.ExtendedConfig.__init__:
+    name: __init__
+    module: src.prefact.config_extended.config
+    line: 16
+    cyclomatic_complexity: 10
+    calls_out: 5
+    calls_in: 0
+  src.prefact.rules.sorted_imports._sort_key:
+    name: _sort_key
+    module: src.prefact.rules.sorted_imports
+    line: 21
+    cyclomatic_complexity: 6
+    calls_out: 5
+    calls_in: 1
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.fixFile:
+    name: fixFile
+    module: vscode-extension.src.extension
+    line: 70
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 5
+  src.prefact.plugins.PluginManager._discover_local_plugins:
+    name: _discover_local_plugins
+    module: src.prefact.plugins
+    line: 143
+    cyclomatic_complexity: 4
+    calls_out: 14
+    calls_in: 0
+  examples.sample-project.models.Post.__post_init__:
+    name: __post_init__
+    module: examples.sample-project.models
+    line: 32
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.fixWorkspace:
+    name: fixWorkspace
+    module: vscode-extension.src.extension
+    line: 92
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 2
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnosticsByFile:
+    name: diagnosticsByFile
+    module: vscode-extension.src.extension
+    line: 191
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 0
+  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__:
+    name: __init__
+    module: examples.04-custom-rules.custom_rules.no_todo_rule
+    line: 20
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.cli.fix:
+    name: fix
+    module: src.prefact.cli
+    line: 110
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.diagnostic:
+    name: diagnostic
+    module: vscode-extension.src.extension
+    line: 202
+    cyclomatic_complexity: 1
     calls_out: 1
     calls_in: 0
-  examples.02-multiple-rules.messy_module.DataProcessor.process:
-    name: process
-    module: examples.02-multiple-rules.messy_module
-    line: 62
+  vscode-extension.src.extension.PrefactTreeProvider.fileIssues:
+    name: fileIssues
+    module: vscode-extension.src.extension
+    line: 315
     cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  src.prefact.rules.isort_based.ISortedImports.__init__:
+    name: __init__
+    module: src.prefact.rules.isort_based
+    line: 171
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.autoflake_based.build_autoflake_check_command:
+    name: build_autoflake_check_command
+    module: src.prefact.rules.autoflake_based
+    line: 22
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 1
+  src.prefact.performance.parallel.ParallelScanTask._calculate_file_hash:
+    name: _calculate_file_hash
+    module: src.prefact.performance.parallel
+    line: 41
+    cyclomatic_complexity: 2
     calls_out: 4
     calls_in: 0
   src.prefact.rules.llm_hallucinations.LLMHallucinationRule.__init__:
@@ -1153,40 +1258,12 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.executablePath:
-    name: executablePath
-    module: vscode-extension.src.extension
-    line: 113
-    cyclomatic_complexity: 9
-    calls_out: 8
-    calls_in: 0
-  examples.run_examples.main:
-    name: main
-    module: examples.run_examples
-    line: 65
-    cyclomatic_complexity: 8
-    calls_out: 25
-    calls_in: 0
-  src.prefact.autonomous.project_scanner.ProjectScanner.__init__:
-    name: __init__
-    module: src.prefact.autonomous.project_scanner
-    line: 17
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  src.prefact.cli._output:
-    name: _output
-    module: src.prefact.cli
-    line: 233
-    cyclomatic_complexity: 4
-    calls_out: 8
-    calls_in: 3
-  examples.01-individual-rules.print-statements.after.calculate:
-    name: calculate
-    module: examples.01-individual-rules.print-statements.after
-    line: 10
-    cyclomatic_complexity: 1
-    calls_out: 1
+  src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool:
+    name: _scan_with_process_pool
+    module: src.prefact.performance.parallel
+    line: 158
+    cyclomatic_complexity: 5
+    calls_out: 9
     calls_in: 0
   examples.sample-project.core.process_data:
     name: process_data
@@ -1195,369 +1272,12 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 2
     calls_in: 0
-  src.prefact.rules.sorted_imports._sort_key:
-    name: _sort_key
-    module: src.prefact.rules.sorted_imports
-    line: 21
-    cyclomatic_complexity: 6
-    calls_out: 5
-    calls_in: 1
-  src.prefact.performance.cache.Cache.set:
-    name: set
-    module: src.prefact.performance.cache
-    line: 67
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 12
-  src.prefact.config_extended.config.ExtendedConfig.__init__:
-    name: __init__
-    module: src.prefact.config_extended.config
-    line: 16
-    cyclomatic_complexity: 10
-    calls_out: 5
-    calls_in: 0
-  Taskfile.print:
-    name: print
-    module: Taskfile
-    line: 185
-    cyclomatic_complexity: 0
-    calls_out: 0
-    calls_in: 133
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.showOutput:
-    name: showOutput
-    module: vscode-extension.src.extension
-    line: 235
-    cyclomatic_complexity: 3
-    calls_out: 3
-    calls_in: 2
-  examples.02-multiple-rules.messy_module.generate_report:
-    name: generate_report
-    module: examples.02-multiple-rules.messy_module
-    line: 37
-    cyclomatic_complexity: 1
-    calls_out: 6
-    calls_in: 0
-  src.prefact.git_hooks.list_git_hooks:
-    name: list_git_hooks
+  src.prefact.git_hooks.GitHooks._find_git_dir:
+    name: _find_git_dir
     module: src.prefact.git_hooks
-    line: 346
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 1
-  src.prefact.git_hooks.main:
-    name: main
-    module: src.prefact.git_hooks
-    line: 361
-    cyclomatic_complexity: 8
-    calls_out: 12
-    calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.validate:
-    name: validate
-    module: src.prefact.rules.autoflake_based
-    line: 265
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.performance.cache_state.initialize_cache:
-    name: initialize_cache
-    module: src.prefact.performance.cache_state
-    line: 19
+    line: 24
     cyclomatic_complexity: 2
-    calls_out: 8
-    calls_in: 1
-  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__:
-    name: __init__
-    module: src.prefact.autonomous.dependency_checker
-    line: 28
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.fixCommand:
-    name: fixCommand
-    module: vscode-extension.src.extension
-    line: 368
-    cyclomatic_complexity: 5
-    calls_out: 3
-    calls_in: 0
-  examples.sample-project.models.load_users_from_file:
-    name: load_users_from_file
-    module: examples.sample-project.models
-    line: 54
-    cyclomatic_complexity: 2
-    calls_out: 4
-    calls_in: 0
-  src.prefact.git_hooks.PreCommitConfig.install:
-    name: install
-    module: src.prefact.git_hooks
-    line: 289
-    cyclomatic_complexity: 3
-    calls_out: 11
-    calls_in: 0
-  src.prefact.config_extended.utils.deep_merge:
-    name: deep_merge
-    module: src.prefact.config_extended.utils
-    line: 4
-    cyclomatic_complexity: 5
     calls_out: 5
-    calls_in: 2
-  src.prefact.rules.isort_based.ISortedImports.__init__:
-    name: __init__
-    module: src.prefact.rules.isort_based
-    line: 171
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.unimport_based.UnimportStarImports.__init__:
-    name: __init__
-    module: src.prefact.rules.unimport_based
-    line: 309
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.composite_rules.CompositeTypeChecking.__init__:
-    name: __init__
-    module: src.prefact.rules.composite_rules
-    line: 210
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.getSeverity:
-    name: getSeverity
-    module: vscode-extension.src.extension
-    line: 222
-    cyclomatic_complexity: 5
-    calls_out: 0
-    calls_in: 8
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.fixWorkspace:
-    name: fixWorkspace
-    module: vscode-extension.src.extension
-    line: 92
-    cyclomatic_complexity: 3
-    calls_out: 5
-    calls_in: 2
-  examples.06-api-usage.example.main:
-    name: main
-    module: examples.06-api-usage.example
-    line: 158
-    cyclomatic_complexity: 4
-    calls_out: 11
-    calls_in: 0
-  src.prefact.rules.unimport_based.UnimportAll.__init__:
-    name: __init__
-    module: src.prefact.rules.unimport_based
-    line: 370
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers:
-    name: _load_allowed_numbers
-    module: src.prefact.rules.magic_numbers
-    line: 38
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.import_linter_based.ImportLinterIndependence.__init__:
-    name: __init__
-    module: src.prefact.rules.import_linter_based
-    line: 274
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.pylint_based.PylintComprehensive.__init__:
-    name: __init__
-    module: src.prefact.rules.pylint_based
-    line: 245
-    cyclomatic_complexity: 1
-    calls_out: 3
-    calls_in: 0
-  src.prefact.benchmark._make_inprocess_probe:
-    name: _make_inprocess_probe
-    module: src.prefact.benchmark
-    line: 125
-    cyclomatic_complexity: 1
-    calls_out: 10
-    calls_in: 1
-  src.prefact.rules.unused_imports._collect_all_exports:
-    name: _collect_all_exports
-    module: src.prefact.rules.unused_imports
-    line: 221
-    cyclomatic_complexity: 10
-    calls_out: 8
-    calls_in: 1
-  src.prefact.rules.unused_imports.UnusedImports.scan_file:
-    name: scan_file
-    module: src.prefact.rules.unused_imports
-    line: 17
-    cyclomatic_complexity: 6
-    calls_out: 8
-    calls_in: 0
-  examples.sample-project.utils.format_name:
-    name: format_name
-    module: examples.sample-project.utils
-    line: 6
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  examples.01-individual-rules.print-statements.before.process_data:
-    name: process_data
-    module: examples.01-individual-rules.print-statements.before
-    line: 3
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  examples.sample-project.cli.admin:
-    name: admin
-    module: examples.sample-project.cli
-    line: 45
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.logging.exceptions.PprefactException.__init__:
-    name: __init__
-    module: src.prefact.logging.exceptions
-    line: 7
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.sorted_imports.SortedImports.scan_file:
-    name: scan_file
-    module: src.prefact.rules.sorted_imports
-    line: 38
-    cyclomatic_complexity: 7
-    calls_out: 8
-    calls_in: 0
-  vscode-extension.src.extension.PrefactDiagnosticsProvider.scanFile:
-    name: scanFile
-    module: vscode-extension.src.extension
-    line: 31
-    cyclomatic_complexity: 4
-    calls_out: 6
-    calls_in: 5
-  examples.02-multiple-rules.messy_module.process_users:
-    name: process_users
-    module: examples.02-multiple-rules.messy_module
-    line: 16
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  examples.sample-project.core.calculate_sum:
-    name: calculate_sum
-    module: examples.sample-project.core
-    line: 13
-    cyclomatic_complexity: 2
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.string_concat._flatten_add:
-    name: _flatten_add
-    module: src.prefact.rules.string_concat
-    line: 32
-    cyclomatic_complexity: 3
-    calls_out: 4
-    calls_in: 3
-  src.prefact.benchmark.main:
-    name: main
-    module: src.prefact.benchmark
-    line: 249
-    cyclomatic_complexity: 7
-    calls_out: 12
-    calls_in: 0
-  src.prefact.performance.cache.cached_file_operation:
-    name: cached_file_operation
-    module: src.prefact.performance.cache
-    line: 353
-    cyclomatic_complexity: 1
-    calls_out: 16
-    calls_in: 0
-  vscode-extension.src.extension.PrefactTreeProvider.fileIssues:
-    name: fileIssues
-    module: vscode-extension.src.extension
-    line: 315
-    cyclomatic_complexity: 1
-    calls_out: 5
-    calls_in: 0
-  examples.01-individual-rules.unused-imports.before.read_file:
-    name: read_file
-    module: examples.01-individual-rules.unused-imports.before
-    line: 22
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  examples.sample-project.utils.validate_email:
-    name: validate_email
-    module: examples.sample-project.utils
-    line: 13
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 1
-  examples.01-individual-rules.relative-imports.after.Processor.process:
-    name: process
-    module: examples.01-individual-rules.relative-imports.after
-    line: 25
-    cyclomatic_complexity: 1
-    calls_out: 1
-    calls_in: 0
-  src.prefact.plugins.PluginManager.__init__:
-    name: __init__
-    module: src.prefact.plugins
-    line: 92
-    cyclomatic_complexity: 1
-    calls_out: 4
-    calls_in: 0
-  src.prefact.rules.unimport_based.UnimportDuplicateImports.__init__:
-    name: __init__
-    module: src.prefact.rules.unimport_based
-    line: 223
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  examples.01-individual-rules.unused-imports.after.read_file:
-    name: read_file
-    module: examples.01-individual-rules.unused-imports.after
-    line: 22
-    cyclomatic_complexity: 1
-    calls_out: 2
-    calls_in: 0
-  src.prefact.rules.relative_imports._RelativeImportFixer._resolve:
-    name: _resolve
-    module: src.prefact.rules.relative_imports
-    line: 84
-    cyclomatic_complexity: 9
-    calls_out: 9
-    calls_in: 0
-  src.prefact.rules.registry.register:
-    name: register
-    module: src.prefact.rules.registry
-    line: 198
-    cyclomatic_complexity: 2
-    calls_out: 3
-    calls_in: 0
-  src.prefact.rules.migration.PerformanceProfiler.compare_implementations:
-    name: compare_implementations
-    module: src.prefact.rules.migration
-    line: 171
-    cyclomatic_complexity: 5
-    calls_out: 8
-    calls_in: 0
-  src.prefact.cli._build_config:
-    name: _build_config
-    module: src.prefact.cli
-    line: 54
-    cyclomatic_complexity: 7
-    calls_out: 14
-    calls_in: 3
-  vscode-extension.src.extension.PrefactTreeProvider.onSave:
-    name: onSave
-    module: vscode-extension.src.extension
-    line: 405
-    cyclomatic_complexity: 4
-    calls_out: 5
-    calls_in: 0
-  src.prefact.rules.autoflake_based.AutoflakeHelper.check_source:
-    name: check_source
-    module: src.prefact.rules.autoflake_based
-    line: 192
-    cyclomatic_complexity: 1
-    calls_out: 4
     calls_in: 0
   src.prefact.rules.import_linter_based.ImportLinterCustomArchitecture.__init__:
     name: __init__
@@ -1566,47 +1286,327 @@ nodes:
     cyclomatic_complexity: 1
     calls_out: 3
     calls_in: 0
-  src.prefact.rules.composite_rules.CompositeUnusedImports.__init__:
+  src.prefact.logging.exceptions.PprefactException.__init__:
     name: __init__
-    module: src.prefact.rules.composite_rules
-    line: 28
-    cyclomatic_complexity: 1
-    calls_out: 4
-    calls_in: 0
-  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__:
-    name: __init__
-    module: examples.04-custom-rules.custom_rules.no_todo_rule
-    line: 20
-    cyclomatic_complexity: 1
+    module: src.prefact.logging.exceptions
+    line: 7
+    cyclomatic_complexity: 2
     calls_out: 3
     calls_in: 0
-  src.prefact.rules.registry.get_rule:
-    name: get_rule
-    module: src.prefact.rules.registry
-    line: 193
-    cyclomatic_complexity: 1
-    calls_out: 2
+  src.prefact.rules.autoflake_based.build_autoflake_fix_command:
+    name: build_autoflake_fix_command
+    module: src.prefact.rules.autoflake_based
+    line: 78
+    cyclomatic_complexity: 5
+    calls_out: 7
+    calls_in: 1
+  src.prefact.rules.sorted_imports.SortedImports.scan_file:
+    name: scan_file
+    module: src.prefact.rules.sorted_imports
+    line: 38
+    cyclomatic_complexity: 7
+    calls_out: 8
     calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.entries:
+    name: entries
+    module: vscode-extension.src.extension
+    line: 215
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
   src.prefact.scanner.Scanner.collect_files:
     name: collect_files
     module: src.prefact.scanner
     line: 91
     cyclomatic_complexity: 6
-    calls_out: 6
+    calls_out: 7
     calls_in: 0
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile:
-    name: update_planfile
-    module: src.prefact.autonomous.docs_manager
-    line: 21
-    cyclomatic_complexity: 11
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.range:
+    name: range
+    module: vscode-extension.src.extension
+    line: 196
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 6
+  examples.01-individual-rules.relative-imports.before.Processor.process:
+    name: process
+    module: examples.01-individual-rules.relative-imports.before
+    line: 25
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.prefact.rules.migration.add_ruff_config_to_prefact_yaml:
+    name: add_ruff_config_to_prefact_yaml
+    module: src.prefact.rules.migration
+    line: 210
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 0
+  src.prefact.plugins.PluginManager.load_plugin:
+    name: load_plugin
+    module: src.prefact.plugins
+    line: 181
+    cyclomatic_complexity: 10
+    calls_out: 15
+    calls_in: 0
+  examples.run_examples.main:
+    name: main
+    module: examples.run_examples
+    line: 65
+    cyclomatic_complexity: 8
     calls_out: 25
     calls_in: 0
-  src.prefact.rules.pylint_based.PylintPrintStatements.__init__:
+  examples.02-multiple-rules.messy_module.DataProcessor.__init__:
     name: __init__
-    module: src.prefact.rules.pylint_based
-    line: 87
+    module: examples.02-multiple-rules.messy_module
+    line: 57
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  examples.06-api-usage.example.batch_processing_example:
+    name: batch_processing_example
+    module: examples.06-api-usage.example
+    line: 117
+    cyclomatic_complexity: 6
+    calls_out: 19
+    calls_in: 1
+  examples.02-multiple-rules.messy_module.generate_report:
+    name: generate_report
+    module: examples.02-multiple-rules.messy_module
+    line: 37
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  src.prefact.validator.Validator.__init__:
+    name: __init__
+    module: src.prefact.validator
+    line: 12
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 0
+  src.prefact.cli._build_config:
+    name: _build_config
+    module: src.prefact.cli
+    line: 65
+    cyclomatic_complexity: 7
+    calls_out: 14
+    calls_in: 3
+  examples.06-api-usage.example.run_prefact_example:
+    name: run_prefact_example
+    module: examples.06-api-usage.example
+    line: 13
+    cyclomatic_complexity: 11
+    calls_out: 28
+    calls_in: 1
+  benchmark_ram_optimization.run_benchmark:
+    name: run_benchmark
+    module: benchmark_ram_optimization
+    line: 122
+    cyclomatic_complexity: 1
+    calls_out: 16
+    calls_in: 1
+  src.prefact.performance.cache.get_cache_info:
+    name: get_cache_info
+    module: src.prefact.performance.cache
+    line: 408
+    cyclomatic_complexity: 4
+    calls_out: 7
+    calls_in: 0
+  src.prefact.rules.string_concat._is_str_concat:
+    name: _is_str_concat
+    module: src.prefact.rules.string_concat
+    line: 22
+    cyclomatic_complexity: 6
+    calls_out: 7
+    calls_in: 1
+  src.prefact.rules.mypy_based.MyPyMissingReturnType.__init__:
+    name: __init__
+    module: src.prefact.rules.mypy_based
+    line: 99
     cyclomatic_complexity: 1
     calls_out: 3
+    calls_in: 0
+  src.prefact.rules.mypy_based.ReturnTypeInferrer._analyze_return_types:
+    name: _analyze_return_types
+    module: src.prefact.rules.mypy_based
+    line: 247
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 0
+  src.prefact.rules.pylint_based.PylintComprehensive.__init__:
+    name: __init__
+    module: src.prefact.rules.pylint_based
+    line: 245
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.autoflake_based.AutoflakeHelper.check_file:
+    name: check_file
+    module: src.prefact.rules.autoflake_based
+    line: 172
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.executablePath:
+    name: executablePath
+    module: vscode-extension.src.extension
+    line: 113
+    cyclomatic_complexity: 9
+    calls_out: 8
+    calls_in: 0
+  src.prefact.rules.registry.get_all_rules:
+    name: get_all_rules
+    module: src.prefact.rules.registry
+    line: 188
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.prefact.rules.registry.register:
+    name: register
+    module: src.prefact.rules.registry
+    line: 198
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.reject:
+    name: reject
+    module: vscode-extension.src.extension
+    line: 152
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 3
+  src.prefact.performance.cache.cleanup_cache:
+    name: cleanup_cache
+    module: src.prefact.performance.cache
+    line: 308
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  src.prefact.rules.import_linter_based.ImportLinterNoRelative.__init__:
+    name: __init__
+    module: src.prefact.rules.import_linter_based
+    line: 192
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.rules.unused_imports.UnusedImports.scan_file:
+    name: scan_file
+    module: src.prefact.rules.unused_imports
+    line: 17
+    cyclomatic_complexity: 6
+    calls_out: 8
+    calls_in: 0
+  examples.run_examples.find_examples:
+    name: find_examples
+    module: examples.run_examples
+    line: 54
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 1
+  src.prefact.rules.isort_based.ImportSectionSeparator.__init__:
+    name: __init__
+    module: src.prefact.rules.isort_based
+    line: 259
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  examples.03-output-formats.sample_code.process_data:
+    name: process_data
+    module: examples.03-output-formats.sample_code
+    line: 9
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  vscode-extension.src.extension.PrefactDiagnosticsProvider.resolve:
+    name: resolve
+    module: vscode-extension.src.extension
+    line: 136
+    cyclomatic_complexity: 2
+    calls_out: 0
+    calls_in: 3
+  src.prefact.performance.cache_state.initialize_cache:
+    name: initialize_cache
+    module: src.prefact.performance.cache_state
+    line: 19
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 1
+  src.prefact.rules.autoflake_based.run_autoflake_command:
+    name: run_autoflake_command
+    module: src.prefact.rules.autoflake_based
+    line: 59
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  examples.sample-project.core.calculate_sum:
+    name: calculate_sum
+    module: examples.sample-project.core
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.prefact.cli._output:
+    name: _output
+    module: src.prefact.cli
+    line: 292
+    cyclomatic_complexity: 4
+    calls_out: 8
+    calls_in: 3
+  src.prefact.rules.autoflake_based.AutoflakeHelper.check_source:
+    name: check_source
+    module: src.prefact.rules.autoflake_based
+    line: 192
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 0
+  src.prefact.rules.pylint_based.PprefactPylintPlugin.register:
+    name: register
+    module: src.prefact.rules.pylint_based
+    line: 231
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 1
+  src.prefact.config_extended.config.ExtendedConfig.to_dict:
+    name: to_dict
+    module: src.prefact.config_extended.config
+    line: 118
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  examples.01-individual-rules.duplicate-imports.after.process_data:
+    name: process_data
+    module: examples.01-individual-rules.duplicate-imports.after
+    line: 9
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.prefact.rules.unused_imports._collect_all_exports:
+    name: _collect_all_exports
+    module: src.prefact.rules.unused_imports
+    line: 221
+    cyclomatic_complexity: 10
+    calls_out: 8
+    calls_in: 1
+  src.prefact.rules.autoflake_based.AutoflakeUnusedImports.__init__:
+    name: __init__
+    module: src.prefact.rules.autoflake_based
+    line: 234
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.prefact.performance.cache.CacheContext.__exit__:
+    name: __exit__
+    module: src.prefact.performance.cache
+    line: 438
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.prefact.scanner._match_gitignore_pattern:
+    name: _match_gitignore_pattern
+    module: src.prefact.scanner
+    line: 30
+    cyclomatic_complexity: 12
+    calls_out: 18
     calls_in: 0
 edges:
 - caller: benchmark_ram_optimization.create_test_files
@@ -1774,44 +1774,8 @@ edges:
 - caller: src.prefact.git_hooks.main
   callee: src.prefact.git_hooks.list_git_hooks
   call_type: resolved
-- caller: src.prefact.cli.scan
-  callee: src.prefact.cli._build_config
-  call_type: resolved
-- caller: src.prefact.cli.scan
-  callee: src.prefact.cli._output
-  call_type: resolved
-- caller: src.prefact.cli.fix
-  callee: src.prefact.cli._build_config
-  call_type: resolved
-- caller: src.prefact.cli.fix
-  callee: src.prefact.cli._output
-  call_type: resolved
-- caller: src.prefact.cli.check
-  callee: src.prefact.cli._build_config
-  call_type: resolved
-- caller: src.prefact.cli.check
-  callee: src.prefact.cli._output
-  call_type: resolved
 - caller: src.prefact.fixer.Fixer.__init__
   callee: src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  call_type: resolved
-- caller: src.prefact.scanner._load_gitignore
-  callee: project.map.toon.open
-  call_type: resolved
-- caller: src.prefact.scanner._match_gitignore_pattern
-  callee: vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  call_type: resolved
-- caller: src.prefact.scanner.Scanner.__init__
-  callee: src.prefact.scanner._load_gitignore
-  call_type: resolved
-- caller: src.prefact.scanner.Scanner.__init__
-  callee: src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  call_type: resolved
-- caller: src.prefact.scanner.Scanner.collect_files
-  callee: src.prefact.performance.cache.Cache.set
-  call_type: resolved
-- caller: src.prefact.scanner.Scanner._excluded
-  callee: src.prefact.scanner._match_gitignore_pattern
   call_type: resolved
 - caller: src.prefact.benchmark.ScanProbe.run
   callee: vscode-extension.src.extension.PrefactDiagnosticsProvider.range
@@ -1879,29 +1843,8 @@ edges:
 - caller: src.prefact.performance.cache.CacheContext.__exit__
   callee: src.prefact.performance.cache.cleanup_cache
   call_type: resolved
-- caller: src.prefact.reporters.json_reporter.dump
-  callee: src.prefact.reporters.json_reporter.to_dict
-  call_type: resolved
-- caller: src.prefact.autonomous.docs_manager.DocsManager.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-  callee: src.prefact.performance.cache.Cache.set
-  call_type: resolved
-- caller: src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-  callee: project.map.toon.open
-  call_type: resolved
-- caller: src.prefact.autonomous.todo_manager.TodoManager.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.autonomous.todo_manager.TodoManager._generate_current_todos
-  callee: src.prefact.performance.cache.Cache.set
-  call_type: resolved
 - caller: src.prefact.autonomous.setup_manager.SetupManager.create_refact_config
   callee: project.map.toon.open
-  call_type: resolved
-- caller: src.prefact.autonomous.project_scanner.ProjectScanner.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
 - caller: src.prefact.autonomous.dependency_checker.DependencyChecker.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
@@ -1918,17 +1861,11 @@ edges:
 - caller: src.prefact.config_extended.generator.ConfigGenerator.save_config
   callee: project.map.toon.open
   call_type: resolved
-- caller: src.prefact.config_extended.models.ExtendedConfig.__init__
+- caller: src.prefact.rules.magic_numbers.MagicNumberRule.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
-- caller: src.prefact.config_extended.models.ExtendedConfig.from_yaml
-  callee: project.map.toon.open
-  call_type: resolved
-- caller: src.prefact.config_extended.models.ExtendedConfig.from_yaml
-  callee: src.prefact.config_extended.utils.deep_merge
-  call_type: resolved
-- caller: src.prefact.config_extended.models.ExtendedConfig.to_dict
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
+- caller: src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers
+  callee: src.prefact.performance.cache.Cache.set
   call_type: resolved
 - caller: src.prefact.rules.ruff_based.RuffHelper.fix_source
   callee: project.map.toon.open
@@ -1949,6 +1886,15 @@ edges:
   callee: src.prefact.performance.cache.Cache.set
   call_type: resolved
 - caller: src.prefact.rules.unused_imports._collect_all_exports
+  callee: src.prefact.performance.cache.Cache.set
+  call_type: resolved
+- caller: src.prefact.rules.importchecker_based.ImportCheckerUnusedImports.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.importchecker_based.ImportDependencyAnalysis.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.importchecker_based.ImportOptimizer._count_usage
   callee: src.prefact.performance.cache.Cache.set
   call_type: resolved
 - caller: src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
@@ -2008,6 +1954,21 @@ edges:
 - caller: src.prefact.rules.string_concat.StringConcatToFstring.scan_file
   callee: src.prefact.rules.string_concat._is_str_concat
   call_type: resolved
+- caller: src.prefact.rules.unimport_based.UnimportHelper.fix_source
+  callee: project.map.toon.open
+  call_type: resolved
+- caller: src.prefact.rules.unimport_based.UnimportUnusedImports.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.unimport_based.UnimportDuplicateImports.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.unimport_based.UnimportStarImports.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.unimport_based.UnimportAll.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
 - caller: src.prefact.rules.mypy_based.MyPyMissingReturnType.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
@@ -2027,6 +1988,9 @@ edges:
   callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
 - caller: src.prefact.rules.isort_based.CustomImportOrganization.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
 - caller: src.prefact.rules.sorted_imports.SortedImports.scan_file
@@ -2054,7 +2018,7 @@ edges:
   callee: project.map.toon.open
   call_type: resolved
 - caller: src.prefact.rules.string_transformations.StringConcatToFString._is_string_concat
-  callee: src.prefact.cli.check
+  callee: project.map.toon.check
   call_type: resolved
 - caller: src.prefact.rules.string_transformations.ContextAwareStringConcat.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
@@ -2263,38 +2227,68 @@ edges:
 - caller: vscode-extension.src.extension.PrefactTreeProvider.setInterval
   callee: vscode-extension.src.extension.PrefactTreeProvider.refresh
   call_type: resolved
-- caller: src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.rules.unimport_based.UnimportHelper.fix_source
+- caller: src.prefact.scanner._load_gitignore
   callee: project.map.toon.open
   call_type: resolved
-- caller: src.prefact.rules.unimport_based.UnimportUnusedImports.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
+- caller: src.prefact.scanner._match_gitignore_pattern
+  callee: vscode-extension.src.extension.PrefactDiagnosticsProvider.range
   call_type: resolved
-- caller: src.prefact.rules.unimport_based.UnimportDuplicateImports.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
+- caller: src.prefact.scanner.Scanner.__init__
+  callee: src.prefact.scanner._load_gitignore
   call_type: resolved
-- caller: src.prefact.rules.unimport_based.UnimportStarImports.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
+- caller: src.prefact.scanner.Scanner.__init__
+  callee: src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
   call_type: resolved
-- caller: src.prefact.rules.unimport_based.UnimportAll.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.rules.magic_numbers.MagicNumberRule.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers
+- caller: src.prefact.scanner.Scanner.collect_files
   callee: src.prefact.performance.cache.Cache.set
   call_type: resolved
-- caller: src.prefact.rules.importchecker_based.ImportCheckerUnusedImports.__init__
+- caller: src.prefact.autonomous.docs_manager.DocsManager.__init__
   callee: vscode-extension.src.extension.PrefactTreeItem.super
   call_type: resolved
-- caller: src.prefact.rules.importchecker_based.ImportDependencyAnalysis.__init__
-  callee: vscode-extension.src.extension.PrefactTreeItem.super
-  call_type: resolved
-- caller: src.prefact.rules.importchecker_based.ImportOptimizer._count_usage
+- caller: src.prefact.autonomous.docs_manager.DocsManager.update_planfile
   callee: src.prefact.performance.cache.Cache.set
+  call_type: resolved
+- caller: src.prefact.reporters.json_reporter.dump
+  callee: src.prefact.reporters.json_reporter.to_dict
+  call_type: resolved
+- caller: src.prefact.config_extended.models.ExtendedConfig.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.config_extended.models.ExtendedConfig.from_yaml
+  callee: project.map.toon.open
+  call_type: resolved
+- caller: src.prefact.config_extended.models.ExtendedConfig.from_yaml
+  callee: src.prefact.config_extended.utils.deep_merge
+  call_type: resolved
+- caller: src.prefact.config_extended.models.ExtendedConfig.to_dict
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.autonomous.todo_manager.TodoManager.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.autonomous.todo_manager.TodoManager._generate_current_todos
+  callee: src.prefact.performance.cache.Cache.set
+  call_type: resolved
+- caller: src.prefact.autonomous.project_scanner.ProjectScanner.__init__
+  callee: vscode-extension.src.extension.PrefactTreeItem.super
+  call_type: resolved
+- caller: src.prefact.cli.scan
+  callee: src.prefact.cli._build_config
+  call_type: resolved
+- caller: src.prefact.cli.scan
+  callee: src.prefact.cli._output
+  call_type: resolved
+- caller: src.prefact.cli.fix
+  callee: src.prefact.cli._build_config
+  call_type: resolved
+- caller: src.prefact.cli.fix
+  callee: src.prefact.cli._output
+  call_type: resolved
+- caller: src.prefact.cli.check
+  callee: src.prefact.cli._build_config
+  call_type: resolved
+- caller: src.prefact.cli.check
+  callee: src.prefact.cli._output
   call_type: resolved
 modules:
   Taskfile:
@@ -2361,6 +2355,7 @@ modules:
   - examples.sample-project.utils.helper_function
   - examples.sample-project.utils.validate_email
   project.map.toon:
+  - project.map.toon.check
   - project.map.toon.open
   src.prefact.autonomous.dependency_checker:
   - src.prefact.autonomous.dependency_checker.DependencyChecker.__init__
@@ -2551,7 +2546,6 @@ modules:
   - src.prefact.rules.unused_imports._collect_used_names
   src.prefact.scanner:
   - src.prefact.scanner.Scanner.__init__
-  - src.prefact.scanner.Scanner._excluded
   - src.prefact.scanner.Scanner.collect_files
   - src.prefact.scanner._load_gitignore
   - src.prefact.scanner._match_gitignore_pattern
@@ -3757,7 +3751,6 @@ entry_points:
 - project.map.toon.charCodeAt
 - project.map.toon.charStrAt
 - project.map.toon.chdir
-- project.map.toon.check
 - project.map.toon.check_bidi
 - project.map.toon.check_code_string
 - project.map.toon.check_compatibility
@@ -5389,6 +5382,8 @@ entry_points:
 - src.prefact.autonomous.AutonomousRefact.manage_documentation
 - src.prefact.autonomous.AutonomousRefact.run_autonomous
 - src.prefact.autonomous.AutonomousRefact.run_examples
+- src.prefact.autonomous.AutonomousRefact.run_testql
+- src.prefact.autonomous.AutonomousRefact.run_testql_all
 - src.prefact.autonomous.AutonomousRefact.run_tests
 - src.prefact.autonomous.AutonomousRefact.scan_project
 - src.prefact.autonomous.AutonomousRefact.ticket_exists
@@ -5411,6 +5406,9 @@ entry_points:
 - src.prefact.autonomous.dependency_checker.DependencyChecker.check_dependencies
 - src.prefact.autonomous.docs_manager.DocsManager.__init__
 - src.prefact.autonomous.docs_manager.DocsManager._count_existing_tickets
+- src.prefact.autonomous.docs_manager.DocsManager._get_relative_file_path
+- src.prefact.autonomous.docs_manager.DocsManager._is_autonomous_ticket
+- src.prefact.autonomous.docs_manager.DocsManager._should_remove_obsolete_ticket
 - src.prefact.autonomous.docs_manager.DocsManager.create_default_planfile
 - src.prefact.autonomous.docs_manager.DocsManager.create_ticket_from_issue
 - src.prefact.autonomous.docs_manager.DocsManager.ticket_exists
@@ -5426,6 +5424,9 @@ entry_points:
 - src.prefact.autonomous.setup_manager.SetupManager.create_refact_config
 - src.prefact.autonomous.setup_manager.SetupManager.detect_project_info
 - src.prefact.autonomous.setup_manager.SetupManager.run_examples
+- src.prefact.autonomous.testql_manager.TestQLManager.discover_scenarios
+- src.prefact.autonomous.testql_manager.TestQLManager.run
+- src.prefact.autonomous.testql_manager.TestQLManager.run_all
 - src.prefact.autonomous.todo_manager.TodoManager.__init__
 - src.prefact.autonomous.todo_manager.TodoManager._execute_todo_tasks
 - src.prefact.autonomous.todo_manager.TodoManager._find_completed_tasks
@@ -5447,11 +5448,13 @@ entry_points:
 - src.prefact.benchmark.main
 - src.prefact.cli._common_options
 - src.prefact.cli.autonomous_cmd
+- src.prefact.cli.check
 - src.prefact.cli.fix
 - src.prefact.cli.init
 - src.prefact.cli.main
 - src.prefact.cli.rules
 - src.prefact.cli.scan
+- src.prefact.cli.testql_cmd
 - src.prefact.config.Config._detect_from_pyproject
 - src.prefact.config.Config._detect_from_root_layout
 - src.prefact.config.Config._detect_from_src_layout
@@ -5973,6 +5976,7 @@ entry_points:
 - src.prefact.scanner.Scanner.collect_files
 - src.prefact.scanner.Scanner.scan
 - src.prefact.scanner.Scanner.scan_sources
+- src.prefact.scanner._match_gitignore_pattern
 - src.prefact.validator.Validator.__init__
 - src.prefact.validator.Validator.validate_file
 - vscode-extension.src.extension.PrefactDiagnosticsProvider.child

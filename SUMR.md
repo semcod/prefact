@@ -19,7 +19,7 @@ SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorizati
 - **name**: `prefact`
 - **version**: `0.0.0`
 - **python_requires**: `>=3.8`
-- **license**: Apache-2.0
+- **license**: {'text': 'Apache-2.0'}
 - **ai_model**: `openrouter/qwen/qwen3-coder-next`
 - **ecosystem**: SUMD + DOQL + testql + taskfile
 - **generated_from**: pyproject.toml, Taskfile.yml, Makefile, testql(2), app.doql.less, pyqual.yaml, goal.yaml, .env.example, project/(6 analysis files)
@@ -41,8 +41,8 @@ app {
 }
 
 dependencies {
-  runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
-  dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
+  runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60, planfile>=0.1.86";
+  dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60";
 }
 
 interface[type="cli"] {
@@ -791,9 +791,10 @@ libcst>=0.4.0
 pyyaml>=6.0
 rich>=12.0.0
 tomli>=2.0.0; python_version<'3.11'
-goal>=2.1.0
+goal>=2.1.218
 costs>=0.1.20
 pfix>=0.1.60
+planfile>=0.1.86
 ```
 
 ### Development
@@ -807,14 +808,14 @@ isort>=5.10.0
 mypy>=1.0.0
 ruff>=0.5.0
 pre-commit>=3.0.0
-goal>=2.1.0
+goal>=2.1.218
 costs>=0.1.20
 pfix>=0.1.60
 ```
 
 ## Call Graph
 
-*229 nodes · 229 edges · 65 modules · CC̄=0.6*
+*229 nodes · 227 edges · 65 modules · CC̄=0.7*
 
 ### Hubs (by degree)
 
@@ -822,35 +823,35 @@ pfix>=0.1.60
 |----------|----|----|-----|-------|
 | `print` *(in Taskfile)* | 0 | 133 | 0 | **133** |
 | `super` *(in vscode-extension.src.extension.PrefactTreeItem)* | 1 | 42 | 0 | **42** |
+| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 27 ⚠ | 0 | 41 | **41** |
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
+| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 27 | **27** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
-| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
-| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 24 | **24** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.6
+# nodes: 229 | edges: 227 | modules: 65
+# CC̄=0.7
 
 HUBS[20]:
   Taskfile.print
     CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=27  in:0  out:41  total:41
   src.prefact.rules.registry._initialize_built_in_rules
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:24  total:24
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
@@ -859,22 +860,22 @@ HUBS[20]:
     CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  src.prefact.rules.benchmark.print_benchmark_results
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
+  examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  benchmark_ram_optimization.run_benchmark
-    CC=1  in:1  out:16  total:17
-  examples.06-api-usage.example.custom_rule_example
+  src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  src.prefact.cli._build_config
+    CC=7  in:3  out:14  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -940,14 +941,15 @@ MODULES:
     format_name  CC=1  out:1
     helper_function  CC=1  out:1
     validate_email  CC=2  out:3
-  project.map.toon  [1 funcs]
+  project.map.toon  [2 funcs]
+    check  CC=0  out:0
     open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
   src.prefact.autonomous.docs_manager  [2 funcs]
     __init__  CC=1  out:2
-    update_planfile  CC=11  out:25
+    update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
   src.prefact.autonomous.setup_manager  [1 funcs]
@@ -973,7 +975,7 @@ MODULES:
     save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
-    from_yaml  CC=13  out:24
+    from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
@@ -1121,10 +1123,9 @@ MODULES:
     _collect_all_exports  CC=10  out:8
     _collect_imported_names  CC=8  out:4
     _collect_used_names  CC=5  out:7
-  src.prefact.scanner  [5 funcs]
+  src.prefact.scanner  [4 funcs]
     __init__  CC=4  out:6
-    _excluded  CC=12  out:5
-    collect_files  CC=6  out:6
+    collect_files  CC=6  out:7
     _load_gitignore  CC=6  out:5
     _match_gitignore_pattern  CC=12  out:18
   src.prefact.validator  [1 funcs]
@@ -1214,26 +1215,26 @@ EDGES:
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.6
+# nodes: 229 | edges: 227 | modules: 65
+# CC̄=0.7
 
 HUBS[20]:
   Taskfile.print
     CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=27  in:0  out:41  total:41
   src.prefact.rules.registry._initialize_built_in_rules
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:24  total:24
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
@@ -1242,22 +1243,22 @@ HUBS[20]:
     CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  src.prefact.rules.benchmark.print_benchmark_results
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
+  examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  benchmark_ram_optimization.run_benchmark
-    CC=1  in:1  out:16  total:17
-  examples.06-api-usage.example.custom_rule_example
+  src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  src.prefact.cli._build_config
+    CC=7  in:3  out:14  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -1323,14 +1324,15 @@ MODULES:
     format_name  CC=1  out:1
     helper_function  CC=1  out:1
     validate_email  CC=2  out:3
-  project.map.toon  [1 funcs]
+  project.map.toon  [2 funcs]
+    check  CC=0  out:0
     open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
   src.prefact.autonomous.docs_manager  [2 funcs]
     __init__  CC=1  out:2
-    update_planfile  CC=11  out:25
+    update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
   src.prefact.autonomous.setup_manager  [1 funcs]
@@ -1356,7 +1358,7 @@ MODULES:
     save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
-    from_yaml  CC=13  out:24
+    from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
@@ -1504,10 +1506,9 @@ MODULES:
     _collect_all_exports  CC=10  out:8
     _collect_imported_names  CC=8  out:4
     _collect_used_names  CC=5  out:7
-  src.prefact.scanner  [5 funcs]
+  src.prefact.scanner  [4 funcs]
     __init__  CC=4  out:6
-    _excluded  CC=12  out:5
-    collect_files  CC=6  out:6
+    collect_files  CC=6  out:7
     _load_gitignore  CC=6  out:5
     _match_gitignore_pattern  CC=12  out:18
   src.prefact.validator  [1 funcs]
@@ -1580,16 +1581,19 @@ EDGES:
 ### Code Analysis (`project/analysis.toon.yaml`)
 
 ```toon markpact:analysis path=project/analysis.toon.yaml
-# code2llm | 154f 123434L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
-# CC̄=0.6 | critical:0/3487 | dups:15 | cycles:0
+# code2llm | 157f 123880L | python:105,yaml:37,json:4,shell:3,txt:2,cfg:1,yml:1,typescript:1,toml:1 | 2026-05-03
+# CC̄=0.7 | critical:2/3496 | dups:15 | cycles:0
 
-HEALTH[1]:
+HEALTH[3]:
   🔴 DUP   15 classes duplicated
+  🟡 CC    run CC=15 (limit:15)
+  🟡 CC    update_planfile CC=27 (limit:15)
 
-REFACTOR[1]:
+REFACTOR[2]:
   1. rm duplicates  (-15 dup classes)
+  2. split 2 high-CC methods  (CC>15)
 
-PIPELINES[599]:
+PIPELINES[610]:
   [1] Src [main]: main → print
       PURITY: 100% pure
   [2] Src [main]: main → find_examples
@@ -1602,7 +1606,7 @@ PIPELINES[599]:
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
+  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
   │ importchecker_based        484L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
@@ -1616,26 +1620,27 @@ LAYERS:
   │ parallel                   353L  4C   23m  CC=7      ←0
   │ __init__                   320L  3C   17m  CC=10     ←0
   │ ruff_based                 311L  6C   19m  CC=4      ←0
+  │ cli                        306L  0C   11m  CC=7      ←0
   │ benchmark                  293L  1C    6m  CC=7      ←0
+  │ __init__                   290L  1C   19m  CC=7      ←0
   │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
+  │ !! docs_manager               261L  1C   10m  CC=27     ←0
   │ registry                   255L  1C   13m  CC=8      ←8
   │ __init__                   248L  1C    8m  CC=3      ←0
-  │ cli                        247L  0C   10m  CC=7      ←1
   │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
-  │ __init__                   218L  1C   17m  CC=7      ←0
+  │ !! testql_manager             215L  1C    3m  CC=15     ←0
   │ llm_hallucinations         214L  1C    9m  CC=8      ←0
   │ config                     192L  2C   13m  CC=5      ←3
-  │ docs_manager               189L  1C    7m  CC=11     ←0
   │ llm_generated_code         186L  1C    9m  CC=7      ←0
   │ generator                  171L  1C    3m  CC=12     ←1
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
-  │ scanner                    153L  1C    7m  CC=12     ←0
+  │ scanner                    157L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
   │ magic_numbers              134L  1C    8m  CC=7      ←0
   │ config                     128L  1C    8m  CC=10     ←4
@@ -1659,12 +1664,12 @@ LAYERS:
   │ _ast_cache                  51L  0C    2m  CC=4      ←0
   │ globals                     50L  0C    3m  CC=2      ←0
   │ fixer                       49L  1C    3m  CC=7      ←0
+  │ models                      49L  1C    3m  CC=13     ←0
   │ rule                        47L  1C    4m  CC=1      ←0  ×DUP
   │ type_hints                  46L  1C    3m  CC=6      ←0
   │ wildcard_imports            45L  1C    3m  CC=7      ←0
   │ validators                  44L  1C    4m  CC=5      ←1  ×DUP
   │ __init__                    41L  0C    0m  CC=0.0    ←0
-  │ models                      38L  1C    3m  CC=13     ←0
   │ config                      31L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
   │ validator                   29L  1C    2m  CC=4      ←0
@@ -1690,7 +1695,7 @@ LAYERS:
   ./                              CC̄=2.2    ←in:0  →out:0
   │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
   │ goal.yaml                  480L  0C    0m  CC=0.0    ←0
-  │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml             340L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
   │ Taskfile.yml               186L  0C    1m  CC=0.0    ←16
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
@@ -1700,6 +1705,7 @@ LAYERS:
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
+  │ tree.sh                      1L  0C    0m  CC=0.0    ←0
   │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
   examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
@@ -1751,22 +1757,25 @@ LAYERS:
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml            96742L  0C  2716m  CC=0.0    ←19
-  │ !! calls.yaml                6005L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml            96743L  0C  2716m  CC=0.0    ←20
+  │ !! calls.yaml                6008L  0C    0m  CC=0.0    ←0
   │ calls.toon.yaml            362L  0C    0m  CC=0.0    ←0
   │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         219L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         217L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
   │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
   │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         39L  0C    0m  CC=0.0    ←0
   │
   testql-scenarios/               CC̄=0.0    ←in:0  →out:0
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
+  │
+  .taskill/                       CC̄=0.0    ←in:0  →out:0
+  │ state.json                  11L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
      Makefile                                  0L
@@ -1774,25 +1783,25 @@ LAYERS:
 COUPLING:
                                                     Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization                   project.map       examples.sample-project  examples.01-individual-rules    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
                       Taskfile                            ──                           ←43                                                         ←34                           ←25                                                         ←17                            ←6                            ←6                            ←2                                hub
-                   src.prefact                            43                            ──                            46                            ←1                                                          19                                                                                                                                                        !! fan-out
+                   src.prefact                            43                            ──                            46                            ←1                                                          23                                                                                                                                                        !! fan-out
           vscode-extension.src                                                         ←46                            ──                                                          ←1                                                                                                                                                                                  ←1  hub
          examples.06-api-usage                            34                             1                                                          ──                                                                                                                                                                                                                    !! fan-out
     benchmark_ram_optimization                            25                                                           1                                                          ──                                                                                                                                                                                      !! fan-out
-                   project.map                                                         ←19                                                                                                                      ──                            ←1                            ←2                                                                                            hub
+                   project.map                                                         ←23                                                                                                                      ──                            ←1                            ←2                                                                                            hub
        examples.sample-project                            17                                                                                                                                                     1                            ──                             1                                                                                            !! fan-out
   examples.01-individual-rules                             6                                                                                                                                                     2                             2                            ──                                                                                            !! fan-out
     examples.02-multiple-rules                             6                                                                                                                                                                                                                                              ──                                                            
     examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
       examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
-  HUB: vscode-extension.src/ (fan-in=48)
-  HUB: project.map/ (fan-in=22)
   HUB: Taskfile/ (fan-in=133)
+  HUB: vscode-extension.src/ (fan-in=48)
+  HUB: project.map/ (fan-in=26)
   SMELL: examples.06-api-usage/ fan-out=35 → split needed
+  SMELL: src.prefact/ fan-out=112 → split needed
   SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
-  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
-  SMELL: src.prefact/ fan-out=108 → split needed
   SMELL: examples.sample-project/ fan-out=19 → split needed
+  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
@@ -1802,15 +1811,15 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 39 groups | 99f 13236L | 2026-04-25
+# redup/duplication | 40 groups | 99f 13454L | 2026-05-03
 
 SUMMARY:
   files_scanned: 99
-  total_lines:   13236
-  dup_groups:    39
-  dup_fragments: 107
-  saved_lines:   354
-  scan_ms:       21366
+  total_lines:   13454
+  dup_groups:    40
+  dup_fragments: 109
+  saved_lines:   363
+  scan_ms:       35272
 
 HOTSPOTS[7] (files with most duplication):
   src/prefact/rules/unimport_based.py  dup=72L  groups=3  frags=7  (0.5%)
@@ -1821,7 +1830,7 @@ HOTSPOTS[7] (files with most duplication):
   src/prefact/rules/mypy_based.py  dup=29L  groups=3  frags=6  (0.2%)
   examples/04-custom-rules/custom_rules/no_todo_rule.py  dup=28L  groups=2  frags=4  (0.2%)
 
-DUPLICATES[39] (ranked by impact):
+DUPLICATES[40] (ranked by impact):
   [fb8a4c52c4513ef3] ! EXAC  fix  L=3 N=14 saved=39 sim=1.00
       examples/04-custom-rules/custom_rules/no_todo_rule.py:46-48  (fix)
       examples/04-custom-rules/custom_rules/no_todo_rule.py:94-96  (fix)
@@ -1877,6 +1886,9 @@ DUPLICATES[39] (ranked by impact):
   [0012aae792aa3fda]   EXAC  get_hash  L=10 N=2 saved=10 sim=1.00
       src/prefact/performance/cache.py:229-238  (get_hash)
       src/prefact/performance/cache_adapters.py:95-101  (get_hash)
+  [ea7177ce519c189d]   EXAC  _get_relative_file_path  L=9 N=2 saved=9 sim=1.00
+      src/prefact/autonomous/docs_manager.py:253-261  (_get_relative_file_path)
+      src/prefact/autonomous/todo_manager.py:186-194  (_get_relative_file_path)
   [8edfe22670ef44e1]   EXAC  process_data  L=8 N=2 saved=8 sim=1.00
       examples/01-individual-rules/unused-imports/after.py:7-14  (process_data)
       examples/01-individual-rules/unused-imports/before.py:7-14  (process_data)
@@ -1969,7 +1981,7 @@ DUPLICATES[39] (ranked by impact):
       src/prefact/rules/mypy_based.py:99-101  (__init__)
       src/prefact/rules/mypy_based.py:174-176  (__init__)
 
-REFACTOR[39] (ranked by priority):
+REFACTOR[40] (ranked by priority):
   [1] ○ extract_function   → utils/fix.py
       WHY: 14 occurrences of 3-line block across 9 files — saves 39 lines
       FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py, src/prefact/rules/ai_boilerplate.py, src/prefact/rules/import_linter_based.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py +4 more
@@ -2000,95 +2012,98 @@ REFACTOR[39] (ranked by priority):
   [10] ○ extract_class      → src/prefact/performance/utils/get_hash.py
       WHY: 2 occurrences of 10-line block across 2 files — saves 10 lines
       FILES: src/prefact/performance/cache.py, src/prefact/performance/cache_adapters.py
-  [11] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/process_data.py
+  [11] ○ extract_function   → src/prefact/autonomous/utils/_get_relative_file_path.py
+      WHY: 2 occurrences of 9-line block across 2 files — saves 9 lines
+      FILES: src/prefact/autonomous/docs_manager.py, src/prefact/autonomous/todo_manager.py
+  [12] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/process_data.py
       WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [12] ○ extract_function   → src/prefact/rules/utils/scan_file.py
+  [13] ○ extract_function   → src/prefact/rules/utils/scan_file.py
       WHY: 3 occurrences of 4-line block across 2 files — saves 8 lines
       FILES: src/prefact/rules/composite_factory.py, src/prefact/rules/composite_rules.py
-  [13] ○ extract_function   → src/prefact/rules/utils/fix.py
+  [14] ○ extract_function   → src/prefact/rules/utils/fix.py
       WHY: 3 occurrences of 4-line block across 2 files — saves 8 lines
       FILES: src/prefact/rules/composite_factory.py, src/prefact/rules/composite_rules.py
-  [14] ○ extract_function   → src/prefact/rules/utils/validate.py
+  [15] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines
       FILES: src/prefact/rules/duplicate_imports.py, src/prefact/rules/unused_imports.py
-  [15] ○ extract_function   → src/prefact/rules/utils/_load_mypy_config.py
+  [16] ○ extract_function   → src/prefact/rules/utils/_load_mypy_config.py
       WHY: 2 occurrences of 8-line block across 1 files — saves 8 lines
       FILES: src/prefact/rules/mypy_based.py
-  [16] ○ extract_function   → examples/utils/calculate_sum.py
+  [17] ○ extract_function   → examples/utils/calculate_sum.py
       WHY: 2 occurrences of 7-line block across 2 files — saves 7 lines
       FILES: examples/03-output-formats/sample_code.py, examples/sample-project/core.py
-  [17] ○ extract_function   → examples/01-individual-rules/print-statements/utils/process_data.py
+  [18] ○ extract_function   → examples/01-individual-rules/print-statements/utils/process_data.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: examples/01-individual-rules/print-statements/after.py, examples/01-individual-rules/print-statements/before.py
-  [18] ○ extract_function   → src/prefact/utils/__init__.py
+  [19] ○ extract_function   → src/prefact/utils/__init__.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/fixer.py, src/prefact/validator.py
-  [19] ○ extract_class      → src/prefact/performance/utils/set_hash.py
+  [20] ○ extract_class      → src/prefact/performance/utils/set_hash.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/performance/cache.py, src/prefact/performance/cache_adapters.py
-  [20] ○ extract_function   → src/prefact/rules/utils/__init__.py
-      WHY: 3 occurrences of 3-line block across 1 files — saves 6 lines
-      FILES: src/prefact/rules/import_linter_based.py
   [21] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 3 occurrences of 3-line block across 1 files — saves 6 lines
+      FILES: src/prefact/rules/import_linter_based.py
+  [22] ○ extract_function   → src/prefact/rules/utils/__init__.py
+      WHY: 3 occurrences of 3-line block across 1 files — saves 6 lines
       FILES: src/prefact/rules/pylint_based.py
-  [22] ○ extract_function   → src/prefact/utils/get_performance_monitor.py
+  [23] ○ extract_function   → src/prefact/utils/get_performance_monitor.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/performance/parallel.py, src/prefact/rules/registry.py
-  [23] ○ extract_function   → examples/01-individual-rules/relative-imports/utils/process_user.py
+  [24] ○ extract_function   → examples/01-individual-rules/relative-imports/utils/process_user.py
       WHY: 2 occurrences of 5-line block across 2 files — saves 5 lines
       FILES: examples/01-individual-rules/relative-imports/after.py, examples/01-individual-rules/relative-imports/before.py
-  [24] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [25] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 2 occurrences of 5-line block across 1 files — saves 5 lines
       FILES: src/prefact/rules/unimport_based.py
-  [25] ○ extract_function   → examples/01-individual-rules/print-statements/utils/calculate.py
+  [26] ○ extract_function   → examples/01-individual-rules/print-statements/utils/calculate.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/print-statements/after.py, examples/01-individual-rules/print-statements/before.py
-  [26] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/read_file.py
+  [27] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/read_file.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [27] ○ extract_function   → examples/01-individual-rules/wildcard-imports/utils/process.py
+  [28] ○ extract_function   → examples/01-individual-rules/wildcard-imports/utils/process.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/wildcard-imports/after.py, examples/01-individual-rules/wildcard-imports/before.py
-  [28] ○ extract_function   → examples/utils/format_data.py
+  [29] ○ extract_function   → examples/utils/format_data.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/string-concat/before.py, examples/sample-project/utils.py
-  [29] ○ extract_function   → examples/01-individual-rules/duplicate-imports/utils/process_data.py
+  [30] ○ extract_function   → examples/01-individual-rules/duplicate-imports/utils/process_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/duplicate-imports/after.py, examples/01-individual-rules/duplicate-imports/before.py
-  [30] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/add.py
+  [31] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/add.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [31] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/get_user.py
+  [32] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/get_user.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [32] ○ extract_class      → examples/01-individual-rules/missing-return-type/utils/process.py
+  [33] ○ extract_class      → examples/01-individual-rules/missing-return-type/utils/process.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [33] ○ extract_function   → examples/01-individual-rules/sorted-imports/utils/process.py
+  [34] ○ extract_function   → examples/01-individual-rules/sorted-imports/utils/process.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/sorted-imports/after.py, examples/01-individual-rules/sorted-imports/before.py
-  [34] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/format_timestamp.py
+  [35] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/format_timestamp.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [35] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/__init__.py
+  [36] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [36] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/add_data.py
+  [37] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/add_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [37] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/get_data.py
+  [38] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/get_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [38] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [39] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
       FILES: src/prefact/rules/importchecker_based.py
-  [39] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [40] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
       FILES: src/prefact/rules/mypy_based.py
 
-QUICK_WINS[22] (low risk, high savings — do first):
+QUICK_WINS[23] (low risk, high savings — do first):
   [1] extract_function   saved=39L  → utils/fix.py
       FILES: no_todo_rule.py, ai_boilerplate.py, import_linter_based.py +6
   [2] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
@@ -2118,7 +2133,7 @@ DEPENDENCY_RISK[1] (duplicates spanning multiple packages):
       src/prefact/rules/importchecker_based.py
       +5 more
 
-EFFORT_ESTIMATE (total ≈ 13.1h):
+EFFORT_ESTIMATE (total ≈ 13.4h):
   hard   fix                                 saved=39L  ~156min
   medium fix                                 saved=36L  ~72min
   medium validate                            saved=30L  ~60min
@@ -2129,27 +2144,35 @@ EFFORT_ESTIMATE (total ≈ 13.1h):
   easy   validate                            saved=14L  ~28min
   easy   validate                            saved=11L  ~22min
   easy   get_hash                            saved=10L  ~20min
-  ... +29 more (~284min)
+  ... +30 more (~302min)
 
 METRICS-TARGET:
-  dup_groups:  39 → 0
-  saved_lines: 354 lines recoverable
+  dup_groups:  40 → 0
+  saved_lines: 363 lines recoverable
 ```
 
 ### Evolution / Churn (`project/evolution.toon.yaml`)
 
 ```toon markpact:analysis path=project/evolution.toon.yaml
-# code2llm/evolution | 3408 func | 70f | 2026-04-25
+# code2llm/evolution | 3417 func | 71f | 2026-05-03
 
-NEXT[0]: no refactoring needed
+NEXT[2] (ranked by impact):
+  [1] !! SPLIT-FUNC      DocsManager.update_planfile  CC=27  fan=23
+      WHY: CC=27 exceeds 15
+      EFFORT: ~1h  IMPACT: 621
+
+  [2] !  SPLIT-FUNC      TestQLManager.run  CC=15  fan=12
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 180
+
 
 RISKS[0]: none
 
 METRICS-TARGET:
   CC̄:          0.6 → ≤0.4
-  max-CC:      14 → ≤7
+  max-CC:      27 → ≤13
   god-modules: 0 → 0
-  high-CC(≥15): 0 → ≤0
+  high-CC(≥15): 2 → ≤1
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):

@@ -1,23 +1,23 @@
-# prefact | 3487 func | 96f | 234484L | python | 2026-04-25
+# prefact | 3496 func | 97f | 235254L | python | 2026-05-03
 
 HEALTH:
-  CC̄=0.6  critical=22 (limit:10)  dup=10  cycles=0
+  CC̄=0.7  critical=23 (limit:10)  dup=10  cycles=0
 
 ALERTS[20]:
+  !!! cc_exceeded      DocsManager.update_planfile = 27 (limit:15)
+  !!! high_fan_out     DocsManager.update_planfile = 23 (limit:10)
   !!! high_fan_out     PrefactTreeProvider.activate = 20 (limit:10)
-  !!  high_fan_out     DocsManager.update_planfile = 18 (limit:10)
   !!  high_fan_out     CompositeRuleFactory.create_composite_rule = 18 (limit:10)
-  !!  high_fan_out     ProjectScanner.scan_project = 16 (limit:10)
+  !!  high_fan_out     ProjectScanner.scan_project = 18 (limit:10)
   !!  high_fan_out     RefactoringEngine.run = 15 (limit:10)
   !!  high_fan_out     ProjectScanner._scan_files_parallel = 15 (limit:10)
-  !   high_fan_out     ExtendedConfig.from_yaml = 14 (limit:10)
+  !   cc_exceeded      TestQLManager.run = 15 (limit:15)
   !   high_fan_out     benchmark_file = 14 (limit:10)
-  !   high_fan_out     benchmark_without_rampreload = 13 (limit:10)
-  !   high_fan_out     main = 13 (limit:10)
+  !   high_fan_out     ExtendedConfig.from_yaml = 14 (limit:10)
 
-MODULES[154] (top by size):
-  M[project/map.toon.yaml] 96742L C:0 F:2716 CC↑0 D:19 (yaml)
-  M[project/calls.yaml] 6005L C:0 F:0 CC↑0 D:0 (yaml)
+MODULES[157] (top by size):
+  M[project/map.toon.yaml] 96743L C:0 F:2716 CC↑0 D:20 (yaml)
+  M[project/calls.yaml] 6008L C:0 F:0 CC↑0 D:0 (yaml)
   M[planfile.yaml] 2126L C:0 F:0 CC↑0 D:0 (yaml)
   M[src/prefact/rules/string_transformations.py] 495L C:6 F:27 CC↑8 D:0 (python)
   M[src/prefact/rules/importchecker_based.py] 484L C:5 F:24 CC↑14 D:0 (python)
@@ -31,21 +31,21 @@ MODULES[154] (top by size):
   M[src/prefact/rules/pylint_based.py] 396L C:5 F:22 CC↑6 D:1 (python)
   M[src/prefact/git_hooks.py] 383L C:2 F:17 CC↑8 D:0 (python)
   M[src/prefact/autonomous/todo_manager.py] 368L C:1 F:15 CC↑13 D:0 (python)
-  LANGS: python:105/yaml:37/json:3/txt:2/shell:2/typescript:1/other:1/yml:1/toml:1/cfg:1
+  LANGS: python:106/yaml:37/json:4/shell:3/txt:2/typescript:1/other:1/yml:1/toml:1/cfg:1
 
 HOTSPOTS[10]:
+  ★ DocsManager.update_planfile fan=23  // Update planfile.yaml with new tickets.
   ★ PrefactTreeProvider.activate fan=20  // Orchestrates 20 calls
-  ★ DocsManager.update_planfile fan=18  // Update planfile.yaml with new tickets.
   ★ CompositeRuleFactory.create_composite_rule fan=18  // Create a composite rule dynamically.
-  ★ ProjectScanner.scan_project fan=16  // Scan project for issues.
+  ★ ProjectScanner.scan_project fan=18  // Scan project for issues.
   ★ RefactoringEngine.run fan=15  // Orchestrates 15 calls
 
-REFACTOR[6]:
-  [1] H/H Split god module planfile.yaml (2126L, 0 classes)
-  [2] H/H Split god module project/calls.yaml (6005L, 0 classes)
-  [3] H/H Split god module project/map.toon.yaml (96742L, 0 classes)
-  [4] M/M Reduce PrefactTreeProvider.activate fan-out (currently 20)
-  [5] M/M Reduce DocsManager.update_planfile fan-out (currently 18)
+REFACTOR[8]:
+  [1] H/L Split DocsManager.update_planfile (CC=27)
+  [2] H/H Split god module planfile.yaml (2126L, 0 classes)
+  [3] H/H Split god module project/calls.yaml (6008L, 0 classes)
+  [4] H/H Split god module project/map.toon.yaml (96743L, 0 classes)
+  [5] M/L Split TestQLManager.run (CC=15)
 
 EVOLUTION:
-  2026-04-25 CC̄=0.6 crit=22 234484L // Automated analysis
+  2026-05-03 CC̄=0.7 crit=23 235254L // Automated analysis

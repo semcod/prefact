@@ -4,12 +4,12 @@
 
 - **Project**: /home/tom/github/semcod/prefact
 - **Primary Language**: python
-- **Languages**: python: 104, yaml: 37, json: 3, shell: 2, txt: 2
+- **Languages**: python: 105, yaml: 37, json: 4, shell: 3, txt: 2
 - **Analysis Mode**: static
-- **Total Functions**: 3487
-- **Total Classes**: 146
-- **Modules**: 153
-- **Entry Points**: 3414
+- **Total Functions**: 3496
+- **Total Classes**: 147
+- **Modules**: 156
+- **Entry Points**: 3424
 
 ## Architecture by Module
 
@@ -27,15 +27,15 @@
 - **Classes**: 6
 - **File**: `string_transformations.py`
 
-### src.prefact.rules.import_linter_based
-- **Functions**: 24
-- **Classes**: 5
-- **File**: `import_linter_based.py`
-
 ### src.prefact.rules.importchecker_based
 - **Functions**: 24
 - **Classes**: 5
 - **File**: `importchecker_based.py`
+
+### src.prefact.rules.import_linter_based
+- **Functions**: 24
+- **Classes**: 5
+- **File**: `import_linter_based.py`
 
 ### src.prefact.performance.parallel
 - **Functions**: 23
@@ -52,15 +52,20 @@
 - **Classes**: 5
 - **File**: `pylint_based.py`
 
+### src.prefact.rules.unimport_based
+- **Functions**: 22
+- **Classes**: 5
+- **File**: `unimport_based.py`
+
 ### src.prefact.rules.mypy_based
 - **Functions**: 22
 - **Classes**: 6
 - **File**: `mypy_based.py`
 
-### src.prefact.rules.unimport_based
-- **Functions**: 22
-- **Classes**: 5
-- **File**: `unimport_based.py`
+### src.prefact.autonomous
+- **Functions**: 19
+- **Classes**: 1
+- **File**: `__init__.py`
 
 ### src.prefact.rules.ruff_based
 - **Functions**: 19
@@ -76,11 +81,6 @@
 - **Functions**: 17
 - **Classes**: 2
 - **File**: `git_hooks.py`
-
-### src.prefact.autonomous
-- **Functions**: 17
-- **Classes**: 1
-- **File**: `__init__.py`
 
 ### src.prefact.plugins
 - **Functions**: 17
@@ -116,6 +116,10 @@
 
 Main execution flows into the system:
 
+### src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+> Update planfile.yaml with new tickets.
+- **Calls**: self.planfile_path.exists, src.prefact.performance.cache.Cache.set, planfile.get, src.prefact.performance.cache.Cache.set, self.get_autonomous_limit, self.create_default_planfile, self._get_relative_file_path, current_issue_keys.add
+
 ### src.prefact.autonomous.project_scanner.ProjectScanner.scan_project
 > Scan project for issues.
 - **Calls**: ExtendedConfig.from_yaml, console.print, RefactoringEngine, Scanner, list, self.get_autonomous_limit, self._scan_files_with_progress, console.print
@@ -124,27 +128,30 @@ Main execution flows into the system:
 > Initialize built-in rule mappings.
 - **Calls**: src.prefact.rules.registry.get_lazy_registry, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module, registry.register_rule_module
 
-### examples.run_examples.main
-> Run all examples and show results.
-- **Calls**: console.print, examples.run_examples.find_examples, console.print, Table, table.add_column, table.add_column, table.add_column, console.print
+### src.prefact.autonomous.AutonomousRefact.run_autonomous
+> Run autonomous prefact process.
+- **Calls**: console.print, monotonic, Panel.fit, console.print, self.scan_project, self.scanner.get_autonomous_limit, console.print, self.update_planfile
 
-### src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-> Update planfile.yaml with new tickets.
-- **Calls**: self.planfile_path.exists, src.prefact.performance.cache.Cache.set, self.get_autonomous_limit, None.extend, self.create_default_planfile, self.create_ticket_from_issue, None.append, project.map.toon.open
+### src.prefact.autonomous.testql_manager.TestQLManager.run
+> Execute scenario and update planfile/TODO based on results.
 
-### src.prefact.reporters.console.print_report
-- **Calls**: Console, console.print, console.print, console.print, console.print, console.print, Panel, Table
+Returns a structured payload with validation report, tickets summary,
+and per-integration
+- **Calls**: str, run_testql_validation, console.print, console.print, str, str, build_testql_tickets, len
 
 ### src.prefact.config_extended.models.ExtendedConfig.from_yaml
 - **Calls**: None.items, cls, path.exists, cls, project.map.toon.open, src.prefact.config_extended.utils.deep_merge, isinstance, yaml.safe_load
 
+### examples.run_examples.main
+> Run all examples and show results.
+- **Calls**: console.print, examples.run_examples.find_examples, console.print, Table, table.add_column, table.add_column, table.add_column, console.print
+
+### src.prefact.reporters.console.print_report
+- **Calls**: Console, console.print, console.print, console.print, console.print, console.print, Panel, Table
+
 ### benchmark_ram_optimization.main
 > Run multiple benchmarks with different file counts and sizes.
 - **Calls**: Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print
-
-### src.prefact.autonomous.AutonomousRefact.run_autonomous
-> Run autonomous prefact process.
-- **Calls**: console.print, monotonic, Panel.fit, console.print, self.scan_project, self.scanner.get_autonomous_limit, console.print, self.update_planfile
 
 ### src.prefact.config_extended.config.ExtendedConfig.from_yaml
 > Load configuration from YAML file with environment support.
@@ -153,10 +160,6 @@ Main execution flows into the system:
 ### src.prefact.rules.mypy_based.MyPyHelper.check_file
 > Run MyPy on a single file and return JSON results.
 - **Calls**: tempfile.TemporaryDirectory, Path, str, str, config.get, config.get, subprocess.run, report_file.exists
-
-### src.prefact.autonomous.todo_manager.TodoManager._parse_existing_todos
-> Parse existing TODO.md entries.
-- **Calls**: self.todo_path.read_text, existing_content.split, self.todo_path.exists, len, None.strip, line.startswith, line.startswith, None.strip
 
 ### src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
 > Create a composite rule dynamically.
@@ -168,24 +171,32 @@ Main execution flows into the system:
 ### vscode-extension.src.extension.PrefactTreeProvider.activate
 - **Calls**: vscode-extension.src.extension.log, vscode-extension.src.extension.PrefactDiagnosticsProvider, vscode-extension.src.extension.PrefactTreeProvider, vscode-extension.src.extension.createTreeView, vscode-extension.src.extension.registerCommand, vscode-extension.src.extension.openTextDocument, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanFile, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanWorkspace
 
-### src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel
-> Scan files using parallel processing.
-- **Calls**: min, console.print, config.performance.get, len, ThreadPoolExecutor, as_completed, file_path.read_text, executor.submit
+### src.prefact.autonomous.todo_manager.TodoManager._parse_existing_todos
+> Parse existing TODO.md entries.
+- **Calls**: self.todo_path.read_text, existing_content.split, self.todo_path.exists, len, None.strip, line.startswith, line.startswith, None.strip
 
 ### src.prefact.rules.composite_rules.CompositeImportRules._load_tools
 > Load all import-related tools.
 - **Calls**: self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, tools.extend, tools.append, tools.append
 
-### examples.sample-project.cli.main
-> Main CLI command.
-- **Calls**: click.command, click.option, click.option, Taskfile.print, User, Taskfile.print, DataProcessor, processor.add_item
+### src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel
+> Scan files using parallel processing.
+- **Calls**: min, console.print, config.performance.get, len, ThreadPoolExecutor, as_completed, file_path.read_text, executor.submit
 
 ### src.prefact.cli.autonomous_cmd
 > Run autonomous prefact mode (-a).
 
 Automatically initializes prefact.yaml if missing, runs examples,
 scans for issues, and creates tickets in planfile
-- **Calls**: main.command, click.option, click.option, click.option, click.option, click.option, Console, AutonomousRefact
+- **Calls**: main.command, click.option, click.option, click.option, click.option, click.option, click.option, click.option
+
+### examples.sample-project.cli.main
+> Main CLI command.
+- **Calls**: click.command, click.option, click.option, Taskfile.print, User, Taskfile.print, DataProcessor, processor.add_item
+
+### src.prefact.scanner._match_gitignore_pattern
+> Match a path against a gitignore-style pattern.
+- **Calls**: pattern.endswith, pattern.startswith, pattern.rstrip, path.split, pattern.split, fnmatch.fnmatch, fnmatch.fnmatch, path.endswith
 
 ### src.prefact.benchmark.ScanProbe.run
 - **Calls**: textwrap.dedent, BenchmarkResult, tempfile.TemporaryDirectory, Path, vscode-extension.src.extension.PrefactDiagnosticsProvider.range, Config, RefactoringEngine, time.perf_counter
@@ -194,6 +205,10 @@ scans for issues, and creates tickets in planfile
 > Find line numbers for each import.
 - **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
 
+### src.prefact.cli.testql_cmd
+> Run TestQL DSL validation and bridge results into planfile/TODO.
+- **Calls**: main.command, click.argument, click.option, click.option, click.option, click.option, click.option, click.option
+
 ### src.prefact.engine.RefactoringEngine.run
 - **Calls**: PipelineResult, self.scanner.collect_files, self._preload_sources, issues_map.values, issues_map.items, issues_map.update, issues_map.update, result.issues_found.extend
 
@@ -201,21 +216,17 @@ scans for issues, and creates tickets in planfile
 > Decorator to cache file operations.
 - **Calls**: src.prefact.performance.cache.get_hash_cache, hash_cache.get_hash, src.prefact.performance.cache.get_cache, cache.get, func, cache.set, func, hash_cache.set_hash
 
-### src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
-> Create a hybrid rule that can switch between AST and Ruff.
-- **Calls**: None.get, None.__init__, RuleMigrationManager, self.migration_manager.should_use_ruff, self.ast_rule.scan_file, self.migration_manager.should_use_ruff, self.ast_rule.fix, self.migration_manager.should_use_ruff
-
 ### src.prefact.rules.importchecker_based.ImportOptimizer._extract_all_imports
 > Extract all imports with their locations.
 - **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
 
+### src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
+> Create a hybrid rule that can switch between AST and Ruff.
+- **Calls**: None.get, None.__init__, RuleMigrationManager, self.migration_manager.should_use_ruff, self.ast_rule.scan_file, self.migration_manager.should_use_ruff, self.ast_rule.fix, self.migration_manager.should_use_ruff
+
 ### src.prefact.plugins.PluginManager.load_plugin
 > Load a plugin and register its rules.
 - **Calls**: Taskfile.print, PluginValidator.validate_plugin_module, metadata.entry_point.split, importlib.import_module, getattr, callable, self._loaded_modules.add, Taskfile.print
-
-### src.prefact.autonomous.todo_manager.TodoManager._parse_todo_tasks
-> Parse active tasks from TODO.md.
-- **Calls**: self.todo_path.read_text, content.split, None.startswith, line.strip, None.startswith, None.startswith, line.strip, line.strip
 
 ### src.prefact.autonomous.setup_manager.SetupManager.run_examples
 > Run all examples and verify they work.
@@ -224,44 +235,36 @@ scans for issues, and creates tickets in planfile
 ### src.prefact.rules.unimport_based.UnimportUnusedImports.scan_file
 - **Calls**: UnimportHelper.check_source, source.splitlines, enumerate, line.strip, stripped.startswith, item.get, import_lines.get, issues.append
 
-### src.prefact.plugins.PluginManager._discover_local_plugins
-> Discover plugins in a local directory.
-- **Calls**: plugin_dir.glob, PluginValidator.validate_plugin_path, importlib.util.spec_from_file_location, importlib.util.module_from_spec, spec.loader.exec_module, PluginMetadata, plugins.append, Taskfile.print
-
-### src.prefact.performance.cache.cached_result
-> Decorator to cache function results.
-- **Calls**: src.prefact.performance.cache.get_cache, cache.get, func, cache.set, func, key_func, None.hexdigest, None.hexdigest
-
 ## Process Flows
 
 Key execution flows identified:
 
-### Flow 1: scan_project
+### Flow 1: update_planfile
+```
+update_planfile [src.prefact.autonomous.docs_manager.DocsManager]
+  └─ →> set
+  └─ →> set
+```
+
+### Flow 2: scan_project
 ```
 scan_project [src.prefact.autonomous.project_scanner.ProjectScanner]
 ```
 
-### Flow 2: _initialize_built_in_rules
+### Flow 3: _initialize_built_in_rules
 ```
 _initialize_built_in_rules [src.prefact.rules.registry]
   └─> get_lazy_registry
 ```
 
-### Flow 3: main
+### Flow 4: run_autonomous
 ```
-main [examples.run_examples]
-  └─> find_examples
-```
-
-### Flow 4: update_planfile
-```
-update_planfile [src.prefact.autonomous.docs_manager.DocsManager]
-  └─ →> set
+run_autonomous [src.prefact.autonomous.AutonomousRefact]
 ```
 
-### Flow 5: print_report
+### Flow 5: run
 ```
-print_report [src.prefact.reporters.console]
+run [src.prefact.autonomous.testql_manager.TestQLManager]
 ```
 
 ### Flow 6: from_yaml
@@ -270,19 +273,20 @@ from_yaml [src.prefact.config_extended.models.ExtendedConfig]
   └─ →> open
 ```
 
-### Flow 7: run_autonomous
+### Flow 7: main
 ```
-run_autonomous [src.prefact.autonomous.AutonomousRefact]
+main [examples.run_examples]
+  └─> find_examples
 ```
 
-### Flow 8: check_file
+### Flow 8: print_report
+```
+print_report [src.prefact.reporters.console]
+```
+
+### Flow 9: check_file
 ```
 check_file [src.prefact.rules.mypy_based.MyPyHelper]
-```
-
-### Flow 9: _parse_existing_todos
-```
-_parse_existing_todos [src.prefact.autonomous.todo_manager.TodoManager]
 ```
 
 ### Flow 10: create_composite_rule
@@ -303,7 +307,7 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 
 ### src.prefact.autonomous.AutonomousRefact
 > Autonomous prefact manager.
-- **Methods**: 17
+- **Methods**: 19
 - **Key Methods**: src.prefact.autonomous.AutonomousRefact.__init__, src.prefact.autonomous.AutonomousRefact.run_autonomous, src.prefact.autonomous.AutonomousRefact.create_refact_config, src.prefact.autonomous.AutonomousRefact.detect_project_info, src.prefact.autonomous.AutonomousRefact.run_examples, src.prefact.autonomous.AutonomousRefact.scan_project, src.prefact.autonomous.AutonomousRefact.group_issues, src.prefact.autonomous.AutonomousRefact.update_planfile, src.prefact.autonomous.AutonomousRefact.create_default_planfile, src.prefact.autonomous.AutonomousRefact.create_ticket_from_issue
 
 ### src.prefact.logging.logger.PprefactLogger
@@ -337,11 +341,11 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Key Methods**: src.prefact.autonomous.dependency_checker.DependencyChecker.__init__, src.prefact.autonomous.dependency_checker.DependencyChecker.check_dependencies, src.prefact.autonomous.dependency_checker.DependencyChecker._collect_declared_deps, src.prefact.autonomous.dependency_checker.DependencyChecker._parse_pyproject_toml, src.prefact.autonomous.dependency_checker.DependencyChecker._parse_requirements_files, src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated, src.prefact.autonomous.dependency_checker.DependencyChecker._build_issue_groups, src.prefact.autonomous.dependency_checker.DependencyChecker._find_dep_source_file, src.prefact.autonomous.dependency_checker.DependencyChecker._find_dep_line, src.prefact.autonomous.dependency_checker.DependencyChecker._normalize
 - **Inherits**: BaseManager
 
-### src.prefact.rules.llm_hallucinations.LLMHallucinationRule
-> Detect LLM hallucination patterns in code.
-- **Methods**: 9
-- **Key Methods**: src.prefact.rules.llm_hallucinations.LLMHallucinationRule.__init__, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._load_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.scan_file, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._check_ast_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_function_name, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_import, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._map_severity, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.fix, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.validate
-- **Inherits**: BaseRule
+### src.prefact.autonomous.docs_manager.DocsManager
+> Manages documentation files - planfile.yaml and CHANGELOG.md.
+- **Methods**: 10
+- **Key Methods**: src.prefact.autonomous.docs_manager.DocsManager.__init__, src.prefact.autonomous.docs_manager.DocsManager.update_planfile, src.prefact.autonomous.docs_manager.DocsManager._count_existing_tickets, src.prefact.autonomous.docs_manager.DocsManager._should_remove_obsolete_ticket, src.prefact.autonomous.docs_manager.DocsManager._is_autonomous_ticket, src.prefact.autonomous.docs_manager.DocsManager.create_default_planfile, src.prefact.autonomous.docs_manager.DocsManager.create_ticket_from_issue, src.prefact.autonomous.docs_manager.DocsManager.ticket_exists, src.prefact.autonomous.docs_manager.DocsManager.update_changelog_md, src.prefact.autonomous.docs_manager.DocsManager._get_relative_file_path
+- **Inherits**: BaseManager
 
 ### src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule
 > Detect code that appears to be LLM-generated.
@@ -349,11 +353,23 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Key Methods**: src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.__init__, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._load_indicators, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.scan_file, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_comment_ratio, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._check_docstring_patterns, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._has_llm_docstring_pattern, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule._map_severity, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.fix, src.prefact.rules.llm_generated_code.LLMGeneratedCodeRule.validate
 - **Inherits**: BaseRule
 
+### src.prefact.rules.llm_hallucinations.LLMHallucinationRule
+> Detect LLM hallucination patterns in code.
+- **Methods**: 9
+- **Key Methods**: src.prefact.rules.llm_hallucinations.LLMHallucinationRule.__init__, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._load_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.scan_file, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._check_ast_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_function_name, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_import, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._map_severity, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.fix, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.validate
+- **Inherits**: BaseRule
+
 ### src.prefact.config_extended.config.ExtendedConfig
 > Extended configuration with additional features.
 - **Methods**: 8
 - **Key Methods**: src.prefact.config_extended.config.ExtendedConfig.__init__, src.prefact.config_extended.config.ExtendedConfig.from_yaml, src.prefact.config_extended.config.ExtendedConfig._parse_rules, src.prefact.config_extended.config.ExtendedConfig._deep_merge, src.prefact.config_extended.config.ExtendedConfig.get_tool_config, src.prefact.config_extended.config.ExtendedConfig.get_performance_setting, src.prefact.config_extended.config.ExtendedConfig.get_plugin_config, src.prefact.config_extended.config.ExtendedConfig.to_dict
 - **Inherits**: Config
+
+### src.prefact.rules.magic_numbers.MagicNumberRule
+> Detect magic numbers in code.
+- **Methods**: 8
+- **Key Methods**: src.prefact.rules.magic_numbers.MagicNumberRule.__init__, src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers, src.prefact.rules.magic_numbers.MagicNumberRule.scan_file, src.prefact.rules.magic_numbers.MagicNumberRule._extract_literal_issues, src.prefact.rules.magic_numbers.MagicNumberRule._extract_comparison_issues, src.prefact.rules.magic_numbers.MagicNumberRule._is_magic_number, src.prefact.rules.magic_numbers.MagicNumberRule.fix, src.prefact.rules.magic_numbers.MagicNumberRule.validate
+- **Inherits**: BaseRule
 
 ### src.prefact.rules.unused_imports.UnusedImports
 - **Methods**: 8
@@ -371,12 +387,6 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Key Methods**: src.prefact.rules.string_transformations.ContextAwareStringTransformer.__init__, src.prefact.rules.string_transformations.ContextAwareStringTransformer.visit_FunctionDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_FunctionDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.visit_ClassDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_ClassDef, src.prefact.rules.string_transformations.ContextAwareStringTransformer.leave_BinaryOperation, src.prefact.rules.string_transformations.ContextAwareStringTransformer._should_skip_context, src.prefact.rules.string_transformations.ContextAwareStringTransformer._is_in_logging_statement
 - **Inherits**: cst.CSTTransformer
 
-### src.prefact.rules.magic_numbers.MagicNumberRule
-> Detect magic numbers in code.
-- **Methods**: 8
-- **Key Methods**: src.prefact.rules.magic_numbers.MagicNumberRule.__init__, src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers, src.prefact.rules.magic_numbers.MagicNumberRule.scan_file, src.prefact.rules.magic_numbers.MagicNumberRule._extract_literal_issues, src.prefact.rules.magic_numbers.MagicNumberRule._extract_comparison_issues, src.prefact.rules.magic_numbers.MagicNumberRule._is_magic_number, src.prefact.rules.magic_numbers.MagicNumberRule.fix, src.prefact.rules.magic_numbers.MagicNumberRule.validate
-- **Inherits**: BaseRule
-
 ### src.prefact.performance.parallel.ParallelEngine
 > Parallel processing engine for prefact.
 - **Methods**: 7
@@ -391,12 +401,6 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 > Wrapper for diskcache with additional functionality.
 - **Methods**: 7
 - **Key Methods**: src.prefact.performance.cache.base.Cache.__init__, src.prefact.performance.cache.base.Cache.get, src.prefact.performance.cache.base.Cache.set, src.prefact.performance.cache.base.Cache.delete, src.prefact.performance.cache.base.Cache.clear, src.prefact.performance.cache.base.Cache.get_stats, src.prefact.performance.cache.base.Cache.close
-
-### src.prefact.autonomous.docs_manager.DocsManager
-> Manages documentation files - planfile.yaml and CHANGELOG.md.
-- **Methods**: 7
-- **Key Methods**: src.prefact.autonomous.docs_manager.DocsManager.__init__, src.prefact.autonomous.docs_manager.DocsManager.update_planfile, src.prefact.autonomous.docs_manager.DocsManager._count_existing_tickets, src.prefact.autonomous.docs_manager.DocsManager.create_default_planfile, src.prefact.autonomous.docs_manager.DocsManager.create_ticket_from_issue, src.prefact.autonomous.docs_manager.DocsManager.ticket_exists, src.prefact.autonomous.docs_manager.DocsManager.update_changelog_md
-- **Inherits**: BaseManager
 
 ## Data Transformation Functions
 
@@ -538,15 +542,16 @@ Key functions that process and transform data:
 
 Functions exposed as public API (no underscore prefix):
 
-- `src.prefact.autonomous.project_scanner.ProjectScanner.scan_project` - 34 calls
+- `src.prefact.autonomous.docs_manager.DocsManager.update_planfile` - 41 calls
+- `src.prefact.autonomous.project_scanner.ProjectScanner.scan_project` - 36 calls
+- `src.prefact.autonomous.AutonomousRefact.run_autonomous` - 30 calls
+- `src.prefact.autonomous.testql_manager.TestQLManager.run` - 29 calls
 - `examples.06-api-usage.example.run_prefact_example` - 28 calls
+- `src.prefact.config_extended.models.ExtendedConfig.from_yaml` - 27 calls
 - `src.prefact.benchmark.build_prefact_suite` - 26 calls
 - `examples.run_examples.main` - 25 calls
-- `src.prefact.autonomous.docs_manager.DocsManager.update_planfile` - 25 calls
 - `src.prefact.reporters.console.print_report` - 24 calls
-- `src.prefact.config_extended.models.ExtendedConfig.from_yaml` - 24 calls
 - `benchmark_ram_optimization.main` - 22 calls
-- `src.prefact.autonomous.AutonomousRefact.run_autonomous` - 22 calls
 - `src.prefact.config_extended.config.ExtendedConfig.from_yaml` - 21 calls
 - `src.prefact.rules.mypy_based.MyPyHelper.check_file` - 21 calls
 - `src.prefact.rules.benchmark.benchmark_file` - 21 calls
@@ -554,9 +559,10 @@ Functions exposed as public API (no underscore prefix):
 - `src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate` - 20 calls
 - `vscode-extension.src.extension.PrefactTreeProvider.activate` - 20 calls
 - `examples.06-api-usage.example.batch_processing_example` - 19 calls
+- `src.prefact.cli.autonomous_cmd` - 19 calls
 - `examples.sample-project.cli.main` - 18 calls
-- `src.prefact.cli.autonomous_cmd` - 17 calls
 - `src.prefact.benchmark.ScanProbe.run` - 17 calls
+- `src.prefact.cli.testql_cmd` - 17 calls
 - `benchmark_ram_optimization.run_benchmark` - 16 calls
 - `examples.06-api-usage.example.custom_rule_example` - 16 calls
 - `src.prefact.engine.RefactoringEngine.run` - 16 calls
@@ -566,18 +572,16 @@ Functions exposed as public API (no underscore prefix):
 - `src.prefact.plugins.PluginManager.load_plugin` - 15 calls
 - `src.prefact.autonomous.setup_manager.SetupManager.run_examples` - 15 calls
 - `src.prefact.rules.unimport_based.UnimportUnusedImports.scan_file` - 15 calls
+- `src.prefact.autonomous.testql_manager.TestQLManager.run_all` - 15 calls
 - `benchmark_ram_optimization.benchmark_without_rampreload` - 14 calls
 - `src.prefact.performance.cache.cached_result` - 14 calls
+- `src.prefact.rules.unimport_based.UnimportAll.validate` - 14 calls
 - `src.prefact.autonomous.docs_manager.DocsManager.update_changelog_md` - 14 calls
 - `src.prefact.autonomous.project_scanner.ProjectScanner.group_issues` - 14 calls
-- `src.prefact.rules.unimport_based.UnimportAll.validate` - 14 calls
 - `src.prefact.config.Config.from_yaml` - 13 calls
 - `vscode-extension.src.extension.PrefactTreeProvider.getChildren` - 13 calls
 - `src.prefact.git_hooks.main` - 12 calls
 - `src.prefact.benchmark.main` - 12 calls
-- `src.prefact.config_extended.validation.ConfigValidator.validate` - 12 calls
-- `src.prefact.rules.import_linter_based.ImportLinterNoRelative.scan_file` - 12 calls
-- `src.prefact.rules.benchmark.main` - 12 calls
 
 ## System Interactions
 
@@ -585,6 +589,10 @@ How components interact:
 
 ```mermaid
 graph TD
+    update_planfile --> exists
+    update_planfile --> set
+    update_planfile --> get
+    update_planfile --> get_autonomous_limit
     scan_project --> from_yaml
     scan_project --> print
     scan_project --> RefactoringEngine
@@ -592,29 +600,25 @@ graph TD
     scan_project --> list
     _initialize_built_in --> get_lazy_registry
     _initialize_built_in --> register_rule_module
-    main --> print
-    main --> find_examples
-    main --> Table
-    main --> add_column
-    update_planfile --> exists
-    update_planfile --> set
-    update_planfile --> get_autonomous_limit
-    update_planfile --> extend
-    update_planfile --> create_default_planf
-    print_report --> Console
-    print_report --> print
-    from_yaml --> items
-    from_yaml --> cls
-    from_yaml --> exists
-    from_yaml --> open
     run_autonomous --> print
     run_autonomous --> monotonic
     run_autonomous --> fit
     run_autonomous --> scan_project
+    run --> str
+    run --> run_testql_validatio
+    run --> print
+    from_yaml --> items
+    from_yaml --> cls
+    from_yaml --> exists
+    from_yaml --> open
+    main --> print
+    main --> find_examples
+    main --> Table
+    main --> add_column
+    print_report --> Console
+    print_report --> print
     from_yaml --> _parse_rules
     from_yaml --> pop
-    check_file --> TemporaryDirectory
-    check_file --> Path
 ```
 
 ## Reverse Engineering Guidelines

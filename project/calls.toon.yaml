@@ -1,24 +1,24 @@
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.6
+# nodes: 229 | edges: 227 | modules: 65
+# CC̄=0.7
 
 HUBS[20]:
   Taskfile.print
     CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=27  in:0  out:41  total:41
   src.prefact.rules.registry._initialize_built_in_rules
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:24  total:24
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
@@ -27,22 +27,22 @@ HUBS[20]:
     CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  src.prefact.rules.benchmark.print_benchmark_results
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
+  examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  benchmark_ram_optimization.run_benchmark
-    CC=1  in:1  out:16  total:17
-  examples.06-api-usage.example.custom_rule_example
+  src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  src.prefact.cli._build_config
+    CC=7  in:3  out:14  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -108,14 +108,15 @@ MODULES:
     format_name  CC=1  out:1
     helper_function  CC=1  out:1
     validate_email  CC=2  out:3
-  project.map.toon  [1 funcs]
+  project.map.toon  [2 funcs]
+    check  CC=0  out:0
     open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
   src.prefact.autonomous.docs_manager  [2 funcs]
     __init__  CC=1  out:2
-    update_planfile  CC=11  out:25
+    update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
   src.prefact.autonomous.setup_manager  [1 funcs]
@@ -141,7 +142,7 @@ MODULES:
     save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
-    from_yaml  CC=13  out:24
+    from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
@@ -289,10 +290,9 @@ MODULES:
     _collect_all_exports  CC=10  out:8
     _collect_imported_names  CC=8  out:4
     _collect_used_names  CC=5  out:7
-  src.prefact.scanner  [5 funcs]
+  src.prefact.scanner  [4 funcs]
     __init__  CC=4  out:6
-    _excluded  CC=12  out:5
-    collect_files  CC=6  out:6
+    collect_files  CC=6  out:7
     _load_gitignore  CC=6  out:5
     _match_gitignore_pattern  CC=12  out:18
   src.prefact.validator  [1 funcs]

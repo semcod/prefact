@@ -25,7 +25,7 @@ Python code quality tool with LLM-aware rules, plugin system, and enterprise fea
 - **name**: `prefact`
 - **version**: `0.0.0`
 - **python_requires**: `>=3.8`
-- **license**: Apache-2.0
+- **license**: {'text': 'Apache-2.0'}
 - **ai_model**: `openrouter/qwen/qwen3-coder-next`
 - **ecosystem**: SUMD + DOQL + testql + taskfile
 - **generated_from**: pyproject.toml, Taskfile.yml, Makefile, testql(2), app.doql.less, pyqual.yaml, goal.yaml, .env.example, project/(2 analysis files)
@@ -47,8 +47,8 @@ app {
 }
 
 dependencies {
-  runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
-  dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.0, costs>=0.1.20, pfix>=0.1.60";
+  runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60, planfile>=0.1.86";
+  dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60";
 }
 
 interface[type="cli"] {
@@ -854,9 +854,10 @@ libcst>=0.4.0
 pyyaml>=6.0
 rich>=12.0.0
 tomli>=2.0.0; python_version<'3.11'
-goal>=2.1.0
+goal>=2.1.218
 costs>=0.1.20
 pfix>=0.1.60
+planfile>=0.1.86
 ```
 
 ### Development
@@ -870,7 +871,7 @@ isort>=5.10.0
 mypy>=1.0.0
 ruff>=0.5.0
 pre-commit>=3.0.0
-goal>=2.1.0
+goal>=2.1.218
 costs>=0.1.20
 pfix>=0.1.60
 ```
@@ -956,13 +957,13 @@ pip install -e .[dev]
 ### `project/map.toon.yaml`
 
 ```toon markpact:analysis path=project/map.toon.yaml
-# prefact | 13248f 4519817L | python:13240,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-04-25
-# stats: 28684 func | 30253 cls | 13248 mod | CC̄=4.2 | critical:2551 | cycles:0
+# prefact | 13250f 4520476L | python:13242,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-05-03
+# stats: 28694 func | 30254 cls | 13250 mod | CC̄=4.2 | critical:2552 | cycles:0
 # alerts[5]: CC process=177; fan-out _install_wheel=75
 # hotspots[5]: _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75; _install_wheel fan=75
 # evolution: baseline
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[13248]:
+M[13250]:
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/__init__.py,14
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_argcomplete.py,118
   .algitex/backups/batch_20260328_163114/examples/test_env/lib/python3.13/site-packages/_pytest/_code/__init__.py,27
@@ -14120,22 +14121,23 @@ M[13248]:
   project.sh,47
   src/prefact/__init__.py,4
   src/prefact/_base.py,7
-  src/prefact/autonomous/__init__.py,219
+  src/prefact/autonomous/__init__.py,291
   src/prefact/autonomous/_base.py,67
   src/prefact/autonomous/dependency_checker.py,238
-  src/prefact/autonomous/docs_manager.py,190
+  src/prefact/autonomous/docs_manager.py,262
   src/prefact/autonomous/project_scanner.py,245
   src/prefact/autonomous/setup_manager.py,121
+  src/prefact/autonomous/testql_manager.py,216
   src/prefact/autonomous/todo_manager.py,369
   src/prefact/autonomous.py,18
   src/prefact/benchmark.py,294
-  src/prefact/cli.py,248
+  src/prefact/cli.py,307
   src/prefact/config.py,193
   src/prefact/config_extended/__init__.py,7
   src/prefact/config_extended/config.py,129
   src/prefact/config_extended/constants.py,25
   src/prefact/config_extended/generator.py,172
-  src/prefact/config_extended/models.py,39
+  src/prefact/config_extended/models.py,50
   src/prefact/config_extended/utils.py,11
   src/prefact/config_extended/validation.py,66
   src/prefact/config_extended/validators.py,45
@@ -14194,7 +14196,7 @@ M[13248]:
   src/prefact/rules/unimport_based.py,445
   src/prefact/rules/unused_imports.py,233
   src/prefact/rules/wildcard_imports.py,46
-  src/prefact/scanner.py,154
+  src/prefact/scanner.py,158
   src/prefact/validator.py,30
   test_large_files.py,49
   test_ram_implementation.py,55
@@ -14206,6 +14208,7 @@ M[13248]:
   tests/test_refactoring.py,12
   tests/test_relative_imports.py,136
   tests/test_rules.py,164
+  tests/test_testql_manager.py,225
   tests/test_unused_imports.py,68
   tree.sh,2
   vscode-extension/out/extension.js,355
@@ -97273,7 +97276,7 @@ D:
   src/prefact/_base.py:
   src/prefact/autonomous/__init__.py:
     e: AutonomousRefact
-    AutonomousRefact: __init__(2),run_autonomous(1),create_refact_config(0),detect_project_info(0),run_examples(0),scan_project(0),group_issues(1),update_planfile(0),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),manage_documentation(0),update_todo_md(0),execute_todos(0),update_changelog_md(0),_print_autonomous_summary(0),run_tests(0)  # Autonomous prefact manager.
+    AutonomousRefact: __init__(2),run_autonomous(1),create_refact_config(0),detect_project_info(0),run_examples(0),scan_project(0),group_issues(1),update_planfile(0),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),manage_documentation(0),update_todo_md(0),execute_todos(0),update_changelog_md(0),run_testql(1),run_testql_all(0),_print_autonomous_summary(0),run_tests(0)  # Autonomous prefact manager.
   src/prefact/autonomous/_base.py:
     e: BaseManager
     BaseManager: __init__(1),get_autonomous_limit(1),_load_autonomous_limits(0)  # Base class for autonomous managers.
@@ -97282,13 +97285,16 @@ D:
     DependencyChecker: __init__(1),check_dependencies(0),_collect_declared_deps(0),_parse_pyproject_toml(0),_parse_requirements_files(0),_query_pip_outdated(0),_build_issue_groups(0),_find_dep_source_file(0),_find_dep_line(2),_normalize(1),_parse_dep_string(1)  # Checks for outdated project dependencies.
   src/prefact/autonomous/docs_manager.py:
     e: DocsManager
-    DocsManager: __init__(1),update_planfile(0),_count_existing_tickets(1),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),update_changelog_md(0)  # Manages documentation files - planfile.yaml and CHANGELOG.md
+    DocsManager: __init__(1),update_planfile(0),_count_existing_tickets(1),_should_remove_obsolete_ticket(2),_is_autonomous_ticket(1),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),update_changelog_md(0),_get_relative_file_path(1)  # Manages documentation files - planfile.yaml and CHANGELOG.md
   src/prefact/autonomous/project_scanner.py:
     e: ProjectScanner
     ProjectScanner: __init__(2),scan_project(0),_scan_files_with_progress(3),_scan_files_parallel(6),_scan_files_sequential(5),_scan_single_file(2),group_issues(1)  # Handles project scanning operations.
   src/prefact/autonomous/setup_manager.py:
     e: SetupManager
     SetupManager: create_refact_config(0),detect_project_info(0),run_examples(0)  # Handles project setup - configuration and examples.
+  src/prefact/autonomous/testql_manager.py:
+    e: TestQLManager
+    TestQLManager: run(1),discover_scenarios(1),run_all(0)  # Run TestQL DSL validation and bridge results into planfile.
   src/prefact/autonomous/todo_manager.py:
     e: TodoManager
     TodoManager: __init__(1),update_todo_md(0),_parse_existing_todos(0),_generate_current_todos(1),_find_completed_tasks(2),_write_todo_md(4),_get_relative_file_path(1),execute_todos(0),_parse_todo_tasks(0),_get_refactoring_config(0),_limit_todo_execution_tasks(1),_execute_todo_tasks(1),_group_tasks_by_file(1),_process_file_tasks(4),_update_todo_with_execution_results(4)  # Manages TODO.md file operations.
@@ -97301,15 +97307,16 @@ D:
     benchmark_library(module;cli_commands;test_path;threshold_import;threshold_cli;threshold_tests)
     main()
   src/prefact/cli.py:
-    e: main,_common_options,_build_config,scan,fix,check,init,autonomous_cmd,rules,_output
-    main(ctx;autonomous;init_only;skip_tests;skip_examples;exclude)
+    e: main,_common_options,_build_config,scan,fix,check,init,autonomous_cmd,testql_cmd,rules,_output
+    main(ctx;autonomous;init_only;skip_tests;skip_examples;exclude;with_testql;testql_dir)
     _common_options(fn)
     _build_config(project_path;package_name;config_file;verbose;exclude)
     scan()
     fix(dry_run;no_backup)
     check(filepath)
     init(project_path)
-    autonomous_cmd(project_path;init_only;skip_tests;skip_examples;exclude)
+    autonomous_cmd(project_path;init_only;skip_tests;skip_examples;exclude;with_testql;testql_dir)
+    testql_cmd(scenario_path;project_path;url;dry_run;strategy_path;create_tickets;sync_targets;max_tickets;testql_bin;testql_repo_path)
     rules()
     _output(result;kwargs)
   src/prefact/config.py:
@@ -97694,6 +97701,17 @@ D:
     TestMissingReturnType: test_detects_missing(1),test_has_return_type(1),test_skips_private(1)
     TestSortedImports: test_detects_unsorted(1),test_sorted_ok(1)
     config(tmp_path)
+  tests/test_testql_manager.py:
+    e: planfile_stub,test_run_testql_creates_and_syncs_tickets,test_run_testql_respects_no_create_tickets,test_discover_scenarios_returns_sorted_glob,test_run_testql_all_skips_when_no_scenarios,test_run_testql_all_aggregates_results,_stub_pipeline_steps,test_run_autonomous_with_testql_invokes_run_all,test_run_autonomous_default_skips_testql
+    planfile_stub(monkeypatch)
+    test_run_testql_creates_and_syncs_tickets(tmp_path;planfile_stub)
+    test_run_testql_respects_no_create_tickets(tmp_path;planfile_stub)
+    test_discover_scenarios_returns_sorted_glob(tmp_path)
+    test_run_testql_all_skips_when_no_scenarios(tmp_path;planfile_stub)
+    test_run_testql_all_aggregates_results(tmp_path;planfile_stub)
+    _stub_pipeline_steps(auto;monkeypatch)
+    test_run_autonomous_with_testql_invokes_run_all(tmp_path;monkeypatch)
+    test_run_autonomous_default_skips_testql(tmp_path;monkeypatch)
   tests/test_unused_imports.py:
     e: config,TestScanUnused,TestFixUnused
     TestScanUnused: test_detects_unused(1),test_used_import_not_flagged(1),test_respects_all_exports(1),test_skips_underscore_imports(1),test_attribute_access_counts_as_used(1)
@@ -97703,7 +97721,7 @@ D:
 
 ## Call Graph
 
-*229 nodes · 229 edges · 65 modules · CC̄=0.6*
+*229 nodes · 227 edges · 65 modules · CC̄=0.7*
 
 ### Hubs (by degree)
 
@@ -97711,35 +97729,35 @@ D:
 |----------|----|----|-----|-------|
 | `print` *(in Taskfile)* | 0 | 133 | 0 | **133** |
 | `super` *(in vscode-extension.src.extension.PrefactTreeItem)* | 1 | 42 | 0 | **42** |
+| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 27 ⚠ | 0 | 41 | **41** |
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
+| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 27 | **27** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
-| `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 11 ⚠ | 0 | 25 | **25** |
-| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 24 | **24** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 229 | modules: 65
-# CC̄=0.6
+# nodes: 229 | edges: 227 | modules: 65
+# CC̄=0.7
 
 HUBS[20]:
   Taskfile.print
     CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
+    CC=27  in:0  out:41  total:41
   src.prefact.rules.registry._initialize_built_in_rules
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile
-    CC=11  in:0  out:25  total:25
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:24  total:24
   benchmark_ram_optimization.main
     CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
@@ -97748,22 +97766,22 @@ HUBS[20]:
     CC=0  in:22  out:0  total:22
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:2  out:18  total:20
-  examples.06-api-usage.example.batch_processing_example
-    CC=6  in:1  out:19  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
+  examples.06-api-usage.example.batch_processing_example
+    CC=6  in:1  out:19  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  src.prefact.rules.benchmark.print_benchmark_results
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
+  examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
-  benchmark_ram_optimization.run_benchmark
-    CC=1  in:1  out:16  total:17
-  examples.06-api-usage.example.custom_rule_example
+  src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  src.prefact.cli._build_config
+    CC=7  in:3  out:14  total:17
 
 MODULES:
   Taskfile  [1 funcs]
@@ -97829,14 +97847,15 @@ MODULES:
     format_name  CC=1  out:1
     helper_function  CC=1  out:1
     validate_email  CC=2  out:3
-  project.map.toon  [1 funcs]
+  project.map.toon  [2 funcs]
+    check  CC=0  out:0
     open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
   src.prefact.autonomous.docs_manager  [2 funcs]
     __init__  CC=1  out:2
-    update_planfile  CC=11  out:25
+    update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
   src.prefact.autonomous.setup_manager  [1 funcs]
@@ -97862,7 +97881,7 @@ MODULES:
     save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
-    from_yaml  CC=13  out:24
+    from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
@@ -98010,10 +98029,9 @@ MODULES:
     _collect_all_exports  CC=10  out:8
     _collect_imported_names  CC=8  out:4
     _collect_used_names  CC=5  out:7
-  src.prefact.scanner  [5 funcs]
+  src.prefact.scanner  [4 funcs]
     __init__  CC=4  out:6
-    _excluded  CC=12  out:5
-    collect_files  CC=6  out:6
+    collect_files  CC=6  out:7
     _load_gitignore  CC=6  out:5
     _match_gitignore_pattern  CC=12  out:18
   src.prefact.validator  [1 funcs]

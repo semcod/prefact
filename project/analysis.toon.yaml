@@ -1,13 +1,16 @@
-# code2llm | 154f 123434L | python:104,yaml:37,json:3,shell:2,txt:2,cfg:1,toml:1,yml:1,typescript:1 | 2026-04-25
-# CC̄=0.6 | critical:0/3487 | dups:15 | cycles:0
+# code2llm | 157f 123880L | python:105,yaml:37,json:4,shell:3,txt:2,cfg:1,yml:1,typescript:1,toml:1 | 2026-05-03
+# CC̄=0.7 | critical:2/3496 | dups:15 | cycles:0
 
-HEALTH[1]:
+HEALTH[3]:
   🔴 DUP   15 classes duplicated
+  🟡 CC    run CC=15 (limit:15)
+  🟡 CC    update_planfile CC=27 (limit:15)
 
-REFACTOR[1]:
+REFACTOR[2]:
   1. rm duplicates  (-15 dup classes)
+  2. split 2 high-CC methods  (CC>15)
 
-PIPELINES[599]:
+PIPELINES[610]:
   [1] Src [main]: main → print
       PURITY: 100% pure
   [2] Src [main]: main → find_examples
@@ -20,7 +23,7 @@ PIPELINES[599]:
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
+  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
   │ string_transformations     495L  6C   27m  CC=8      ←0
   │ importchecker_based        484L  5C   24m  CC=14     ←0
   │ isort_based                470L  4C   23m  CC=13     ←0
@@ -34,26 +37,27 @@ LAYERS:
   │ parallel                   353L  4C   23m  CC=7      ←0
   │ __init__                   320L  3C   17m  CC=10     ←0
   │ ruff_based                 311L  6C   19m  CC=4      ←0
+  │ cli                        306L  0C   11m  CC=7      ←0
   │ benchmark                  293L  1C    6m  CC=7      ←0
+  │ __init__                   290L  1C   19m  CC=7      ←0
   │ autoflake_based            277L  3C   19m  CC=7      ←0
   │ composite_rules            276L  3C   16m  CC=12     ←0
+  │ !! docs_manager               261L  1C   10m  CC=27     ←0
   │ registry                   255L  1C   13m  CC=8      ←8
   │ __init__                   248L  1C    8m  CC=3      ←0
-  │ cli                        247L  0C   10m  CC=7      ←1
   │ project_scanner            244L  1C    7m  CC=11     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
   │ unused_imports             232L  1C   11m  CC=10     ←0
   │ migration                  232L  3C   10m  CC=5      ←0
   │ relative_imports           219L  2C    9m  CC=14     ←0
-  │ __init__                   218L  1C   17m  CC=7      ←0
+  │ !! testql_manager             215L  1C    3m  CC=15     ←0
   │ llm_hallucinations         214L  1C    9m  CC=8      ←0
   │ config                     192L  2C   13m  CC=5      ←3
-  │ docs_manager               189L  1C    7m  CC=11     ←0
   │ llm_generated_code         186L  1C    9m  CC=7      ←0
   │ generator                  171L  1C    3m  CC=12     ←1
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ engine                     158L  1C    5m  CC=13     ←0
-  │ scanner                    153L  1C    7m  CC=12     ←0
+  │ scanner                    157L  1C    7m  CC=12     ←0
   │ strategies                 152L  4C   10m  CC=5      ←0
   │ magic_numbers              134L  1C    8m  CC=7      ←0
   │ config                     128L  1C    8m  CC=10     ←4
@@ -77,12 +81,12 @@ LAYERS:
   │ _ast_cache                  51L  0C    2m  CC=4      ←0
   │ globals                     50L  0C    3m  CC=2      ←0
   │ fixer                       49L  1C    3m  CC=7      ←0
+  │ models                      49L  1C    3m  CC=13     ←0
   │ rule                        47L  1C    4m  CC=1      ←0  ×DUP
   │ type_hints                  46L  1C    3m  CC=6      ←0
   │ wildcard_imports            45L  1C    3m  CC=7      ←0
   │ validators                  44L  1C    4m  CC=5      ←1  ×DUP
   │ __init__                    41L  0C    0m  CC=0.0    ←0
-  │ models                      38L  1C    3m  CC=13     ←0
   │ config                      31L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
   │ validator                   29L  1C    2m  CC=4      ←0
@@ -108,7 +112,7 @@ LAYERS:
   ./                              CC̄=2.2    ←in:0  →out:0
   │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
   │ goal.yaml                  480L  0C    0m  CC=0.0    ←0
-  │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml             340L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
   │ Taskfile.yml               186L  0C    1m  CC=0.0    ←16
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
@@ -118,6 +122,7 @@ LAYERS:
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
+  │ tree.sh                      1L  0C    0m  CC=0.0    ←0
   │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
   examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
@@ -169,22 +174,25 @@ LAYERS:
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml            96742L  0C  2716m  CC=0.0    ←19
-  │ !! calls.yaml                6005L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml            96743L  0C  2716m  CC=0.0    ←20
+  │ !! calls.yaml                6008L  0C    0m  CC=0.0    ←0
   │ calls.toon.yaml            362L  0C    0m  CC=0.0    ←0
   │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         219L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         217L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
   │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
   │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
   │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         39L  0C    0m  CC=0.0    ←0
   │
   testql-scenarios/               CC̄=0.0    ←in:0  →out:0
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
+  │
+  .taskill/                       CC̄=0.0    ←in:0  →out:0
+  │ state.json                  11L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
      Makefile                                  0L
@@ -192,25 +200,25 @@ LAYERS:
 COUPLING:
                                                     Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization                   project.map       examples.sample-project  examples.01-individual-rules    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
                       Taskfile                            ──                           ←43                                                         ←34                           ←25                                                         ←17                            ←6                            ←6                            ←2                                hub
-                   src.prefact                            43                            ──                            46                            ←1                                                          19                                                                                                                                                        !! fan-out
+                   src.prefact                            43                            ──                            46                            ←1                                                          23                                                                                                                                                        !! fan-out
           vscode-extension.src                                                         ←46                            ──                                                          ←1                                                                                                                                                                                  ←1  hub
          examples.06-api-usage                            34                             1                                                          ──                                                                                                                                                                                                                    !! fan-out
     benchmark_ram_optimization                            25                                                           1                                                          ──                                                                                                                                                                                      !! fan-out
-                   project.map                                                         ←19                                                                                                                      ──                            ←1                            ←2                                                                                            hub
+                   project.map                                                         ←23                                                                                                                      ──                            ←1                            ←2                                                                                            hub
        examples.sample-project                            17                                                                                                                                                     1                            ──                             1                                                                                            !! fan-out
   examples.01-individual-rules                             6                                                                                                                                                     2                             2                            ──                                                                                            !! fan-out
     examples.02-multiple-rules                             6                                                                                                                                                                                                                                              ──                                                            
     examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
       examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
   CYCLES: none
-  HUB: vscode-extension.src/ (fan-in=48)
-  HUB: project.map/ (fan-in=22)
   HUB: Taskfile/ (fan-in=133)
+  HUB: vscode-extension.src/ (fan-in=48)
+  HUB: project.map/ (fan-in=26)
   SMELL: examples.06-api-usage/ fan-out=35 → split needed
+  SMELL: src.prefact/ fan-out=112 → split needed
   SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
-  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
-  SMELL: src.prefact/ fan-out=108 → split needed
   SMELL: examples.sample-project/ fan-out=19 → split needed
+  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
