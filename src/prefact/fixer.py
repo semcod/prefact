@@ -17,7 +17,11 @@ class Fixer:
                 self._rules[rule_id] = rule_cls(config)
 
     def fix_file(
-        self, path: Path, issues: list[Issue], *, dry_run: bool = False,
+        self,
+        path: Path,
+        issues: list[Issue],
+        *,
+        dry_run: bool = False,
     ) -> tuple[str, list[Fix]]:
         try:
             source = path.read_text(encoding="utf-8")
@@ -26,7 +30,12 @@ class Fixer:
         return self.fix_file_with_source(path, source, issues, dry_run=dry_run)
 
     def fix_file_with_source(
-        self, path: Path, source: str, issues: list[Issue], *, dry_run: bool = False,
+        self,
+        path: Path,
+        source: str,
+        issues: list[Issue],
+        *,
+        dry_run: bool = False,
     ) -> tuple[str, list[Fix]]:
         """Fix a file using preloaded source to avoid I/O operations."""
         all_fixes: list[Fix] = []

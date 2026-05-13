@@ -23,13 +23,19 @@ from ._base import console
 class AutonomousRefact:
     """Autonomous prefact manager."""
 
-    def __init__(self, project_root: Optional[Path] = None, exclude_patterns: Optional[List[str]] = None):
+    def __init__(
+        self,
+        project_root: Optional[Path] = None,
+        exclude_patterns: Optional[List[str]] = None,
+    ):
         self.project_root = project_root or Path.cwd()
         self.exclude_patterns = exclude_patterns or []
 
         # Initialize sub-managers
         self.setup_manager = SetupManager(self.project_root)
-        self.scanner = ProjectScanner(self.project_root, exclude_patterns=self.exclude_patterns)
+        self.scanner = ProjectScanner(
+            self.project_root, exclude_patterns=self.exclude_patterns
+        )
         self.todo_manager = TodoManager(self.project_root)
         self.docs_manager = DocsManager(self.project_root)
         self.testql_manager = TestQLManager(self.project_root)
@@ -72,7 +78,9 @@ class AutonomousRefact:
             console.print("🔍 Scanning project for issues...")
             self.scan_project()
 
-            max_run_seconds = self.scanner.get_autonomous_limit("autonomous_max_run_seconds")
+            max_run_seconds = self.scanner.get_autonomous_limit(
+                "autonomous_max_run_seconds"
+            )
             if monotonic() - run_started >= max_run_seconds:
                 console.print(
                     f"⚠️ Autonomous run time limit reached ({max_run_seconds}s); stopping before documentation updates.",
@@ -102,7 +110,9 @@ class AutonomousRefact:
 
             self._print_autonomous_summary()
 
-            console.print("✅ Autonomous prefact completed successfully!", style="green")
+            console.print(
+                "✅ Autonomous prefact completed successfully!", style="green"
+            )
             return True
 
         except Exception as e:
@@ -258,30 +268,42 @@ class AutonomousRefact:
                         ["pytest", str(test_path), "-v"],
                         capture_output=True,
                         text=True,
-                        cwd=self.project_root
+                        cwd=self.project_root,
                     )
 
                     if result.returncode == 0:
                         console.print("✅ Tests passed", style="green")
                         return True
                     else:
-                        console.print(f"⚠️ Tests failed: {result.stderr}", style="yellow")
+                        console.print(
+                            f"⚠️ Tests failed: {result.stderr}", style="yellow"
+                        )
 
                 except FileNotFoundError:
                     # Try unittest
                     try:
                         result = subprocess.run(
-                            [sys.executable, "-m", "unittest", "discover", "-s", test_dir, "-v"],
+                            [
+                                sys.executable,
+                                "-m",
+                                "unittest",
+                                "discover",
+                                "-s",
+                                test_dir,
+                                "-v",
+                            ],
                             capture_output=True,
                             text=True,
-                            cwd=self.project_root
+                            cwd=self.project_root,
                         )
 
                         if result.returncode == 0:
                             console.print("✅ Tests passed", style="green")
                             return True
                         else:
-                            console.print(f"⚠️ Tests failed: {result.stderr}", style="yellow")
+                            console.print(
+                                f"⚠️ Tests failed: {result.stderr}", style="yellow"
+                            )
 
                     except Exception as e:
                         console.print(f"⚠️ Could not run tests: {e}", style="yellow")

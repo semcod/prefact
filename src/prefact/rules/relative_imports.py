@@ -64,7 +64,11 @@ class _RelativeImportFixer(cst.CSTTransformer):
     ) -> cst.ImportFrom:
         if not isinstance(updated_node.relative, (list, tuple)):
             return updated_node
-        level = len(updated_node.relative) if isinstance(updated_node.relative, (list, tuple)) else 0
+        level = (
+            len(updated_node.relative)
+            if isinstance(updated_node.relative, (list, tuple))
+            else 0
+        )
         if level == 0:
             return updated_node
 
@@ -81,7 +85,9 @@ class _RelativeImportFixer(cst.CSTTransformer):
         )
         return updated_node.with_changes(relative=(), module=new_module)
 
-    def _resolve(self, level: int, module_node: cst.BaseExpression | None) -> str | None:
+    def _resolve(
+        self, level: int, module_node: cst.BaseExpression | None
+    ) -> str | None:
         """Resolve ``level`` dots + ``module_node`` to an absolute dotted path."""
         try:
             rel = self.file_path.resolve().relative_to(self.project_root.resolve())
@@ -143,7 +149,9 @@ class RelativeToAbsoluteImports(BaseRule):
                 )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         if not issues or not self.package_name:
             return source, []
 
@@ -152,7 +160,9 @@ class RelativeToAbsoluteImports(BaseRule):
         except cst.ParserSyntaxError:
             return source, []
 
-        transformer = _RelativeImportFixer(path, self.package_name, self.config.project_root)
+        transformer = _RelativeImportFixer(
+            path, self.package_name, self.config.project_root
+        )
         new_tree = cst_tree.visit(transformer)
         fixed_source = new_tree.code
 
@@ -204,10 +214,14 @@ class RelativeToAbsoluteImports(BaseRule):
         # 3. Import count preserved
         try:
             orig_count = sum(
-                1 for n in ast.walk(ast.parse(original)) if isinstance(n, (ast.Import, ast.ImportFrom))
+                1
+                for n in ast.walk(ast.parse(original))
+                if isinstance(n, (ast.Import, ast.ImportFrom))
             )
             fix_count = sum(
-                1 for n in ast.walk(ast.parse(fixed)) if isinstance(n, (ast.Import, ast.ImportFrom))
+                1
+                for n in ast.walk(ast.parse(fixed))
+                if isinstance(n, (ast.Import, ast.ImportFrom))
             )
             if orig_count == fix_count:
                 checks.append("import_count_preserved")
@@ -216,4 +230,6 @@ class RelativeToAbsoluteImports(BaseRule):
         except SyntaxError:
             pass
 
-        return ValidationResult(file=path, passed=len(errors) == 0, checks=checks, errors=errors)
+        return ValidationResult(
+            file=path, passed=len(errors) == 0, checks=checks, errors=errors
+        )

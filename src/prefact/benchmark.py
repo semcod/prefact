@@ -14,7 +14,6 @@ Usage:
     python -m prefact.benchmark --threshold 2.0   # fail if any probe > 2.0s
 """
 
-
 import argparse
 import sys
 import tempfile
@@ -40,6 +39,7 @@ _ROOT = Path(__file__).parent.parent.parent  # src/prefact/ -> project root
 # Prefact-specific probes
 # ---------------------------------------------------------------------------
 
+
 class ScanProbe(BenchmarkProbe):
     """Prefact-specific: creates N temp Python files and measures scan throughput."""
 
@@ -63,8 +63,10 @@ class ScanProbe(BenchmarkProbe):
             from prefact.engine import RefactoringEngine
         except ImportError as e:
             return BenchmarkResult(
-                name=self.label, suite=self.suite,
-                elapsed=0.0, error=f"prefact not importable: {e}",
+                name=self.label,
+                suite=self.suite,
+                elapsed=0.0,
+                error=f"prefact not importable: {e}",
                 threshold=self.threshold,
             )
 
@@ -80,6 +82,7 @@ class ScanProbe(BenchmarkProbe):
         """)
 
         import time
+
         with tempfile.TemporaryDirectory() as tmpdir:
             base = Path(tmpdir)
 
@@ -121,6 +124,7 @@ class ScanProbe(BenchmarkProbe):
 # Default prefact benchmark suite
 # ---------------------------------------------------------------------------
 
+
 def _make_inprocess_probe() -> ThroughputProbe:
     """Benchmark scanner in-process with pre-built files."""
     _state: Dict[str, Any] = {}
@@ -144,7 +148,9 @@ def _make_inprocess_probe() -> ThroughputProbe:
             p.write_text(src, encoding="utf-8")
             files.append(p)
 
-        config = Config(project_root=base, package_name="bench", dry_run=True, verbose=False)
+        config = Config(
+            project_root=base, package_name="bench", dry_run=True, verbose=False
+        )
         scanner = Scanner(config)
         _state["scanner"] = scanner
         _state["files"] = files
@@ -172,36 +178,44 @@ def build_prefact_suite() -> BenchmarkSuite:
     suite.add(ImportProbe("prefact.engine", threshold=2.0))
     suite.add(ImportProbe("prefact.rules", threshold=2.0))
 
-    suite.add(CLIProbe(
-        [sys.executable, "-m", "prefact", "--help"],
-        label="prefact --help",
-        threshold=3.0,
-    ))
-    suite.add(CLIProbe(
-        [sys.executable, "-m", "prefact", "scan", "--help"],
-        label="prefact scan --help",
-        threshold=3.0,
-    ))
+    suite.add(
+        CLIProbe(
+            [sys.executable, "-m", "prefact", "--help"],
+            label="prefact --help",
+            threshold=3.0,
+        )
+    )
+    suite.add(
+        CLIProbe(
+            [sys.executable, "-m", "prefact", "scan", "--help"],
+            label="prefact scan --help",
+            threshold=3.0,
+        )
+    )
 
     # ── Unit tests ───────────────────────────────────────────────────────────
     tests_dir = _ROOT / "tests"
     if tests_dir.exists():
-        suite.add(UnitTestProbe(
-            tests_dir,
-            label="full test suite",
-            threshold=30.0,
-        ))
+        suite.add(
+            UnitTestProbe(
+                tests_dir,
+                label="full test suite",
+                threshold=30.0,
+            )
+        )
         for test_file in sorted(tests_dir.glob("test_*.py")):
-            suite.add(UnitTestProbe(
-                test_file,
-                label=f"pytest {test_file.name}",
-                threshold=15.0,
-            ))
+            suite.add(
+                UnitTestProbe(
+                    test_file,
+                    label=f"pytest {test_file.name}",
+                    threshold=15.0,
+                )
+            )
 
     # ── Scan throughput ──────────────────────────────────────────────────────
-    suite.add(ScanProbe(num_files=50,   file_size_kb=1,  threshold=10.0))
-    suite.add(ScanProbe(num_files=100,  file_size_kb=1,  threshold=20.0))
-    suite.add(ScanProbe(num_files=200,  file_size_kb=5,  threshold=40.0))
+    suite.add(ScanProbe(num_files=50, file_size_kb=1, threshold=10.0))
+    suite.add(ScanProbe(num_files=100, file_size_kb=1, threshold=20.0))
+    suite.add(ScanProbe(num_files=200, file_size_kb=5, threshold=40.0))
 
     # ── In-process throughput ────────────────────────────────────────────────
     suite.add(_make_inprocess_probe())
@@ -212,6 +226,7 @@ def build_prefact_suite() -> BenchmarkSuite:
 # ---------------------------------------------------------------------------
 # Generic helper: benchmark any library
 # ---------------------------------------------------------------------------
+
 
 def benchmark_library(
     module: str,
@@ -232,7 +247,7 @@ def benchmark_library(
     suite = BenchmarkSuite(f"library:{module}")
     suite.add(ImportProbe(module, threshold=threshold_import))
 
-    for cmd in (cli_commands or []):
+    for cmd in cli_commands or []:
         suite.add(CLIProbe(cmd, threshold=threshold_cli))
 
     if test_path and test_path.exists():
@@ -244,6 +259,7 @@ def benchmark_library(
 # ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -268,7 +284,10 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--plain", action="store_true", help="Plain text (no colours)")
     parser.add_argument(
-        "--threshold", type=float, default=None, metavar="SEC",
+        "--threshold",
+        type=float,
+        default=None,
+        metavar="SEC",
         help="Override all time thresholds",
     )
     args = parser.parse_args()

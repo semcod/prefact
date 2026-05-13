@@ -30,9 +30,7 @@ class MagicNumberRule(BaseRule):
         self.allowed_numbers = self._load_allowed_numbers()
         self.threshold = self.config.get_rule_option(self.rule_id, "threshold", 10)
         self.ignore_patterns = self.config.get_rule_option(
-            self.rule_id,
-            "ignore_patterns",
-            [r"test_.*\.py", r".*_test\.py"]
+            self.rule_id, "ignore_patterns", [r"test_.*\.py", r".*_test\.py"]
         )
 
     def _load_allowed_numbers(self) -> Set[int]:
@@ -40,9 +38,7 @@ class MagicNumberRule(BaseRule):
         default_allowed = {0, 1, -1, 2, 10, 100, 1000}
         return set(
             self.config.get_rule_option(
-                self.rule_id,
-                "allowed_numbers",
-                list(default_allowed)
+                self.rule_id, "allowed_numbers", list(default_allowed)
             )
         )
 
@@ -72,16 +68,18 @@ class MagicNumberRule(BaseRule):
             value = node.n
 
         if value is not None and self._is_magic_number(value):
-            return [Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=node.lineno,
-                col=node.col_offset,
-                message=f"Magic number: {value} - use named constant",
-                severity=Severity.INFO,
-                original=str(value),
-                suggested="CONSTANT_NAME",
-            )]
+            return [
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=node.lineno,
+                    col=node.col_offset,
+                    message=f"Magic number: {value} - use named constant",
+                    severity=Severity.INFO,
+                    original=str(value),
+                    suggested="CONSTANT_NAME",
+                )
+            ]
         return []
 
     def _extract_comparison_issues(self, path: Path, node: ast.AST) -> List[Issue]:
@@ -91,17 +89,21 @@ class MagicNumberRule(BaseRule):
 
         issues = []
         for comparator in node.comparators:
-            if isinstance(comparator, ast.Constant) and isinstance(comparator.value, (int, float)):
+            if isinstance(comparator, ast.Constant) and isinstance(
+                comparator.value, (int, float)
+            ):
                 if self._is_magic_number(comparator.value):
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        message=f"Magic number in comparison: {comparator.value}",
-                        severity=Severity.INFO,
-                        original=str(comparator.value),
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            message=f"Magic number in comparison: {comparator.value}",
+                            severity=Severity.INFO,
+                            original=str(comparator.value),
+                        )
+                    )
         return issues
 
     def _is_magic_number(self, value: int | float) -> bool:
@@ -124,7 +126,9 @@ class MagicNumberRule(BaseRule):
 
         return True
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Magic numbers require manual naming
         return source, []
 

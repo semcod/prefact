@@ -15,6 +15,7 @@ from prefact.rules import BaseRule
 # Plugin API version - increment when breaking changes are made
 PLUGIN_API_VERSION = "1.0.0"
 
+
 # Plugin metadata
 class PluginMetadata:
     """Metadata for a loaded plugin."""
@@ -26,7 +27,7 @@ class PluginMetadata:
         api_version: str,
         description: str = "",
         author: str = "",
-        entry_point: Optional[str] = None
+        entry_point: Optional[str] = None,
     ):
         self.name = name
         self.version = version
@@ -49,10 +50,10 @@ class PluginValidator:
     def validate_plugin_module(module) -> bool:
         """Validate that a plugin module is safe to load."""
         # Check required attributes
-        if not hasattr(module, '__plugin_api_version__'):
+        if not hasattr(module, "__plugin_api_version__"):
             return False
 
-        if not hasattr(module, 'rules'):
+        if not hasattr(module, "rules"):
             return False
 
         # Validate API version
@@ -76,11 +77,11 @@ class PluginValidator:
         plugin_path = plugin_path.resolve()
 
         # Check for suspicious file names
-        if plugin_path.name.startswith(('.', '__')):
+        if plugin_path.name.startswith((".", "__")):
             return False
 
         # Ensure it's a Python file
-        if plugin_path.suffix != '.py':
+        if plugin_path.suffix != ".py":
             return False
 
         return True
@@ -127,10 +128,10 @@ class PluginManager:
                 metadata = PluginMetadata(
                     name=ep.name,
                     version=ep.dist.version if ep.dist else "unknown",
-                    api_version=getattr(ep, 'api_version', PLUGIN_API_VERSION),
-                    description=ep.dist.metadata.get('Summary', '') if ep.dist else '',
-                    author=ep.dist.metadata.get('Author', '') if ep.dist else '',
-                    entry_point=ep.value
+                    api_version=getattr(ep, "api_version", PLUGIN_API_VERSION),
+                    description=ep.dist.metadata.get("Summary", "") if ep.dist else "",
+                    author=ep.dist.metadata.get("Author", "") if ep.dist else "",
+                    entry_point=ep.value,
                 )
                 plugins.append(metadata)
 
@@ -161,12 +162,14 @@ class PluginManager:
 
                 # Get metadata
                 metadata = PluginMetadata(
-                    name=getattr(module, '__plugin_name__', plugin_file.stem),
-                    version=getattr(module, '__version__', '0.0.0'),
-                    api_version=getattr(module, '__plugin_api_version__', PLUGIN_API_VERSION),
-                    description=getattr(module, '__description__', ''),
-                    author=getattr(module, '__author__', ''),
-                    entry_point=str(plugin_file)
+                    name=getattr(module, "__plugin_name__", plugin_file.stem),
+                    version=getattr(module, "__version__", "0.0.0"),
+                    api_version=getattr(
+                        module, "__plugin_api_version__", PLUGIN_API_VERSION
+                    ),
+                    description=getattr(module, "__description__", ""),
+                    author=getattr(module, "__author__", ""),
+                    entry_point=str(plugin_file),
                 )
                 plugins.append(metadata)
 
@@ -181,7 +184,9 @@ class PluginManager:
     def load_plugin(self, metadata: PluginMetadata) -> bool:
         """Load a plugin and register its rules."""
         if not metadata.compatible:
-            print(f"Plugin {metadata.name} is not compatible with API version {PLUGIN_API_VERSION}")
+            print(
+                f"Plugin {metadata.name} is not compatible with API version {PLUGIN_API_VERSION}"
+            )
             return False
 
         try:
@@ -272,14 +277,17 @@ class PluginManager:
                 "description": metadata.description,
                 "author": metadata.author,
                 "rules": [
-                    rule_id for rule_id, rule_class in self._rules.items()
+                    rule_id
+                    for rule_id, rule_class in self._rules.items()
                     if self._is_rule_from_plugin(rule_class, metadata)
-                ]
+                ],
             }
             for metadata in self._plugins.values()
         ]
 
-    def _is_rule_from_plugin(self, rule_class: Type[BaseRule], metadata: PluginMetadata) -> bool:
+    def _is_rule_from_plugin(
+        self, rule_class: Type[BaseRule], metadata: PluginMetadata
+    ) -> bool:
         """Check if a rule comes from a specific plugin."""
         # This is simplified - you'd need to track which plugin provided which rule
         return True
@@ -313,8 +321,10 @@ def get_plugin_manager(config: Optional[Config] = None) -> PluginManager:
 # Decorator for plugin rules
 def register_plugin_rule(plugin_name: str, version: str = "1.0.0") -> Any:
     """Decorator to register a rule as part of a plugin."""
+
     def decorator(rule_class: Type[BaseRule]) -> Any:
         # This would be used by plugin authors
         # The actual registration happens when the plugin is loaded
         return rule_class
+
     return decorator

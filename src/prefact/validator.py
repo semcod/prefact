@@ -1,6 +1,5 @@
 """Validator – runs post-fix checks to ensure nothing is broken."""
 
-
 from pathlib import Path
 
 from prefact.config import Config
@@ -17,7 +16,11 @@ class Validator:
                 self._rules[rule_id] = rule_cls(config)
 
     def validate_file(
-        self, path: Path, original_source: str, fixed_source: str, issues: list[Issue],
+        self,
+        path: Path,
+        original_source: str,
+        fixed_source: str,
+        issues: list[Issue],
     ) -> list[ValidationResult]:
         results: list[ValidationResult] = []
         rule_ids = {i.rule_id for i in issues}

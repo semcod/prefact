@@ -19,14 +19,16 @@ except ImportError:
     from ..rules import BaseRule, register
 
 
-def build_autoflake_check_command(file_path: Path, config: Optional[Dict] = None) -> List[str]:
+def build_autoflake_check_command(
+    file_path: Path, config: Optional[Dict] = None
+) -> List[str]:
     """Build the autoflake command for checking a file."""
     cmd = [
         "autoflake",
         "--check-diff",
         "--remove-unused-variables",
         "--remove-all-unused-imports",
-        str(file_path)
+        str(file_path),
     ]
 
     if config and config.get("ignore_init_module_imports"):
@@ -41,18 +43,22 @@ def parse_autoflake_output(output_lines: List[str]) -> List[Dict]:
     for line in output_lines:
         if line.startswith("-") and ("import" in line or "from" in line):
             # This is a removed import
-            issues.append({
-                "type": "unused_import",
-                "line": line,
-                "message": "Unused import detected"
-            })
+            issues.append(
+                {
+                    "type": "unused_import",
+                    "line": line,
+                    "message": "Unused import detected",
+                }
+            )
         elif line.startswith("-") and "=" in line:
             # This might be an unused variable
-            issues.append({
-                "type": "unused_variable",
-                "line": line,
-                "message": "Unused variable detected"
-            })
+            issues.append(
+                {
+                    "type": "unused_variable",
+                    "line": line,
+                    "message": "Unused variable detected",
+                }
+            )
     return issues
 
 
@@ -62,27 +68,29 @@ def run_autoflake_command(cmd: List[str]) -> subprocess.CompletedProcess:
         cmd,
         capture_output=True,
         text=True,
-        check=False  # Autoflake returns non-zero on changes
+        check=False,  # Autoflake returns non-zero on changes
     )
 
 
 def create_temp_file_with_source(source: str) -> str:
     """Create a temporary file with the given source code."""
-    tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False)
+    tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False)
     tmp.write(source)
     tmp_path = tmp.name
     tmp.close()
     return tmp_path
 
 
-def build_autoflake_fix_command(file_path: Path, config: Optional[Dict] = None) -> List[str]:
+def build_autoflake_fix_command(
+    file_path: Path, config: Optional[Dict] = None
+) -> List[str]:
     """Build the autoflake command for fixing a file."""
     cmd = [
         "autoflake",
         "--in-place",
         "--remove-unused-variables",
         "--remove-all-unused-imports",
-        str(file_path)
+        str(file_path),
     ]
 
     if config:
@@ -96,7 +104,9 @@ def build_autoflake_fix_command(file_path: Path, config: Optional[Dict] = None) 
     return cmd
 
 
-def create_issues_from_results(results: List[Dict], path: Path, rule_id: str) -> List[Issue]:
+def create_issues_from_results(
+    results: List[Dict], path: Path, rule_id: str
+) -> List[Issue]:
     """Create Issue objects from autoflake results."""
     issues = []
     line_num = 1
@@ -105,15 +115,17 @@ def create_issues_from_results(results: List[Dict], path: Path, rule_id: str) ->
             # Extract import name from the line
             import_name = extract_import_name(item["line"])
 
-            issues.append(Issue(
-                rule_id=rule_id,
-                file=path,
-                line=line_num,
-                col=0,
-                message=f"Unused import: {import_name}",
-                severity=Severity.INFO,
-                original=import_name
-            ))
+            issues.append(
+                Issue(
+                    rule_id=rule_id,
+                    file=path,
+                    line=line_num,
+                    col=0,
+                    message=f"Unused import: {import_name}",
+                    severity=Severity.INFO,
+                    original=import_name,
+                )
+            )
         line_num += 1
     return issues
 
@@ -142,17 +154,21 @@ def create_fixes_from_issues(issues: List[Issue], path: Path) -> List[Fix]:
     """Create Fix objects from issues."""
     fixes = []
     for issue in issues:
-        fixes.append(Fix(
-            issue=issue,
-            file=path,
-            original_code=issue.original,
-            fixed_code="",
-            applied=True
-        ))
+        fixes.append(
+            Fix(
+                issue=issue,
+                file=path,
+                original_code=issue.original,
+                fixed_code="",
+                applied=True,
+            )
+        )
     return fixes
 
 
-def validate_unused_imports(fixed: str, autoflake_config: Dict, path: Path) -> ValidationResult:
+def validate_unused_imports(
+    fixed: str, autoflake_config: Dict, path: Path
+) -> ValidationResult:
     """Validate that no unused imports remain."""
     remaining = AutoflakeHelper.check_source(fixed, autoflake_config)
     unused_imports = [r for r in remaining if r["type"] == "unused_import"]
@@ -161,7 +177,9 @@ def validate_unused_imports(fixed: str, autoflake_config: Dict, path: Path) -> V
         file=path,
         passed=len(unused_imports) == 0,
         checks=["no_unused_imports"] if not unused_imports else [],
-        errors=[f"Still has {len(unused_imports)} unused imports"] if unused_imports else []
+        errors=[f"Still has {len(unused_imports)} unused imports"]
+        if unused_imports
+        else [],
     )
 
 
@@ -250,7 +268,9 @@ class AutoflakeUnusedImports(BaseRule):
         results = AutoflakeHelper.check_source(source, self.autoflake_config)
         return create_issues_from_results(results, path, self.rule_id)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 

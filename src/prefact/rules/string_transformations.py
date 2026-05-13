@@ -31,11 +31,11 @@ class StringConcatTransformer(cst.CSTTransformer):
 
     def _get_line_number(self, node: cst.CSTNode) -> int:
         """Get line number from CST node metadata."""
-        if hasattr(node, 'position') and node.position:
+        if hasattr(node, "position") and node.position:
             return node.position.start.line
         # Try to get from the first child if position is not available
         for child in node.children:
-            if hasattr(child, 'position') and child.position:
+            if hasattr(child, "position") and child.position:
                 return child.position.start.line
         return 0
 
@@ -55,11 +55,13 @@ class StringConcatTransformer(cst.CSTTransformer):
             # Create f-string
             fstring = self._create_fstring(parts)
             if fstring:
-                self.fixes.append({
-                    "line": self._get_line_number(original_node),
-                    "original": cst.Module([]).code_for_node(original_node),
-                    "fixed": cst.Module([]).code_for_node(fstring)
-                })
+                self.fixes.append(
+                    {
+                        "line": self._get_line_number(original_node),
+                        "original": cst.Module([]).code_for_node(original_node),
+                        "fixed": cst.Module([]).code_for_node(fstring),
+                    }
+                )
                 return fstring
 
         return updated_node
@@ -128,27 +130,17 @@ class StringConcatTransformer(cst.CSTTransformer):
         for part in parts:
             if part["type"] == "string":
                 # Add string content
-                content_parts.append(
-                    cst.FormattedStringText(
-                        value=part["value"]
-                    )
-                )
+                content_parts.append(cst.FormattedStringText(value=part["value"]))
             else:
                 # Add expression
                 content_parts.append(
                     cst.FormattedStringExpression(
-                        expression=part["node"],
-                        conversion=None,
-                        format_spec=None
+                        expression=part["node"], conversion=None, format_spec=None
                     )
                 )
 
         if content_parts:
-            return cst.FormattedString(
-                parts=content_parts,
-                start='f"',
-                end='"'
-            )
+            return cst.FormattedString(parts=content_parts, start='f"', end='"')
 
         return None
 
@@ -171,24 +163,31 @@ class StringConcatToFString(BaseRule):
         for node in ast.walk(tree):
             if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
                 if self._is_string_concat(node):
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        message="String concatenation can be converted to f-string",
-                        severity=Severity.INFO,
-                        original="string concatenation"
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            message="String concatenation can be converted to f-string",
+                            severity=Severity.INFO,
+                            original="string concatenation",
+                        )
+                    )
 
         return issues
 
     def _is_string_concat(self, node: ast.BinOp) -> bool:
         """Check if a BinOp is a string concatenation."""
+
         def check(n) -> Any:
             if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
                 return check(n.left) and check(n.right)
-            elif isinstance(n, ast.Str) or isinstance(n, ast.Constant) and isinstance(n.value, str):
+            elif (
+                isinstance(n, ast.Str)
+                or isinstance(n, ast.Constant)
+                and isinstance(n.value, str)
+            ):
                 return True
             else:
                 # Allow variables/expressions in the mix
@@ -196,7 +195,9 @@ class StringConcatToFString(BaseRule):
 
         return check(node.left) and check(node.right)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -211,21 +212,23 @@ class StringConcatToFString(BaseRule):
 
         fixes = []
         for fix_info in transformer.fixes:
-            fixes.append(Fix(
-                issue=Issue(
-                    rule_id=self.rule_id,
+            fixes.append(
+                Fix(
+                    issue=Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=fix_info["line"],
+                        col=0,
+                        message="Converted string concatenation to f-string",
+                        original=fix_info["original"],
+                        suggested=fix_info["fixed"],
+                    ),
                     file=path,
-                    line=fix_info["line"],
-                    col=0,
-                    message="Converted string concatenation to f-string",
-                    original=fix_info["original"],
-                    suggested=fix_info["fixed"]
-                ),
-                file=path,
-                original_code=fix_info["original"],
-                fixed_code=fix_info["fixed"],
-                applied=True
-            ))
+                    original_code=fix_info["original"],
+                    fixed_code=fix_info["fixed"],
+                    applied=True,
+                )
+            )
 
         return fixed_source, fixes
 
@@ -257,10 +260,7 @@ class StringConcatToFString(BaseRule):
             pass
 
         return ValidationResult(
-            file=path,
-            passed=len(errors) == 0,
-            checks=checks,
-            errors=errors
+            file=path, passed=len(errors) == 0, checks=checks, errors=errors
         )
 
 
@@ -307,31 +307,37 @@ class FlyntStringFormatting(BaseRule):
 
         # Look for .format() calls
         if ".format(" in source:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=1,
-                col=0,
-                message="String .format() calls can be converted to f-strings",
-                severity=Severity.INFO,
-                original=".format()"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=1,
+                    col=0,
+                    message="String .format() calls can be converted to f-strings",
+                    severity=Severity.INFO,
+                    original=".format()",
+                )
+            )
 
         # Look for % formatting
         if "%" in source and ("'" in source or '"' in source):
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=1,
-                col=0,
-                message="Old-style string formatting can be converted to f-strings",
-                severity=Severity.INFO,
-                original="% formatting"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=1,
+                    col=0,
+                    message="Old-style string formatting can be converted to f-strings",
+                    severity=Severity.INFO,
+                    original="% formatting",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -340,13 +346,15 @@ class FlyntStringFormatting(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="f-string",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="f-string",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -355,17 +363,11 @@ class FlyntStringFormatting(BaseRule):
         try:
             ast.parse(fixed)
             return ValidationResult(
-                file=path,
-                passed=True,
-                checks=["syntax_valid"],
-                errors=[]
+                file=path, passed=True, checks=["syntax_valid"], errors=[]
             )
         except SyntaxError as e:
             return ValidationResult(
-                file=path,
-                passed=False,
-                checks=[],
-                errors=[f"Syntax error: {e}"]
+                file=path, passed=False, checks=[], errors=[f"Syntax error: {e}"]
             )
 
 
@@ -458,7 +460,9 @@ class ContextAwareStringConcat(BaseRule):
         # Context awareness is applied during fixing
         return StringConcatToFString(self.config).scan_file(path, source)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -473,21 +477,23 @@ class ContextAwareStringConcat(BaseRule):
 
         fixes = []
         for fix_info in transformer.fixes:
-            fixes.append(Fix(
-                issue=Issue(
-                    rule_id=self.rule_id,
+            fixes.append(
+                Fix(
+                    issue=Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=fix_info["line"],
+                        col=0,
+                        message="Converted string concatenation to f-string",
+                        original=fix_info["original"],
+                        suggested=fix_info["fixed"],
+                    ),
                     file=path,
-                    line=fix_info["line"],
-                    col=0,
-                    message="Converted string concatenation to f-string",
-                    original=fix_info["original"],
-                    suggested=fix_info["fixed"]
-                ),
-                file=path,
-                original_code=fix_info["original"],
-                fixed_code=fix_info["fixed"],
-                applied=True
-            ))
+                    original_code=fix_info["original"],
+                    fixed_code=fix_info["fixed"],
+                    applied=True,
+                )
+            )
 
         return fixed_source, fixes
 

@@ -32,7 +32,7 @@ class ExtendedConfig(Config):
             package_name=package_name,
             include=include or ["**/*.py"],
             exclude=exclude or [],
-            rules=rules or {}
+            rules=rules or {},
         )
         self.tools: Dict[str, Any] = tools or {}
         self.performance: Dict[str, Any] = performance or {}
@@ -42,7 +42,9 @@ class ExtendedConfig(Config):
             setattr(self, key, value)
 
     @classmethod
-    def from_yaml(cls, path: Path, environment: Optional[str] = None) -> "ExtendedConfig":
+    def from_yaml(
+        cls, path: Path, environment: Optional[str] = None
+    ) -> "ExtendedConfig":
         """Load configuration from YAML file with environment support."""
         if not path.exists():
             return cls(project_root=Path.cwd())
@@ -87,12 +89,20 @@ class ExtendedConfig(Config):
             if isinstance(rule_raw, bool):
                 rules[rule_id] = RuleConfig(enabled=rule_raw)
             elif isinstance(rule_raw, dict):
-                basic_fields = {k: v for k, v in rule_raw.items() if k in {"enabled", "severity", "options"}}
+                basic_fields = {
+                    k: v
+                    for k, v in rule_raw.items()
+                    if k in {"enabled", "severity", "options"}
+                }
                 rules[rule_id] = RuleConfig(**basic_fields)
                 if hasattr(rules[rule_id], "_extended"):
                     rules[rule_id]._extended.update(rule_raw)
                 else:
-                    rules[rule_id]._extended = {k: v for k, v in rule_raw.items() if k not in {"enabled", "severity", "options"}}
+                    rules[rule_id]._extended = {
+                        k: v
+                        for k, v in rule_raw.items()
+                        if k not in {"enabled", "severity", "options"}
+                    }
         return rules
 
     @staticmethod
@@ -100,7 +110,11 @@ class ExtendedConfig(Config):
         """Deep merge two dictionaries."""
         result = base.copy()
         for key, value in override.items():
-            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            if (
+                key in result
+                and isinstance(result[key], dict)
+                and isinstance(value, dict)
+            ):
                 result[key] = ExtendedConfig._deep_merge(result[key], value)
             else:
                 result[key] = value

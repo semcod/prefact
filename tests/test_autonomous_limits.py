@@ -1,13 +1,12 @@
 """Tests for autonomous mode limits and batching."""
 
-
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-from prefact.autonomous.docs_manager import DocsManager
 from prefact.autonomous import AutonomousRefact
+from prefact.autonomous.docs_manager import DocsManager
 from prefact.autonomous.project_scanner import ProjectScanner
 from prefact.autonomous.todo_manager import TodoManager
 from prefact.config_extended import ConfigGenerator, ConfigValidator, ExtendedConfig
@@ -19,7 +18,9 @@ def _write_prefact_config(project_root: Path, performance: dict[str, Any]) -> No
     (project_root / "prefact.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
 
 
-def _issue_group(file_path: Path, rule_id: str, example_count: int = 1) -> dict[str, Any]:
+def _issue_group(
+    file_path: Path, rule_id: str, example_count: int = 1
+) -> dict[str, Any]:
     return {
         "rule_id": rule_id,
         "file": str(file_path),
@@ -43,7 +44,6 @@ def test_config_generator_includes_autonomous_limits(tmp_path: Path) -> None:
     assert config["performance"]["autonomous_max_todo_execution_items"] == 50
 
 
-
 def test_config_validator_rejects_invalid_autonomous_limits(tmp_path: Path) -> None:
     config = ExtendedConfig(
         project_root=tmp_path,
@@ -57,7 +57,6 @@ def test_config_validator_rejects_invalid_autonomous_limits(tmp_path: Path) -> N
 
     assert "performance.autonomous_max_tickets must be a positive integer" in errors
     assert "performance.autonomous_max_todo_items must be a positive integer" in errors
-
 
 
 def test_project_scanner_respects_configured_example_limit(tmp_path: Path) -> None:
@@ -78,7 +77,6 @@ def test_project_scanner_respects_configured_example_limit(tmp_path: Path) -> No
     assert grouped[0]["examples"][0]["message"] == "first"
 
 
-
 def test_project_scanner_caps_files_to_scan(tmp_path: Path) -> None:
     _write_prefact_config(tmp_path, {"autonomous_max_files_to_scan": 1})
     first_file = tmp_path / "first.py"
@@ -93,15 +91,23 @@ def test_project_scanner_caps_files_to_scan(tmp_path: Path) -> None:
         def collect_files(self):
             return [first_file, second_file]
 
-    scanner._scan_files_with_progress = lambda _scanner, files, _config: collected.extend(files) or []  # type: ignore[method-assign]
+    scanner._scan_files_with_progress = lambda _scanner, files, _config: (
+        collected.extend(files) or []
+    )  # type: ignore[method-assign]
     scanner.scan_project = ProjectScanner.scan_project.__get__(scanner, ProjectScanner)
 
-    original_scanner_cls = __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner
+    original_scanner_cls = __import__(
+        "prefact.autonomous.project_scanner", fromlist=["Scanner"]
+    ).Scanner
     try:
-        __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner = lambda config: DummyScanner()  # type: ignore[assignment]
+        __import__(
+            "prefact.autonomous.project_scanner", fromlist=["Scanner"]
+        ).Scanner = lambda config: DummyScanner()  # type: ignore[assignment]
         scanner.scan_project()
     finally:
-        __import__("prefact.autonomous.project_scanner", fromlist=["Scanner"]).Scanner = original_scanner_cls  # type: ignore[assignment]
+        __import__(
+            "prefact.autonomous.project_scanner", fromlist=["Scanner"]
+        ).Scanner = original_scanner_cls  # type: ignore[assignment]
 
     assert collected == [first_file]
 
@@ -123,7 +129,9 @@ def test_project_scanner_caps_issues_per_file(tmp_path: Path) -> None:
     assert grouped[0]["examples"][0]["message"] == "first"
 
 
-def test_autonomous_refact_caps_grouped_issues_before_distribution(tmp_path: Path) -> None:
+def test_autonomous_refact_caps_grouped_issues_before_distribution(
+    tmp_path: Path,
+) -> None:
     _write_prefact_config(tmp_path, {"autonomous_max_issues": 1})
     refact = AutonomousRefact(tmp_path)
     refact.scanner.scan_project = lambda: [
@@ -138,7 +146,9 @@ def test_autonomous_refact_caps_grouped_issues_before_distribution(tmp_path: Pat
     assert refact.docs_manager.issues_found == refact.issues_found
 
 
-def test_autonomous_refact_stops_before_docs_when_time_limit_exceeded(tmp_path: Path) -> None:
+def test_autonomous_refact_stops_before_docs_when_time_limit_exceeded(
+    tmp_path: Path,
+) -> None:
     _write_prefact_config(tmp_path, {"autonomous_max_run_seconds": 1})
     refact = AutonomousRefact(tmp_path)
 
@@ -273,8 +283,9 @@ def test_todo_manager_reports_skipped_todo_counts(tmp_path: Path, capsys) -> Non
     assert "omitting 1 remaining completed tasks" in output
 
 
-
-def test_todo_manager_limits_output_and_normalizes_existing_paths(tmp_path: Path) -> None:
+def test_todo_manager_limits_output_and_normalizes_existing_paths(
+    tmp_path: Path,
+) -> None:
     _write_prefact_config(
         tmp_path,
         {
@@ -305,7 +316,6 @@ def test_todo_manager_limits_output_and_normalizes_existing_paths(tmp_path: Path
     assert "## ✅ Completed Tasks (showing 1 of 2)" in content
     assert "## 📋 Current Issues (showing 2 of 3)" in content
     assert f"- [x] {current_file}:1 - issue 1" not in content
-
 
 
 def test_todo_manager_execute_todos_respects_execution_limit(tmp_path: Path) -> None:

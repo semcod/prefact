@@ -1,6 +1,5 @@
 """Tests for configuration loading and auto-detection."""
 
-
 from pathlib import Path
 
 import pytest
@@ -10,9 +9,7 @@ from prefact.config import Config
 
 @pytest.fixture
 def project_with_pyproject(tmp_path: Path) -> Path:
-    (tmp_path / "pyproject.toml").write_text(
-        '[project]\nname = "my-cool-app"\n'
-    )
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "my-cool-app"\n')
     pkg = tmp_path / "src" / "my_cool_app"
     pkg.mkdir(parents=True)
     (pkg / "__init__.py").write_text("")

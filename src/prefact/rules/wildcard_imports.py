@@ -29,8 +29,10 @@ class WildcardImports(BaseRule):
                         module = node.module or ""
                         issues.append(
                             Issue(
-                                rule_id=self.rule_id, file=path,
-                                line=node.lineno, col=node.col_offset,
+                                rule_id=self.rule_id,
+                                file=path,
+                                line=node.lineno,
+                                col=node.col_offset,
                                 message=f"Wildcard import: 'from {module} import *'",
                                 severity=Severity.ERROR,
                                 original=f"from {module} import *",
@@ -38,7 +40,9 @@ class WildcardImports(BaseRule):
                         )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         return source, []  # cannot safely auto-fix without runtime info
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:

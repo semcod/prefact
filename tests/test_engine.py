@@ -1,6 +1,5 @@
 """Tests for the engine (full scan → fix → validate pipeline)."""
 
-
 import textwrap
 from pathlib import Path
 
@@ -94,5 +93,9 @@ class TestEngine:
         engine = RefactoringEngine(cfg)
         result = engine.scan_only()
         # Should find zero or minimal issues (maybe sorted-imports)
-        auto_fixable = [i for i in result.issues_found if i.rule_id in ("relative-imports", "unused-imports", "duplicate-imports")]
+        auto_fixable = [
+            i
+            for i in result.issues_found
+            if i.rule_id in ("relative-imports", "unused-imports", "duplicate-imports")
+        ]
         assert len(auto_fixable) == 0

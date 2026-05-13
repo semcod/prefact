@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any, Optional, Tuple
 
-from .base import Cache, CONSTANT_3600
+from .base import CONSTANT_3600, Cache
 
 
 class ScanResultCache:
@@ -17,16 +17,10 @@ class ScanResultCache:
         file_path: Path,
         file_hash: str,
         rule_ids: Tuple[str, ...],
-        config_hash: str
+        config_hash: str,
     ) -> str:
         """Generate cache key for scan result."""
-        key_parts = [
-            "scan",
-            str(file_path),
-            file_hash,
-            ",".join(rule_ids),
-            config_hash
-        ]
+        key_parts = ["scan", str(file_path), file_hash, ",".join(rule_ids), config_hash]
         return ":".join(key_parts)
 
     def get(
@@ -34,7 +28,7 @@ class ScanResultCache:
         file_path: Path,
         file_hash: str,
         rule_ids: Tuple[str, ...],
-        config_hash: str
+        config_hash: str,
     ) -> Optional[Any]:
         """Get cached scan result."""
         key = self.get_key(file_path, file_hash, rule_ids, config_hash)
@@ -47,7 +41,7 @@ class ScanResultCache:
         rule_ids: Tuple[str, ...],
         config_hash: str,
         result: Any,
-        expire: int = CONSTANT_3600  # 1 hour
+        expire: int = CONSTANT_3600,  # 1 hour
     ) -> None:
         """Cache scan result."""
         key = self.get_key(file_path, file_hash, rule_ids, config_hash)

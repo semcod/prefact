@@ -23,7 +23,9 @@ class CompositeUnusedImports(BaseRule):
     """Composite rule for unused imports using multiple tools."""
 
     rule_id = "composite-unused-imports"
-    description = "Detect unused imports using multiple tools (Ruff, Pyflakes, Unimport)"
+    description = (
+        "Detect unused imports using multiple tools (Ruff, Pyflakes, Unimport)"
+    )
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
@@ -45,14 +47,17 @@ class CompositeUnusedImports(BaseRule):
             return SequentialScanStrategy()
         elif strategy_type == "priority":
             priorities = self.config.get_rule_option(
-                self.rule_id, "tool_priorities",
-                {"ruff-unused-imports": 3, "unused-imports": 2, "unimport-unused-imports": 1}
+                self.rule_id,
+                "tool_priorities",
+                {
+                    "ruff-unused-imports": 3,
+                    "unused-imports": 2,
+                    "unimport-unused-imports": 1,
+                },
             )
             return PriorityBasedStrategy(priorities)
         else:
-            max_workers = self.config.get_rule_option(
-                self.rule_id, "max_workers", 4
-            )
+            max_workers = self.config.get_rule_option(self.rule_id, "max_workers", 4)
             return ParallelScanStrategy(max_workers)
 
     def _load_tools(self) -> List[BaseRule]:
@@ -62,6 +67,7 @@ class CompositeUnusedImports(BaseRule):
         # Try to load Ruff-based rule
         try:
             from prefact.rules.ruff_based import RuffUnusedImports
+
             if self.config.get_rule_option("unused-imports", "use_ruff", False):
                 tools.append(RuffUnusedImports(self.config))
         except ImportError:
@@ -70,6 +76,7 @@ class CompositeUnusedImports(BaseRule):
         # Load AST-based rule
         try:
             from prefact.rules.unused_imports import UnusedImports
+
             tools.append(UnusedImports(self.config))
         except ImportError:
             pass
@@ -77,6 +84,7 @@ class CompositeUnusedImports(BaseRule):
         # Try to load Unimport-based rule
         try:
             from prefact.rules.unimport_based import UnimportUnusedImports
+
             tools.append(UnimportUnusedImports(self.config))
         except ImportError:
             pass
@@ -90,7 +98,9 @@ class CompositeUnusedImports(BaseRule):
 
         return self.strategy.scan(path, source, self.tools)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         """Fix using the strategy."""
         if not self.tools:
             return source, []
@@ -130,6 +140,7 @@ class CompositeImportRules(BaseRule):
         if self.config.is_rule_enabled("duplicate-imports"):
             try:
                 from prefact.rules.duplicate_imports import DuplicateImports
+
                 tools.append(DuplicateImports(self.config))
             except ImportError:
                 pass
@@ -138,10 +149,12 @@ class CompositeImportRules(BaseRule):
         if self.config.is_rule_enabled("wildcard-imports"):
             try:
                 from prefact.rules.ruff_based import RuffWildcardImports
+
                 tools.append(RuffWildcardImports(self.config))
             except ImportError:
                 try:
                     from prefact.rules.wildcard_imports import WildcardImports
+
                     tools.append(WildcardImports(self.config))
                 except ImportError:
                     pass
@@ -150,10 +163,12 @@ class CompositeImportRules(BaseRule):
         if self.config.is_rule_enabled("sorted-imports"):
             try:
                 from prefact.rules.isort_based import ISortedImports
+
                 tools.append(ISortedImports(self.config))
             except ImportError:
                 try:
                     from prefact.rules.sorted_imports import SortedImports
+
                     tools.append(SortedImports(self.config))
                 except ImportError:
                     pass
@@ -162,6 +177,7 @@ class CompositeImportRules(BaseRule):
         if self.config.is_rule_enabled("relative-imports"):
             try:
                 from prefact.rules.relative_imports import RelativeToAbsoluteImports
+
                 tools.append(RelativeToAbsoluteImports(self.config))
             except ImportError:
                 pass
@@ -175,7 +191,9 @@ class CompositeImportRules(BaseRule):
 
         return self.strategy.scan(path, source, self.tools)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         """Fix using appropriate tools."""
         if not self.tools:
             return source, []
@@ -193,10 +211,7 @@ class CompositeImportRules(BaseRule):
             all_errors.extend(result.errors)
 
         return ValidationResult(
-            file=path,
-            passed=len(all_errors) == 0,
-            checks=all_checks,
-            errors=all_errors
+            file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors
         )
 
 
@@ -219,6 +234,7 @@ class CompositeTypeChecking(BaseRule):
         if self.config.is_rule_enabled("missing-return-type"):
             try:
                 from prefact.rules.mypy_based import MyPyMissingReturnType
+
                 tools.append(MyPyMissingReturnType(self.config))
             except ImportError:
                 pass
@@ -226,6 +242,7 @@ class CompositeTypeChecking(BaseRule):
         # Pylint type checking
         try:
             from prefact.rules.pylint_based import PylintComprehensive
+
             tools.append(PylintComprehensive(self.config))
         except ImportError:
             pass
@@ -240,7 +257,9 @@ class CompositeTypeChecking(BaseRule):
         strategy = ParallelScanStrategy(max_workers=2)
         return strategy.scan(path, source, self.tools)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         """Fix type-related issues."""
         if not self.tools:
             return source, []
@@ -250,7 +269,7 @@ class CompositeTypeChecking(BaseRule):
         fixes = []
 
         for tool in self.tools:
-            if hasattr(tool, 'fix'):
+            if hasattr(tool, "fix"):
                 fixed_source, tool_fixes = tool.fix(path, source, issues)
                 if fixed_source != source:
                     source = fixed_source
@@ -269,8 +288,5 @@ class CompositeTypeChecking(BaseRule):
             all_errors.extend(result.errors)
 
         return ValidationResult(
-            file=path,
-            passed=len(all_errors) == 0,
-            checks=all_checks,
-            errors=all_errors
+            file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors
         )

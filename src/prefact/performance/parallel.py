@@ -21,7 +21,6 @@ MAX_16 = 16
 CONSTANT_3600 = 3600
 
 
-
 class ParallelScanTask:
     """A task for parallel scanning."""
 
@@ -30,7 +29,7 @@ class ParallelScanTask:
         file_path: Path,
         config_dict: Dict[str, Any],
         rule_ids: List[str],
-        cache_enabled: bool = True
+        cache_enabled: bool = True,
     ):
         self.file_path = file_path
         self.config_dict = config_dict
@@ -41,7 +40,7 @@ class ParallelScanTask:
     def _calculate_file_hash(self) -> str:
         """Calculate hash of file content for cache key."""
         try:
-            with open(self.file_path, 'rb') as f:
+            with open(self.file_path, "rb") as f:
                 return hashlib.md5(f.read()).hexdigest()
         except Exception:
             return ""
@@ -51,8 +50,11 @@ class ParallelScanTask:
         # Check cache first if enabled
         if self.cache_enabled:
             from prefact.performance.cache import get_cache
+
             cache = get_cache()
-            cache_key = f"scan:{self.file_path}:{self.file_hash}:{hash(tuple(self.rule_ids))}"
+            cache_key = (
+                f"scan:{self.file_path}:{self.file_hash}:{hash(tuple(self.rule_ids))}"
+            )
 
             cached_result = cache.get(cache_key)
             if cached_result:
@@ -80,23 +82,15 @@ class ParallelEngine:
         self.max_workers = config.get_rule_option(
             "_performance",
             "max_workers",
-            min(int(multiprocessing.cpu_count() * MAX_1), MAX_16)  # 1.5x CPU count, max MAX_16
+            min(
+                int(multiprocessing.cpu_count() * MAX_1), MAX_16
+            ),  # 1.5x CPU count, max MAX_16
         )
-        self.chunk_size = config.get_rule_option(
-            "_performance",
-            "chunk_size",
-            10
-        )
-        self.cache_enabled = config.get_rule_option(
-            "_performance",
-            "cache",
-            True
-        )
+        self.chunk_size = config.get_rule_option("_performance", "chunk_size", 10)
+        self.cache_enabled = config.get_rule_option("_performance", "cache", True)
 
     def scan_files(
-        self,
-        file_paths: List[Path],
-        rule_ids: Optional[List[str]] = None
+        self, file_paths: List[Path], rule_ids: Optional[List[str]] = None
     ) -> List[Dict[str, Any]]:
         """Scan multiple files in parallel."""
         if not file_paths:
@@ -112,7 +106,7 @@ class ParallelEngine:
                 path,
                 self.config.to_dict(),  # type: ignore[attr-defined]
                 rule_ids,
-                self.cache_enabled
+                self.cache_enabled,
             )
             for path in file_paths
         ]
@@ -128,11 +122,15 @@ class ParallelEngine:
             # Large batch - use process pool for true parallelism
             return self._scan_with_process_pool(tasks)
 
-    def _scan_with_thread_pool(self, tasks: List[ParallelScanTask]) -> List[Dict[str, Any]]:
+    def _scan_with_thread_pool(
+        self, tasks: List[ParallelScanTask]
+    ) -> List[Dict[str, Any]]:
         """Scan using thread pool (for small batches)."""
         results = []
 
-        with ProcessPoolExecutor(max_workers=min(self.max_workers, len(tasks))) as executor:
+        with ProcessPoolExecutor(
+            max_workers=min(self.max_workers, len(tasks))
+        ) as executor:
             future_to_task = {
                 executor.submit(self._execute_task_wrapper, task): task
                 for task in tasks
@@ -149,19 +147,21 @@ class ParallelEngine:
                         "file": task.file_path,
                         "issues": [],
                         "fixes": [],
-                        "errors": [str(e)]
+                        "errors": [str(e)],
                     }
                     results.append(error_result)
 
         return results
 
-    def _scan_with_process_pool(self, tasks: List[ParallelScanTask]) -> List[Dict[str, Any]]:
+    def _scan_with_process_pool(
+        self, tasks: List[ParallelScanTask]
+    ) -> List[Dict[str, Any]]:
         """Scan using process pool (for large batches)."""
         results = []
 
         # Process in chunks to avoid memory issues
         for i in range(0, len(tasks), self.chunk_size):
-            chunk = tasks[i:i + self.chunk_size]
+            chunk = tasks[i : i + self.chunk_size]
 
             with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
                 future_to_task = {
@@ -180,7 +180,7 @@ class ParallelEngine:
                             "file": task.file_path,
                             "issues": [],
                             "fixes": [],
-                            "errors": [str(e)]
+                            "errors": [str(e)],
                         }
                         results.append(error_result)
 
@@ -194,6 +194,7 @@ class ParallelEngine:
     def _get_enabled_rule_ids(self) -> List[str]:
         """Get list of enabled rule IDs."""
         from prefact.rules.registry import get_lazy_registry
+
         registry = get_lazy_registry()
 
         enabled_rules = []
@@ -204,9 +205,7 @@ class ParallelEngine:
         return enabled_rules
 
     def fix_files(
-        self,
-        file_paths: List[Path],
-        rule_ids: Optional[List[str]] = None
+        self, file_paths: List[Path], rule_ids: Optional[List[str]] = None
     ) -> List[Dict[str, Any]]:
         """Fix multiple files in parallel."""
         # For fixing, we need to be more careful about file conflicts
@@ -224,7 +223,7 @@ class ParallelEngine:
                     "file": file_path,
                     "issues": [],
                     "fixes": [],
-                    "errors": [str(e)]
+                    "errors": [str(e)],
                 }
                 results.append(error_result)
 
@@ -243,7 +242,7 @@ class ParallelScanner:
         directory: Path,
         pattern: str = "**/*.py",
         rule_ids: Optional[List[str]] = None,
-        exclude_patterns: Optional[List[str]] = None
+        exclude_patterns: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
         """Scan all Python files in a directory."""
         if exclude_patterns is None:
@@ -255,15 +254,16 @@ class ParallelScanner:
             for file_path in directory.glob(pattern):
                 if file_path.is_file():
                     # Check exclude patterns
-                    if not any(file_path.match(exclude) for exclude in exclude_patterns):
+                    if not any(
+                        file_path.match(exclude) for exclude in exclude_patterns
+                    ):
                         file_paths.append(file_path)
 
         # Scan in parallel
         return self.engine.scan_files(file_paths, rule_ids)
 
     def scan_workspace(
-        self,
-        rule_ids: Optional[List[str]] = None
+        self, rule_ids: Optional[List[str]] = None
     ) -> List[Dict[str, Any]]:
         """Scan the entire workspace."""
         return self.scan_directory(self.config.project_root, rule_ids=rule_ids)
@@ -282,7 +282,7 @@ class ParallelScanner:
 def init_worker() -> None:  # type: ignore[no-untyped-def]
     """Initialize worker process."""
     # Set up worker-specific configuration
-    os.environ['PREFACT_WORKER'] = '1'
+    os.environ["PREFACT_WORKER"] = "1"
 
 
 def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> Dict[str, Any]:
@@ -332,7 +332,11 @@ class PerformanceMonitor:
 
         if stats["files_scanned"] > 0:
             stats["avg_time_per_file"] = stats["total_time"] / stats["files_scanned"]  # type: ignore[assignment]
-            stats["files_per_second"] = stats["files_scanned"] / stats["total_time"] if stats["total_time"] > 0 else 0  # type: ignore[assignment]
+            stats["files_per_second"] = (
+                stats["files_scanned"] / stats["total_time"]
+                if stats["total_time"] > 0
+                else 0
+            )  # type: ignore[assignment]
 
         total_cache_operations = stats["cache_hits"] + stats["cache_misses"]
         if total_cache_operations > 0:

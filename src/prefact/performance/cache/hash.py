@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Optional
 
-from .base import Cache, CONSTANT_86400
+from .base import CONSTANT_86400, Cache
 
 
 class FileHashCache:

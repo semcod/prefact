@@ -20,6 +20,7 @@ DEFAULT_CACHE_EXPIRE = MIN_1800  # 30 minutes
 
 try:
     import diskcache
+
     DISKCACHE_AVAILABLE = True
 except ImportError:
     DISKCACHE_AVAILABLE = False
@@ -30,9 +31,15 @@ from prefact.config import Config
 class Cache:
     """Wrapper for diskcache with additional functionality."""
 
-    def __init__(self, cache_dir: Optional[Path] = None, size_limit: int = CONSTANT_1024 * CONSTANT_1024 * 100):  # 100MB
+    def __init__(
+        self,
+        cache_dir: Optional[Path] = None,
+        size_limit: int = CONSTANT_1024 * CONSTANT_1024 * 100,
+    ):  # 100MB
         if not DISKCACHE_AVAILABLE:
-            raise ImportError("diskcache is required for caching. Install with: pip install diskcache")
+            raise ImportError(
+                "diskcache is required for caching. Install with: pip install diskcache"
+            )
 
         if cache_dir is None:
             cache_dir = Path.home() / ".prefact" / "cache"
@@ -44,7 +51,7 @@ class Cache:
         self.cache = diskcache.Cache(
             str(self.cache_dir),
             size_limit=size_limit,
-            eviction_policy='least-recently-used'
+            eviction_policy="least-recently-used",
         )
 
         # Statistics
@@ -114,16 +121,10 @@ class ScanResultCache:
         file_path: Path,
         file_hash: str,
         rule_ids: tuple[str, ...],
-        config_hash: str
+        config_hash: str,
     ) -> str:
         """Generate cache key for scan result."""
-        key_parts = [
-            "scan",
-            str(file_path),
-            file_hash,
-            ",".join(rule_ids),
-            config_hash
-        ]
+        key_parts = ["scan", str(file_path), file_hash, ",".join(rule_ids), config_hash]
         return ":".join(key_parts)
 
     def get(
@@ -131,7 +132,7 @@ class ScanResultCache:
         file_path: Path,
         file_hash: str,
         rule_ids: tuple[str, ...],
-        config_hash: str
+        config_hash: str,
     ) -> Optional[Any]:
         """Get cached scan result."""
         key = self.get_key(file_path, file_hash, rule_ids, config_hash)
@@ -144,7 +145,7 @@ class ScanResultCache:
         rule_ids: tuple[str, ...],
         config_hash: str,
         result: Any,
-        expire: int = CONSTANT_3600  # 1 hour
+        expire: int = CONSTANT_3600,  # 1 hour
     ) -> None:
         """Cache scan result."""
         key = self.get_key(file_path, file_hash, rule_ids, config_hash)
@@ -186,21 +187,13 @@ class RuleResultCache:
         self.cache = cache
 
     def get_key(
-        self,
-        rule_id: str,
-        file_path: Path,
-        file_hash: str,
-        config_hash: str
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
     ) -> str:
         """Generate cache key for rule result."""
         return f"rule:{rule_id}:{file_path}:{file_hash}:{config_hash}"
 
     def get(
-        self,
-        rule_id: str,
-        file_path: Path,
-        file_hash: str,
-        config_hash: str
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
     ) -> Optional[List[Any]]:
         """Get cached rule result."""
         key = self.get_key(rule_id, file_path, file_hash, config_hash)
@@ -213,7 +206,7 @@ class RuleResultCache:
         file_hash: str,
         config_hash: str,
         issues: List[Any],
-        expire: int = DEFAULT_CACHE_EXPIRE  # 30 minutes
+        expire: int = DEFAULT_CACHE_EXPIRE,  # 30 minutes
     ) -> None:
         """Cache rule result."""
         key = self.get_key(rule_id, file_path, file_hash, config_hash)
@@ -261,7 +254,9 @@ def initialize_cache(config: Config) -> None:
         return
 
     cache_dir = config.get_rule_option("_performance", "cache_dir")
-    size_limit = config.get_rule_option("_performance", "cache_size", 100 * CONSTANT_1024 * CONSTANT_1024)
+    size_limit = config.get_rule_option(
+        "_performance", "cache_size", 100 * CONSTANT_1024 * CONSTANT_1024
+    )
 
     _cache = Cache(cache_dir, size_limit)
     _scan_cache = ScanResultCache(_cache)
@@ -322,6 +317,7 @@ def cleanup_cache() -> None:
 # Cache decorators
 def cached_result(expire: int = CONSTANT_3600, key_func=None) -> Any:
     """Decorator to cache function results."""
+
     def decorator(func) -> Any:
         def wrapper(*args, **kwargs) -> Any:
             if not DISKCACHE_AVAILABLE:
@@ -347,11 +343,13 @@ def cached_result(expire: int = CONSTANT_3600, key_func=None) -> Any:
             return result
 
         return wrapper
+
     return decorator
 
 
 def cached_file_operation(expire: int = DEFAULT_CACHE_EXPIRE) -> Any:
     """Decorator to cache file operations."""
+
     def decorator(func) -> Any:
         def wrapper(file_path: Path, *args, **kwargs) -> Any:
             if not DISKCACHE_AVAILABLE:
@@ -363,7 +361,7 @@ def cached_file_operation(expire: int = DEFAULT_CACHE_EXPIRE) -> Any:
             file_hash = hash_cache.get_hash(file_path)
             if file_hash is None:
                 # Calculate hash
-                with open(file_path, 'rb') as f:
+                with open(file_path, "rb") as f:
                     file_hash = hashlib.md5(f.read()).hexdigest()
                 hash_cache.set_hash(file_path, file_hash)
 
@@ -383,6 +381,7 @@ def cached_file_operation(expire: int = DEFAULT_CACHE_EXPIRE) -> Any:
             return result
 
         return wrapper
+
     return decorator
 
 
@@ -416,7 +415,9 @@ def get_cache_info() -> Dict[str, Any]:
 
     # Get cache size on disk
     try:
-        total_size = sum(f.stat().st_size for f in cache.cache_dir.rglob('*') if f.is_file())
+        total_size = sum(
+            f.stat().st_size for f in cache.cache_dir.rglob("*") if f.is_file()
+        )
         stats["disk_size"] = total_size
     except Exception:
         stats["disk_size"] = 0

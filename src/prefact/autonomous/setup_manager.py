@@ -24,7 +24,7 @@ class SetupManager(BaseManager):
         config_content = ConfigGenerator.generate_extended_config(
             self.project_root,
             tools=["ruff", "mypy", "isort"],
-            rules=["unused-imports", "relative-imports", "missing-return-type"]
+            rules=["unused-imports", "relative-imports", "missing-return-type"],
         )
 
         # Customize based on project
@@ -40,7 +40,7 @@ class SetupManager(BaseManager):
             config["rules"]["magic-numbers"] = {"enabled": True}
 
         # Write configuration
-        with open(self.refact_config_path, 'w') as f:
+        with open(self.refact_config_path, "w") as f:
             yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
         console.print(f"✅ Created {self.refact_config_path}")
@@ -52,25 +52,33 @@ class SetupManager(BaseManager):
             "has_ai_code": False,
             "is_test_project": False,
             "has_tests": False,
-            "python_version": "3.8"
+            "python_version": "3.8",
         }
 
         # Check for AI indicators
         for py_file in self.project_root.rglob("*.py"):
             try:
                 content = py_file.read_text()
-                if any(indicator in content for indicator in ["TODO", "placeholder", "AI", "LLM"]):
+                if any(
+                    indicator in content
+                    for indicator in ["TODO", "placeholder", "AI", "LLM"]
+                ):
                     info["has_ai_code"] = True
                     break
             except Exception:
                 pass
 
         # Check for tests
-        if any(self.project_root.glob("test*")) or any(self.project_root.glob("**/test*")):
+        if any(self.project_root.glob("test*")) or any(
+            self.project_root.glob("**/test*")
+        ):
             info["has_tests"] = True
 
         # Check if this is a test project
-        if "test" in self.project_root.name.lower() or "example" in self.project_root.name.lower():
+        if (
+            "test" in self.project_root.name.lower()
+            or "example" in self.project_root.name.lower()
+        ):
             info["is_test_project"] = True
 
         return info
@@ -99,20 +107,34 @@ class SetupManager(BaseManager):
                 try:
                     # Run prefact scan
                     result = subprocess.run(
-                        [sys.executable, "-m", "prefact.cli", "scan", "--path", str(example_dir), "--config", str(config_path)],
+                        [
+                            sys.executable,
+                            "-m",
+                            "prefact.cli",
+                            "scan",
+                            "--path",
+                            str(example_dir),
+                            "--config",
+                            str(config_path),
+                        ],
                         capture_output=True,
                         text=True,
-                        cwd=self.project_root
+                        cwd=self.project_root,
                     )
 
                     if result.returncode != 0:
-                        console.print(f"❌ Example {example_dir.name} failed: {result.stderr}", style="red")
+                        console.print(
+                            f"❌ Example {example_dir.name} failed: {result.stderr}",
+                            style="red",
+                        )
                         success = False
                     else:
                         console.print(f"✅ Example {example_dir.name} passed")
 
                 except Exception as e:
-                    console.print(f"❌ Error running example {example_dir.name}: {e}", style="red")
+                    console.print(
+                        f"❌ Error running example {example_dir.name}: {e}", style="red"
+                    )
                     success = False
 
                 progress.advance(task)

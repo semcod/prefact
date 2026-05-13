@@ -30,8 +30,10 @@ class MissingReturnType(BaseRule):
                 if node.returns is None:
                     issues.append(
                         Issue(
-                            rule_id=self.rule_id, file=path,
-                            line=node.lineno, col=node.col_offset,
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=node.lineno,
+                            col=node.col_offset,
                             message=f"Function '{node.name}' missing return type annotation.",
                             severity=Severity.INFO,
                             original=node.name,
@@ -39,7 +41,9 @@ class MissingReturnType(BaseRule):
                     )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         return source, []  # cannot infer types automatically
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:

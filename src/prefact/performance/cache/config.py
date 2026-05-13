@@ -4,8 +4,9 @@ import hashlib
 import json
 from typing import Any, Dict, Optional
 
-from .base import Cache, CONSTANT_86400
 from prefact.config import Config
+
+from .base import CONSTANT_86400, Cache
 
 
 class ConfigCache:

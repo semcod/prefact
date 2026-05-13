@@ -40,7 +40,7 @@ class LLMHallucinationRule(BaseRule):
             {
                 "pattern": r"placeholder code",
                 "severity": "error",
-                "message": "Placeholder code detected"
+                "message": "Placeholder code detected",
             },
             # {
             #     "pattern": r"from [a-z]+\.llm\.generator import",
@@ -50,45 +50,41 @@ class LLMHallucinationRule(BaseRule):
             {
                 "pattern": r"from openai\.api import",
                 "severity": "error",
-                "message": "Incorrect OpenAI import - API has changed"
+                "message": "Incorrect OpenAI import - API has changed",
             },
             {
                 "pattern": r"# This is a (template|example|placeholder)",
                 "severity": "warning",
-                "message": "Template/placeholder code detected"
+                "message": "Template/placeholder code detected",
             },
             {
                 "pattern": r"raise NotImplementedError\(",
                 "severity": "warning",
-                "message": "NotImplementedError - incomplete implementation"
+                "message": "NotImplementedError - incomplete implementation",
             },
             {
                 "pattern": r"pass  # TODO",
                 "severity": "warning",
-                "message": "TODO with pass statement"
+                "message": "TODO with pass statement",
             },
             {
                 "pattern": r"# FIXME: ",
                 "severity": "info",
-                "message": "FIXME comment - known issue"
+                "message": "FIXME comment - known issue",
             },
             {
                 "pattern": r"# XXX: ",
                 "severity": "warning",
-                "message": "XXX comment - attention needed"
+                "message": "XXX comment - attention needed",
             },
             {
                 "pattern": r"import (nonexistent|fake|dummy)_module",
                 "severity": "error",
-                "message": "Import of non-existent module detected"
-            }
+                "message": "Import of non-existent module detected",
+            },
         ]
 
-        return self.config.get_rule_option(
-            self.rule_id,
-            "patterns",
-            default_patterns
-        )
+        return self.config.get_rule_option(self.rule_id, "patterns", default_patterns)
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
@@ -103,15 +99,17 @@ class LLMHallucinationRule(BaseRule):
                 if re.search(pattern, line, re.IGNORECASE):
                     severity = self._map_severity(severity_str)
 
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=line_num,
-                        col=0,
-                        message=message,
-                        severity=severity,
-                        original=line.strip()
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=line_num,
+                            col=0,
+                            message=message,
+                            severity=severity,
+                            original=line.strip(),
+                        )
+                    )
 
         # Additional AST-based checks
         issues.extend(self._check_ast_patterns(path, source))
@@ -129,29 +127,33 @@ class LLMHallucinationRule(BaseRule):
                 # Check for suspicious function names
                 if isinstance(node, ast.FunctionDef):
                     if self._is_suspicious_function_name(node.name):
-                        issues.append(Issue(
-                            rule_id=self.rule_id,
-                            file=path,
-                            line=node.lineno,
-                            col=node.col_offset,
-                            message=f"Suspicious function name: {node.name}",
-                            severity=Severity.WARNING,
-                            original=node.name
-                        ))
+                        issues.append(
+                            Issue(
+                                rule_id=self.rule_id,
+                                file=path,
+                                line=node.lineno,
+                                col=node.col_offset,
+                                message=f"Suspicious function name: {node.name}",
+                                severity=Severity.WARNING,
+                                original=node.name,
+                            )
+                        )
 
                 # Check for suspicious imports
                 elif isinstance(node, ast.ImportFrom):
                     if self._is_suspicious_import(node):
                         module = node.module or ""
-                        issues.append(Issue(
-                            rule_id=self.rule_id,
-                            file=path,
-                            line=node.lineno,
-                            col=node.col_offset,
-                            message=f"Suspicious import: from {module}",
-                            severity=Severity.ERROR,
-                            original=module
-                        ))
+                        issues.append(
+                            Issue(
+                                rule_id=self.rule_id,
+                                file=path,
+                                line=node.lineno,
+                                col=node.col_offset,
+                                message=f"Suspicious import: from {module}",
+                                severity=Severity.ERROR,
+                                original=module,
+                            )
+                        )
 
         except SyntaxError:
             pass
@@ -198,7 +200,9 @@ class LLMHallucinationRule(BaseRule):
         }
         return mapping.get(severity_str, Severity.WARNING)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Hallucinations usually require manual review
         return source, []
 
@@ -210,5 +214,7 @@ class LLMHallucinationRule(BaseRule):
             file=path,
             passed=len(remaining) == 0,
             checks=["no_hallucinations"] if not remaining else [],
-            errors=[f"Still has {len(remaining)} hallucination patterns"] if remaining else []
+            errors=[f"Still has {len(remaining)} hallucination patterns"]
+            if remaining
+            else [],
         )

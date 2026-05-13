@@ -3,4 +3,10 @@ from .generator import ConfigGenerator
 from .models import ExtendedConfig
 from .validators import ConfigValidator
 
-__all__ = ['ExtendedConfig', 'ConfigValidator', 'ConfigGenerator', 'DEFAULT_MAX_LINE_LENGTH', 'DEFAULT_CACHE_SIZE']
+__all__ = [
+    "ExtendedConfig",
+    "ConfigValidator",
+    "ConfigGenerator",
+    "DEFAULT_MAX_LINE_LENGTH",
+    "DEFAULT_CACHE_SIZE",
+]

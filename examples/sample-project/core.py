@@ -21,15 +21,15 @@ def calculate_sum(numbers):
 
 class DataProcessor:
     """A class that processes data."""
-    
+
     def __init__(self):
         self.items = []
         print("Initializing DataProcessor")
-    
+
     def add_item(self, item):
         """Add an item to the processor."""
         self.items.append(item)
-    
+
     def get_summary(self):
         """Get summary of items."""
         count = len(self.items)

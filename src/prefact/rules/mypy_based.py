@@ -32,11 +32,13 @@ class MyPyHelper:
             report_file = Path(tmpdir) / "result.json"
 
             cmd = [
-                "mypy", str(file_path),
+                "mypy",
+                str(file_path),
                 "--show-error-codes",
                 "--no-error-summary",
-                "--json-report", str(tmpdir),
-                "--check-untyped-defs"
+                "--json-report",
+                str(tmpdir),
+                "--check-untyped-defs",
             ]
 
             # Add additional config options
@@ -58,14 +60,16 @@ class MyPyHelper:
                     errors = []
                     for file_data in report.get("files", []):
                         for msg in file_data.get("messages", []):
-                            errors.append({
-                                "file": file_data.get("path"),
-                                "line": msg.get("line"),
-                                "column": msg.get("column"),
-                                "message": msg.get("message"),
-                                "code": msg.get("code"),
-                                "severity": msg.get("severity", "error")
-                            })
+                            errors.append(
+                                {
+                                    "file": file_data.get("path"),
+                                    "line": msg.get("line"),
+                                    "column": msg.get("column"),
+                                    "message": msg.get("message"),
+                                    "code": msg.get("code"),
+                                    "severity": msg.get("severity", "error"),
+                                }
+                            )
                     return errors
             except subprocess.CalledProcessError:
                 # MyPy returns non-zero exit code on type errors
@@ -78,7 +82,7 @@ class MyPyHelper:
     @staticmethod
     def check_source(source: str, config: Optional[Dict] = None) -> List[Dict]:
         """Check source code in memory using MyPy."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
 
@@ -86,6 +90,7 @@ class MyPyHelper:
             return MyPyHelper.check_file(Path(tmp_path), config)
         finally:
             import os
+
             os.unlink(tmp_path)
 
 
@@ -106,7 +111,7 @@ class MyPyMissingReturnType(BaseRule):
             "strict": self.config.get_rule_option(self.rule_id, "strict", False),
             "ignore_missing_imports": self.config.get_rule_option(
                 self.rule_id, "ignore_missing_imports", True
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -118,15 +123,19 @@ class MyPyMissingReturnType(BaseRule):
             if item.get("code") in ["no-return-type", "no-untyped-def"]:
                 # Check if function is public (doesn't start with _)
                 if self._is_public_function(path, item.get("line", 0)):
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=item.get("line", 0),
-                        col=item.get("column", 0),
-                        message=item.get("message", "Missing return type annotation"),
-                        severity=Severity.INFO,
-                        original="def function(...):"
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=item.get("line", 0),
+                            col=item.get("column", 0),
+                            message=item.get(
+                                "message", "Missing return type annotation"
+                            ),
+                            severity=Severity.INFO,
+                            original="def function(...):",
+                        )
+                    )
 
         return issues
 
@@ -143,7 +152,9 @@ class MyPyMissingReturnType(BaseRule):
             pass
         return True
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # MyPy doesn't auto-fix missing return types
         # Would need to infer types or add -> Any
         return source, []
@@ -152,7 +163,8 @@ class MyPyMissingReturnType(BaseRule):
         # Check if missing return types were added
         remaining = MyPyHelper.check_file(path, self.mypy_config)
         missing_types = [
-            r for r in remaining
+            r
+            for r in remaining
             if r.get("code") in ["no-return-type", "no-untyped-def"]
         ]
 
@@ -160,7 +172,9 @@ class MyPyMissingReturnType(BaseRule):
             file=path,
             passed=len(missing_types) == 0,
             checks=["return_types_annotated"] if not missing_types else [],
-            errors=[f"Still missing {len(missing_types)} return types"] if missing_types else []
+            errors=[f"Still missing {len(missing_types)} return types"]
+            if missing_types
+            else [],
         )
 
 
@@ -181,7 +195,7 @@ class MyPyTypeChecking(BaseRule):
             "strict": self.config.get_rule_option(self.rule_id, "strict", False),
             "ignore_missing_imports": self.config.get_rule_option(
                 self.rule_id, "ignore_missing_imports", True
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -191,23 +205,26 @@ class MyPyTypeChecking(BaseRule):
         for item in results:
             # Map MyPy severity to prefact severity
             severity = (
-                Severity.ERROR if item.get("severity") == "error"
-                else Severity.WARNING
+                Severity.ERROR if item.get("severity") == "error" else Severity.WARNING
             )
 
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item.get("line", 0),
-                col=item.get("column", 0),
-                message=f"[{item.get('code', 'type')}] {item.get('message')}",
-                severity=severity,
-                original=item.get("code", "")
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item.get("line", 0),
+                    col=item.get("column", 0),
+                    message=f"[{item.get('code', 'type')}] {item.get('message')}",
+                    severity=severity,
+                    original=item.get("code", ""),
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # MyPy doesn't provide auto-fixes
         return source, []
 
@@ -220,7 +237,7 @@ class MyPyTypeChecking(BaseRule):
             file=path,
             passed=len(errors) == 0,
             checks=["no_type_errors"] if not errors else [],
-            errors=[f"{len(errors)} type errors remain"] if errors else []
+            errors=[f"{len(errors)} type errors remain"] if errors else [],
         )
 
 
@@ -301,9 +318,7 @@ class ReturnTypeAdder(cst.CSTTransformer):
         self.path = path
 
     def leave_FunctionDef(
-        self,
-        original_node: cst.FunctionDef,
-        updated_node: cst.FunctionDef
+        self, original_node: cst.FunctionDef, updated_node: cst.FunctionDef
     ) -> cst.FunctionDef:
         if original_node.name.value in self.issues_by_line:
             issue = self.issues_by_line[original_node.name.value]
@@ -311,20 +326,18 @@ class ReturnTypeAdder(cst.CSTTransformer):
 
             if inferred:
                 # Add return type annotation
-                new_returns = cst.Annotation(
-                    annotation=cst.Name(inferred)
-                )
-                updated_node = updated_node.with_changes(
-                    returns=new_returns
-                )
+                new_returns = cst.Annotation(annotation=cst.Name(inferred))
+                updated_node = updated_node.with_changes(returns=new_returns)
 
-                self.fixes.append(Fix(
-                    issue=issue,
-                    file=self.path,
-                    original_code=f"def {original_node.name.value}(...):",
-                    fixed_code=f"def {original_node.name.value}(...) -> {inferred}:",
-                    applied=True
-                ))
+                self.fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=self.path,
+                        original_code=f"def {original_node.name.value}(...):",
+                        fixed_code=f"def {original_node.name.value}(...) -> {inferred}:",
+                        applied=True,
+                    )
+                )
 
         return updated_node
 
@@ -356,21 +369,27 @@ class SmartReturnTypeRule(BaseRule):
                     if inferred:
                         message += f" (suggested: -> {inferred})"
 
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        message=message,
-                        severity=Severity.INFO,
-                        original=f"def {node.name}(...):",
-                        suggested=f"def {node.name}(...) -> {inferred or 'Any'}:" if inferred else None,
-                        meta={"inferred_type": inferred}
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            message=message,
+                            severity=Severity.INFO,
+                            original=f"def {node.name}(...):",
+                            suggested=f"def {node.name}(...) -> {inferred or 'Any'}:"
+                            if inferred
+                            else None,
+                            meta={"inferred_type": inferred},
+                        )
+                    )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
 
         if not issues:
             return source, []
@@ -388,11 +407,10 @@ class SmartReturnTypeRule(BaseRule):
         # Simple syntax check
         try:
             ast.parse(fixed)
-            return ValidationResult(file=path, passed=True, checks=["syntax_valid"], errors=[])
+            return ValidationResult(
+                file=path, passed=True, checks=["syntax_valid"], errors=[]
+            )
         except SyntaxError as e:
             return ValidationResult(
-                file=path,
-                passed=False,
-                checks=[],
-                errors=[f"Syntax error: {e}"]
+                file=path, passed=False, checks=[], errors=[f"Syntax error: {e}"]
             )

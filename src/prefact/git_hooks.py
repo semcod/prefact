@@ -227,7 +227,7 @@ exit 0
                 capture_output=True,
                 text=True,
                 cwd=self.repo_root,
-                timeout=5
+                timeout=5,
             )
             # Hooks may return non-zero for testing, that's OK
             return True
@@ -304,7 +304,7 @@ repos:
                 ["pre-commit", "install"],
                 cwd=repo_root,
                 check=True,
-                capture_output=True
+                capture_output=True,
             )
             print("Installed pre-commit hooks")
         except subprocess.CalledProcessError as e:

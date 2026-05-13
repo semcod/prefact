@@ -30,58 +30,48 @@ class LazyRuleRegistry:
             "string-concat": "prefact.rules.string_concat",
             "print-statements": "prefact.rules.print_statements",
             "missing-return-type": "prefact.rules.type_hints",
-
             # Ruff-based rules
             "ruff-unused-imports": "prefact.rules.ruff_based",
             "ruff-duplicate-imports": "prefact.rules.ruff_based",
             "ruff-wildcard-imports": "prefact.rules.ruff_based",
             "ruff-print-statements": "prefact.rules.ruff_based",
             "ruff-sorted-imports": "prefact.rules.ruff_based",
-
             # MyPy-based rules
             "mypy-missing-return-type": "prefact.rules.mypy_based",
             "mypy-type-checking": "prefact.rules.mypy_based",
             "smart-return-type": "prefact.rules.mypy_based",
-
             # ISort-based rules
             "isorted-imports": "prefact.rules.isort_based",
             "import-section-separators": "prefact.rules.isort_based",
             "custom-import-organization": "prefact.rules.isort_based",
-
             # Autoflake-based rules
             "autoflake-unused-imports": "prefact.rules.autoflake_based",
             "autoflake-unused-variables": "prefact.rules.autoflake_based",
             "autoflake-duplicate-keys": "prefact.rules.autoflake_based",
             "autoflake-all": "prefact.rules.autoflake_based",
-
             # String transformation rules
             "string-concat-fstring": "prefact.rules.string_transformations",
             "flynt-string-formatting": "prefact.rules.string_transformations",
             "context-aware-string-concat": "prefact.rules.string_transformations",
-
             # Pylint-based rules
             "pylint-print-statements": "prefact.rules.pylint_based",
             "pylint-string-concat": "prefact.rules.pylint_based",
             "pylint-comprehensive": "prefact.rules.pylint_based",
-
             # Unimport-based rules
             "unimport-unused-imports": "prefact.rules.unimport_based",
             "unimport-duplicate-imports": "prefact.rules.unimport_based",
             "unimport-star-imports": "prefact.rules.unimport_based",
             "unimport-all": "prefact.rules.unimport_based",
-
             # ImportChecker-based rules
             "importchecker-unused-imports": "prefact.rules.importchecker_based",
             "importchecker-duplicate-imports": "prefact.rules.importchecker_based",
             "import-dependency-analysis": "prefact.rules.importchecker_based",
             "import-optimizer": "prefact.rules.importchecker_based",
-
             # Import-linter-based rules
             "import-linter-layers": "prefact.rules.import_linter_based",
             "import-linter-no-relative": "prefact.rules.import_linter_based",
             "import-linter-independence": "prefact.rules.import_linter_based",
             "import-linter-custom-architecture": "prefact.rules.import_linter_based",
-
             # Composite rules
             "composite-unused-imports": "prefact.rules.composite",
             "composite-imports": "prefact.rules.composite",
@@ -133,7 +123,7 @@ class LazyRuleRegistry:
     def _find_rule_class(self, module, rule_id: str) -> Optional[Type[BaseRule]]:
         """Find a rule class in a module by rule_id."""
         # Check for a direct mapping
-        rule_map = getattr(module, '_RULE_MAP', None)
+        rule_map = getattr(module, "_RULE_MAP", None)
         if rule_map and rule_id in rule_map:
             return rule_map[rule_id]
 
@@ -143,7 +133,7 @@ class LazyRuleRegistry:
             if (
                 isinstance(attr, type)
                 and issubclass(attr, BaseRule)
-                and hasattr(attr, 'rule_id')
+                and hasattr(attr, "rule_id")
                 and attr.rule_id == rule_id
             ):
                 return attr
@@ -197,7 +187,7 @@ def get_rule(rule_id: str) -> Optional[Type[BaseRule]]:
 
 def register(rule_class: Type[BaseRule]) -> Type[BaseRule]:
     """Decorator to register a rule class."""
-    if hasattr(rule_class, 'rule_id'):
+    if hasattr(rule_class, "rule_id"):
         get_lazy_registry().register_rule(rule_class.rule_id, rule_class)
     return rule_class
 
@@ -216,30 +206,58 @@ def _initialize_built_in_rules():
     registry.register_rule_module("mypy-type-checking", "prefact.rules.mypy_based")
     registry.register_rule_module("smart-return-type", "prefact.rules.mypy_based")
 
-    registry.register_rule_module("import-section-separators", "prefact.rules.isort_based")
-    registry.register_rule_module("custom-import-organization", "prefact.rules.isort_based")
+    registry.register_rule_module(
+        "import-section-separators", "prefact.rules.isort_based"
+    )
+    registry.register_rule_module(
+        "custom-import-organization", "prefact.rules.isort_based"
+    )
 
-    registry.register_rule_module("autoflake-unused-variables", "prefact.rules.autoflake_based")
-    registry.register_rule_module("autoflake-duplicate-keys", "prefact.rules.autoflake_based")
+    registry.register_rule_module(
+        "autoflake-unused-variables", "prefact.rules.autoflake_based"
+    )
+    registry.register_rule_module(
+        "autoflake-duplicate-keys", "prefact.rules.autoflake_based"
+    )
     registry.register_rule_module("autoflake-all", "prefact.rules.autoflake_based")
 
-    registry.register_rule_module("flynt-string-formatting", "prefact.rules.string_transformations")
-    registry.register_rule_module("context-aware-string-concat", "prefact.rules.string_transformations")
+    registry.register_rule_module(
+        "flynt-string-formatting", "prefact.rules.string_transformations"
+    )
+    registry.register_rule_module(
+        "context-aware-string-concat", "prefact.rules.string_transformations"
+    )
 
     registry.register_rule_module("pylint-string-concat", "prefact.rules.pylint_based")
     registry.register_rule_module("pylint-comprehensive", "prefact.rules.pylint_based")
 
-    registry.register_rule_module("unimport-duplicate-imports", "prefact.rules.unimport_based")
-    registry.register_rule_module("unimport-star-imports", "prefact.rules.unimport_based")
+    registry.register_rule_module(
+        "unimport-duplicate-imports", "prefact.rules.unimport_based"
+    )
+    registry.register_rule_module(
+        "unimport-star-imports", "prefact.rules.unimport_based"
+    )
     registry.register_rule_module("unimport-all", "prefact.rules.unimport_based")
 
-    registry.register_rule_module("importchecker-duplicate-imports", "prefact.rules.importchecker_based")
-    registry.register_rule_module("import-dependency-analysis", "prefact.rules.importchecker_based")
-    registry.register_rule_module("import-optimizer", "prefact.rules.importchecker_based")
+    registry.register_rule_module(
+        "importchecker-duplicate-imports", "prefact.rules.importchecker_based"
+    )
+    registry.register_rule_module(
+        "import-dependency-analysis", "prefact.rules.importchecker_based"
+    )
+    registry.register_rule_module(
+        "import-optimizer", "prefact.rules.importchecker_based"
+    )
 
-    registry.register_rule_module("import-linter-no-relative", "prefact.rules.import_linter_based")
-    registry.register_rule_module("import-linter-independence", "prefact.rules.import_linter_based")
-    registry.register_rule_module("import-linter-custom-architecture", "prefact.rules.import_linter_based")
+    registry.register_rule_module(
+        "import-linter-no-relative", "prefact.rules.import_linter_based"
+    )
+    registry.register_rule_module(
+        "import-linter-independence", "prefact.rules.import_linter_based"
+    )
+    registry.register_rule_module(
+        "import-linter-custom-architecture", "prefact.rules.import_linter_based"
+    )
 
     registry.register_rule_module("composite-imports", "prefact.rules.composite")
     registry.register_rule_module("composite-type-checking", "prefact.rules.composite")

@@ -1,6 +1,5 @@
 """Tests for the dependency checker module."""
 
-
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -29,19 +28,34 @@ def project_with_pyproject(tmp_path: Path) -> Path:
 
 @pytest.fixture
 def project_with_requirements(tmp_path: Path) -> Path:
-    (tmp_path / "requirements.txt").write_text(
-        "click==8.0.0\nrich>=12.0.0\npyyaml\n"
-    )
+    (tmp_path / "requirements.txt").write_text("click==8.0.0\nrich>=12.0.0\npyyaml\n")
     return tmp_path
 
 
 @pytest.fixture
 def pip_outdated_json() -> str:
-    return json.dumps([
-        {"name": "click", "version": "8.0.0", "latest_version": "8.2.0", "latest_filetype": "wheel"},
-        {"name": "rich", "version": "12.0.0", "latest_version": "13.9.0", "latest_filetype": "wheel"},
-        {"name": "unrelated-pkg", "version": "1.0", "latest_version": "2.0", "latest_filetype": "wheel"},
-    ])
+    return json.dumps(
+        [
+            {
+                "name": "click",
+                "version": "8.0.0",
+                "latest_version": "8.2.0",
+                "latest_filetype": "wheel",
+            },
+            {
+                "name": "rich",
+                "version": "12.0.0",
+                "latest_version": "13.9.0",
+                "latest_filetype": "wheel",
+            },
+            {
+                "name": "unrelated-pkg",
+                "version": "1.0",
+                "latest_version": "2.0",
+                "latest_filetype": "wheel",
+            },
+        ]
+    )
 
 
 class TestDependencyChecker:
@@ -69,7 +83,9 @@ class TestDependencyChecker:
     def test_outdated_filtering(
         self, mock_run: MagicMock, project_with_pyproject: Path, pip_outdated_json: str
     ) -> None:
-        mock_run.return_value = MagicMock(returncode=0, stdout=pip_outdated_json, stderr="")
+        mock_run.return_value = MagicMock(
+            returncode=0, stdout=pip_outdated_json, stderr=""
+        )
         checker = DependencyChecker(project_with_pyproject)
         issues = checker.check_dependencies()
 
@@ -92,7 +108,9 @@ class TestDependencyChecker:
     def test_issue_group_shape(
         self, mock_run: MagicMock, project_with_pyproject: Path, pip_outdated_json: str
     ) -> None:
-        mock_run.return_value = MagicMock(returncode=0, stdout=pip_outdated_json, stderr="")
+        mock_run.return_value = MagicMock(
+            returncode=0, stdout=pip_outdated_json, stderr=""
+        )
         checker = DependencyChecker(project_with_pyproject)
         issues = checker.check_dependencies()
 
@@ -108,7 +126,9 @@ class TestDependencyChecker:
     def test_line_number_detection(
         self, mock_run: MagicMock, project_with_pyproject: Path, pip_outdated_json: str
     ) -> None:
-        mock_run.return_value = MagicMock(returncode=0, stdout=pip_outdated_json, stderr="")
+        mock_run.return_value = MagicMock(
+            returncode=0, stdout=pip_outdated_json, stderr=""
+        )
         checker = DependencyChecker(project_with_pyproject)
         issues = checker.check_dependencies()
 

@@ -7,14 +7,13 @@ significantly improving CLI cold-start performance.
 
 Usage:
     from prefact.rules import get_rule, get_all_rules
-    
+
     # Get a specific rule class
     rule_class = get_rule("unused-imports")
-    
+
     # Get all rule classes (loads them all)
     all_rules = get_all_rules()
 """
-
 
 import abc
 from pathlib import Path
@@ -39,14 +38,23 @@ class BaseRule(abc.ABC):
         """Return list of issues found in *source*."""
 
     @abc.abstractmethod
-    def fix(self, path: Path, source: str, issues: list["Issue"]) -> tuple[str, list["Fix"]]:
+    def fix(
+        self, path: Path, source: str, issues: list["Issue"]
+    ) -> tuple[str, list["Fix"]]:
         """Return (fixed_source, list_of_fixes)."""
 
     @abc.abstractmethod
     def validate(self, path: Path, original: str, fixed: str) -> "ValidationResult":
         """Check that the fix didn't break anything."""
 
-    def _validate_by_rescan(self, path: Path, original: str, fixed: str, check_name: str, error_template: str) -> "ValidationResult":
+    def _validate_by_rescan(
+        self,
+        path: Path,
+        original: str,
+        fixed: str,
+        check_name: str,
+        error_template: str,
+    ) -> "ValidationResult":
         """Re-scan *fixed* and return a ValidationResult using *check_name* and *error_template*."""
         from prefact.models import ValidationResult
 

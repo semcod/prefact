@@ -57,12 +57,7 @@ class ImportLinterHelper:
         cmd = ["import-linter", "run", str(config_path)]
 
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=False
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
             # Parse output
             issues = []
@@ -87,12 +82,14 @@ class ImportLinterHelper:
                                 file_path = file_part
                                 line_num = 1
 
-                            issues.append({
-                                "file": file_path,
-                                "line": line_num,
-                                "message": message,
-                                "type": "violation"
-                            })
+                            issues.append(
+                                {
+                                    "file": file_path,
+                                    "line": line_num,
+                                    "message": message,
+                                    "type": "violation",
+                                }
+                            )
 
             return issues
         except (subprocess.SubprocessError, FileNotFoundError):
@@ -102,7 +99,7 @@ class ImportLinterHelper:
     def check_file(file_path: Path, config: Dict) -> List[Dict]:
         """Check a specific file using import-linter."""
         # Create temporary config
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yml', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as tmp:
             config_path = Path(tmp.name)
 
         try:
@@ -111,7 +108,8 @@ class ImportLinterHelper:
 
             # Filter issues for the specific file
             return [
-                issue for issue in all_issues
+                issue
+                for issue in all_issues
                 if Path(issue.get("file", "")).resolve() == file_path.resolve()
             ]
         finally:
@@ -134,18 +132,22 @@ class ImportLinterLayers(BaseRule):
         return {
             "root_package": self.config.package_name or "planfile",
             "layers": self.config.get_rule_option(
-                self.rule_id, "layers", [
+                self.rule_id,
+                "layers",
+                [
                     {"name": "domain", "modules": ["planfile.domain.*"]},
                     {"name": "service", "modules": ["planfile.service.*"]},
                     {"name": "api", "modules": ["planfile.api.*"]},
-                ]
+                ],
             ),
             "dependencies": self.config.get_rule_option(
-                self.rule_id, "dependencies", [
+                self.rule_id,
+                "dependencies",
+                [
                     {"layers": ["api"], "may_depend_on": ["service"]},
                     {"layers": ["service"], "may_depend_on": ["domain"]},
-                ]
-            )
+                ],
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -153,19 +155,23 @@ class ImportLinterLayers(BaseRule):
         results = ImportLinterHelper.check_file(path, self.linter_config)
 
         for item in results:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item.get("line", 1),
-                col=0,
-                message=item.get("message", "Layer violation"),
-                severity=Severity.ERROR,
-                original="layer violation"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item.get("line", 1),
+                    col=0,
+                    message=item.get("message", "Layer violation"),
+                    severity=Severity.ERROR,
+                    original="layer violation",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Layer violations require architectural changes
         # We can only report them, not fix automatically
         return source, []
@@ -178,7 +184,7 @@ class ImportLinterLayers(BaseRule):
             file=path,
             passed=len(results) == 0,
             checks=["no_layer_violations"] if not results else [],
-            errors=[f"Still has {len(results)} layer violations"] if results else []
+            errors=[f"Still has {len(results)} layer violations"] if results else [],
         )
 
 
@@ -198,14 +204,16 @@ class ImportLinterNoRelative(BaseRule):
         return {
             "root_package": self.config.package_name or "planfile",
             "forbidden": self.config.get_rule_option(
-                self.rule_id, "forbidden", [
+                self.rule_id,
+                "forbidden",
+                [
                     {
                         "type": "relative_imports",
                         "from_modules": ["planfile.*"],
-                        "message": "Relative imports are not allowed"
+                        "message": "Relative imports are not allowed",
                     }
-                ]
-            )
+                ],
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -213,20 +221,23 @@ class ImportLinterNoRelative(BaseRule):
 
         # First, quick AST check for relative imports
         import ast
+
         try:
             tree = ast.parse(source)
             for node in ast.walk(tree):
                 if isinstance(node, ast.ImportFrom) and node.level > 0:
                     # Found relative import
-                    issues.append(Issue(
-                        rule_id=self.rule_id,
-                        file=path,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        message=f"Relative import not allowed (level={node.level})",
-                        severity=Severity.ERROR,
-                        original="relative import"
-                    ))
+                    issues.append(
+                        Issue(
+                            rule_id=self.rule_id,
+                            file=path,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            message=f"Relative import not allowed (level={node.level})",
+                            severity=Severity.ERROR,
+                            original="relative import",
+                        )
+                    )
         except SyntaxError:
             pass
 
@@ -234,21 +245,26 @@ class ImportLinterNoRelative(BaseRule):
         results = ImportLinterHelper.check_file(path, self.linter_config)
         for item in results:
             if "relative" in item.get("message", "").lower():
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=item.get("line", 1),
-                    col=0,
-                    message=item.get("message", "Relative import not allowed"),
-                    severity=Severity.ERROR,
-                    original="relative import"
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=item.get("line", 1),
+                        col=0,
+                        message=item.get("message", "Relative import not allowed"),
+                        severity=Severity.ERROR,
+                        original="relative import",
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Delegate to relative imports fixer
         from prefact.rules.relative_imports import RelativeToAbsoluteImports
+
         fixer = RelativeToAbsoluteImports(self.config)
         return fixer.fix(path, source, issues)
 
@@ -260,7 +276,7 @@ class ImportLinterNoRelative(BaseRule):
             file=path,
             passed=len(results) == 0,
             checks=["no_relative_imports"] if not results else [],
-            errors=[f"Still has {len(results)} relative imports"] if results else []
+            errors=[f"Still has {len(results)} relative imports"] if results else [],
         )
 
 
@@ -280,11 +296,13 @@ class ImportLinterIndependence(BaseRule):
         return {
             "root_package": self.config.package_name or "planfile",
             "independence": self.config.get_rule_option(
-                self.rule_id, "independence", [
+                self.rule_id,
+                "independence",
+                [
                     {"modules": ["planfile.domain.*"]},
                     {"modules": ["planfile.utils.*"]},
-                ]
-            )
+                ],
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -292,19 +310,23 @@ class ImportLinterIndependence(BaseRule):
         results = ImportLinterHelper.check_file(path, self.linter_config)
 
         for item in results:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item.get("line", 1),
-                col=0,
-                message=item.get("message", "Independence violation"),
-                severity=Severity.WARNING,
-                original="independence violation"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item.get("line", 1),
+                    col=0,
+                    message=item.get("message", "Independence violation"),
+                    severity=Severity.WARNING,
+                    original="independence violation",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Independence violations require architectural changes
         return source, []
 
@@ -315,7 +337,9 @@ class ImportLinterIndependence(BaseRule):
             file=path,
             passed=len(results) == 0,
             checks=["independence_maintained"] if not results else [],
-            errors=[f"Still has {len(results)} independence violations"] if results else []
+            errors=[f"Still has {len(results)} independence violations"]
+            if results
+            else [],
         )
 
 
@@ -335,9 +359,7 @@ class ImportLinterCustomArchitecture(BaseRule):
         """Load custom architectural configuration."""
         custom_rules = self.config.get_rule_option(self.rule_id, "rules", {})
 
-        config = {
-            "root_package": self.config.package_name or "planfile"
-        }
+        config = {"root_package": self.config.package_name or "planfile"}
 
         # Add custom layers
         if "layers" in custom_rules:
@@ -371,24 +393,29 @@ class ImportLinterCustomArchitecture(BaseRule):
             else:
                 severity = Severity.INFO
 
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item.get("line", 1),
-                col=0,
-                message=item.get("message", "Architecture rule violation"),
-                severity=severity,
-                original="architecture violation"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item.get("line", 1),
+                    col=0,
+                    message=item.get("message", "Architecture rule violation"),
+                    severity=severity,
+                    original="architecture violation",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Most architectural rules require manual fixes
         # We can only fix simple cases like relative imports
         relative_issues = [i for i in issues if "relative" in i.message.lower()]
         if relative_issues:
             from prefact.rules.relative_imports import RelativeToAbsoluteImports
+
             fixer = RelativeToAbsoluteImports(self.config)
             return fixer.fix(path, source, relative_issues)
 
@@ -401,7 +428,9 @@ class ImportLinterCustomArchitecture(BaseRule):
             file=path,
             passed=len(results) == 0,
             checks=["architecture_rules_satisfied"] if not results else [],
-            errors=[f"Still has {len(results)} architecture violations"] if results else []
+            errors=[f"Still has {len(results)} architecture violations"]
+            if results
+            else [],
         )
 
 
@@ -426,13 +455,13 @@ def generate_import_linter_config(config: Config, output_path: Path) -> None:
             {
                 "type": "relative_imports",
                 "from_modules": ["planfile.*"],
-                "message": "Use absolute imports instead of relative imports"
+                "message": "Use absolute imports instead of relative imports",
             }
         ],
         "independence": [
             {"modules": ["planfile.domain.*"]},
             {"modules": ["planfile.utils.*"]},
-        ]
+        ],
     }
 
     # Add custom rules from config

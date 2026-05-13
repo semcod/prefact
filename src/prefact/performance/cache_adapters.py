@@ -22,10 +22,24 @@ class ScanResultCache:
     def __init__(self, cache: Cache):
         self.cache = cache
 
-    def get_key(self, file_path: Path, file_hash: str, rule_ids: tuple[str, ...], config_hash: str) -> str:
-        return ":".join(["scan", str(file_path), file_hash, ",".join(rule_ids), config_hash])
+    def get_key(
+        self,
+        file_path: Path,
+        file_hash: str,
+        rule_ids: tuple[str, ...],
+        config_hash: str,
+    ) -> str:
+        return ":".join(
+            ["scan", str(file_path), file_hash, ",".join(rule_ids), config_hash]
+        )
 
-    def get(self, file_path: Path, file_hash: str, rule_ids: tuple[str, ...], config_hash: str) -> Optional[Any]:
+    def get(
+        self,
+        file_path: Path,
+        file_hash: str,
+        rule_ids: tuple[str, ...],
+        config_hash: str,
+    ) -> Optional[Any]:
         return self.cache.get(self.get_key(file_path, file_hash, rule_ids, config_hash))
 
     def set(
@@ -37,7 +51,11 @@ class ScanResultCache:
         result: Any,
         expire: int = CONSTANT_3600,
     ) -> None:
-        self.cache.set(self.get_key(file_path, file_hash, rule_ids, config_hash), result, expire=expire)
+        self.cache.set(
+            self.get_key(file_path, file_hash, rule_ids, config_hash),
+            result,
+            expire=expire,
+        )
 
     def invalidate_file(self, file_path: Path) -> None:
         pass
@@ -66,10 +84,14 @@ class RuleResultCache:
     def __init__(self, cache: Cache):
         self.cache = cache
 
-    def get_key(self, rule_id: str, file_path: Path, file_hash: str, config_hash: str) -> str:
+    def get_key(
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
+    ) -> str:
         return f"rule:{rule_id}:{file_path}:{file_hash}:{config_hash}"
 
-    def get(self, rule_id: str, file_path: Path, file_hash: str, config_hash: str) -> Optional[List[Any]]:
+    def get(
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
+    ) -> Optional[List[Any]]:
         return self.cache.get(self.get_key(rule_id, file_path, file_hash, config_hash))
 
     def set(
@@ -81,7 +103,11 @@ class RuleResultCache:
         issues: List[Any],
         expire: int = DEFAULT_CACHE_EXPIRE,
     ) -> None:
-        self.cache.set(self.get_key(rule_id, file_path, file_hash, config_hash), issues, expire=expire)
+        self.cache.set(
+            self.get_key(rule_id, file_path, file_hash, config_hash),
+            issues,
+            expire=expire,
+        )
 
 
 class FileHashCache:

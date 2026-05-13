@@ -1,6 +1,5 @@
 """Tests for the relative-imports rule."""
 
-
 import textwrap
 from pathlib import Path
 

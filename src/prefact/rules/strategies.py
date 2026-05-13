@@ -27,7 +27,9 @@ class ToolStrategy(ABC):
         pass
 
     @abstractmethod
-    def fix(self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]
+    ) -> tuple[str, List[Fix]]:
         """Fix issues using multiple tools."""
         pass
 
@@ -42,11 +44,12 @@ class ParallelScanStrategy(ToolStrategy):
         """Scan with all tools in parallel."""
         all_issues = []
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
             # Submit all scan tasks
             future_to_tool = {
-                executor.submit(tool.scan_file, path, source): tool
-                for tool in tools
+                executor.submit(tool.scan_file, path, source): tool for tool in tools
             }
 
             # Collect results
@@ -61,7 +64,9 @@ class ParallelScanStrategy(ToolStrategy):
 
         return all_issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]
+    ) -> tuple[str, List[Fix]]:
         """Apply fixes sequentially (order matters for fixes)."""
         current_source = source
         all_fixes = []
@@ -96,12 +101,14 @@ class SequentialScanStrategy(ToolStrategy):
             all_issues.extend(issues)
 
             # Optionally apply fixes between scans
-            if hasattr(tool, 'auto_fix') and tool.auto_fix:
+            if hasattr(tool, "auto_fix") and tool.auto_fix:
                 current_source, _ = tool.fix(path, current_source, issues)
 
         return all_issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]
+    ) -> tuple[str, List[Fix]]:
         """Fix using tools in sequence."""
         return ParallelScanStrategy().fix(path, source, issues, tools)
 
@@ -133,20 +140,19 @@ class PriorityBasedStrategy(ToolStrategy):
             else:
                 # Choose issue from highest priority tool
                 best_issue = max(
-                    issue_list,
-                    key=lambda x: self.tool_priorities.get(x[1].rule_id, 0)
+                    issue_list, key=lambda x: self.tool_priorities.get(x[1].rule_id, 0)
                 )[0]
                 all_issues.append(best_issue)
 
         return all_issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue], tools: List[BaseRule]
+    ) -> tuple[str, List[Fix]]:
         """Fix using tools in priority order."""
         # Sort tools by priority
         sorted_tools = sorted(
-            tools,
-            key=lambda t: self.tool_priorities.get(t.rule_id, 0),
-            reverse=True
+            tools, key=lambda t: self.tool_priorities.get(t.rule_id, 0), reverse=True
         )
 
         return ParallelScanStrategy().fix(path, source, issues, sorted_tools)

@@ -18,7 +18,9 @@ def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
 
     mode = "[dim](dry-run)[/]" if result.dry_run else ""
     console.print()
-    console.print(Panel(f"[bold]prefact Report[/bold] {mode}", border_style="blue", expand=False))
+    console.print(
+        Panel(f"[bold]prefact Report[/bold] {mode}", border_style="blue", expand=False)
+    )
 
     if result.issues_found:
         table = Table(title="Issues Found", show_lines=False)
@@ -28,7 +30,9 @@ def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
         table.add_column("Message")
         for iss in result.issues_found:
             s = _STYLE.get(iss.severity, "white")
-            table.add_row(iss.location, iss.rule_id, f"[{s}]{iss.severity.value}[/]", iss.message)
+            table.add_row(
+                iss.location, iss.rule_id, f"[{s}]{iss.severity.value}[/]", iss.message
+            )
         console.print(table)
     else:
         console.print("[green]✓ No issues found.[/green]")
@@ -37,7 +41,9 @@ def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
         console.print(f"\n[green]✓ Applied {result.total_fixed} fix(es).[/green]")
         if verbose:
             for fix in result.fixes_applied:
-                console.print(f"  [dim]{fix.file}[/dim] — {fix.original_code} → {fix.fixed_code}")
+                console.print(
+                    f"  [dim]{fix.file}[/dim] — {fix.original_code} → {fix.fixed_code}"
+                )
 
     if result.fixes_failed:
         console.print(f"\n[red]✗ {result.total_failed} fix(es) failed.[/red]")

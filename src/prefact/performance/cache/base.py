@@ -14,19 +14,24 @@ DEFAULT_CACHE_EXPIRE = MIN_1800  # 30 minutes
 
 try:
     import diskcache
+
     DISKCACHE_AVAILABLE = True
 except ImportError:
     DISKCACHE_AVAILABLE = False
-
-from prefact.config import Config
 
 
 class Cache:
     """Wrapper for diskcache with additional functionality."""
 
-    def __init__(self, cache_dir: Optional[Path] = None, size_limit: int = CONSTANT_1024 * CONSTANT_1024 * 100):  # 100MB
+    def __init__(
+        self,
+        cache_dir: Optional[Path] = None,
+        size_limit: int = CONSTANT_1024 * CONSTANT_1024 * 100,
+    ):  # 100MB
         if not DISKCACHE_AVAILABLE:
-            raise ImportError("diskcache is required for caching. Install with: pip install diskcache")
+            raise ImportError(
+                "diskcache is required for caching. Install with: pip install diskcache"
+            )
 
         if cache_dir is None:
             cache_dir = Path.home() / ".prefact" / "cache"
@@ -38,7 +43,7 @@ class Cache:
         self.cache = diskcache.Cache(
             str(self.cache_dir),
             size_limit=size_limit,
-            eviction_policy='least-recently-used'
+            eviction_policy="least-recently-used",
         )
 
         # Statistics

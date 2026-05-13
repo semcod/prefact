@@ -14,11 +14,13 @@ class JsonFormatter(logging.Formatter):
                 "level": record.levelname,
                 "logger": record.name,
             }
-        data.update({
-            "level": record.levelname,
-            "logger": record.name,
-            "module": record.module,
-            "function": record.funcName,
-            "line": record.lineno,
-        })
+        data.update(
+            {
+                "level": record.levelname,
+                "logger": record.name,
+                "module": record.module,
+                "function": record.funcName,
+                "line": record.lineno,
+            }
+        )
         return json.dumps(data)

@@ -1,6 +1,5 @@
 """Rule: detect and remove duplicate imports."""
 
-
 import ast
 from pathlib import Path
 
@@ -34,10 +33,13 @@ class DuplicateImports(BaseRule):
                         if name in seen:
                             issues.append(
                                 Issue(
-                                    rule_id=self.rule_id, file=path,
-                                    line=node.lineno, col=node.col_offset,
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
                                     message=f"Duplicate import: '{name}' (first at line {seen[name]})",
-                                    severity=Severity.WARNING, original=name,
+                                    severity=Severity.WARNING,
+                                    original=name,
                                     meta={"first_line": seen[name]},
                                 )
                             )
@@ -49,10 +51,13 @@ class DuplicateImports(BaseRule):
                         if name in seen:
                             issues.append(
                                 Issue(
-                                    rule_id=self.rule_id, file=path,
-                                    line=node.lineno, col=node.col_offset,
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
                                     message=f"Duplicate import: '{name}' (first at line {seen[name]})",
-                                    severity=Severity.WARNING, original=name,
+                                    severity=Severity.WARNING,
+                                    original=name,
                                     meta={"first_line": seen[name]},
                                 )
                             )
@@ -64,15 +69,24 @@ class DuplicateImports(BaseRule):
         _collect_imports(list(ast.iter_child_nodes(tree)))  # type: ignore[arg-type]
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         if not issues:
             return source, []
         dup_lines: set[int] = {i.line for i in issues}
         lines = source.splitlines(keepends=True)
         new_lines = [l for idx, l in enumerate(lines, 1) if idx not in dup_lines]
         fixes = [
-            Fix(issue=iss, file=path, original_code=lines[iss.line - 1].rstrip(), fixed_code="", applied=True)
-            for iss in issues if iss.line <= len(lines)
+            Fix(
+                issue=iss,
+                file=path,
+                original_code=lines[iss.line - 1].rstrip(),
+                fixed_code="",
+                applied=True,
+            )
+            for iss in issues
+            if iss.line <= len(lines)
         ]
         return "".join(new_lines), fixes
 
@@ -83,4 +97,6 @@ class DuplicateImports(BaseRule):
             checks.append("syntax_valid")
         except SyntaxError as exc:
             errors.append(f"SyntaxError: {exc}")
-        return ValidationResult(file=path, passed=not errors, checks=checks, errors=errors)
+        return ValidationResult(
+            file=path, passed=not errors, checks=checks, errors=errors
+        )

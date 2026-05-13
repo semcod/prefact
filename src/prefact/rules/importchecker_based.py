@@ -48,11 +48,9 @@ class ImportCheckerHelper:
             # Convert to issues
             issues = []
             for imp in unused_imports:
-                issues.append({
-                    "type": "unused_import",
-                    "import": str(imp),
-                    "module": module_name
-                })
+                issues.append(
+                    {"type": "unused_import", "import": str(imp), "module": module_name}
+                )
 
             return issues
         except ImportError:
@@ -66,13 +64,13 @@ class ImportCheckerHelper:
         """Convert file path to module name."""
         # This is simplified - real implementation would need
         # to consider PYTHONPATH and package structure
-        parts = file_path.with_suffix('').parts
+        parts = file_path.with_suffix("").parts
 
         # Remove common parent directories
         if "src" in parts:
-            parts = parts[parts.index('src') + 1:]
+            parts = parts[parts.index("src") + 1 :]
         elif "lib" in parts:
-            parts = parts[parts.index('lib') + 1:]
+            parts = parts[parts.index("lib") + 1 :]
 
         return ".".join(parts)
 
@@ -111,7 +109,7 @@ class ImportCheckerUnusedImports(BaseRule):
             ),
             "ignore_dunder_main": self.config.get_rule_option(
                 self.rule_id, "ignore_dunder_main", True
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -134,15 +132,17 @@ class ImportCheckerUnusedImports(BaseRule):
             if self.checker_config["ignore_dunder_main"] and import_name == "__main__":
                 continue
 
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=line_num,
-                col=0,
-                message=f"Unused import: {import_name}",
-                severity=Severity.INFO,
-                original=import_name
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=line_num,
+                    col=0,
+                    message=f"Unused import: {import_name}",
+                    severity=Severity.INFO,
+                    original=import_name,
+                )
+            )
 
         return issues
 
@@ -173,9 +173,12 @@ class ImportCheckerUnusedImports(BaseRule):
 
         return import_lines
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Use existing unused imports fixer
         from prefact.rules.unused_imports import UnusedImports
+
         fixer = UnusedImports(self.config)
         return fixer.fix(path, source, issues)
 
@@ -187,7 +190,7 @@ class ImportCheckerUnusedImports(BaseRule):
             file=path,
             passed=len(results) == 0,
             checks=["no_unused_imports"] if not results else [],
-            errors=[f"Still has {len(results)} unused imports"] if results else []
+            errors=[f"Still has {len(results)} unused imports"] if results else [],
         )
 
 
@@ -211,15 +214,17 @@ class ImportCheckerDuplicateImports(BaseRule):
                     for alias in node.names:
                         name = alias.asname or alias.name.split(".")[0]
                         if name in import_map:
-                            issues.append(Issue(
-                                rule_id=self.rule_id,
-                                file=path,
-                                line=node.lineno,
-                                col=node.col_offset,
-                                message=f"Duplicate import: {name}",
-                                severity=Severity.WARNING,
-                                original=name
-                            ))
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
+                                    message=f"Duplicate import: {name}",
+                                    severity=Severity.WARNING,
+                                    original=name,
+                                )
+                            )
                         else:
                             import_map[name] = node.lineno
                 elif isinstance(node, ast.ImportFrom):
@@ -228,15 +233,17 @@ class ImportCheckerDuplicateImports(BaseRule):
                         name = alias.asname or alias.name
                         if name in import_map and import_map[name] != node.lineno:
                             full_name = f"{module}.{name}" if module else name
-                            issues.append(Issue(
-                                rule_id=self.rule_id,
-                                file=path,
-                                line=node.lineno,
-                                col=node.col_offset,
-                                message=f"Duplicate import: {full_name}",
-                                severity=Severity.WARNING,
-                                original=full_name
-                            ))
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
+                                    message=f"Duplicate import: {full_name}",
+                                    severity=Severity.WARNING,
+                                    original=full_name,
+                                )
+                            )
                         else:
                             import_map[name] = node.lineno
         except SyntaxError:
@@ -244,15 +251,22 @@ class ImportCheckerDuplicateImports(BaseRule):
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Use existing duplicate imports fixer
         from prefact.rules.duplicate_imports import DuplicateImports
+
         fixer = DuplicateImports(self.config)
         return fixer.fix(path, source, issues)
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return self._validate_by_rescan(
-            path, original, fixed, "no_duplicate_imports", "Still has {count} duplicate imports"
+            path,
+            original,
+            fixed,
+            "no_duplicate_imports",
+            "Still has {count} duplicate imports",
         )
 
 
@@ -271,12 +285,10 @@ class ImportDependencyAnalysis(BaseRule):
     def _load_checker_config(self) -> Dict:
         """Load configuration."""
         return {
-            "max_depth": self.config.get_rule_option(
-                self.rule_id, "max_depth", MAX_5
-            ),
+            "max_depth": self.config.get_rule_option(self.rule_id, "max_depth", MAX_5),
             "detect_cycles": self.config.get_rule_option(
                 self.rule_id, "detect_cycles", True
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -289,28 +301,32 @@ class ImportDependencyAnalysis(BaseRule):
         if self.checker_config["detect_cycles"]:
             circular = self._detect_circular_imports(path, imports)
             for cycle in circular:
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=1,
-                    col=0,
-                    message=f"Circular import detected: {' -> '.join(cycle)}",
-                    severity=Severity.ERROR,
-                    original=" -> ".join(cycle)
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=1,
+                        col=0,
+                        message=f"Circular import detected: {' -> '.join(cycle)}",
+                        severity=Severity.ERROR,
+                        original=" -> ".join(cycle),
+                    )
+                )
 
         # Check import depth
         for imp in imports:
             if imp.count(".") > self.checker_config["max_depth"]:
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=imp["line"],
-                    col=0,
-                    message=f"Deep import: {imp['name']} (depth: {imp['name'].count('.')})",
-                    severity=Severity.WARNING,
-                    original=imp["name"]
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=imp["line"],
+                        col=0,
+                        message=f"Deep import: {imp['name']} (depth: {imp['name'].count('.')})",
+                        severity=Severity.WARNING,
+                        original=imp["name"],
+                    )
+                )
 
         return issues
 
@@ -326,24 +342,20 @@ class ImportDependencyAnalysis(BaseRule):
                     parts = stripped.split()
                     if len(parts) >= CONSTANT_4:
                         module = parts[1]
-                        imports.append({
-                            "name": module,
-                            "line": i + 1,
-                            "type": "from"
-                        })
+                        imports.append({"name": module, "line": i + 1, "type": "from"})
                 else:
                     parts = stripped.split()
                     if len(parts) >= 2:
                         module = parts[1].split(".")[0]
-                        imports.append({
-                            "name": module,
-                            "line": i + 1,
-                            "type": "import"
-                        })
+                        imports.append(
+                            {"name": module, "line": i + 1, "type": "import"}
+                        )
 
         return imports
 
-    def _detect_circular_imports(self, path: Path, imports: List[Dict]) -> List[List[str]]:
+    def _detect_circular_imports(
+        self, path: Path, imports: List[Dict]
+    ) -> List[List[str]]:
         """Detect circular imports (simplified implementation)."""
         # This is a simplified version - real implementation would need
         # to build a full dependency graph
@@ -363,7 +375,9 @@ class ImportDependencyAnalysis(BaseRule):
 
         return circular
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Import dependency issues usually require manual fixes
         return source, []
 
@@ -375,7 +389,7 @@ class ImportDependencyAnalysis(BaseRule):
             file=path,
             passed=len(issues) == 0,
             checks=["no_circular_imports", "import_depth_ok"] if not issues else [],
-            errors=[issue.message for issue in issues] if issues else []
+            errors=[issue.message for issue in issues] if issues else [],
         )
 
 
@@ -406,15 +420,17 @@ class ImportOptimizer(BaseRule):
 
         # Report single-use imports
         for imp in single_use:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=imp["line"],
-                col=0,
-                message=f"Import used only once: {imp['name']}",
-                severity=Severity.INFO,
-                original=imp["name"]
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=imp["line"],
+                    col=0,
+                    message=f"Import used only once: {imp['name']}",
+                    severity=Severity.INFO,
+                    original=imp["name"],
+                )
+            )
 
         return issues
 
@@ -433,20 +449,20 @@ class ImportOptimizer(BaseRule):
                         names = parts[PORT_3].split(",")
                         for name in names:
                             clean_name = name.strip().split(" as ")[0]
-                            imports.append({
-                                "name": clean_name,
-                                "line": f"{i}{1}",
-                                "module": module
-                            })
+                            imports.append(
+                                {
+                                    "name": clean_name,
+                                    "line": f"{i}{1}",
+                                    "module": module,
+                                }
+                            )
                 else:
                     names = stripped[PORT_6:].split(",")
                     for name in names:
                         clean_name = name.strip().split(" as ")[0].split(".")[0]
-                        imports.append({
-                            "name": clean_name,
-                            "line": f"{i}{1}",
-                            "module": None
-                        })
+                        imports.append(
+                            {"name": clean_name, "line": f"{i}{1}", "module": None}
+                        )
 
         return imports
 
@@ -471,14 +487,13 @@ class ImportOptimizer(BaseRule):
 
         return count
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Optimization suggestions only - no automatic fixes
         return source, []
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return ValidationResult(
-            file=path,
-            passed=True,
-            checks=["imports_analyzed"],
-            errors=[]
+            file=path, passed=True, checks=["imports_analyzed"], errors=[]
         )

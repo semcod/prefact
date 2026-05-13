@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any, List, Optional
 
-from .base import Cache, DEFAULT_CACHE_EXPIRE
+from .base import DEFAULT_CACHE_EXPIRE, Cache
 
 
 class RuleResultCache:
@@ -13,21 +13,13 @@ class RuleResultCache:
         self.cache = cache
 
     def get_key(
-        self,
-        rule_id: str,
-        file_path: Path,
-        file_hash: str,
-        config_hash: str
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
     ) -> str:
         """Generate cache key for rule result."""
         return f"rule:{rule_id}:{file_path}:{file_hash}:{config_hash}"
 
     def get(
-        self,
-        rule_id: str,
-        file_path: Path,
-        file_hash: str,
-        config_hash: str
+        self, rule_id: str, file_path: Path, file_hash: str, config_hash: str
     ) -> Optional[List[Any]]:
         """Get cached rule result."""
         key = self.get_key(rule_id, file_path, file_hash, config_hash)
@@ -40,7 +32,7 @@ class RuleResultCache:
         file_hash: str,
         config_hash: str,
         issues: List[Any],
-        expire: int = DEFAULT_CACHE_EXPIRE  # 30 minutes
+        expire: int = DEFAULT_CACHE_EXPIRE,  # 30 minutes
     ) -> None:
         """Cache rule result."""
         key = self.get_key(rule_id, file_path, file_hash, config_hash)

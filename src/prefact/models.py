@@ -1,6 +1,5 @@
 """Data models for the prefact pipeline."""
 
-
 import enum
 from dataclasses import dataclass, field
 from pathlib import Path

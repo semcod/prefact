@@ -41,22 +41,30 @@ class SortedImports(BaseRule):
             tree = ast.parse(source)
         except SyntaxError:
             return issues
-        imports = [n for n in ast.iter_child_nodes(tree) if isinstance(n, (ast.Import, ast.ImportFrom))]
+        imports = [
+            n
+            for n in ast.iter_child_nodes(tree)
+            if isinstance(n, (ast.Import, ast.ImportFrom))
+        ]
         if len(imports) < MIN_IMPORTS_FOR_SORTING:
             return issues
         keys = [_sort_key(n) for n in imports]
         if keys != sorted(keys):
             issues.append(
                 Issue(
-                    rule_id=self.rule_id, file=path,
-                    line=imports[0].lineno, col=0,
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=imports[0].lineno,
+                    col=0,
                     message="Import block is not sorted (stdlib → third-party → local).",
                     severity=Severity.INFO,
                 )
             )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         return source, []  # delegate to isort / ruff
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:

@@ -52,17 +52,23 @@ class RefactoringEngine:
         for path, issues in issues_map.items():
             if path in sources:
                 original = sources[path]
-                fixed_source, fixes = self.fixer.fix_file_with_source(path, original, issues, dry_run=dry_run)
+                fixed_source, fixes = self.fixer.fix_file_with_source(
+                    path, original, issues, dry_run=dry_run
+                )
             else:
                 # Large file - read directly (always need original for validation)
                 original = path.read_text(encoding="utf-8")
                 fixed_source, fixes = self.fixer.fix_file(path, issues, dry_run=dry_run)
 
             for fix in fixes:
-                (result.fixes_applied if fix.applied else result.fixes_failed).append(fix)
+                (result.fixes_applied if fix.applied else result.fixes_failed).append(
+                    fix
+                )
 
             # Phase 3 – Validate
-            validations = self.validator.validate_file(path, original, fixed_source, issues)
+            validations = self.validator.validate_file(
+                path, original, fixed_source, issues
+            )
             result.validations.extend(validations)
 
         return result
@@ -110,7 +116,9 @@ class RefactoringEngine:
         if not issues:
             return result
 
-        fixed_source, fixes = self.fixer.fix_file_with_source(path, source, issues, dry_run=dry_run)
+        fixed_source, fixes = self.fixer.fix_file_with_source(
+            path, source, issues, dry_run=dry_run
+        )
         for fix in fixes:
             (result.fixes_applied if fix.applied else result.fixes_failed).append(fix)
 
@@ -120,10 +128,10 @@ class RefactoringEngine:
 
     def _preload_sources(self, files: list[Path] | None = None) -> dict[Path, str]:
         """Preload small file sources into RAM to avoid multiple I/O operations.
-        
+
         Returns a dictionary mapping file paths to their contents.
         Only loads files under 100KB to avoid excessive memory usage.
-        
+
         Args:
             files: List of files to preload. If None, collects all files.
         """
@@ -140,7 +148,9 @@ class RefactoringEngine:
                 # Skip files larger than 100KB
                 if path.stat().st_size > max_file_size:
                     if self.config.verbose:
-                        print(f"Skipping large file (>{max_file_size//1024}KB): {path}")
+                        print(
+                            f"Skipping large file (>{max_file_size // 1024}KB): {path}"
+                        )
                     continue
 
                 source = path.read_text(encoding="utf-8")
@@ -153,6 +163,8 @@ class RefactoringEngine:
             total_files = len(files) if files else 0
             preloaded_count = len(sources)
             total_bytes = sum(len(s) for s in sources.values())
-            print(f"Preloaded {preloaded_count}/{total_files} files into RAM ({total_bytes} bytes)")
+            print(
+                f"Preloaded {preloaded_count}/{total_files} files into RAM ({total_bytes} bytes)"
+            )
 
         return sources

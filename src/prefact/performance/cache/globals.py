@@ -2,13 +2,13 @@
 
 from typing import Optional
 
-from .base import Cache, CONSTANT_1024
-from .scan import ScanResultCache
-from .config import ConfigCache
-from .rule import RuleResultCache
-from .hash import FileHashCache
 from prefact.config import Config
 
+from .base import CONSTANT_1024, Cache
+from .config import ConfigCache
+from .hash import FileHashCache
+from .rule import RuleResultCache
+from .scan import ScanResultCache
 
 # Global cache instance
 _cache: Optional[Cache] = None
@@ -26,7 +26,9 @@ def initialize_cache(config: Config) -> None:
         return
 
     cache_dir = config.get_rule_option("_performance", "cache_dir")
-    size_limit = config.get_rule_option("_performance", "cache_size", 100 * CONSTANT_1024 * CONSTANT_1024)
+    size_limit = config.get_rule_option(
+        "_performance", "cache_size", 100 * CONSTANT_1024 * CONSTANT_1024
+    )
 
     _cache = Cache(cache_dir, size_limit)
     _scan_cache = ScanResultCache(_cache)

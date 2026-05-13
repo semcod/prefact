@@ -33,20 +33,24 @@ class AIBoilerplateRule(BaseRule):
             (r"if __name__ == ['\"]__main__['\"]:", "module execution block"),
         ]
 
-    def _check_line(self, line_num: int, line: str, patterns: List[tuple[str, str]]) -> List[Issue]:
+    def _check_line(
+        self, line_num: int, line: str, patterns: List[tuple[str, str]]
+    ) -> List[Issue]:
         """Check a single line against boilerplate patterns and return any issues found."""
         issues = []
         for pattern, message in patterns:
             if re.search(pattern, line, re.IGNORECASE):
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=None,  # Will be set in scan_file
-                    line=line_num,
-                    col=0,
-                    message=message,
-                    severity=Severity.INFO,
-                    original=line.strip()
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=None,  # Will be set in scan_file
+                        line=line_num,
+                        col=0,
+                        message=message,
+                        severity=Severity.INFO,
+                        original=line.strip(),
+                    )
+                )
         return issues
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -62,7 +66,9 @@ class AIBoilerplateRule(BaseRule):
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Boilerplate removal requires manual decision
         return source, []
 

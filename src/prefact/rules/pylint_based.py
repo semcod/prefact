@@ -31,7 +31,7 @@ class PylintHelper:
             "--output-format=json",
             "--disable=all",
             "--enable=consider-using-f-string",
-            str(file_path)
+            str(file_path),
         ]
 
         # Add custom configuration
@@ -46,7 +46,7 @@ class PylintHelper:
                 cmd,
                 capture_output=True,
                 text=True,
-                check=False  # Pylint returns non-zero on issues
+                check=False,  # Pylint returns non-zero on issues
             )
 
             # Parse JSON output
@@ -59,7 +59,7 @@ class PylintHelper:
     @staticmethod
     def check_source(source: str, config: Optional[Dict] = None) -> List[Dict]:
         """Check source code using Pylint."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
 
@@ -67,6 +67,7 @@ class PylintHelper:
             return PylintHelper.check_file(Path(tmp_path), config)
         finally:
             import os
+
             os.unlink(tmp_path)
 
     @staticmethod
@@ -96,33 +97,42 @@ class PylintPrintStatements(BaseRule):
             ),
             "ignore_patterns": self.config.get_rule_option(
                 self.rule_id, "ignore_patterns", []
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
 
         # Check if file should be ignored
-        if any(pattern in str(path) for pattern in self.pylint_config["ignore_patterns"]):
+        if any(
+            pattern in str(path) for pattern in self.pylint_config["ignore_patterns"]
+        ):
             return issues
 
         results = PylintHelper.check_source(source, self.pylint_config)
 
         for item in results:
-            if item.get("message-id") == "W1201" or "print-statement" in item.get("message", "").lower():
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=item.get("line", 0),
-                    col=item.get("column", 0),
-                    message=item.get("message", "Print statement found"),
-                    severity=Severity.INFO,
-                    original="print()"
-                ))
+            if (
+                item.get("message-id") == "W1201"
+                or "print-statement" in item.get("message", "").lower()
+            ):
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=item.get("line", 0),
+                        col=item.get("column", 0),
+                        message=item.get("message", "Print statement found"),
+                        severity=Severity.INFO,
+                        original="print()",
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Pylint doesn't fix, but we can implement simple print removal
         if not issues:
             return source, []
@@ -137,13 +147,15 @@ class PylintPrintStatements(BaseRule):
                 line = lines[line_idx]
                 if "print(" in line and not line.strip().startswith("#"):
                     lines[line_idx] = f"# {line}"
-                    fixes.append(Fix(
-                        issue=issue,
-                        file=path,
-                        original_code=line,
-                        fixed_code=f"# {line}",
-                        applied=True
-                    ))
+                    fixes.append(
+                        Fix(
+                            issue=issue,
+                            file=path,
+                            original_code=line,
+                            fixed_code=f"# {line}",
+                            applied=True,
+                        )
+                    )
 
         return "\n".join(lines), fixes
 
@@ -151,15 +163,19 @@ class PylintPrintStatements(BaseRule):
         # Check if print statements remain
         results = PylintHelper.check_source(fixed, self.pylint_config)
         remaining = [
-            r for r in results
-            if r.get("message-id") == "W1201" or "print-statement" in r.get("message", "").lower()
+            r
+            for r in results
+            if r.get("message-id") == "W1201"
+            or "print-statement" in r.get("message", "").lower()
         ]
 
         return ValidationResult(
             file=path,
             passed=len(remaining) == 0,
             checks=["no_print_statements"] if not remaining else [],
-            errors=[f"Still has {len(remaining)} print statements"] if remaining else []
+            errors=[f"Still has {len(remaining)} print statements"]
+            if remaining
+            else [],
         )
 
 
@@ -180,7 +196,7 @@ class PylintStringConcat(BaseRule):
             "enable_codes": "consider-using-f-string",
             "min_complexity": self.config.get_rule_option(
                 self.rule_id, "min_complexity", 2
-            )
+            ),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -188,22 +204,30 @@ class PylintStringConcat(BaseRule):
         results = PylintHelper.check_source(source, self.pylint_config)
 
         for item in results:
-            if item.get("message-id") == "W1308" or "f-string" in item.get("message", "").lower():
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=item.get("line", 0),
-                    col=item.get("column", 0),
-                    message=item.get("message", "Consider using f-string"),
-                    severity=Severity.INFO,
-                    original="string concatenation"
-                ))
+            if (
+                item.get("message-id") == "W1308"
+                or "f-string" in item.get("message", "").lower()
+            ):
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=item.get("line", 0),
+                        col=item.get("column", 0),
+                        message=item.get("message", "Consider using f-string"),
+                        severity=Severity.INFO,
+                        original="string concatenation",
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Delegate to string transformation rules
         from prefact.rules.string_transformations import StringConcatToFString
+
         transformer = StringConcatToFString(self.config)
         return transformer.fix(path, source, issues)
 
@@ -211,15 +235,19 @@ class PylintStringConcat(BaseRule):
         # Check if string concatenations remain
         results = PylintHelper.check_source(fixed, self.pylint_config)
         remaining = [
-            r for r in results
-            if r.get("message-id") == "W1308" or "f-string" in r.get("message", "").lower()
+            r
+            for r in results
+            if r.get("message-id") == "W1308"
+            or "f-string" in r.get("message", "").lower()
         ]
 
         return ValidationResult(
             file=path,
             passed=len(remaining) == 0,
             checks=["no_string_concat"] if not remaining else [],
-            errors=[f"Still has {len(remaining)} string concatenations"] if remaining else []
+            errors=[f"Still has {len(remaining)} string concatenations"]
+            if remaining
+            else [],
         )
 
 
@@ -250,16 +278,15 @@ class PylintComprehensive(BaseRule):
         """Load comprehensive Pylint configuration."""
         return {
             "enable_codes": self.config.get_rule_option(
-                self.rule_id, "enable_codes",
+                self.rule_id,
+                "enable_codes",
                 "consider-using-f-string,unused-import,"
-                "duplicate-key,unnecessary-comprehension"
+                "duplicate-key,unnecessary-comprehension",
             ),
             "disable_codes": self.config.get_rule_option(
                 self.rule_id, "disable_codes", ""
             ),
-            "score": self.config.get_rule_option(
-                self.rule_id, "score", False
-            )
+            "score": self.config.get_rule_option(self.rule_id, "score", False),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -273,15 +300,17 @@ class PylintComprehensive(BaseRule):
             if rule_id:
                 severity = self._map_pylint_severity(item.get("type", ""))
 
-                issues.append(Issue(
-                    rule_id=rule_id,
-                    file=path,
-                    line=item.get("line", 0),
-                    col=item.get("column", 0),
-                    message=item.get("message", ""),
-                    severity=severity,
-                    original=item.get("symbol", "")
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=rule_id,
+                        file=path,
+                        line=item.get("line", 0),
+                        col=item.get("column", 0),
+                        message=item.get("message", ""),
+                        severity=severity,
+                        original=item.get("symbol", ""),
+                    )
+                )
 
         return issues
 
@@ -308,7 +337,9 @@ class PylintComprehensive(BaseRule):
         }
         return mapping.get(pylint_type.lower(), Severity.INFO)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Delegate to appropriate fixers based on rule types
         all_fixes = []
         fixed_source = source
@@ -354,10 +385,7 @@ class PylintComprehensive(BaseRule):
                 all_errors.append(f"Still has {len(results)} {rule_type}")
 
         return ValidationResult(
-            file=path,
-            passed=len(all_errors) == 0,
-            checks=all_checks,
-            errors=all_errors
+            file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors
         )
 
 

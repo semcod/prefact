@@ -123,13 +123,16 @@ class TestQLManager(BaseManager):
 
         return payload
 
-
     def discover_scenarios(
         self,
         scenarios_dir: str | Path | None = None,
     ) -> list[Path]:
         """Return sorted list of TestQL scenarios found in the project."""
-        base = Path(scenarios_dir) if scenarios_dir else self.project_root / DEFAULT_SCENARIOS_DIR
+        base = (
+            Path(scenarios_dir)
+            if scenarios_dir
+            else self.project_root / DEFAULT_SCENARIOS_DIR
+        )
         if not base.is_absolute():
             base = (self.project_root / base).resolve()
         if not base.exists() or not base.is_dir():

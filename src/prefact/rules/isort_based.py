@@ -19,6 +19,7 @@ except ImportError:
 # Optional import - only import when needed
 try:
     import isort
+
     HAS_ISORT = True
 except ImportError:
     HAS_ISORT = False
@@ -62,19 +63,23 @@ class ISortHelper:
 
             for block in import_blocks:
                 if not ISortHelper._is_block_sorted(block, isort_config):
-                    issues.append({
-                        "line": str(block['start_line'] + 1),
-                        "message": f"Import block not properly sorted (lines {block['start_line'] + 1}-{block['end_line'] + 1})",
-                        "type": "unsorted_imports"
-                    })
+                    issues.append(
+                        {
+                            "line": str(block["start_line"] + 1),
+                            "message": f"Import block not properly sorted (lines {block['start_line'] + 1}-{block['end_line'] + 1})",
+                            "type": "unsorted_imports",
+                        }
+                    )
 
             # Check for missing section separators
             if ISortHelper._needs_section_separators(source, isort_config):
-                issues.append({
-                    "line": 1,
-                    "message": "Import sections should be separated by blank lines",
-                    "type": "missing_separator"
-                })
+                issues.append(
+                    {
+                        "line": 1,
+                        "message": "Import sections should be separated by blank lines",
+                        "type": "missing_separator",
+                    }
+                )
 
             return issues
 
@@ -94,25 +99,33 @@ class ISortHelper:
                 if not in_block:
                     in_block = True
                     start_line = i
-            elif in_block and not stripped and not any(
-                lines[j].strip().startswith(("import ", "from "))
-                for j in range(i + 1, min(i + 3, len(lines)))
+            elif (
+                in_block
+                and not stripped
+                and not any(
+                    lines[j].strip().startswith(("import ", "from "))
+                    for j in range(i + 1, min(i + 3, len(lines)))
+                )
             ):
                 # End of import block
-                blocks.append({
-                    "start_line": start_line,
-                    "end_line": i - 1,
-                    "lines": lines[start_line:i]
-                })
+                blocks.append(
+                    {
+                        "start_line": start_line,
+                        "end_line": i - 1,
+                        "lines": lines[start_line:i],
+                    }
+                )
                 in_block = False
 
         # Handle block at end of file
         if in_block:
-            blocks.append({
-                "start_line": start_line,
-                "end_line": len(lines) - 1,
-                "lines": lines[start_line:]
-            })
+            blocks.append(
+                {
+                    "start_line": start_line,
+                    "end_line": len(lines) - 1,
+                    "lines": lines[start_line:],
+                }
+            )
 
         return blocks
 
@@ -176,17 +189,25 @@ class ISortedImports(BaseRule):
         """Load ISort configuration from prefact config."""
         config = {
             "profile": self.config.get_rule_option(self.rule_id, "profile", "black"),
-            "line_length": self.config.get_rule_option(self.rule_id, "line_length", DEFAULT_MAX_LINE_LENGTH),
+            "line_length": self.config.get_rule_option(
+                self.rule_id, "line_length", DEFAULT_MAX_LINE_LENGTH
+            ),
             "known_first_party": self.config.get_rule_option(
-                self.rule_id, "known_first_party", [self.config.package_name or "prefact"]
+                self.rule_id,
+                "known_first_party",
+                [self.config.package_name or "prefact"],
             ),
             "sections": self.config.get_rule_option(
-                self.rule_id, "sections", ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+                self.rule_id,
+                "sections",
+                ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"],
             ),
         }
 
         # Add custom settings
-        custom_settings = self.config.get_rule_option(self.rule_id, "custom_settings", {})
+        custom_settings = self.config.get_rule_option(
+            self.rule_id, "custom_settings", {}
+        )
         config.update(custom_settings)
 
         return config
@@ -203,19 +224,23 @@ class ISortedImports(BaseRule):
         results = ISortHelper.check_source(source, self.isort_config)
 
         for item in results:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item.get("line", 1),
-                col=0,
-                message=item.get("message", "Imports not sorted"),
-                severity=Severity.INFO,
-                original="unsorted imports"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item.get("line", 1),
+                    col=0,
+                    message=item.get("message", "Imports not sorted"),
+                    severity=Severity.INFO,
+                    original="unsorted imports",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues or not HAS_ISORT:
             return source, []
 
@@ -224,13 +249,15 @@ class ISortedImports(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code="unsorted imports",
-                    fixed_code="sorted imports",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code="unsorted imports",
+                        fixed_code="sorted imports",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -245,7 +272,9 @@ class ISortedImports(BaseRule):
             file=path,
             passed=len(remaining_issues) == 0,
             checks=["imports_sorted"] if not remaining_issues else [],
-            errors=[f"Still has {len(remaining_issues)} sorting issues"] if remaining_issues else []
+            errors=[f"Still has {len(remaining_issues)} sorting issues"]
+            if remaining_issues
+            else [],
         )
 
 
@@ -271,19 +300,23 @@ class ImportSectionSeparator(BaseRule):
 
         # Check for missing section separators
         if ISortHelper._needs_section_separators(source, self.isort_config):
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=1,
-                col=0,
-                message="Import sections should be separated by blank lines",
-                severity=Severity.INFO,
-                original="imports without separators"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=1,
+                    col=0,
+                    message="Import sections should be separated by blank lines",
+                    severity=Severity.INFO,
+                    original="imports without separators",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues or not HAS_ISORT:
             return source, []
 
@@ -291,13 +324,15 @@ class ImportSectionSeparator(BaseRule):
         fixes = []
 
         if fixed_source != source:
-            fixes.append(Fix(
-                issue=issues[0],
-                file=path,
-                original_code="imports without separators",
-                fixed_code="imports with proper separators",
-                applied=True
-            ))
+            fixes.append(
+                Fix(
+                    issue=issues[0],
+                    file=path,
+                    original_code="imports without separators",
+                    fixed_code="imports with proper separators",
+                    applied=True,
+                )
+            )
 
         return fixed_source, fixes
 
@@ -305,13 +340,15 @@ class ImportSectionSeparator(BaseRule):
         # Skip if isort is not available
         if not HAS_ISORT:
             return ValidationResult(file=path, passed=True, checks=[], errors=[])
-        needs_separators = ISortHelper._needs_section_separators(fixed, self.isort_config)
+        needs_separators = ISortHelper._needs_section_separators(
+            fixed, self.isort_config
+        )
 
         return ValidationResult(
             file=path,
             passed=not needs_separators,
             checks=["section_separators_present"] if not needs_separators else [],
-            errors=["Missing section separators"] if needs_separators else []
+            errors=["Missing section separators"] if needs_separators else [],
         )
 
 
@@ -361,22 +398,26 @@ class CustomImportOrganization(BaseRule):
         for node in ast.iter_child_nodes(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    imports.append({
-                        "line": node.lineno,
-                        "type": "import",
-                        "module": alias.name,
-                        "name": alias.asname or alias.name
-                    })
+                    imports.append(
+                        {
+                            "line": node.lineno,
+                            "type": "import",
+                            "module": alias.name,
+                            "name": alias.asname or alias.name,
+                        }
+                    )
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 for alias in node.names:
-                    imports.append({
-                        "line": node.lineno,
-                        "type": "from",
-                        "module": module,
-                        "name": alias.asname or alias.name,
-                        "level": node.level
-                    })
+                    imports.append(
+                        {
+                            "line": node.lineno,
+                            "type": "from",
+                            "module": module,
+                            "name": alias.asname or alias.name,
+                            "level": node.level,
+                        }
+                    )
 
         # Check organization
         if self.custom_rules["group_by_package"]:
@@ -420,24 +461,30 @@ class CustomImportOrganization(BaseRule):
         for module, group in groups.items():
             names = [imp["name"] for imp in group]
             if names != sorted(names):
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=group[0]["line"],
-                    col=0,
-                    message=f"Imports from '{module}' not in alphabetical order",
-                    severity=Severity.INFO,
-                    original="unalphabetical imports"
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=group[0]["line"],
+                        col=0,
+                        message=f"Imports from '{module}' not in alphabetical order",
+                        severity=Severity.INFO,
+                        original="unalphabetical imports",
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Use ISort with custom configuration
         custom_config = {
             "profile": "black",
             "force_single_line": self.custom_rules["group_by_package"],
-            "sort_order": "natural" if self.custom_rules["alphabetical_within_groups"] else "native",
+            "sort_order": "natural"
+            if self.custom_rules["alphabetical_within_groups"]
+            else "native",
         }
 
         fixed_source = ISortHelper.fix_source(source, custom_config)
@@ -445,13 +492,15 @@ class CustomImportOrganization(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="organized imports",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="organized imports",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -466,5 +515,5 @@ class CustomImportOrganization(BaseRule):
             file=path,
             passed=len(issues) == 0,
             checks=["imports_organized"] if not issues else [],
-            errors=[f"Still has {len(issues)} organization issues"] if issues else []
+            errors=[f"Still has {len(issues)} organization issues"] if issues else [],
         )

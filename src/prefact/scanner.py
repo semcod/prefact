@@ -1,6 +1,5 @@
 """Scanner – walks the project tree and collects issues."""
 
-
 import fnmatch
 import os
 from pathlib import Path
@@ -68,7 +67,9 @@ def _match_gitignore_pattern(path: str, pattern: str) -> bool:
         if fnmatch.fnmatch(os.path.basename(path), pattern):
             return True
         # Check if pattern with **/ prefix matches
-        if fnmatch.fnmatch(path, f"*/{pattern}") or fnmatch.fnmatch(path, f"**/{pattern}"):
+        if fnmatch.fnmatch(path, f"*/{pattern}") or fnmatch.fnmatch(
+            path, f"**/{pattern}"
+        ):
             return True
         return False
 
@@ -134,24 +135,31 @@ class Scanner:
             return True
 
         import fnmatch
+
         for pat in self._exclude_patterns:
             if not pat:
                 continue
-            
+
             # Match directly
             if fnmatch.fnmatch(rel_str, pat) or fnmatch.fnmatch(rel_str, f"*/{pat}"):
                 return True
-                
+
             # Match parents
             for parent in rel.parents:
                 parent_str = str(parent)
-                if parent_str == "." : continue
-                if fnmatch.fnmatch(parent_str, pat) or fnmatch.fnmatch(parent_str, f"*/{pat}"):
+                if parent_str == ".":
+                    continue
+                if fnmatch.fnmatch(parent_str, pat) or fnmatch.fnmatch(
+                    parent_str, f"*/{pat}"
+                ):
                     return True
-                    
+
         # Hardcoded safety for common folders if not caught by patterns
         path_str = str(abs_path)
-        if any(x in path_str for x in ["/.venv/", "/venv/", "/node_modules/", "/__pycache__/", "/.git/"]):
+        if any(
+            x in path_str
+            for x in ["/.venv/", "/venv/", "/node_modules/", "/__pycache__/", "/.git/"]
+        ):
             return True
-            
+
         return False

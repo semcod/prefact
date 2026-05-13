@@ -28,11 +28,11 @@ def helper_function(data):
 
 class UtilClass:
     """Utility class."""
-    
+
     def __init__(self):
         self.cache = {}
         print("UtilClass initialized")
-    
+
     def get_cached(self, key):
         """Get cached value."""
         if key in self.cache:

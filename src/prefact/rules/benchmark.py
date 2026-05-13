@@ -23,7 +23,7 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
         "file": str(file_path),
         "file_size_bytes": len(source),
         "lines": source.count("\n") + 1,
-        "rules": {}
+        "rules": {},
     }
 
     total_ast_time = 0
@@ -51,16 +51,10 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
 
         # Store results
         results["rules"][rule_id] = {
-            "ast": {
-                "issues": len(ast_issues),
-                "time_ms": ast_time * 1000
-            },
-            "ruff": {
-                "issues": len(ruff_issues),
-                "time_ms": ruff_time * 1000
-            },
+            "ast": {"issues": len(ast_issues), "time_ms": ast_time * 1000},
+            "ruff": {"issues": len(ruff_issues), "time_ms": ruff_time * 1000},
             "speedup": ast_time / ruff_time if ruff_time > 0 else 0,
-            "issues_match": len(ast_issues) == len(ruff_issues)
+            "issues_match": len(ast_issues) == len(ruff_issues),
         }
 
         total_ast_time += ast_time
@@ -69,7 +63,9 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
     results["total"] = {
         "ast_time_ms": total_ast_time * 1000,
         "ruff_time_ms": total_ruff_time * 1000,
-        "overall_speedup": total_ast_time / total_ruff_time if total_ruff_time > 0 else 0
+        "overall_speedup": total_ast_time / total_ruff_time
+        if total_ruff_time > 0
+        else 0,
     }
 
     return results
@@ -80,8 +76,7 @@ def benchmark_project(project_root: Path, config: Config) -> Dict:
     python_files = list(project_root.rglob("*.py"))
     # Filter out test files and __pycache__
     python_files = [
-        f for f in python_files
-        if "test" not in f.name and "__pycache__" not in str(f)
+        f for f in python_files if "test" not in f.name and "__pycache__" not in str(f)
     ]
 
     print(f"Benchmarking {len(python_files)} Python files...")
@@ -104,8 +99,10 @@ def benchmark_project(project_root: Path, config: Config) -> Dict:
         "files_processed": len(all_results),
         "total_ast_time_ms": total_ast_time,
         "total_ruff_time_ms": total_ruff_time,
-        "overall_speedup": total_ast_time / total_ruff_time if total_ruff_time > 0 else 0,
-        "results": all_results
+        "overall_speedup": total_ast_time / total_ruff_time
+        if total_ruff_time > 0
+        else 0,
+        "results": all_results,
     }
 
 
@@ -129,7 +126,9 @@ def print_benchmark_results(results: Dict) -> None:
 
     for result in results["results"]:
         file_name = Path(result["file"]).name
-        print(f"\n{file_name} ({result['lines']} lines, {result['file_size_bytes']} bytes)")
+        print(
+            f"\n{file_name} ({result['lines']} lines, {result['file_size_bytes']} bytes)"
+        )
         print(f"  Speedup: {result['total']['overall_speedup']:.2f}x")
 
         for rule_id, rule_result in result["rules"].items():
@@ -140,7 +139,9 @@ def print_benchmark_results(results: Dict) -> None:
 
 def main() -> None:
     """Run benchmark on current project."""
-    parser = argparse.ArgumentParser(description="Benchmark AST vs Ruff implementations")
+    parser = argparse.ArgumentParser(
+        description="Benchmark AST vs Ruff implementations"
+    )
     parser.add_argument("--path", default=".", help="Path to benchmark")
     args = parser.parse_args()
 

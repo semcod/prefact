@@ -1,6 +1,5 @@
 """Configuration management for prefact."""
 
-
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
@@ -89,8 +88,14 @@ class Config:
         return {
             "include": ["**/*.py"],
             "exclude": [
-                "**/__pycache__/**", "**/node_modules/**", "**/.venv/**",
-                "**/venv/**", "**/.git/**", "**/build/**", "**/dist/**", "**/*.egg-info/**",
+                "**/__pycache__/**",
+                "**/node_modules/**",
+                "**/.venv/**",
+                "**/venv/**",
+                "**/.git/**",
+                "**/build/**",
+                "**/dist/**",
+                "**/*.egg-info/**",
             ],
         }
 
@@ -125,7 +130,7 @@ class Config:
         strategies = [
             self._detect_from_pyproject,
             self._detect_from_src_layout,
-            self._detect_from_root_layout
+            self._detect_from_root_layout,
         ]
 
         for strategy in strategies:
@@ -161,6 +166,7 @@ class Config:
         """Get available TOML library."""
         try:
             import tomllib
+
             return tomllib
         except ModuleNotFoundError:
             return None

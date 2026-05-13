@@ -15,7 +15,6 @@ from ._base import BaseManager, console
 CONSTANT_6 = 6
 
 
-
 class TodoManager(BaseManager):
     """Manages TODO.md file operations."""
 
@@ -29,13 +28,19 @@ class TodoManager(BaseManager):
         existing_todos, completed_todos = self._parse_existing_todos()
 
         # Create set of current issues and generate new todos
-        current_issues, new_todos, total_active_todos = self._generate_current_todos(existing_todos)
+        current_issues, new_todos, total_active_todos = self._generate_current_todos(
+            existing_todos
+        )
 
         # Find completed tasks (exist in TODO.md but not in current issues)
-        completed_tasks, total_completed_todos = self._find_completed_tasks(existing_todos, current_issues)
+        completed_tasks, total_completed_todos = self._find_completed_tasks(
+            existing_todos, current_issues
+        )
 
         # Build and write TODO.md content
-        self._write_todo_md(new_todos, completed_tasks, total_active_todos, total_completed_todos)
+        self._write_todo_md(
+            new_todos, completed_tasks, total_active_todos, total_completed_todos
+        )
 
     def _parse_existing_todos(self) -> Tuple[Dict, List]:
         """Parse existing TODO.md entries."""
@@ -56,7 +61,11 @@ class TodoManager(BaseManager):
                 content = line[CONSTANT_6:]  # Remove "- [ ] " or "- [x] "
 
                 # Handle multi-line messages
-                while i + 1 < len(lines) and not lines[i + 1].strip().startswith("- [") and lines[i + 1].strip():
+                while (
+                    i + 1 < len(lines)
+                    and not lines[i + 1].strip().startswith("- [")
+                    and lines[i + 1].strip()
+                ):
                     content += f" {lines[i + 1].strip()}"
                     i += 1
 
@@ -66,27 +75,35 @@ class TodoManager(BaseManager):
 
                     # Parse file and line
                     if ":" in file_line_part:
-                        file_part = self._get_relative_file_path(file_line_part.rsplit(":", 1)[0])
+                        file_part = self._get_relative_file_path(
+                            file_line_part.rsplit(":", 1)[0]
+                        )
                         line_part = file_line_part.rsplit(":", 1)[1]
                         try:
                             line_num = int(line_part)
                             key = (file_part, line_num, message_part)
                             existing_todos[key] = {
-                                'status': 'completed' if line.startswith("- [x] ") else 'pending',
-                                'original_line': line
+                                "status": "completed"
+                                if line.startswith("- [x] ")
+                                else "pending",
+                                "original_line": line,
                             }
                         except ValueError:
                             # Line number is not an integer, treat differently
                             key = (file_part, message_part)
                             existing_todos[key] = {
-                                'status': 'completed' if line.startswith("- [x] ") else 'pending',
-                                'original_line': line
+                                "status": "completed"
+                                if line.startswith("- [x] ")
+                                else "pending",
+                                "original_line": line,
                             }
             i += 1
 
         return existing_todos, completed_todos
 
-    def _generate_current_todos(self, existing_todos: Dict) -> Tuple[set, List[str], int]:
+    def _generate_current_todos(
+        self, existing_todos: Dict
+    ) -> Tuple[set, List[str], int]:
         """Generate todos for current issues."""
         current_issues = set()
         new_todos = []
@@ -97,16 +114,16 @@ class TodoManager(BaseManager):
         skipped_active_todos = 0
 
         for issue_group in self.issues_found:
-            rel_file = self._get_relative_file_path(issue_group['file'])
+            rel_file = self._get_relative_file_path(issue_group["file"])
             for example in issue_group["examples"]:
-                key = (rel_file, example['line'], example['message'])
+                key = (rel_file, example["line"], example["message"])
                 current_issues.add(key)
 
                 # Check if this is a new issue or existing one
                 if key in existing_todos:
                     # Keep existing status
-                    status = existing_todos[key]['status']
-                    checkbox = "[x]" if status == 'completed' else "[ ]"
+                    status = existing_todos[key]["status"]
+                    checkbox = "[x]" if status == "completed" else "[ ]"
                 else:
                     # New issue
                     checkbox = "[ ]"
@@ -115,7 +132,9 @@ class TodoManager(BaseManager):
                 if key not in seen:
                     total_active_todos += 1
                     if len(new_todos) < max_todo_items:
-                        new_todos.append(f"- {checkbox} {rel_file}:{example['line']} - {example['message']}")
+                        new_todos.append(
+                            f"- {checkbox} {rel_file}:{example['line']} - {example['message']}"
+                        )
                     elif not limit_reached:
                         skipped_active_todos = total_active_todos - len(new_todos)
                         console.print(
@@ -127,21 +146,29 @@ class TodoManager(BaseManager):
 
         return current_issues, new_todos, total_active_todos
 
-    def _find_completed_tasks(self, existing_todos: Dict, current_issues: set) -> Tuple[List[str], int]:
+    def _find_completed_tasks(
+        self, existing_todos: Dict, current_issues: set
+    ) -> Tuple[List[str], int]:
         """Find tasks that were completed since last run."""
         completed_tasks = []
         total_completed_todos = 0
-        max_completed_todos = self.get_autonomous_limit("autonomous_max_completed_todos")
+        max_completed_todos = self.get_autonomous_limit(
+            "autonomous_max_completed_todos"
+        )
         limit_reached = False
         skipped_completed_todos = 0
 
         for key, todo_info in existing_todos.items():
-            if key not in current_issues and todo_info['status'] == 'pending':
+            if key not in current_issues and todo_info["status"] == "pending":
                 total_completed_todos += 1
                 if len(completed_tasks) < max_completed_todos:
-                    completed_tasks.append(f"- [x] {todo_info['original_line'][CONSTANT_6:]}")
+                    completed_tasks.append(
+                        f"- [x] {todo_info['original_line'][CONSTANT_6:]}"
+                    )
                 elif not limit_reached:
-                    skipped_completed_todos = total_completed_todos - len(completed_tasks)
+                    skipped_completed_todos = total_completed_todos - len(
+                        completed_tasks
+                    )
                     console.print(
                         f"⚠️ Completed TODO limit reached ({max_completed_todos}); omitting {max(0, skipped_completed_todos)} remaining completed tasks from TODO.md.",
                         style="yellow",
@@ -150,8 +177,13 @@ class TodoManager(BaseManager):
 
         return completed_tasks, total_completed_todos
 
-    def _write_todo_md(self, new_todos: List[str], completed_tasks: List[str],
-                      total_active_todos: int, total_completed_todos: int) -> None:
+    def _write_todo_md(
+        self,
+        new_todos: List[str],
+        completed_tasks: List[str],
+        total_active_todos: int,
+        total_completed_todos: int,
+    ) -> None:
         """Write the updated TODO.md file."""
         content = "# TODO\n\n"
         content += f"**Generated by:** prefact v{__version__}\n"
@@ -163,7 +195,9 @@ class TodoManager(BaseManager):
         if completed_tasks:
             content += "## ✅ Completed Tasks"
             if total_completed_todos > len(completed_tasks):
-                content += f" (showing {len(completed_tasks)} of {total_completed_todos})"
+                content += (
+                    f" (showing {len(completed_tasks)} of {total_completed_todos})"
+                )
             content += "\n\n"
             content += "\n".join(completed_tasks)
             content += "\n\n"
@@ -175,13 +209,17 @@ class TodoManager(BaseManager):
                 content += f" (showing {len(new_todos)} of {total_active_todos})"
             content += "\n\n"
             content += "\n".join(new_todos)
-            content += "\n\n---\n\n*To execute all tasks, run: `prefact -a --execute-todos`*"
+            content += (
+                "\n\n---\n\n*To execute all tasks, run: `prefact -a --execute-todos`*"
+            )
 
         # Write TODO.md
         self.todo_path.write_text(content)
 
         total_items = total_active_todos + total_completed_todos
-        console.print(f"📝 Updated TODO.md: {total_active_todos} active, {total_completed_todos} completed ({total_items} total)")
+        console.print(
+            f"📝 Updated TODO.md: {total_active_todos} active, {total_completed_todos} completed ({total_items} total)"
+        )
 
     def _get_relative_file_path(self, file_path: str) -> str:
         """Convert file path to relative path for better portability."""
@@ -208,11 +246,13 @@ class TodoManager(BaseManager):
             console.print("ℹ️ No active tasks found.")
             return
 
-        tasks_to_execute, deferred_tasks = self._limit_todo_execution_tasks(active_tasks)
+        tasks_to_execute, deferred_tasks = self._limit_todo_execution_tasks(
+            active_tasks
+        )
 
         # Execute tasks using the refactoring engine
         executed_count, completed_tasks = self._execute_todo_tasks(tasks_to_execute)
-        completed_tasks.extend(task['original_line'] for task in deferred_tasks)
+        completed_tasks.extend(task["original_line"] for task in deferred_tasks)
 
         # Update TODO.md with results
         self._update_todo_with_execution_results(
@@ -246,12 +286,14 @@ class TodoManager(BaseManager):
                     if ":" in file_line_part:
                         file_path = file_line_part.rsplit(":", 1)[0]
                         line_num = int(file_line_part.rsplit(":", 1)[1])
-                        active_tasks.append({
-                            'file': file_path,
-                            'line': line_num,
-                            'message': message,
-                            'original_line': line
-                        })
+                        active_tasks.append(
+                            {
+                                "file": file_path,
+                                "line": line_num,
+                                "message": message,
+                                "original_line": line,
+                            }
+                        )
 
         return active_tasks
 
@@ -267,8 +309,12 @@ class TodoManager(BaseManager):
         config.project_root = self.project_root
         return config
 
-    def _limit_todo_execution_tasks(self, active_tasks: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-        max_execution_items = self.get_autonomous_limit("autonomous_max_todo_execution_items")
+    def _limit_todo_execution_tasks(
+        self, active_tasks: List[Dict[str, Any]]
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        max_execution_items = self.get_autonomous_limit(
+            "autonomous_max_todo_execution_items"
+        )
         tasks_to_execute = active_tasks[:max_execution_items]
         deferred_tasks = active_tasks[max_execution_items:]
 
@@ -280,7 +326,9 @@ class TodoManager(BaseManager):
 
         return tasks_to_execute, deferred_tasks
 
-    def _execute_todo_tasks(self, active_tasks: List[Dict[str, Any]]) -> Tuple[int, List[str]]:
+    def _execute_todo_tasks(
+        self, active_tasks: List[Dict[str, Any]]
+    ) -> Tuple[int, List[str]]:
         """Execute TODO tasks and return count of fixed tasks and completed task lines."""
         config = self._get_refactoring_config()
         scanner = Scanner(config)
@@ -295,30 +343,39 @@ class TodoManager(BaseManager):
         for file_path, file_tasks in tasks_by_file.items():
             if file_path.exists():
                 try:
-                    result = self._process_file_tasks(file_path, file_tasks, scanner, fixer)
-                    executed_count += result['fixed_count']
-                    completed_tasks.extend(result['completed_tasks'])
+                    result = self._process_file_tasks(
+                        file_path, file_tasks, scanner, fixer
+                    )
+                    executed_count += result["fixed_count"]
+                    completed_tasks.extend(result["completed_tasks"])
                 except Exception as e:
                     console.print(f"❌ Error fixing {file_path}: {str(e)}")
-                    completed_tasks.extend(task['original_line'] for task in file_tasks)
+                    completed_tasks.extend(task["original_line"] for task in file_tasks)
             else:
                 console.print(f"⚠️  File not found: {file_path}")
-                completed_tasks.extend(task['original_line'] for task in file_tasks)
+                completed_tasks.extend(task["original_line"] for task in file_tasks)
 
         return executed_count, completed_tasks
 
-    def _group_tasks_by_file(self, active_tasks: List[Dict[str, Any]]) -> Dict[Path, List[Dict[str, Any]]]:
+    def _group_tasks_by_file(
+        self, active_tasks: List[Dict[str, Any]]
+    ) -> Dict[Path, List[Dict[str, Any]]]:
         """Group tasks by file path."""
         tasks_by_file = {}
         for task in active_tasks:
-            file_path = self.project_root / task['file']
+            file_path = self.project_root / task["file"]
             if file_path not in tasks_by_file:
                 tasks_by_file[file_path] = []
             tasks_by_file[file_path].append(task)
         return tasks_by_file
 
-    def _process_file_tasks(self, file_path: Path, file_tasks: List[Dict[str, Any]],
-                           scanner: Scanner, fixer: Fixer) -> Dict[str, Any]:
+    def _process_file_tasks(
+        self,
+        file_path: Path,
+        file_tasks: List[Dict[str, Any]],
+        scanner: Scanner,
+        fixer: Fixer,
+    ) -> Dict[str, Any]:
         """Process tasks for a single file."""
         # Scan the file to get current issues
         issues_map = scanner.scan([file_path])
@@ -333,24 +390,27 @@ class TodoManager(BaseManager):
             if fixes:
                 # Mark all tasks for this file as completed
                 for task in file_tasks:
-                    completed_tasks.append(f"- [x] {task['file']}:{task['line']} - {task['message']} ✅")
+                    completed_tasks.append(
+                        f"- [x] {task['file']}:{task['line']} - {task['message']} ✅"
+                    )
                     fixed_count += 1
                     console.print(f"✅ Fixed: {task['file']}:{task['line']}")
             else:
                 # Keep as active if not fixed
-                completed_tasks.extend(task['original_line'] for task in file_tasks)
+                completed_tasks.extend(task["original_line"] for task in file_tasks)
         else:
             # No issues found, keep as active
-            completed_tasks.extend(task['original_line'] for task in file_tasks)
+            completed_tasks.extend(task["original_line"] for task in file_tasks)
 
-        return {
-            'completed_tasks': completed_tasks,
-            'fixed_count': fixed_count
-        }
+        return {"completed_tasks": completed_tasks, "fixed_count": fixed_count}
 
-    def _update_todo_with_execution_results(self, completed_tasks: List[str],
-                                           executed_count: int, processed_tasks: int,
-                                           total_tasks: int) -> None:
+    def _update_todo_with_execution_results(
+        self,
+        completed_tasks: List[str],
+        executed_count: int,
+        processed_tasks: int,
+        total_tasks: int,
+    ) -> None:
         """Update TODO.md with execution results."""
         new_content = "# TODO\n\n"
         new_content += f"**Generated by:** prefact v{__version__}\n"
@@ -365,4 +425,6 @@ class TodoManager(BaseManager):
             new_content += "\n\n"
 
         self.todo_path.write_text(new_content)
-        console.print(f"🎉 Execution complete: {processed_tasks}/{total_tasks} tasks processed, {executed_count} fixed")
+        console.print(
+            f"🎉 Execution complete: {processed_tasks}/{total_tasks} tasks processed, {executed_count} fixed"
+        )

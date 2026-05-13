@@ -1,7 +1,7 @@
 """Example file with unused imports that should be removed."""
 
 import datetime
-from typing import List, Dict, Any, Optional  # Optional is unused
+from typing import Any, Dict, List  # Optional is unused
 
 
 def process_data(data: List[str]) -> Dict[str, Any]:
@@ -21,21 +21,21 @@ def format_timestamp(ts: datetime.datetime) -> str:
 
 def read_file(filepath: str) -> str:
     """Read file contents."""
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         return f.read()
 
 
 class DataProcessor:
     """A class with unused imports."""
-    
+
     def __init__(self):
         self.data = {}
         self.timestamp = datetime.datetime.now()
-    
+
     def add_data(self, key: str, value: Any) -> None:
         """Add data to processor."""
         self.data[key] = value
-    
+
     def get_data(self, key: str) -> Any:
         """Get data from processor."""
         return self.data.get(key)

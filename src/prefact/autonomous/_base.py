@@ -3,9 +3,9 @@
 from pathlib import Path
 from typing import Dict, Optional
 
-from prefact.config_extended import ExtendedConfig
-
 from rich.console import Console
+
+from prefact.config_extended import ExtendedConfig
 
 # Shared console instance
 console = Console()
@@ -43,8 +43,15 @@ class BaseManager:
         return self._load_autonomous_limits()[key]
 
     def _load_autonomous_limits(self) -> Dict[str, int]:
-        config_mtime = self.refact_config_path.stat().st_mtime if self.refact_config_path.exists() else None
-        if self._autonomous_limits is not None and self._autonomous_limits_mtime == config_mtime:
+        config_mtime = (
+            self.refact_config_path.stat().st_mtime
+            if self.refact_config_path.exists()
+            else None
+        )
+        if (
+            self._autonomous_limits is not None
+            and self._autonomous_limits_mtime == config_mtime
+        ):
             return self._autonomous_limits
 
         limits = DEFAULT_AUTONOMOUS_LIMITS.copy()

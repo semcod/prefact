@@ -14,15 +14,47 @@ from prefact.reporters import json_reporter
 
 @click.group(invoke_without_command=True)
 @click.pass_context
-@click.option("-a", "--autonomous", is_flag=True, help="Run autonomous mode (initialize, scan, and create tickets).")
-@click.option("--init-only", is_flag=True, help="Only initialize prefact.yaml without running full process.")
+@click.option(
+    "-a",
+    "--autonomous",
+    is_flag=True,
+    help="Run autonomous mode (initialize, scan, and create tickets).",
+)
+@click.option(
+    "--init-only",
+    is_flag=True,
+    help="Only initialize prefact.yaml without running full process.",
+)
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
-@click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
-@click.option("--with-testql/--no-testql", "with_testql", default=False, help="Include TestQL scenarios run as final autonomous step.")
-@click.option("--testql-dir", default=None, help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).")
+@click.option(
+    "-e",
+    "--exclude",
+    multiple=True,
+    help="Exclude patterns (glob syntax). Can be used multiple times.",
+)
+@click.option(
+    "--with-testql/--no-testql",
+    "with_testql",
+    default=False,
+    help="Include TestQL scenarios run as final autonomous step.",
+)
+@click.option(
+    "--testql-dir",
+    default=None,
+    help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).",
+)
 @click.version_option(package_name="prefact")
-def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude, with_testql, testql_dir) -> None:
+def main(
+    ctx,
+    autonomous,
+    init_only,
+    skip_tests,
+    skip_examples,
+    exclude,
+    with_testql,
+    testql_dir,
+) -> None:
     """prefact – automatic Python prefactoring toolkit.
 
     Detect, fix, and validate common code issues - especially those
@@ -33,7 +65,10 @@ def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude, with_te
     if autonomous:
         # Auto-skip examples if exclude pattern matches examples directory
         auto_skip_examples = skip_examples
-        if exclude and any("examples" in pattern or pattern.startswith("examples") for pattern in exclude):
+        if exclude and any(
+            "examples" in pattern or pattern.startswith("examples")
+            for pattern in exclude
+        ):
             auto_skip_examples = True
         # Run autonomous command directly with all options
         ctx.invoke(
@@ -52,17 +87,44 @@ def main(ctx, autonomous, init_only, skip_tests, skip_examples, exclude, with_te
 
 
 def _common_options(fn):
-    fn = click.option("-p", "--path", "project_path", default=".", help="Project root directory.")(fn)
-    fn = click.option("--package", "package_name", default="", help="Package name (auto-detected if omitted).")(fn)
-    fn = click.option("-c", "--config", "config_file", default=None, help="Path to prefact.yaml config.")(fn)
-    fn = click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")(fn)
+    fn = click.option(
+        "-p", "--path", "project_path", default=".", help="Project root directory."
+    )(fn)
+    fn = click.option(
+        "--package",
+        "package_name",
+        default="",
+        help="Package name (auto-detected if omitted).",
+    )(fn)
+    fn = click.option(
+        "-c",
+        "--config",
+        "config_file",
+        default=None,
+        help="Path to prefact.yaml config.",
+    )(fn)
+    fn = click.option(
+        "-e",
+        "--exclude",
+        multiple=True,
+        help="Exclude patterns (glob syntax). Can be used multiple times.",
+    )(fn)
     fn = click.option("--verbose", is_flag=True, help="Show detailed output.")(fn)
-    fn = click.option("--format", "output_format", type=click.Choice(["console", "json"]), default="console")(fn)
-    fn = click.option("-o", "--output", "output_file", default=None, help="Write JSON report to file.")(fn)
+    fn = click.option(
+        "--format",
+        "output_format",
+        type=click.Choice(["console", "json"]),
+        default="console",
+    )(fn)
+    fn = click.option(
+        "-o", "--output", "output_file", default=None, help="Write JSON report to file."
+    )(fn)
     return fn
 
 
-def _build_config(project_path, package_name, config_file, verbose, exclude=None, **_kw) -> Config:
+def _build_config(
+    project_path, package_name, config_file, verbose, exclude=None, **_kw
+) -> Config:
     if config_file:
         # Try extended config first, fall back to basic config
         try:
@@ -105,7 +167,9 @@ def scan(**kwargs) -> None:
 
 @main.command()
 @_common_options
-@click.option("--dry-run", is_flag=True, help="Show what would change without writing files.")
+@click.option(
+    "--dry-run", is_flag=True, help="Show what would change without writing files."
+)
 @click.option("--no-backup", is_flag=True, help="Don't create .bak backup files.")
 def fix(dry_run, no_backup, **kwargs) -> None:
     """Scan, fix, and validate in one pass."""
@@ -131,7 +195,9 @@ def check(filepath, **kwargs) -> None:
 
 
 @main.command()
-@click.option("-p", "--path", "project_path", default=".", help="Where to create prefact.yaml.")
+@click.option(
+    "-p", "--path", "project_path", default=".", help="Where to create prefact.yaml."
+)
 def init(project_path) -> None:
     """Generate a default prefact.yaml in the project directory."""
     default = """\
@@ -185,14 +251,36 @@ rules:
 
 
 @main.command()
-@click.option("-p", "--path", "project_path", default=".", help="Project root directory.")
-@click.option("--init-only", is_flag=True, help="Only initialize prefact.yaml without running full process.")
+@click.option(
+    "-p", "--path", "project_path", default=".", help="Project root directory."
+)
+@click.option(
+    "--init-only",
+    is_flag=True,
+    help="Only initialize prefact.yaml without running full process.",
+)
 @click.option("--skip-tests", is_flag=True, help="Skip running tests.")
 @click.option("--skip-examples", is_flag=True, help="Skip running examples.")
-@click.option("-e", "--exclude", multiple=True, help="Exclude patterns (glob syntax). Can be used multiple times.")
-@click.option("--with-testql/--no-testql", "with_testql", default=False, help="Include TestQL scenarios run as final autonomous step.")
-@click.option("--testql-dir", default=None, help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).")
-def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude, with_testql, testql_dir) -> None:
+@click.option(
+    "-e",
+    "--exclude",
+    multiple=True,
+    help="Exclude patterns (glob syntax). Can be used multiple times.",
+)
+@click.option(
+    "--with-testql/--no-testql",
+    "with_testql",
+    default=False,
+    help="Include TestQL scenarios run as final autonomous step.",
+)
+@click.option(
+    "--testql-dir",
+    default=None,
+    help="Directory containing *.testql.toon.yaml scenarios (default: testql-scenarios/).",
+)
+def autonomous_cmd(
+    project_path, init_only, skip_tests, skip_examples, exclude, with_testql, testql_dir
+) -> None:
     """Run autonomous prefact mode (-a).
 
     Automatically initializes prefact.yaml if missing, runs examples,
@@ -203,7 +291,9 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude, 
     console = Console()
 
     # Initialize autonomous prefact
-    auto = AutonomousRefact(Path(project_path), exclude_patterns=list(exclude) if exclude else None)
+    auto = AutonomousRefact(
+        Path(project_path), exclude_patterns=list(exclude) if exclude else None
+    )
 
     if init_only:
         if not auto.refact_config_path.exists():
@@ -227,15 +317,44 @@ def autonomous_cmd(project_path, init_only, skip_tests, skip_examples, exclude, 
 
 @main.command("testql")
 @click.argument("scenario_path")
-@click.option("-p", "--path", "project_path", default=".", help="Project root directory.")
+@click.option(
+    "-p", "--path", "project_path", default=".", help="Project root directory."
+)
 @click.option("--url", default="http://localhost:8101", help="Base API URL for TestQL.")
-@click.option("--dry-run", is_flag=True, help="Parse/validate scenario without full execution.")
-@click.option("-s", "--strategy", "strategy_path", default=None, help="Target planfile YAML (default: <project>/planfile.yaml).")
-@click.option("--create-tickets/--no-create-tickets", default=True, help="Create planfile tickets for TestQL failures.")
-@click.option("--sync/--no-sync", "sync_targets", default=True, help="Sync generated tickets to TODO.md and configured integrations.")
-@click.option("--max-tickets", default=25, type=int, show_default=True, help="Maximum tickets generated from one TestQL run.")
+@click.option(
+    "--dry-run", is_flag=True, help="Parse/validate scenario without full execution."
+)
+@click.option(
+    "-s",
+    "--strategy",
+    "strategy_path",
+    default=None,
+    help="Target planfile YAML (default: <project>/planfile.yaml).",
+)
+@click.option(
+    "--create-tickets/--no-create-tickets",
+    default=True,
+    help="Create planfile tickets for TestQL failures.",
+)
+@click.option(
+    "--sync/--no-sync",
+    "sync_targets",
+    default=True,
+    help="Sync generated tickets to TODO.md and configured integrations.",
+)
+@click.option(
+    "--max-tickets",
+    default=25,
+    type=int,
+    show_default=True,
+    help="Maximum tickets generated from one TestQL run.",
+)
 @click.option("--testql-bin", default="testql", help="TestQL CLI executable name/path.")
-@click.option("--testql-repo-path", default="/home/tom/github/oqlos/testql", help="Fallback path to local TestQL repository.")
+@click.option(
+    "--testql-repo-path",
+    default="/home/tom/github/oqlos/testql",
+    help="Fallback path to local TestQL repository.",
+)
 def testql_cmd(
     scenario_path,
     project_path,
@@ -282,7 +401,9 @@ def rules() -> None:
     for rule_id, rule_cls in sorted(get_all_rules().items()):
         # Heuristic: if fix() returns source unchanged, it's scan-only
         has_fix = rule_id in ("relative-imports", "unused-imports", "duplicate-imports")
-        table.add_row(rule_id, rule_cls.description, "✅" if has_fix else "🔍 scan-only")
+        table.add_row(
+            rule_id, rule_cls.description, "✅" if has_fix else "🔍 scan-only"
+        )
     console.print(table)
 
 

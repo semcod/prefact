@@ -20,12 +20,21 @@ class RuffHelper:
     def check_file(file_path: Path, select_codes: List[str]) -> List[Dict]:
         """Run Ruff on a single file and return JSON results."""
         try:
-            result = subprocess.run([
-                "ruff", "check", str(file_path),
-                "--select", ",".join(select_codes),
-                "--output-format", "json",
-                "--no-fix"
-            ], capture_output=True, text=True, check=False)  # Use check=False to handle non-zero exit
+            result = subprocess.run(
+                [
+                    "ruff",
+                    "check",
+                    str(file_path),
+                    "--select",
+                    ",".join(select_codes),
+                    "--output-format",
+                    "json",
+                    "--no-fix",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )  # Use check=False to handle non-zero exit
 
             if result.stdout.strip():
                 return json.loads(result.stdout)
@@ -37,11 +46,18 @@ class RuffHelper:
     def fix_file(file_path: Path, select_codes: List[str]) -> bool:
         """Run Ruff with --fix on a file."""
         try:
-            subprocess.run([
-                "ruff", "check", str(file_path),
-                "--select", ",".join(select_codes),
-                "--fix"
-            ], check=True, capture_output=True)
+            subprocess.run(
+                [
+                    "ruff",
+                    "check",
+                    str(file_path),
+                    "--select",
+                    ",".join(select_codes),
+                    "--fix",
+                ],
+                check=True,
+                capture_output=True,
+            )
             return True
         except subprocess.CalledProcessError:
             return False
@@ -51,7 +67,7 @@ class RuffHelper:
         """Fix source code in memory using Ruff."""
         import tempfile
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
 
@@ -63,6 +79,7 @@ class RuffHelper:
             return source
         finally:
             import os
+
             os.unlink(tmp_path)
 
 
@@ -78,19 +95,23 @@ class RuffWildcardImports(BaseRule):
         results = RuffHelper.check_file(path, ["F403"])  # F403 = star-imports
 
         for item in results:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item["location"]["row"],
-                col=item["location"]["column"],
-                message=item["message"],
-                severity=Severity.WARNING,
-                original=item["message"]
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item["location"]["row"],
+                    col=item["location"]["column"],
+                    message=item["message"],
+                    severity=Severity.WARNING,
+                    original=item["message"],
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Ruff doesn't auto-fix wildcard imports, so we just report
         return source, []
 
@@ -114,24 +135,28 @@ class RuffPrintStatements(BaseRule):
             if self._should_ignore_file(path):
                 continue
 
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item["location"]["row"],
-                col=item["location"]["column"],
-                message=item["message"],
-                severity=Severity.INFO,
-                original="print()"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item["location"]["row"],
+                    col=item["location"]["column"],
+                    message=item["message"],
+                    severity=Severity.INFO,
+                    original="print()",
+                )
+            )
 
         return issues
 
     def _should_ignore_file(self, path: Path) -> bool:
         """Check if file should be ignored based on config."""
-        ignore_patterns = getattr(self.config, 'ignore_print_patterns', [])
+        ignore_patterns = getattr(self.config, "ignore_print_patterns", [])
         return any(pattern in str(path) for pattern in ignore_patterns)
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -142,13 +167,15 @@ class RuffPrintStatements(BaseRule):
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code="print(...)",
-                    fixed_code="# Removed print statement",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code="print(...)",
+                        fixed_code="# Removed print statement",
+                        applied=True,
+                    )
+                )
             return fixed_source, fixes
 
         return source, []
@@ -173,19 +200,23 @@ class RuffUnusedImports(BaseRule):
             message = item["message"]
             if "`" in message:
                 import_name = message.split("`")[1]
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=item["location"]["row"],
-                    col=item["location"]["column"],
-                    message=f"Unused import: {import_name}",
-                    severity=Severity.INFO,
-                    original=import_name
-                ))
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=item["location"]["row"],
+                        col=item["location"]["column"],
+                        message=f"Unused import: {import_name}",
+                        severity=Severity.INFO,
+                        original=import_name,
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -196,13 +227,15 @@ class RuffUnusedImports(BaseRule):
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="",
+                        applied=True,
+                    )
+                )
             return fixed_source, fixes
 
         return source, []
@@ -214,7 +247,7 @@ class RuffUnusedImports(BaseRule):
             file=path,
             passed=len(remaining) == 0,
             checks=["no_unused_imports"] if not remaining else [],
-            errors=[f"Still has unused imports: {len(remaining)}"] if remaining else []
+            errors=[f"Still has unused imports: {len(remaining)}"] if remaining else [],
         )
 
 
@@ -227,22 +260,28 @@ class RuffSortedImports(BaseRule):
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
-        results = RuffHelper.check_file(path, ["I001", "I002"])  # I001 = unsorted, I002 = missing newline
+        results = RuffHelper.check_file(
+            path, ["I001", "I002"]
+        )  # I001 = unsorted, I002 = missing newline
 
         for item in results:
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=item["location"]["row"],
-                col=item["location"]["column"],
-                message=item["message"],
-                severity=Severity.INFO,
-                original="unsorted imports"
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=item["location"]["row"],
+                    col=item["location"]["column"],
+                    message=item["message"],
+                    severity=Severity.INFO,
+                    original="unsorted imports",
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -253,13 +292,15 @@ class RuffSortedImports(BaseRule):
         if success:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code="unsorted imports",
-                    fixed_code="sorted imports",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code="unsorted imports",
+                        fixed_code="sorted imports",
+                        applied=True,
+                    )
+                )
             return fixed_source, fixes
 
         return source, []
@@ -271,7 +312,7 @@ class RuffSortedImports(BaseRule):
             file=path,
             passed=len(remaining) == 0,
             checks=["imports_sorted"] if not remaining else [],
-            errors=["Imports not properly sorted"] if remaining else []
+            errors=["Imports not properly sorted"] if remaining else [],
         )
 
 
@@ -289,20 +330,27 @@ class RuffDuplicateImports(BaseRule):
         results = RuffHelper.check_file(path, ["F811"])
 
         for item in results:
-            if "redefined" in item["message"].lower() and "import" in item["message"].lower():
-                issues.append(Issue(
-                    rule_id=self.rule_id,
-                    file=path,
-                    line=item["location"]["row"],
-                    col=item["location"]["column"],
-                    message=item["message"],
-                    severity=Severity.WARNING,
-                    original="duplicate import"
-                ))
+            if (
+                "redefined" in item["message"].lower()
+                and "import" in item["message"].lower()
+            ):
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=item["location"]["row"],
+                        col=item["location"]["column"],
+                        message=item["message"],
+                        severity=Severity.WARNING,
+                        original="duplicate import",
+                    )
+                )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # Ruff doesn't auto-fix duplicate imports
         # Would need custom implementation
         return source, []

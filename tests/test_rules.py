@@ -1,6 +1,5 @@
 """Tests for additional rules."""
 
-
 import textwrap
 from pathlib import Path
 
@@ -8,11 +7,11 @@ import pytest
 
 from prefact.config import Config
 from prefact.rules.duplicate_imports import DuplicateImports
-from prefact.rules.wildcard_imports import WildcardImports
-from prefact.rules.string_concat import StringConcatToFstring
 from prefact.rules.print_statements import PrintStatements
-from prefact.rules.type_hints import MissingReturnType
 from prefact.rules.sorted_imports import SortedImports
+from prefact.rules.string_concat import StringConcatToFstring
+from prefact.rules.type_hints import MissingReturnType
+from prefact.rules.wildcard_imports import WildcardImports
 
 
 @pytest.fixture

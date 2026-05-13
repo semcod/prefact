@@ -24,7 +24,9 @@ def _is_str_concat(node: ast.BinOp) -> bool:
     if not isinstance(node.op, ast.Add):
         return False
     parts = _flatten_add(node)
-    has_str = any(isinstance(p, ast.Constant) and isinstance(p.value, str) for p in parts)
+    has_str = any(
+        isinstance(p, ast.Constant) and isinstance(p.value, str) for p in parts
+    )
     has_name = any(isinstance(p, (ast.Name, ast.Attribute, ast.Call)) for p in parts)
     return has_str and has_name
 
@@ -51,15 +53,19 @@ class StringConcatToFstring(BaseRule):
             if isinstance(node, ast.BinOp) and _is_str_concat(node):
                 issues.append(
                     Issue(
-                        rule_id=self.rule_id, file=path,
-                        line=node.lineno, col=node.col_offset,
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=node.lineno,
+                        col=node.col_offset,
                         message="String concatenation could use f-string.",
                         severity=Severity.INFO,
                     )
                 )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         return source, []  # too many edge cases for safe auto-fix
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:

@@ -1,6 +1,5 @@
 """Configuration generator — extracted from config_extended.py for package compat."""
 
-
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 

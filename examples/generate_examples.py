@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 """Generate example files for prefact rules."""
 
-import os
 from pathlib import Path
 
 # Create directory structure
 base = Path(__file__).parent / "01-individual-rules"
 rules = [
     "duplicate-imports",
-    "wildcard-imports", 
+    "wildcard-imports",
     "sorted-imports",
     "string-concat",
     "print-statements",
-    "missing-return-type"
+    "missing-return-type",
 ]
 
 for rule in rules:
     rule_dir = base / rule
     rule_dir.mkdir(exist_ok=True)
-    
+
     # Create prefact.yaml
     config = f"""package_name: mypackage
 
@@ -46,9 +45,9 @@ rules:
   missing-return-type:
     enabled: {"true" if rule == "missing-return-type" else "false"}
 """
-    
+
     (rule_dir / "prefact.yaml").write_text(config)
-    
+
     # Create before.py examples for each rule
     if rule == "duplicate-imports":
         before = '''"""Example with duplicate imports."""
@@ -78,7 +77,7 @@ def process_data():
     """Process data."""
     return os.getcwd()
 '''
-    
+
     elif rule == "wildcard-imports":
         before = '''"""Example with wildcard imports."""
 
@@ -104,7 +103,7 @@ def process():
     data = defaultdict(list)
     return data
 '''
-    
+
     elif rule == "sorted-imports":
         before = '''"""Example with unsorted imports."""
 
@@ -134,7 +133,7 @@ def process():
     """Process with unsorted imports."""
     pass
 '''
-    
+
     elif rule == "string-concat":
         before = '''"""Example with string concatenation."""
 
@@ -160,7 +159,7 @@ def format_data(data):
     result = f"Data: {data}"
     return result
 '''
-    
+
     elif rule == "print-statements":
         before = '''"""Example with print statements."""
 
@@ -190,7 +189,7 @@ def calculate(a, b):
     print(f"Calculating {a} + {b}")
     return a + b
 '''
-    
+
     elif rule == "missing-return-type":
         before = '''"""Example with missing return type annotations."""
 
@@ -226,7 +225,7 @@ class Processor:
         """Process data."""
         return data.upper()
 '''
-    
+
     (rule_dir / "before.py").write_text(before)
     (rule_dir / "after.py").write_text(after)
 

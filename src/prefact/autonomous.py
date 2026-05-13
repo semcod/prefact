@@ -14,4 +14,4 @@ Please import from prefact.autonomous instead.
 from prefact.autonomous import AutonomousRefact  # noqa: F401
 
 # Re-export everything for backward compatibility
-__all__ = ['AutonomousRefact']
+__all__ = ["AutonomousRefact"]

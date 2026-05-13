@@ -35,12 +35,7 @@ class UnimportHelper:
                 cmd.append("--remove-duplicate-imports")
 
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=False
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
             # Parse output to find unused imports
             issues = []
@@ -51,11 +46,13 @@ class UnimportHelper:
                         # Extract import name from line
                         import_name = UnimportHelper._extract_import_name(line)
                         if import_name:
-                            issues.append({
-                                "type": "unused_import",
-                                "import": import_name,
-                                "line": line
-                            })
+                            issues.append(
+                                {
+                                    "type": "unused_import",
+                                    "import": import_name,
+                                    "line": line,
+                                }
+                            )
 
             return issues
         except (subprocess.SubprocessError, FileNotFoundError):
@@ -64,7 +61,7 @@ class UnimportHelper:
     @staticmethod
     def check_source(source: str, config: Optional[Dict] = None) -> List[Dict]:
         """Check source code for unused imports."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
 
@@ -103,7 +100,7 @@ class UnimportHelper:
     @staticmethod
     def fix_source(source: str, config: Optional[Dict] = None) -> str:
         """Remove unused imports from source code."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
             tmp.write(source)
             tmp_path = tmp.name
 
@@ -137,9 +134,7 @@ class UnimportUnusedImports(BaseRule):
             "remove_duplicate_imports": self.config.get_rule_option(
                 self.rule_id, "remove_duplicate_imports", True
             ),
-            "diff": self.config.get_rule_option(
-                self.rule_id, "diff", False
-            )
+            "diff": self.config.get_rule_option(self.rule_id, "diff", False),
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -169,19 +164,23 @@ class UnimportUnusedImports(BaseRule):
             import_name = item.get("import", "unknown")
             line_num = import_lines.get(import_name, 1)
 
-            issues.append(Issue(
-                rule_id=self.rule_id,
-                file=path,
-                line=line_num,
-                col=0,
-                message=f"Unused import: {import_name}",
-                severity=Severity.INFO,
-                original=import_name
-            ))
+            issues.append(
+                Issue(
+                    rule_id=self.rule_id,
+                    file=path,
+                    line=line_num,
+                    col=0,
+                    message=f"Unused import: {import_name}",
+                    severity=Severity.INFO,
+                    original=import_name,
+                )
+            )
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -190,13 +189,15 @@ class UnimportUnusedImports(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -208,7 +209,7 @@ class UnimportUnusedImports(BaseRule):
             file=path,
             passed=len(remaining) == 0,
             checks=["no_unused_imports"] if not remaining else [],
-            errors=[f"Still has {len(remaining)} unused imports"] if remaining else []
+            errors=[f"Still has {len(remaining)} unused imports"] if remaining else [],
         )
 
 
@@ -221,9 +222,7 @@ class UnimportDuplicateImports(BaseRule):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        self.unimport_config = {
-            "remove_duplicate_imports": True
-        }
+        self.unimport_config = {"remove_duplicate_imports": True}
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         # unimport handles duplicate imports as part of its main functionality
@@ -239,15 +238,17 @@ class UnimportDuplicateImports(BaseRule):
                     for alias in node.names:
                         name = alias.asname or alias.name
                         if name in imports:
-                            issues.append(Issue(
-                                rule_id=self.rule_id,
-                                file=path,
-                                line=node.lineno,
-                                col=node.col_offset,
-                                message=f"Duplicate import: {name}",
-                                severity=Severity.WARNING,
-                                original=name
-                            ))
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
+                                    message=f"Duplicate import: {name}",
+                                    severity=Severity.WARNING,
+                                    original=name,
+                                )
+                            )
                         else:
                             imports[name] = node.lineno
                 elif isinstance(node, ast.ImportFrom):
@@ -256,15 +257,17 @@ class UnimportDuplicateImports(BaseRule):
                         name = alias.asname or alias.name
                         full_name = f"{module}.{name}" if module else name
                         if name in imports and imports[name] != node.lineno:
-                            issues.append(Issue(
-                                rule_id=self.rule_id,
-                                file=path,
-                                line=node.lineno,
-                                col=node.col_offset,
-                                message=f"Duplicate import: {full_name}",
-                                severity=Severity.WARNING,
-                                original=full_name
-                            ))
+                            issues.append(
+                                Issue(
+                                    rule_id=self.rule_id,
+                                    file=path,
+                                    line=node.lineno,
+                                    col=node.col_offset,
+                                    message=f"Duplicate import: {full_name}",
+                                    severity=Severity.WARNING,
+                                    original=full_name,
+                                )
+                            )
                         else:
                             imports[name] = node.lineno
         except SyntaxError:
@@ -272,7 +275,9 @@ class UnimportDuplicateImports(BaseRule):
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -281,19 +286,25 @@ class UnimportDuplicateImports(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="duplicate removed",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="duplicate removed",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
         return self._validate_by_rescan(
-            path, original, fixed, "no_duplicate_imports", "Still has {count} duplicate imports"
+            path,
+            original,
+            fixed,
+            "no_duplicate_imports",
+            "Still has {count} duplicate imports",
         )
 
 
@@ -307,9 +318,7 @@ class UnimportStarImports(BaseRule):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        self.unimport_config = {
-            "include_star_import": True
-        }
+        self.unimport_config = {"include_star_import": True}
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
@@ -321,34 +330,40 @@ class UnimportStarImports(BaseRule):
                 if isinstance(node, ast.ImportFrom):
                     if any(alias.name == "*" for alias in node.names):
                         module = node.module or ""
-                        issues.append(Issue(
-                            rule_id=self.rule_id,
-                            file=path,
-                            line=node.lineno,
-                            col=node.col_offset,
-                            message=f"Star import from {module}",
-                            severity=Severity.WARNING,
-                            original=f"from {module} import *"
-                        ))
+                        issues.append(
+                            Issue(
+                                rule_id=self.rule_id,
+                                file=path,
+                                line=node.lineno,
+                                col=node.col_offset,
+                                message=f"Star import from {module}",
+                                severity=Severity.WARNING,
+                                original=f"from {module} import *",
+                            )
+                        )
         except SyntaxError:
             pass
 
         return issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         # unimport can expand star imports if configured
         fixed_source = UnimportHelper.fix_source(source, self.unimport_config)
         fixes = []
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="expanded imports",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="expanded imports",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -372,7 +387,7 @@ class UnimportAll(BaseRule):
             "include_star_import": config.get_rule_option(
                 "wildcard-imports", "include_star_import", False
             ),
-            "remove_duplicate_imports": True
+            "remove_duplicate_imports": True,
         }
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -393,7 +408,9 @@ class UnimportAll(BaseRule):
 
         return all_issues
 
-    def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
         if not issues:
             return source, []
 
@@ -402,13 +419,15 @@ class UnimportAll(BaseRule):
 
         if fixed_source != source:
             for issue in issues:
-                fixes.append(Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=issue.original,
-                    fixed_code="fixed",
-                    applied=True
-                ))
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="fixed",
+                        applied=True,
+                    )
+                )
 
         return fixed_source, fixes
 
@@ -436,8 +455,5 @@ class UnimportAll(BaseRule):
         all_errors.extend(result3.errors)
 
         return ValidationResult(
-            file=path,
-            passed=len(all_errors) == 0,
-            checks=all_checks,
-            errors=all_errors
+            file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors
         )

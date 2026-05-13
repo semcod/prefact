@@ -1,6 +1,5 @@
 """Tests for prefact TestQL integration via planfile API."""
 
-
 import sys
 import types
 from pathlib import Path
@@ -31,7 +30,9 @@ def planfile_stub(monkeypatch: pytest.MonkeyPatch) -> dict:
         }
 
     def fake_build_testql_tickets(report, scenario_path, max_tickets=25):
-        calls["build"].append({"report": report, "scenario": scenario_path, "max": max_tickets})
+        calls["build"].append(
+            {"report": report, "scenario": scenario_path, "max": max_tickets}
+        )
         return [
             {
                 "id": "TQL-x1",
@@ -87,7 +88,9 @@ def planfile_stub(monkeypatch: pytest.MonkeyPatch) -> dict:
     return calls
 
 
-def test_run_testql_creates_and_syncs_tickets(tmp_path: Path, planfile_stub: dict) -> None:
+def test_run_testql_creates_and_syncs_tickets(
+    tmp_path: Path, planfile_stub: dict
+) -> None:
     from prefact.autonomous import AutonomousRefact
 
     auto = AutonomousRefact(tmp_path)
@@ -109,7 +112,9 @@ def test_run_testql_creates_and_syncs_tickets(tmp_path: Path, planfile_stub: dic
     assert len(planfile_stub["sync"]) == 1
 
 
-def test_run_testql_respects_no_create_tickets(tmp_path: Path, planfile_stub: dict) -> None:
+def test_run_testql_respects_no_create_tickets(
+    tmp_path: Path, planfile_stub: dict
+) -> None:
     from prefact.autonomous import AutonomousRefact
 
     auto = AutonomousRefact(tmp_path)
@@ -141,7 +146,9 @@ def test_discover_scenarios_returns_sorted_glob(tmp_path: Path) -> None:
     assert [p.name for p in found] == ["a.testql.toon.yaml", "b.testql.toon.yaml"]
 
 
-def test_run_testql_all_skips_when_no_scenarios(tmp_path: Path, planfile_stub: dict) -> None:
+def test_run_testql_all_skips_when_no_scenarios(
+    tmp_path: Path, planfile_stub: dict
+) -> None:
     from prefact.autonomous import AutonomousRefact
 
     auto = AutonomousRefact(tmp_path)
@@ -180,7 +187,9 @@ def _stub_pipeline_steps(auto, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(auto.scanner, "get_autonomous_limit", lambda key: 10_000)
 
 
-def test_run_autonomous_with_testql_invokes_run_all(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_run_autonomous_with_testql_invokes_run_all(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     from prefact.autonomous import AutonomousRefact
 
     (tmp_path / "prefact.yaml").write_text("include: []\n", encoding="utf-8")
@@ -192,18 +201,28 @@ def test_run_autonomous_with_testql_invokes_run_all(tmp_path: Path, monkeypatch:
     monkeypatch.setattr(
         auto,
         "run_testql_all",
-        lambda scenarios_dir=None: calls["all"].append(scenarios_dir) or {
-            "scenarios_found": 0,
-            "scenarios": [],
-            "summary": {"ok": True, "failed": 0, "created": 0, "skipped": 0},
-        },
+        lambda scenarios_dir=None: (
+            calls["all"].append(scenarios_dir)
+            or {
+                "scenarios_found": 0,
+                "scenarios": [],
+                "summary": {"ok": True, "failed": 0, "created": 0, "skipped": 0},
+            }
+        ),
     )
 
-    assert auto.run_autonomous(skip_examples=True, with_testql=True, testql_scenarios_dir="custom") is True
+    assert (
+        auto.run_autonomous(
+            skip_examples=True, with_testql=True, testql_scenarios_dir="custom"
+        )
+        is True
+    )
     assert calls["all"] == ["custom"]
 
 
-def test_run_autonomous_default_skips_testql(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_run_autonomous_default_skips_testql(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     from prefact.autonomous import AutonomousRefact
 
     (tmp_path / "prefact.yaml").write_text("include: []\n", encoding="utf-8")

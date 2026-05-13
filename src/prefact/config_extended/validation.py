@@ -28,7 +28,10 @@ class ConfigValidator:
     def _validate_ruff_config(config: Dict[str, Any]) -> List[str]:
         errors = []
         if "max_line_length" in config:
-            if not isinstance(config["max_line_length"], int) or config["max_line_length"] <= 0:
+            if (
+                not isinstance(config["max_line_length"], int)
+                or config["max_line_length"] <= 0
+            ):
                 errors.append("ruff.max_line_length must be a positive integer")
         if "select" in config:
             if not isinstance(config["select"], list):
@@ -53,7 +56,9 @@ class ConfigValidator:
     @staticmethod
     def _validate_performance_config(config: Dict[str, Any]) -> List[str]:
         errors = []
-        if "cache_size" in config and (not isinstance(config["cache_size"], int) or config["cache_size"] <= 0):
+        if "cache_size" in config and (
+            not isinstance(config["cache_size"], int) or config["cache_size"] <= 0
+        ):
             errors.append("performance.cache_size must be a positive integer")
         return errors
 

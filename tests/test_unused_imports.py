@@ -1,6 +1,5 @@
 """Tests for the unused-imports rule."""
 
-
 import textwrap
 from pathlib import Path
 

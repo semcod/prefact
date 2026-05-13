@@ -32,7 +32,7 @@ class RuleMigrationManager:
     # Rules that should remain AST-based (Ruff doesn't handle them well)
     KEEP_AST_RULES = {
         "relative-imports",  # Requires package context
-        "string-concat",     # Complex transformation
+        "string-concat",  # Complex transformation
         "missing-return-type",  # Type checking needed
     }
 
@@ -69,9 +69,9 @@ class RuleMigrationManager:
     def should_use_ruff(self, rule_id: str) -> bool:
         """Check if a rule should use Ruff implementation."""
         return (
-            rule_id in self.MIGRATION_MAP and
-            rule_id not in self.KEEP_AST_RULES and
-            self.config.get_rule_option(rule_id, "use_ruff", True)
+            rule_id in self.MIGRATION_MAP
+            and rule_id not in self.KEEP_AST_RULES
+            and self.config.get_rule_option(rule_id, "use_ruff", True)
         )
 
     def create_hybrid_rule(self, rule_id: str) -> Type[BaseRule]:
@@ -94,12 +94,16 @@ class RuleMigrationManager:
                     return self.ruff_rule.scan_file(path, source)
                 return self.ast_rule.scan_file(path, source)
 
-            def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List]:
+            def fix(
+                self, path: Path, source: str, issues: List[Issue]
+            ) -> tuple[str, List]:
                 if self.migration_manager.should_use_ruff(rule_id):
                     return self.ruff_rule.fix(path, source, issues)
                 return self.ast_rule.fix(path, source, issues)
 
-            def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
+            def validate(
+                self, path: Path, original: str, fixed: str
+            ) -> ValidationResult:
                 if self.migration_manager.should_use_ruff(rule_id):
                     return self.ruff_rule.validate(path, original, fixed)
                 return self.ast_rule.validate(path, original, fixed)
@@ -164,14 +168,12 @@ class PerformanceProfiler:
             "rule_id": rule.rule_id,
             "issues_found": len(issues),
             "time_ms": (end_time - start_time) * 1000,
-            "implementation": rule.__class__.__module__
+            "implementation": rule.__class__.__module__,
         }
 
     @staticmethod
     def compare_implementations(
-        file_path: Path,
-        source: str,
-        config: Config
+        file_path: Path, source: str, config: Config
     ) -> Dict[str, Dict]:
         """Compare AST vs Ruff implementations for applicable rules."""
         results = {}
@@ -194,7 +196,7 @@ class PerformanceProfiler:
 
             results[rule_id] = {
                 "ast": PerformanceProfiler.profile_rule(ast_rule, file_path, source),
-                "ruff": PerformanceProfiler.profile_rule(ruff_rule, file_path, source)
+                "ruff": PerformanceProfiler.profile_rule(ruff_rule, file_path, source),
             }
 
             # Calculate speedup
@@ -225,7 +227,7 @@ def add_ruff_config_to_prefact_yaml(config_path: Path) -> None:
                 "sorted-imports": {"use_ruff": True},
                 "duplicate-imports": {"use_ruff": True},
             },
-            "ignore_patterns": ["cli.py", "scripts/"]  # For print statements
+            "ignore_patterns": ["cli.py", "scripts/"],  # For print statements
         }
 
     with open(config_path, "w") as f:

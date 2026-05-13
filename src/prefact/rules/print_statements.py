@@ -43,15 +43,19 @@ class PrintStatements(BaseRule):
             ):
                 issues.append(
                     Issue(
-                        rule_id=self.rule_id, file=path,
-                        line=node.lineno, col=node.col_offset,
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=node.lineno,
+                        col=node.col_offset,
                         message="print() call – consider using logging instead.",
                         severity=Severity.INFO,
                     )
                 )
         return issues
 
-    def fix(self, path: Path, source: str, issues: list[Issue]) -> tuple[str, list[Fix]]:
+    def fix(
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         return source, []  # removing prints blindly is risky
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:

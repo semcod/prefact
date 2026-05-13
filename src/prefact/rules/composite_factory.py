@@ -32,7 +32,7 @@ class CompositeRuleFactory:
         description: str,
         tool_ids: List[str],
         config: Config,
-        strategy: str = "parallel"
+        strategy: str = "parallel",
     ) -> Type[BaseRule]:
         """Create a composite rule dynamically."""
 
@@ -49,14 +49,10 @@ class CompositeRuleFactory:
                 if strategy_type == "sequential":
                     return SequentialScanStrategy()
                 elif strategy_type == "priority":
-                    priorities = config.get_rule_option(
-                        rule_id, "tool_priorities", {}
-                    )
+                    priorities = config.get_rule_option(rule_id, "tool_priorities", {})
                     return PriorityBasedStrategy(priorities)
                 else:
-                    max_workers = config.get_rule_option(
-                        rule_id, "max_workers", 4
-                    )
+                    max_workers = config.get_rule_option(rule_id, "max_workers", 4)
                     return ParallelScanStrategy(max_workers)
 
             def _load_tools(self, tool_ids: List[str]) -> List[BaseRule]:
@@ -75,14 +71,20 @@ class CompositeRuleFactory:
                     return []
                 return self.strategy.scan(path, source, self.tools)
 
-            def fix(self, path: Path, source: str, issues: List[Issue]) -> tuple[str, List[Fix]]:
+            def fix(
+                self, path: Path, source: str, issues: List[Issue]
+            ) -> tuple[str, List[Fix]]:
                 if not self.tools:
                     return source, []
                 return self.strategy.fix(path, source, issues, self.tools)
 
-            def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
+            def validate(
+                self, path: Path, original: str, fixed: str
+            ) -> ValidationResult:
                 if not self.tools:
-                    return ValidationResult(file=path, passed=True, checks=[], errors=[])
+                    return ValidationResult(
+                        file=path, passed=True, checks=[], errors=[]
+                    )
 
                 all_checks = []
                 all_errors = []
@@ -96,7 +98,7 @@ class CompositeRuleFactory:
                     file=path,
                     passed=len(all_errors) == 0,
                     checks=all_checks,
-                    errors=all_errors
+                    errors=all_errors,
                 )
 
         return DynamicCompositeRule
