@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from prefact.config import Config
+from prefact.defaults import DEFAULT_EXCLUDE, DEFAULT_INCLUDE
 
 
 @pytest.fixture
@@ -58,3 +59,37 @@ rules:
         assert cfg.rule_enabled("relative-imports") is True
         assert cfg.rule_enabled("nonexistent-rule") is True
         assert cfg.rule_options("nonexistent") == {}
+
+    def test_config_uses_defaults_include(self) -> None:
+        cfg = Config()
+        assert cfg.include == DEFAULT_INCLUDE
+
+    def test_config_uses_defaults_exclude(self) -> None:
+        cfg = Config()
+        assert cfg.exclude == DEFAULT_EXCLUDE
+
+    def test_venv_variants_in_defaults(self) -> None:
+        for pattern in ("**/.venv/**", "**/.venv*/**", "**/venv/**", "**/venv*/**", "**/env/**"):
+            assert pattern in DEFAULT_EXCLUDE, f"Missing pattern: {pattern}"
+
+    def test_scanner_excludes_venv_test(self, tmp_path: Path) -> None:
+        from prefact.scanner import Scanner
+
+        venv_dir = tmp_path / ".venv_test" / "lib"
+        venv_dir.mkdir(parents=True)
+        (venv_dir / "foo.py").write_text("x = 1\n")
+        (tmp_path / "main.py").write_text("x = 1\n")
+
+        cfg = Config(project_root=tmp_path)
+        scanner = Scanner(cfg)
+        files = scanner.collect_files()
+        names = [f.name for f in files]
+        assert "main.py" in names
+        assert "foo.py" not in names, ".venv_test should be excluded"
+
+    def test_config_extended_constants_reexport(self) -> None:
+        from prefact.config_extended.constants import DEFAULT_EXCLUDE as CE_EXCLUDE
+        from prefact.config_extended.constants import DEFAULT_INCLUDE as CE_INCLUDE
+
+        assert CE_EXCLUDE is DEFAULT_EXCLUDE
+        assert CE_INCLUDE is DEFAULT_INCLUDE

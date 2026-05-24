@@ -6,6 +6,8 @@ from typing import Any, Optional
 
 import yaml
 
+from prefact.defaults import DEFAULT_EXCLUDE, DEFAULT_INCLUDE
+
 
 @dataclass
 class RuleConfig:
@@ -27,19 +29,8 @@ class Config:
     package_name: str = ""
 
     # File patterns to include / exclude
-    include: list[str] = field(default_factory=lambda: ["**/*.py"])
-    exclude: list[str] = field(
-        default_factory=lambda: [
-            "**/__pycache__/**",
-            "**/node_modules/**",
-            "**/.venv/**",
-            "**/venv/**",
-            "**/.git/**",
-            "**/build/**",
-            "**/dist/**",
-            "**/*.egg-info/**",
-        ]
-    )
+    include: list[str] = field(default_factory=lambda: list(DEFAULT_INCLUDE))
+    exclude: list[str] = field(default_factory=lambda: list(DEFAULT_EXCLUDE))
 
     # Rule-specific configuration
     rules: dict[str, RuleConfig] = field(default_factory=dict)
@@ -85,19 +76,7 @@ class Config:
     @classmethod
     def _get_default_patterns(cls) -> dict[str, list[str]]:
         """Get default include/exclude patterns."""
-        return {
-            "include": ["**/*.py"],
-            "exclude": [
-                "**/__pycache__/**",
-                "**/node_modules/**",
-                "**/.venv/**",
-                "**/venv/**",
-                "**/.git/**",
-                "**/build/**",
-                "**/dist/**",
-                "**/*.egg-info/**",
-            ],
-        }
+        return {"include": list(DEFAULT_INCLUDE), "exclude": list(DEFAULT_EXCLUDE)}
 
     def rule_enabled(self, rule_id: str) -> bool:
         rc = self.rules.get(rule_id)

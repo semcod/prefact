@@ -155,10 +155,12 @@ class Scanner:
                     return True
 
         # Hardcoded safety for common folders if not caught by patterns
-        path_str = str(abs_path)
+        _skip_dirs = {".git", "node_modules", "__pycache__", "env"}
         if any(
-            x in path_str
-            for x in ["/.venv/", "/venv/", "/node_modules/", "/__pycache__/", "/.git/"]
+            part in _skip_dirs
+            or part.startswith(".venv")
+            or part.startswith("venv")
+            for part in abs_path.parts
         ):
             return True
 

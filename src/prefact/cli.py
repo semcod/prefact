@@ -7,6 +7,7 @@ import click
 from prefact.autonomous import AutonomousRefact
 from prefact.config import Config
 from prefact.config_extended import ExtendedConfig
+from prefact.defaults import DEFAULT_EXCLUDE, DEFAULT_INCLUDE
 from prefact.engine import RefactoringEngine
 from prefact.reporters import console as console_reporter
 from prefact.reporters import json_reporter
@@ -200,20 +201,16 @@ def check(filepath, **kwargs) -> None:
 )
 def init(project_path) -> None:
     """Generate a default prefact.yaml in the project directory."""
-    default = """\
+    exclude_lines = "".join(f'  - "{p}"\n' for p in DEFAULT_EXCLUDE)
+    include_lines = "".join(f'  - "{p}"\n' for p in DEFAULT_INCLUDE)
+    default = f"""\
 # prefact.yaml – configuration for prefact
 # package_name: mypackage     # auto-detected from pyproject.toml if omitted
 
 include:
-  - "**/*.py"
-
+{include_lines}
 exclude:
-  - "**/__pycache__/**"
-  - "**/venv/**"
-  - "**/.venv/**"
-  - "**/build/**"
-  - "**/dist/**"
-
+{exclude_lines}
 rules:
   relative-imports:
     enabled: true

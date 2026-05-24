@@ -5,6 +5,8 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
+from prefact.defaults import DEFAULT_EXCLUDE, DEFAULT_INCLUDE
+
 from .constants import DEFAULT_CACHE_SIZE, DEFAULT_MAX_LINE_LENGTH
 
 DEFAULT_AUTONOMOUS_LIMITS = {
@@ -39,18 +41,8 @@ class ConfigGenerator:
         config: Dict[str, Any] = {
             "project_root": str(project_root),
             "package_name": project_root.name,
-            "include": ["**/*.py"],
-            "exclude": [
-                "**/__pycache__/**",
-                "**/node_modules/**",
-                "**/.venv/**",
-                "**/venv/**",
-                "**/.git/**",
-                "**/build/**",
-                "**/dist/**",
-                "**/*.egg-info/**",
-                "**/tests/**",
-            ],
+            "include": list(DEFAULT_INCLUDE),
+            "exclude": list(DEFAULT_EXCLUDE) + ["**/tests/**"],
             "tools": {
                 "parallel": True,
                 "cache": True,
