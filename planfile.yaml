@@ -889,19 +889,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-028f9b29
-    name: Fix duplicate-imports issues
-    description: Resolve 1 duplicate-imports issues in src/prefact/autonomous/dependency_checker.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/autonomous/dependency_checker.py
-    rule_id: duplicate-imports
-    count: 1
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-c7c61163
     name: Fix magic-numbers issues
     description: Resolve 1 magic-numbers issues in src/prefact/autonomous/dependency_checker.py
@@ -990,32 +977,6 @@ sprints:
     - src/prefact/autonomous/todo_manager.py
     rule_id: string-concat
     count: 5
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-f5127721
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/benchmark.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/benchmark.py
-    rule_id: unused-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-6fd769fd
-    name: Fix duplicate-imports issues
-    description: Resolve 1 duplicate-imports issues in src/prefact/benchmark.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/benchmark.py
-    rule_id: duplicate-imports
-    count: 1
     model_hints:
       planning: balanced
       implementation: balanced
@@ -1136,19 +1097,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-d472b6bc
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/config_extended/generator.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/config_extended/generator.py
-    rule_id: unused-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-4bac66a5
     name: Fix magic-numbers issues
     description: Resolve 5 magic-numbers issues in src/prefact/config_extended/generator.py
@@ -1253,19 +1201,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-06d9e38b
-    name: Fix unused-imports issues
-    description: Resolve 8 unused-imports issues in src/prefact/performance/cache/base.py
-    task_type: prefactor
-    priority: high
-    estimate: 2d
-    files:
-    - src/prefact/performance/cache/base.py
-    rule_id: unused-imports
-    count: 8
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-79583064
     name: Fix magic-numbers issues
     description: Resolve 1 magic-numbers issues in src/prefact/performance/cache/base.py
@@ -1302,19 +1237,6 @@ sprints:
     - src/prefact/performance/cache/globals.py
     rule_id: relative-imports
     count: 10
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-e548966a
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/performance/cache/globals.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/performance/cache/globals.py
-    rule_id: unused-imports
-    count: 2
     model_hints:
       planning: balanced
       implementation: balanced
@@ -1396,19 +1318,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-cced5dda
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/performance/cache_adapters.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/performance/cache_adapters.py
-    rule_id: unused-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-c83aa451
     name: Fix magic-numbers issues
     description: Resolve 2 magic-numbers issues in src/prefact/performance/cache_adapters.py
@@ -1435,19 +1344,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-7bd90e80
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/performance/cache_state.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/performance/cache_state.py
-    rule_id: unused-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-8142b3c5
     name: Fix string-concat issues
     description: Resolve 2 string-concat issues in src/prefact/performance/parallel.py
@@ -1457,19 +1353,6 @@ sprints:
     files:
     - src/prefact/performance/parallel.py
     rule_id: string-concat
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-47750bc0
-    name: Fix unused-imports issues
-    description: Resolve 2 unused-imports issues in src/prefact/rules/_ast_cache.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/_ast_cache.py
-    rule_id: unused-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1487,19 +1370,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-09ad9aa9
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/ai_boilerplate.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/ai_boilerplate.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-92fcdf76
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/autoflake_based.py
@@ -1509,19 +1379,6 @@ sprints:
     files:
     - src/prefact/rules/autoflake_based.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-1f499a4a
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/autoflake_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/autoflake_based.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1552,19 +1409,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-fd5fcf70
-    name: Fix duplicate-imports issues
-    description: Resolve 3 duplicate-imports issues in src/prefact/rules/composite_factory.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/composite_factory.py
-    rule_id: duplicate-imports
-    count: 3
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-5d351667
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/composite_rules.py
@@ -1574,19 +1418,6 @@ sprints:
     files:
     - src/prefact/rules/composite_rules.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-5b812fc0
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/composite_rules.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/composite_rules.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1604,19 +1435,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-0041264c
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/duplicate_imports.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/duplicate_imports.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-7733699b
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/import_linter_based.py
@@ -1627,19 +1445,6 @@ sprints:
     - src/prefact/rules/import_linter_based.py
     rule_id: relative-imports
     count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-3d5a1915
-    name: Fix duplicate-imports issues
-    description: Resolve 3 duplicate-imports issues in src/prefact/rules/import_linter_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/import_linter_based.py
-    rule_id: duplicate-imports
-    count: 3
     model_hints:
       planning: balanced
       implementation: balanced
@@ -1669,19 +1474,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-a06ec7c6
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/importchecker_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/importchecker_based.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-4350410a
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/isort_based.py
@@ -1708,19 +1500,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-4f12c05a
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/isort_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/isort_based.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-a3b6305c
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/llm_generated_code.py
@@ -1734,19 +1513,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-9b30b46c
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/llm_generated_code.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/llm_generated_code.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-26735020
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/llm_hallucinations.py
@@ -1756,19 +1522,6 @@ sprints:
     files:
     - src/prefact/rules/llm_hallucinations.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-a2a74685
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/llm_hallucinations.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/llm_hallucinations.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1799,19 +1552,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-25efaa5e
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/magic_numbers.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/magic_numbers.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-cd3a5a6f
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/migration.py
@@ -1821,19 +1561,6 @@ sprints:
     files:
     - src/prefact/rules/migration.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-29d7eb57
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/migration.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/migration.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1851,19 +1578,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-e03eed7f
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/mypy_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/mypy_based.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-9678fa24
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/print_statements.py
@@ -1873,19 +1587,6 @@ sprints:
     files:
     - src/prefact/rules/print_statements.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-12204efa
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/print_statements.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/print_statements.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -1903,19 +1604,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-1e9941ac
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/pylint_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/pylint_based.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-1c8c6aa3
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/registry.py
@@ -1926,19 +1614,6 @@ sprints:
     - src/prefact/rules/registry.py
     rule_id: relative-imports
     count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-6da6416c
-    name: Fix duplicate-imports issues
-    description: Resolve 1 duplicate-imports issues in src/prefact/rules/registry.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/registry.py
-    rule_id: duplicate-imports
-    count: 1
     model_hints:
       planning: balanced
       implementation: balanced
@@ -1968,19 +1643,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-b4f39ed0
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/relative_imports.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/relative_imports.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-324f7c1c
     name: Fix magic-numbers issues
     description: Resolve 1 magic-numbers issues in src/prefact/rules/relative_imports.py
@@ -2007,19 +1669,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-a2979326
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/ruff_based.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/ruff_based.py
-    rule_id: duplicate-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-dbe9d885
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/sorted_imports.py
@@ -2029,19 +1678,6 @@ sprints:
     files:
     - src/prefact/rules/sorted_imports.py
     rule_id: relative-imports
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-fc2d72d3
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/sorted_imports.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/sorted_imports.py
-    rule_id: duplicate-imports
     count: 2
     model_hints:
       planning: balanced
@@ -2072,19 +1708,6 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-1cebc5ac
-    name: Fix duplicate-imports issues
-    description: Resolve 1 duplicate-imports issues in src/prefact/rules/strategies.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - src/prefact/rules/strategies.py
-    rule_id: duplicate-imports
-    count: 1
-    model_hints:
-      planning: balanced
-      implementation: balanced
   - id: ticket-d7ef7559
     name: Fix relative-imports issues
     description: Resolve 2 relative-imports issues in src/prefact/rules/string_concat.py
@@ -2111,16 +1734,315 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-2e4a8c07
-    name: Fix duplicate-imports issues
-    description: Resolve 2 duplicate-imports issues in src/prefact/rules/string_concat.py
+  - id: ticket-44e99cb5
+    name: Fix smart-return-type issues
+    description: Resolve 1 smart-return-type issues in src/prefact/autonomous/__init__.py
     task_type: prefactor
     priority: medium
     estimate: 1d
     files:
-    - src/prefact/rules/string_concat.py
-    rule_id: duplicate-imports
+    - src/prefact/autonomous/__init__.py
+    rule_id: smart-return-type
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-916b11ef
+    name: Fix magic-numbers issues
+    description: Resolve 2 magic-numbers issues in src/prefact/autonomous/__init__.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/autonomous/__init__.py
+    rule_id: magic-numbers
     count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b16c9759
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/prefact/autonomous/testql_manager.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/autonomous/testql_manager.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-eb4c68d9
+    name: Fix magic-numbers issues
+    description: Resolve 2 magic-numbers issues in src/prefact/autonomous/testql_manager.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/autonomous/testql_manager.py
+    rule_id: magic-numbers
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-3107a1ca
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in src/prefact/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/cli.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-2003de2f
+    name: Fix unused-imports issues
+    description: Resolve 8 unused-imports issues in src/prefact/config_extended/constants.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - src/prefact/config_extended/constants.py
+    rule_id: unused-imports
+    count: 8
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-fb914fa8
+    name: Fix string-concat issues
+    description: Resolve 1 string-concat issues in src/prefact/config_extended/generator.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/config_extended/generator.py
+    rule_id: string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-5bc52af6
+    name: Fix string-concat issues
+    description: Resolve 1 string-concat issues in src/prefact/reporters/json_reporter.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/reporters/json_reporter.py
+    rule_id: string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-4339cea3
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in src/prefact/rules/type_hints.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/type_hints.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b559e532
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in src/prefact/rules/unimport_based.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/unimport_based.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-4e5eebbd
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in src/prefact/rules/wildcard_imports.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/wildcard_imports.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-1af40d56
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in src/prefact/rules/unused_imports.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/unused_imports.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-fa84f94a
+    name: Fix string-concat issues
+    description: Resolve 4 string-concat issues in src/prefact/rules/unused_imports.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - src/prefact/rules/unused_imports.py
+    rule_id: string-concat
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-51807278
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in src/prefact/rules/string_transformations.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/string_transformations.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-83c9d2ab
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in src/prefact/rules/string_transformations.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/prefact/rules/string_transformations.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9eea52d4
+    name: Fix smart-return-type issues
+    description: Resolve 1 smart-return-type issues in tests/test_autonomous_limits.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_autonomous_limits.py
+    rule_id: smart-return-type
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-2629eaca
+    name: Fix string-concat issues
+    description: Resolve 1 string-concat issues in tests/test_autonomous_limits.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_autonomous_limits.py
+    rule_id: string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-a797648c
+    name: Fix llm-hallucinations issues
+    description: Resolve 1 llm-hallucinations issues in tests/test_autonomous_limits.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_autonomous_limits.py
+    rule_id: llm-hallucinations
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-52920e08
+    name: Fix smart-return-type issues
+    description: Resolve 2 smart-return-type issues in tests/test_refactoring.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_refactoring.py
+    rule_id: smart-return-type
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f5df4b3b
+    name: Fix smart-return-type issues
+    description: Resolve 8 smart-return-type issues in tests/test_integrations.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_integrations.py
+    rule_id: smart-return-type
+    count: 8
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7275ac50
+    name: Fix string-concat issues
+    description: Resolve 2 string-concat issues in tests/test_integrations.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_integrations.py
+    rule_id: string-concat
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-fe0f0bc7
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in tests/test_integrations.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_integrations.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-de7212b0
+    name: Fix smart-return-type issues
+    description: Resolve 5 smart-return-type issues in tests/test_testql_manager.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - tests/test_testql_manager.py
+    rule_id: smart-return-type
+    count: 5
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-a8b4f10e
+    name: Fix llm-hallucinations issues
+    description: Resolve 4 llm-hallucinations issues in tests/test_testql_manager.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - tests/test_testql_manager.py
+    rule_id: llm-hallucinations
+    count: 4
     model_hints:
       planning: balanced
       implementation: balanced

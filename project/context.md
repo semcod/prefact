@@ -1,26 +1,28 @@
 # System Architecture Analysis
+<!-- generated in 0.00s -->
 
 ## Overview
 
 - **Project**: /home/tom/github/semcod/prefact
 - **Primary Language**: python
-- **Languages**: python: 105, yaml: 37, json: 4, shell: 3, txt: 2
+- **Languages**: python: 106, yaml: 26, shell: 3, json: 3, yml: 2
 - **Analysis Mode**: static
-- **Total Functions**: 3496
+- **Total Functions**: 779
 - **Total Classes**: 147
-- **Modules**: 156
-- **Entry Points**: 3424
+- **Modules**: 145
+- **Entry Points**: 709
 
 ## Architecture by Module
-
-### project.map.toon
-- **Functions**: 28684
-- **File**: `map.toon.yaml`
 
 ### vscode-extension.src.extension
 - **Functions**: 58
 - **Classes**: 5
 - **File**: `extension.ts`
+
+### src.prefact.performance.cache
+- **Functions**: 37
+- **Classes**: 6
+- **File**: `cache.py`
 
 ### src.prefact.rules.string_transformations
 - **Functions**: 27
@@ -118,7 +120,7 @@ Main execution flows into the system:
 
 ### src.prefact.autonomous.docs_manager.DocsManager.update_planfile
 > Update planfile.yaml with new tickets.
-- **Calls**: self.planfile_path.exists, src.prefact.performance.cache.Cache.set, planfile.get, src.prefact.performance.cache.Cache.set, self.get_autonomous_limit, self.create_default_planfile, self._get_relative_file_path, current_issue_keys.add
+- **Calls**: self.planfile_path.exists, src.prefact.performance.cache_adapters.ScanResultCache.set, planfile.get, src.prefact.performance.cache_adapters.ScanResultCache.set, self.get_autonomous_limit, self.create_default_planfile, self._get_relative_file_path, current_issue_keys.add
 
 ### src.prefact.autonomous.project_scanner.ProjectScanner.scan_project
 > Scan project for issues.
@@ -140,7 +142,7 @@ and per-integration
 - **Calls**: str, run_testql_validation, console.print, console.print, str, str, build_testql_tickets, len
 
 ### src.prefact.config_extended.models.ExtendedConfig.from_yaml
-- **Calls**: None.items, cls, path.exists, cls, project.map.toon.open, src.prefact.config_extended.utils.deep_merge, isinstance, yaml.safe_load
+- **Calls**: None.items, cls, path.exists, cls, open, src.prefact.config_extended.utils.deep_merge, isinstance, yaml.safe_load
 
 ### examples.run_examples.main
 > Run all examples and show results.
@@ -151,7 +153,7 @@ and per-integration
 
 ### benchmark_ram_optimization.main
 > Run multiple benchmarks with different file counts and sizes.
-- **Calls**: Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print
+- **Calls**: print, print, print, print, print, print, print, print
 
 ### src.prefact.config_extended.config.ExtendedConfig.from_yaml
 > Load configuration from YAML file with environment support.
@@ -165,9 +167,6 @@ and per-integration
 > Create a composite rule dynamically.
 - **Calls**: None.__init__, self._create_strategy, self._load_tools, src.prefact.rules.registry.LazyRuleRegistry.get_all_rules, self.strategy.scan, self.strategy.fix, ValidationResult, SequentialScanStrategy
 
-### src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate
-- **Calls**: ValidationResult, ast.parse, checks.append, ast.parse, ast.walk, sum, sum, errors.append
-
 ### vscode-extension.src.extension.PrefactTreeProvider.activate
 - **Calls**: vscode-extension.src.extension.log, vscode-extension.src.extension.PrefactDiagnosticsProvider, vscode-extension.src.extension.PrefactTreeProvider, vscode-extension.src.extension.createTreeView, vscode-extension.src.extension.registerCommand, vscode-extension.src.extension.openTextDocument, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanFile, vscode-extension.src.extension.PrefactDiagnosticsProvider.scanWorkspace
 
@@ -175,13 +174,12 @@ and per-integration
 > Parse existing TODO.md entries.
 - **Calls**: self.todo_path.read_text, existing_content.split, self.todo_path.exists, len, None.strip, line.startswith, line.startswith, None.strip
 
+### src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate
+- **Calls**: ValidationResult, ast.parse, checks.append, ast.parse, ast.walk, sum, sum, errors.append
+
 ### src.prefact.rules.composite_rules.CompositeImportRules._load_tools
 > Load all import-related tools.
 - **Calls**: self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, self.config.is_rule_enabled, tools.extend, tools.append, tools.append
-
-### src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel
-> Scan files using parallel processing.
-- **Calls**: min, console.print, config.performance.get, len, ThreadPoolExecutor, as_completed, file_path.read_text, executor.submit
 
 ### src.prefact.cli.autonomous_cmd
 > Run autonomous prefact mode (-a).
@@ -190,20 +188,24 @@ Automatically initializes prefact.yaml if missing, runs examples,
 scans for issues, and creates tickets in planfile
 - **Calls**: main.command, click.option, click.option, click.option, click.option, click.option, click.option, click.option
 
+### src.prefact.autonomous.project_scanner.ProjectScanner._scan_files_parallel
+> Scan files using parallel processing.
+- **Calls**: min, console.print, config.performance.get, len, ThreadPoolExecutor, as_completed, file_path.read_text, executor.submit
+
 ### examples.sample-project.cli.main
 > Main CLI command.
-- **Calls**: click.command, click.option, click.option, Taskfile.print, User, Taskfile.print, DataProcessor, processor.add_item
+- **Calls**: click.command, click.option, click.option, print, User, print, DataProcessor, processor.add_item
 
 ### src.prefact.scanner._match_gitignore_pattern
 > Match a path against a gitignore-style pattern.
 - **Calls**: pattern.endswith, pattern.startswith, pattern.rstrip, path.split, pattern.split, fnmatch.fnmatch, fnmatch.fnmatch, path.endswith
 
-### src.prefact.benchmark.ScanProbe.run
-- **Calls**: textwrap.dedent, BenchmarkResult, tempfile.TemporaryDirectory, Path, vscode-extension.src.extension.PrefactDiagnosticsProvider.range, Config, RefactoringEngine, time.perf_counter
-
 ### src.prefact.rules.importchecker_based.ImportCheckerUnusedImports._find_import_lines
 > Find line numbers for each import.
 - **Calls**: source.splitlines, enumerate, line.strip, stripped.startswith, stripped.startswith, stripped.split, None.split, len
+
+### src.prefact.benchmark.ScanProbe.run
+- **Calls**: textwrap.dedent, BenchmarkResult, tempfile.TemporaryDirectory, Path, vscode-extension.src.extension.PrefactDiagnosticsProvider.range, Config, RefactoringEngine, time.perf_counter
 
 ### src.prefact.cli.testql_cmd
 > Run TestQL DSL validation and bridge results into planfile/TODO.
@@ -226,14 +228,15 @@ scans for issues, and creates tickets in planfile
 
 ### src.prefact.plugins.PluginManager.load_plugin
 > Load a plugin and register its rules.
-- **Calls**: Taskfile.print, PluginValidator.validate_plugin_module, metadata.entry_point.split, importlib.import_module, getattr, callable, self._loaded_modules.add, Taskfile.print
+- **Calls**: print, PluginValidator.validate_plugin_module, metadata.entry_point.split, importlib.import_module, getattr, callable, self._loaded_modules.add, print
+
+### src.prefact.autonomous.testql_manager.TestQLManager.run_all
+> Run all discovered TestQL scenarios and aggregate the results.
+- **Calls**: self.discover_scenarios, console.print, results.append, int, int, int, len, self.run
 
 ### src.prefact.autonomous.setup_manager.SetupManager.run_examples
 > Run all examples and verify they work.
 - **Calls**: list, self.examples_dir.exists, console.print, self.examples_dir.rglob, console.print, Progress, progress.add_task, progress.advance
-
-### src.prefact.rules.unimport_based.UnimportUnusedImports.scan_file
-- **Calls**: UnimportHelper.check_source, source.splitlines, enumerate, line.strip, stripped.startswith, item.get, import_lines.get, issues.append
 
 ## Process Flows
 
@@ -270,7 +273,6 @@ run [src.prefact.autonomous.testql_manager.TestQLManager]
 ### Flow 6: from_yaml
 ```
 from_yaml [src.prefact.config_extended.models.ExtendedConfig]
-  └─ →> open
 ```
 
 ### Flow 7: main
@@ -359,12 +361,6 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Key Methods**: src.prefact.rules.llm_hallucinations.LLMHallucinationRule.__init__, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._load_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.scan_file, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._check_ast_patterns, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_function_name, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._is_suspicious_import, src.prefact.rules.llm_hallucinations.LLMHallucinationRule._map_severity, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.fix, src.prefact.rules.llm_hallucinations.LLMHallucinationRule.validate
 - **Inherits**: BaseRule
 
-### src.prefact.config_extended.config.ExtendedConfig
-> Extended configuration with additional features.
-- **Methods**: 8
-- **Key Methods**: src.prefact.config_extended.config.ExtendedConfig.__init__, src.prefact.config_extended.config.ExtendedConfig.from_yaml, src.prefact.config_extended.config.ExtendedConfig._parse_rules, src.prefact.config_extended.config.ExtendedConfig._deep_merge, src.prefact.config_extended.config.ExtendedConfig.get_tool_config, src.prefact.config_extended.config.ExtendedConfig.get_performance_setting, src.prefact.config_extended.config.ExtendedConfig.get_plugin_config, src.prefact.config_extended.config.ExtendedConfig.to_dict
-- **Inherits**: Config
-
 ### src.prefact.rules.magic_numbers.MagicNumberRule
 > Detect magic numbers in code.
 - **Methods**: 8
@@ -381,6 +377,12 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Methods**: 8
 - **Key Methods**: src.prefact.rules.registry.LazyRuleRegistry.__init__, src.prefact.rules.registry.LazyRuleRegistry.get_rule, src.prefact.rules.registry.LazyRuleRegistry._load_module, src.prefact.rules.registry.LazyRuleRegistry._find_rule_class, src.prefact.rules.registry.LazyRuleRegistry.get_all_rules, src.prefact.rules.registry.LazyRuleRegistry.list_available_rules, src.prefact.rules.registry.LazyRuleRegistry.register_rule, src.prefact.rules.registry.LazyRuleRegistry.register_rule_module
 
+### src.prefact.config_extended.config.ExtendedConfig
+> Extended configuration with additional features.
+- **Methods**: 8
+- **Key Methods**: src.prefact.config_extended.config.ExtendedConfig.__init__, src.prefact.config_extended.config.ExtendedConfig.from_yaml, src.prefact.config_extended.config.ExtendedConfig._parse_rules, src.prefact.config_extended.config.ExtendedConfig._deep_merge, src.prefact.config_extended.config.ExtendedConfig.get_tool_config, src.prefact.config_extended.config.ExtendedConfig.get_performance_setting, src.prefact.config_extended.config.ExtendedConfig.get_plugin_config, src.prefact.config_extended.config.ExtendedConfig.to_dict
+- **Inherits**: Config
+
 ### src.prefact.rules.string_transformations.ContextAwareStringTransformer
 > Transform string concatenations with context awareness.
 - **Methods**: 8
@@ -392,65 +394,25 @@ create_composite_rule [src.prefact.rules.composite_factory.CompositeRuleFactory]
 - **Methods**: 7
 - **Key Methods**: src.prefact.performance.parallel.ParallelEngine.__init__, src.prefact.performance.parallel.ParallelEngine.scan_files, src.prefact.performance.parallel.ParallelEngine._scan_with_thread_pool, src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool, src.prefact.performance.parallel.ParallelEngine._execute_task_wrapper, src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids, src.prefact.performance.parallel.ParallelEngine.fix_files
 
-### src.prefact.performance.cache.Cache
-> Wrapper for diskcache with additional functionality.
-- **Methods**: 7
-- **Key Methods**: src.prefact.performance.cache.Cache.__init__, src.prefact.performance.cache.Cache.get, src.prefact.performance.cache.Cache.set, src.prefact.performance.cache.Cache.delete, src.prefact.performance.cache.Cache.clear, src.prefact.performance.cache.Cache.get_stats, src.prefact.performance.cache.Cache.close
-
 ### src.prefact.performance.cache.base.Cache
 > Wrapper for diskcache with additional functionality.
 - **Methods**: 7
 - **Key Methods**: src.prefact.performance.cache.base.Cache.__init__, src.prefact.performance.cache.base.Cache.get, src.prefact.performance.cache.base.Cache.set, src.prefact.performance.cache.base.Cache.delete, src.prefact.performance.cache.base.Cache.clear, src.prefact.performance.cache.base.Cache.get_stats, src.prefact.performance.cache.base.Cache.close
 
+### src.prefact.performance.cache.Cache
+> Wrapper for diskcache with additional functionality.
+- **Methods**: 7
+- **Key Methods**: src.prefact.performance.cache.Cache.__init__, src.prefact.performance.cache.Cache.get, src.prefact.performance.cache.Cache.set, src.prefact.performance.cache.Cache.delete, src.prefact.performance.cache.Cache.clear, src.prefact.performance.cache.Cache.get_stats, src.prefact.performance.cache.Cache.close
+
 ## Data Transformation Functions
 
 Key functions that process and transform data:
 
-### examples.01-individual-rules.relative-imports.after.process_user
-> Process a user.
-- **Output to**: UserModel, examples.sample-project.utils.helper_function
+### examples.01-individual-rules.sorted-imports.after.process
+> Process with unsorted imports.
 
-### examples.01-individual-rules.relative-imports.after.Processor.process
-- **Output to**: examples.01-individual-rules.string-concat.after.format_data
-
-### examples.01-individual-rules.relative-imports.before.process_user
-> Process a user.
-- **Output to**: UserModel, examples.sample-project.utils.helper_function
-
-### examples.01-individual-rules.relative-imports.before.Processor.process
-- **Output to**: examples.01-individual-rules.string-concat.after.format_data
-
-### examples.01-individual-rules.wildcard-imports.after.process
-> Process using wildcard imports.
-- **Output to**: defaultdict
-
-### examples.01-individual-rules.wildcard-imports.before.process
-> Process using wildcard imports.
-- **Output to**: defaultdict
-
-### examples.01-individual-rules.missing-return-type.after.Processor.process
-> Process data.
-- **Output to**: data.upper
-
-### examples.01-individual-rules.missing-return-type.before.Processor.process
-> Process data.
-- **Output to**: data.upper
-
-### examples.01-individual-rules.duplicate-imports.after.process_data
-> Process data.
-- **Output to**: os.getcwd
-
-### examples.01-individual-rules.duplicate-imports.before.process_data
-> Process data.
-- **Output to**: os.getcwd
-
-### examples.01-individual-rules.unused-imports.after.process_data
-> Process some data.
-- **Output to**: item.lower, len
-
-### examples.01-individual-rules.unused-imports.after.format_timestamp
-> Format a timestamp.
-- **Output to**: ts.strftime
+### examples.01-individual-rules.sorted-imports.before.process
+> Process with unsorted imports.
 
 ### examples.01-individual-rules.unused-imports.before.process_data
 > Process some data.
@@ -463,43 +425,82 @@ Key functions that process and transform data:
 ### examples.01-individual-rules.string-concat.after.format_data
 > Format data.
 
+### examples.01-individual-rules.print-statements.after.process_data
+> Process data with debug prints.
+- **Output to**: print, print
+
+### examples.01-individual-rules.print-statements.before.process_data
+> Process data with debug prints.
+- **Output to**: print, print
+
+### examples.01-individual-rules.missing-return-type.after.Processor.process
+> Process data.
+- **Output to**: data.upper
+
+### examples.02-multiple-rules.messy_module.process_users
+> Process user data with multiple issues.
+- **Output to**: print, processed.append, print
+
+### examples.02-multiple-rules.messy_module.DataProcessor.process
+> Process items.
+- **Output to**: print, str, len, len
+
+### examples.sample-project.utils.format_name
+> Format a full name.
+- **Output to**: print
+
+### examples.sample-project.utils.validate_email
+> Validate email address.
+- **Output to**: re.match, print, print
+
+### examples.03-output-formats.sample_code.process_data
+> Process some data.
+- **Output to**: print, str
+
+### examples.sample-project.core.process_data
+> Process some data without return type annotation.
+- **Output to**: print, str
+
 ### examples.01-individual-rules.string-concat.before.format_data
 > Format data.
 - **Output to**: str
 
-### examples.01-individual-rules.sorted-imports.after.process
-> Process with unsorted imports.
+### src.prefact.validator.Validator.validate_file
+- **Output to**: self._rules.get, results.append, rule.validate
 
-### examples.01-individual-rules.sorted-imports.before.process
-> Process with unsorted imports.
+### examples.01-individual-rules.duplicate-imports.after.process_data
+> Process data.
+- **Output to**: os.getcwd
 
-### examples.01-individual-rules.print-statements.after.process_data
-> Process data with debug prints.
-- **Output to**: Taskfile.print, Taskfile.print
+### examples.01-individual-rules.relative-imports.before.process_user
+> Process a user.
+- **Output to**: UserModel, examples.sample-project.utils.helper_function
 
-### examples.01-individual-rules.print-statements.before.process_data
-> Process data with debug prints.
-- **Output to**: Taskfile.print, Taskfile.print
+### examples.01-individual-rules.relative-imports.before.Processor.process
+- **Output to**: examples.01-individual-rules.string-concat.after.format_data
 
-### examples.02-multiple-rules.messy_module.process_users
-> Process user data with multiple issues.
-- **Output to**: Taskfile.print, processed.append, Taskfile.print
+### examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.validate
+> Validate that the code is still valid.
+- **Output to**: ast.parse, ValidationResult, ValidationResult
 
-### examples.02-multiple-rules.messy_module.DataProcessor.process
-> Process items.
-- **Output to**: Taskfile.print, str, len, len
+### examples.04-custom-rules.custom_rules.no_todo_rule.NoPrintRule.validate
+> Validate that the code is still valid.
+- **Output to**: ast.parse, ValidationResult, ValidationResult
 
-### examples.sample-project.utils.format_name
-> Format a full name.
-- **Output to**: Taskfile.print
+### examples.01-individual-rules.relative-imports.after.process_user
+> Process a user.
+- **Output to**: UserModel, examples.sample-project.utils.helper_function
 
-### examples.sample-project.utils.validate_email
-> Validate email address.
-- **Output to**: re.match, Taskfile.print, Taskfile.print
+### examples.01-individual-rules.relative-imports.after.Processor.process
+- **Output to**: examples.01-individual-rules.string-concat.after.format_data
 
-### examples.sample-project.core.process_data
-> Process some data without return type annotation.
-- **Output to**: Taskfile.print, str
+### examples.01-individual-rules.unused-imports.after.process_data
+> Process some data.
+- **Output to**: item.lower, len
+
+### examples.01-individual-rules.unused-imports.after.format_timestamp
+> Format a timestamp.
+- **Output to**: ts.strftime
 
 ## Behavioral Patterns
 
@@ -554,34 +555,34 @@ Functions exposed as public API (no underscore prefix):
 - `benchmark_ram_optimization.main` - 22 calls
 - `src.prefact.config_extended.config.ExtendedConfig.from_yaml` - 21 calls
 - `src.prefact.rules.mypy_based.MyPyHelper.check_file` - 21 calls
-- `src.prefact.rules.benchmark.benchmark_file` - 21 calls
 - `src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule` - 20 calls
-- `src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate` - 20 calls
+- `src.prefact.rules.benchmark.benchmark_file` - 20 calls
 - `vscode-extension.src.extension.PrefactTreeProvider.activate` - 20 calls
+- `src.prefact.rules.relative_imports.RelativeToAbsoluteImports.validate` - 20 calls
 - `examples.06-api-usage.example.batch_processing_example` - 19 calls
 - `src.prefact.cli.autonomous_cmd` - 19 calls
 - `examples.sample-project.cli.main` - 18 calls
 - `src.prefact.benchmark.ScanProbe.run` - 17 calls
 - `src.prefact.cli.testql_cmd` - 17 calls
 - `benchmark_ram_optimization.run_benchmark` - 16 calls
-- `examples.06-api-usage.example.custom_rule_example` - 16 calls
 - `src.prefact.engine.RefactoringEngine.run` - 16 calls
 - `src.prefact.performance.cache.cached_file_operation` - 16 calls
+- `examples.06-api-usage.example.custom_rule_example` - 16 calls
 - `src.prefact.rules.benchmark.print_benchmark_results` - 16 calls
 - `src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule` - 16 calls
 - `src.prefact.plugins.PluginManager.load_plugin` - 15 calls
+- `src.prefact.autonomous.testql_manager.TestQLManager.run_all` - 15 calls
 - `src.prefact.autonomous.setup_manager.SetupManager.run_examples` - 15 calls
 - `src.prefact.rules.unimport_based.UnimportUnusedImports.scan_file` - 15 calls
-- `src.prefact.autonomous.testql_manager.TestQLManager.run_all` - 15 calls
 - `benchmark_ram_optimization.benchmark_without_rampreload` - 14 calls
 - `src.prefact.performance.cache.cached_result` - 14 calls
-- `src.prefact.rules.unimport_based.UnimportAll.validate` - 14 calls
 - `src.prefact.autonomous.docs_manager.DocsManager.update_changelog_md` - 14 calls
+- `src.prefact.rules.unimport_based.UnimportAll.validate` - 14 calls
 - `src.prefact.autonomous.project_scanner.ProjectScanner.group_issues` - 14 calls
 - `src.prefact.config.Config.from_yaml` - 13 calls
 - `vscode-extension.src.extension.PrefactTreeProvider.getChildren` - 13 calls
 - `src.prefact.git_hooks.main` - 12 calls
-- `src.prefact.benchmark.main` - 12 calls
+- `src.prefact.config_extended.validation.ConfigValidator.validate` - 12 calls
 
 ## System Interactions
 

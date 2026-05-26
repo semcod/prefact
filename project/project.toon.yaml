@@ -1,7 +1,8 @@
-# prefact | 3496 func | 97f | 235254L | python | 2026-05-03
+# prefact | 779 func | 95f | 21099L | python | 2026-05-24
+# generated in 0.00s
 
 HEALTH:
-  CC̄=0.7  critical=23 (limit:10)  dup=10  cycles=0
+  CC̄=3.0  critical=22 (limit:10)  dup=10  cycles=0
 
 ALERTS[20]:
   !!! cc_exceeded      DocsManager.update_planfile = 27 (limit:15)
@@ -12,26 +13,26 @@ ALERTS[20]:
   !!  high_fan_out     RefactoringEngine.run = 15 (limit:10)
   !!  high_fan_out     ProjectScanner._scan_files_parallel = 15 (limit:10)
   !   cc_exceeded      TestQLManager.run = 15 (limit:15)
-  !   high_fan_out     benchmark_file = 14 (limit:10)
   !   high_fan_out     ExtendedConfig.from_yaml = 14 (limit:10)
+  !   high_fan_out     AutonomousRefact.run_autonomous = 14 (limit:10)
 
-MODULES[157] (top by size):
-  M[project/map.toon.yaml] 96743L C:0 F:2716 CC↑0 D:20 (yaml)
-  M[project/calls.yaml] 6008L C:0 F:0 CC↑0 D:0 (yaml)
+MODULES[145] (top by size):
   M[planfile.yaml] 2126L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/prefact/rules/string_transformations.py] 495L C:6 F:27 CC↑8 D:0 (python)
-  M[src/prefact/rules/importchecker_based.py] 484L C:5 F:24 CC↑14 D:0 (python)
-  M[goal.yaml] 480L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/prefact/rules/isort_based.py] 470L C:4 F:23 CC↑13 D:0 (python)
-  M[src/prefact/rules/import_linter_based.py] 451L C:5 F:24 CC↑8 D:0 (python)
-  M[src/prefact/rules/unimport_based.py] 444L C:5 F:22 CC↑14 D:0 (python)
-  M[src/prefact/performance/cache.py] 439L C:6 F:37 CC↑5 D:9 (python)
+  M[src/prefact/rules/isort_based.py] 519L C:4 F:23 CC↑13 D:0 (python)
+  M[goal.yaml] 512L C:0 F:0 CC↑0 D:0 (yaml)
+  M[src/prefact/rules/string_transformations.py] 501L C:6 F:27 CC↑8 D:0 (python)
+  M[src/prefact/rules/importchecker_based.py] 499L C:5 F:24 CC↑14 D:0 (python)
+  M[src/prefact/rules/import_linter_based.py] 480L C:5 F:24 CC↑8 D:0 (python)
+  M[src/prefact/rules/unimport_based.py] 459L C:5 F:22 CC↑14 D:0 (python)
+  M[src/prefact/performance/cache.py] 440L C:6 F:37 CC↑5 D:0 (python)
   M[vscode-extension/src/extension.ts] 437L C:5 F:48 CC↑14 D:27 (typescript)
-  M[src/prefact/rules/mypy_based.py] 398L C:6 F:22 CC↑9 D:0 (python)
-  M[src/prefact/rules/pylint_based.py] 396L C:5 F:22 CC↑6 D:1 (python)
+  M[src/prefact/autonomous/todo_manager.py] 430L C:1 F:15 CC↑13 D:0 (python)
+  M[src/prefact/cli.py] 424L C:0 F:11 CC↑7 D:1 (python)
+  M[src/prefact/rules/pylint_based.py] 424L C:5 F:22 CC↑6 D:0 (python)
+  M[src/prefact/rules/mypy_based.py] 416L C:6 F:22 CC↑9 D:0 (python)
   M[src/prefact/git_hooks.py] 383L C:2 F:17 CC↑8 D:0 (python)
-  M[src/prefact/autonomous/todo_manager.py] 368L C:1 F:15 CC↑13 D:0 (python)
-  LANGS: python:106/yaml:37/json:4/shell:3/txt:2/typescript:1/other:1/yml:1/toml:1/cfg:1
+  M[src/prefact/rules/ruff_based.py] 359L C:6 F:19 CC↑4 D:0 (python)
+  LANGS: python:106/yaml:26/shell:3/json:3/yml:2/typescript:1/other:1/txt:1/toml:1/cfg:1
 
 HOTSPOTS[10]:
   ★ DocsManager.update_planfile fan=23  // Update planfile.yaml with new tickets.
@@ -40,12 +41,12 @@ HOTSPOTS[10]:
   ★ ProjectScanner.scan_project fan=18  // Scan project for issues.
   ★ RefactoringEngine.run fan=15  // Orchestrates 15 calls
 
-REFACTOR[8]:
+REFACTOR[9]:
   [1] H/L Split DocsManager.update_planfile (CC=27)
-  [2] H/H Split god module planfile.yaml (2126L, 0 classes)
-  [3] H/H Split god module project/calls.yaml (6008L, 0 classes)
-  [4] H/H Split god module project/map.toon.yaml (96743L, 0 classes)
-  [5] M/L Split TestQLManager.run (CC=15)
+  [2] H/H Split god module src/prefact/rules/isort_based.py (519L, 4 classes)
+  [3] H/H Split god module src/prefact/rules/string_transformations.py (501L, 6 classes)
+  [4] H/H Split god module goal.yaml (512L, 0 classes)
+  [5] H/H Split god module planfile.yaml (2126L, 0 classes)
 
 EVOLUTION:
-  2026-05-03 CC̄=0.7 crit=23 235254L // Automated analysis
+  2026-05-24 CC̄=3.0 crit=22 21099L // Automated analysis

@@ -18,8 +18,8 @@ SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorizati
 
 - **name**: `prefact`
 - **version**: `0.0.0`
-- **python_requires**: `>=3.8`
-- **license**: {'text': 'Apache-2.0'}
+- **python_requires**: `>=3.10`
+- **license**: Apache-2.0
 - **ai_model**: `openrouter/qwen/qwen3-coder-next`
 - **ecosystem**: SUMD + DOQL + testql + taskfile
 - **generated_from**: pyproject.toml, Taskfile.yml, Makefile, testql(2), app.doql.less, pyqual.yaml, goal.yaml, .env.example, project/(6 analysis files)
@@ -454,7 +454,7 @@ deploy {
 environment[name="local"] {
   runtime: docker-compose;
   env_file: .env;
-  python_version: >=3.8;
+  python_version: >=3.10;
 }
 ```
 
@@ -815,13 +815,12 @@ pfix>=0.1.60
 
 ## Call Graph
 
-*229 nodes · 227 edges · 65 modules · CC̄=0.7*
+*183 nodes · 169 edges · 51 modules · CC̄=3.0*
 
 ### Hubs (by degree)
 
 | Function | CC | in | out | total |
 |----------|----|----|-----|-------|
-| `print` *(in Taskfile)* | 0 | 133 | 0 | **133** |
 | `super` *(in vscode-extension.src.extension.PrefactTreeItem)* | 1 | 42 | 0 | **42** |
 | `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 27 ⚠ | 0 | 41 | **41** |
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
@@ -829,15 +828,15 @@ pfix>=0.1.60
 | `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 27 | **27** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
+| `benchmark_file` *(in src.prefact.rules.benchmark)* | 6 | 1 | 20 | **21** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 227 | modules: 65
-# CC̄=0.7
+# generated in 0.10s
+# nodes: 183 | edges: 169 | modules: 51
+# CC̄=3.0
 
 HUBS[20]:
-  Taskfile.print
-    CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
   src.prefact.autonomous.docs_manager.DocsManager.update_planfile
@@ -852,48 +851,39 @@ HUBS[20]:
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  benchmark_ram_optimization.main
-    CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
-    CC=6  in:1  out:21  total:22
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
+    CC=6  in:1  out:20  total:21
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
   examples.06-api-usage.example.batch_processing_example
     CC=6  in:1  out:19  total:20
-  examples.sample-project.cli.main
-    CC=2  in:0  out:18  total:18
   src.prefact.scanner._match_gitignore_pattern
     CC=12  in:0  out:18  total:18
+  examples.sample-project.cli.main
+    CC=2  in:0  out:18  total:18
   examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
-  src.prefact.benchmark.ScanProbe.run
-    CC=5  in:0  out:17  total:17
   src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  benchmark_ram_optimization.run_benchmark
+    CC=1  in:1  out:16  total:17
+  src.prefact.benchmark.ScanProbe.run
+    CC=5  in:0  out:17  total:17
   src.prefact.cli._build_config
     CC=7  in:3  out:14  total:17
+  src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
+    CC=2  in:0  out:16  total:16
+  src.prefact.performance.cache.cached_file_operation
+    CC=1  in:0  out:16  total:16
 
 MODULES:
-  Taskfile  [1 funcs]
-    print  CC=0  out:0
-  benchmark_ram_optimization  [5 funcs]
+  benchmark_ram_optimization  [4 funcs]
     benchmark_with_rampreload  CC=1  out:4
     benchmark_without_rampreload  CC=1  out:14
     create_test_files  CC=3  out:5
-    main  CC=7  out:22
     run_benchmark  CC=1  out:16
-  examples.01-individual-rules.duplicate-imports.after  [1 funcs]
-    process_data  CC=1  out:1
-  examples.01-individual-rules.print-statements.after  [2 funcs]
-    calculate  CC=1  out:1
-    process_data  CC=1  out:2
-  examples.01-individual-rules.print-statements.before  [2 funcs]
-    calculate  CC=1  out:1
-    process_data  CC=1  out:2
   examples.01-individual-rules.relative-imports.after  [2 funcs]
     process  CC=1  out:1
     process_user  CC=1  out:2
@@ -902,18 +892,8 @@ MODULES:
     process_user  CC=1  out:2
   examples.01-individual-rules.string-concat.after  [1 funcs]
     format_data  CC=1  out:0
-  examples.01-individual-rules.unused-imports.after  [1 funcs]
-    read_file  CC=1  out:2
   examples.01-individual-rules.unused-imports.before  [1 funcs]
-    read_file  CC=1  out:2
-  examples.02-multiple-rules.messy_module  [4 funcs]
-    __init__  CC=1  out:1
-    process  CC=1  out:4
-    generate_report  CC=1  out:6
-    process_users  CC=2  out:3
-  examples.03-output-formats.sample_code  [2 funcs]
-    calculate_sum  CC=2  out:2
-    process_data  CC=1  out:2
+    process_data  CC=2  out:2
   examples.04-custom-rules.custom_rules.no_todo_rule  [1 funcs]
     __init__  CC=1  out:3
   examples.06-api-usage.example  [4 funcs]
@@ -924,26 +904,10 @@ MODULES:
   examples.run_examples  [2 funcs]
     find_examples  CC=4  out:5
     main  CC=8  out:25
-  examples.sample-project.cli  [3 funcs]
-    admin  CC=1  out:2
+  examples.sample-project.cli  [1 funcs]
     main  CC=2  out:18
-    users  CC=2  out:7
-  examples.sample-project.core  [3 funcs]
-    __init__  CC=1  out:1
-    calculate_sum  CC=2  out:2
-    process_data  CC=1  out:2
-  examples.sample-project.models  [3 funcs]
-    __post_init__  CC=2  out:3
-    __post_init__  CC=2  out:3
-    load_users_from_file  CC=2  out:4
-  examples.sample-project.utils  [4 funcs]
-    __init__  CC=1  out:1
-    format_name  CC=1  out:1
+  examples.sample-project.utils  [1 funcs]
     helper_function  CC=1  out:1
-    validate_email  CC=2  out:3
-  project.map.toon  [2 funcs]
-    check  CC=0  out:0
-    open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
@@ -952,8 +916,6 @@ MODULES:
     update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
-  src.prefact.autonomous.setup_manager  [1 funcs]
-    create_refact_config  CC=2  out:7
   src.prefact.autonomous.todo_manager  [2 funcs]
     __init__  CC=1  out:2
     _generate_current_todos  CC=8  out:11
@@ -971,23 +933,15 @@ MODULES:
   src.prefact.config_extended.config  [2 funcs]
     __init__  CC=10  out:5
     to_dict  CC=1  out:3
-  src.prefact.config_extended.generator  [1 funcs]
-    save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
     from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
-  src.prefact.engine  [1 funcs]
-    _preload_sources  CC=9  out:10
   src.prefact.fixer  [1 funcs]
     __init__  CC=3  out:4
-  src.prefact.git_hooks  [8 funcs]
-    _find_git_dir  CC=2  out:5
-    _install_hook  CC=2  out:9
-    uninstall_hooks  CC=6  out:8
-    install  CC=3  out:11
+  src.prefact.git_hooks  [4 funcs]
     install_git_hooks  CC=4  out:9
     list_git_hooks  CC=4  out:6
     main  CC=8  out:12
@@ -996,8 +950,7 @@ MODULES:
     __init__  CC=1  out:2
     __init__  CC=2  out:3
     __init__  CC=1  out:2
-  src.prefact.performance.cache  [10 funcs]
-    set  CC=1  out:1
+  src.prefact.performance.cache  [9 funcs]
     __enter__  CC=1  out:1
     __exit__  CC=1  out:1
     cached_file_operation  CC=1  out:16
@@ -1007,19 +960,17 @@ MODULES:
     get_cache  CC=2  out:1
     get_cache_info  CC=4  out:7
     get_hash_cache  CC=2  out:1
+  src.prefact.performance.cache_adapters  [1 funcs]
+    set  CC=1  out:2
   src.prefact.performance.cache_state  [2 funcs]
     get_cache  CC=2  out:1
     initialize_cache  CC=2  out:8
-  src.prefact.performance.parallel  [4 funcs]
+  src.prefact.performance.parallel  [3 funcs]
     _get_enabled_rule_ids  CC=3  out:4
     _scan_with_process_pool  CC=5  out:9
-    _calculate_file_hash  CC=2  out:4
     execute  CC=4  out:10
-  src.prefact.plugins  [4 funcs]
+  src.prefact.plugins  [1 funcs]
     __init__  CC=1  out:4
-    _discover_entry_point_plugins  CC=6  out:7
-    _discover_local_plugins  CC=4  out:14
-    load_plugin  CC=10  out:15
   src.prefact.reporters.json_reporter  [2 funcs]
     dump  CC=2  out:3
     to_dict  CC=4  out:3
@@ -1035,7 +986,7 @@ MODULES:
     __init__  CC=1  out:2
     build_autoflake_check_command  CC=3  out:3
   src.prefact.rules.benchmark  [4 funcs]
-    benchmark_file  CC=6  out:21
+    benchmark_file  CC=6  out:20
     benchmark_project  CC=7  out:10
     main  CC=1  out:12
     print_benchmark_results  CC=4  out:16
@@ -1046,13 +997,11 @@ MODULES:
     __init__  CC=1  out:4
     __init__  CC=1  out:3
     __init__  CC=1  out:4
-  src.prefact.rules.import_linter_based  [6 funcs]
-    __init__  CC=1  out:3
-    create_config  CC=5  out:4
+  src.prefact.rules.import_linter_based  [4 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-    generate_import_linter_config  CC=7  out:7
+    __init__  CC=1  out:3
   src.prefact.rules.importchecker_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
@@ -1069,22 +1018,19 @@ MODULES:
   src.prefact.rules.magic_numbers  [2 funcs]
     __init__  CC=1  out:5
     _load_allowed_numbers  CC=1  out:3
-  src.prefact.rules.migration  [4 funcs]
+  src.prefact.rules.migration  [3 funcs]
     _load_rules  CC=5  out:6
     compare_implementations  CC=5  out:8
     create_hybrid_rule  CC=2  out:16
-    add_ruff_config_to_prefact_yaml  CC=3  out:4
   src.prefact.rules.mypy_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     _analyze_return_types  CC=4  out:5
-  src.prefact.rules.pylint_based  [4 funcs]
-    register  CC=1  out:0
+  src.prefact.rules.pylint_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-  src.prefact.rules.registry  [7 funcs]
-    _load_module  CC=3  out:2
+  src.prefact.rules.registry  [6 funcs]
     get_all_rules  CC=3  out:1
     _initialize_built_in_rules  CC=1  out:31
     get_all_rules  CC=1  out:2
@@ -1097,13 +1043,9 @@ MODULES:
     leave_ImportFrom  CC=6  out:9
     _module_to_str  CC=4  out:3
     _str_to_module  CC=2  out:4
-  src.prefact.rules.ruff_based  [1 funcs]
-    fix_source  CC=2  out:7
   src.prefact.rules.sorted_imports  [2 funcs]
     scan_file  CC=7  out:8
     _sort_key  CC=6  out:5
-  src.prefact.rules.strategies  [1 funcs]
-    scan  CC=4  out:6
   src.prefact.rules.string_concat  [3 funcs]
     scan_file  CC=5  out:6
     _flatten_add  CC=3  out:4
@@ -1111,10 +1053,9 @@ MODULES:
   src.prefact.rules.string_transformations  [2 funcs]
     __init__  CC=1  out:2
     _is_string_concat  CC=2  out:9
-  src.prefact.rules.unimport_based  [5 funcs]
+  src.prefact.rules.unimport_based  [4 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:2
-    fix_source  CC=2  out:7
     __init__  CC=1  out:2
     __init__  CC=1  out:3
   src.prefact.rules.unused_imports  [5 funcs]
@@ -1144,55 +1085,55 @@ MODULES:
 
 EDGES:
   benchmark_ram_optimization.create_test_files → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  benchmark_ram_optimization.run_benchmark → Taskfile.print
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
-  benchmark_ram_optimization.main → Taskfile.print
+  examples.sample-project.cli.main → examples.01-individual-rules.unused-imports.before.process_data
   examples.run_examples.main → examples.run_examples.find_examples
-  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
-  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
   examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
   examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  examples.01-individual-rules.unused-imports.after.read_file → project.map.toon.open
-  examples.01-individual-rules.unused-imports.before.read_file → project.map.toon.open
-  examples.01-individual-rules.print-statements.after.process_data → Taskfile.print
-  examples.01-individual-rules.print-statements.after.calculate → Taskfile.print
-  examples.01-individual-rules.print-statements.before.process_data → Taskfile.print
-  examples.01-individual-rules.print-statements.before.calculate → Taskfile.print
-  examples.02-multiple-rules.messy_module.process_users → Taskfile.print
-  examples.02-multiple-rules.messy_module.generate_report → Taskfile.print
-  examples.02-multiple-rules.messy_module.DataProcessor.__init__ → Taskfile.print
-  examples.02-multiple-rules.messy_module.DataProcessor.process → Taskfile.print
-  examples.sample-project.cli.main → Taskfile.print
-  examples.sample-project.cli.main → examples.01-individual-rules.duplicate-imports.after.process_data
-  examples.sample-project.cli.admin → Taskfile.print
-  examples.sample-project.cli.users → Taskfile.print
-  examples.sample-project.utils.format_name → Taskfile.print
-  examples.sample-project.utils.validate_email → Taskfile.print
-  examples.sample-project.utils.UtilClass.__init__ → Taskfile.print
-  examples.sample-project.models.User.__post_init__ → Taskfile.print
-  examples.sample-project.models.Post.__post_init__ → Taskfile.print
-  examples.sample-project.models.load_users_from_file → project.map.toon.open
-  examples.sample-project.core.process_data → Taskfile.print
-  examples.sample-project.core.calculate_sum → Taskfile.print
-  examples.sample-project.core.DataProcessor.__init__ → Taskfile.print
-  examples.03-output-formats.sample_code.process_data → Taskfile.print
-  examples.03-output-formats.sample_code.calculate_sum → Taskfile.print
-  examples.06-api-usage.example.run_prefact_example → Taskfile.print
-  examples.06-api-usage.example.custom_rule_example → Taskfile.print
-  examples.06-api-usage.example.batch_processing_example → Taskfile.print
-  examples.06-api-usage.example.main → examples.06-api-usage.example.run_prefact_example
-  examples.06-api-usage.example.main → examples.06-api-usage.example.custom_rule_example
-  examples.06-api-usage.example.main → examples.06-api-usage.example.batch_processing_example
   examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.engine.RefactoringEngine._preload_sources → Taskfile.print
-  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.git_hooks.GitHooks._find_git_dir → project.map.toon.open
-  src.prefact.git_hooks.GitHooks._install_hook → Taskfile.print
-  src.prefact.git_hooks.GitHooks.uninstall_hooks → Taskfile.print
-  src.prefact.git_hooks.PreCommitConfig.install → Taskfile.print
-  src.prefact.git_hooks.install_git_hooks → Taskfile.print
+  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
+  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.git_hooks.main → src.prefact.git_hooks.install_git_hooks
+  src.prefact.git_hooks.main → src.prefact.git_hooks.uninstall_git_hooks
+  src.prefact.git_hooks.main → src.prefact.git_hooks.list_git_hooks
+  src.prefact.logging.exceptions.PprefactException.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.logging.exceptions.RuleError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.logging.exceptions.PluginError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.performance.parallel.ParallelScanTask.execute → src.prefact.performance.cache_state.get_cache
+  src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids → src.prefact.rules.registry.get_lazy_registry
+  src.prefact.performance.cache.cached_result → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.cached_file_operation → src.prefact.performance.cache.get_hash_cache
+  src.prefact.performance.cache.cached_file_operation → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.clear_cache → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.get_cache_info → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.CacheContext.__enter__ → src.prefact.performance.cache_state.initialize_cache
+  src.prefact.performance.cache.CacheContext.__exit__ → src.prefact.performance.cache.cleanup_cache
+  src.prefact.reporters.json_reporter.dump → src.prefact.reporters.json_reporter.to_dict
+  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.autonomous.docs_manager.DocsManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.magic_numbers.MagicNumberRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.rules.composite_factory.register_composite_rules → src.prefact.rules.registry.register
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_imported_names
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_used_names
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_all_exports
+  src.prefact.rules.unused_imports.UnusedImports.fix → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.unused_imports._collect_used_names → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.unused_imports._collect_all_exports → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.registry.get_all_rules → src.prefact.rules.registry.get_lazy_registry
 ```
 
 ## Test Contracts
@@ -1215,12 +1156,11 @@ EDGES:
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# nodes: 229 | edges: 227 | modules: 65
-# CC̄=0.7
+# generated in 0.10s
+# nodes: 183 | edges: 169 | modules: 51
+# CC̄=3.0
 
 HUBS[20]:
-  Taskfile.print
-    CC=0  in:133  out:0  total:133
   vscode-extension.src.extension.PrefactTreeItem.super
     CC=1  in:42  out:0  total:42
   src.prefact.autonomous.docs_manager.DocsManager.update_planfile
@@ -1235,48 +1175,39 @@ HUBS[20]:
     CC=3  in:1  out:26  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
-  benchmark_ram_optimization.main
-    CC=7  in:0  out:22  total:22
   src.prefact.rules.benchmark.benchmark_file
-    CC=6  in:1  out:21  total:22
-  project.map.toon.open
-    CC=0  in:22  out:0  total:22
+    CC=6  in:1  out:20  total:21
   src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
     CC=1  in:0  out:20  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
   examples.06-api-usage.example.batch_processing_example
     CC=6  in:1  out:19  total:20
-  examples.sample-project.cli.main
-    CC=2  in:0  out:18  total:18
   src.prefact.scanner._match_gitignore_pattern
     CC=12  in:0  out:18  total:18
+  examples.sample-project.cli.main
+    CC=2  in:0  out:18  total:18
   examples.06-api-usage.example.custom_rule_example
     CC=4  in:1  out:16  total:17
-  src.prefact.benchmark.ScanProbe.run
-    CC=5  in:0  out:17  total:17
   src.prefact.rules.benchmark.print_benchmark_results
     CC=4  in:1  out:16  total:17
+  benchmark_ram_optimization.run_benchmark
+    CC=1  in:1  out:16  total:17
+  src.prefact.benchmark.ScanProbe.run
+    CC=5  in:0  out:17  total:17
   src.prefact.cli._build_config
     CC=7  in:3  out:14  total:17
+  src.prefact.rules.migration.RuleMigrationManager.create_hybrid_rule
+    CC=2  in:0  out:16  total:16
+  src.prefact.performance.cache.cached_file_operation
+    CC=1  in:0  out:16  total:16
 
 MODULES:
-  Taskfile  [1 funcs]
-    print  CC=0  out:0
-  benchmark_ram_optimization  [5 funcs]
+  benchmark_ram_optimization  [4 funcs]
     benchmark_with_rampreload  CC=1  out:4
     benchmark_without_rampreload  CC=1  out:14
     create_test_files  CC=3  out:5
-    main  CC=7  out:22
     run_benchmark  CC=1  out:16
-  examples.01-individual-rules.duplicate-imports.after  [1 funcs]
-    process_data  CC=1  out:1
-  examples.01-individual-rules.print-statements.after  [2 funcs]
-    calculate  CC=1  out:1
-    process_data  CC=1  out:2
-  examples.01-individual-rules.print-statements.before  [2 funcs]
-    calculate  CC=1  out:1
-    process_data  CC=1  out:2
   examples.01-individual-rules.relative-imports.after  [2 funcs]
     process  CC=1  out:1
     process_user  CC=1  out:2
@@ -1285,18 +1216,8 @@ MODULES:
     process_user  CC=1  out:2
   examples.01-individual-rules.string-concat.after  [1 funcs]
     format_data  CC=1  out:0
-  examples.01-individual-rules.unused-imports.after  [1 funcs]
-    read_file  CC=1  out:2
   examples.01-individual-rules.unused-imports.before  [1 funcs]
-    read_file  CC=1  out:2
-  examples.02-multiple-rules.messy_module  [4 funcs]
-    __init__  CC=1  out:1
-    process  CC=1  out:4
-    generate_report  CC=1  out:6
-    process_users  CC=2  out:3
-  examples.03-output-formats.sample_code  [2 funcs]
-    calculate_sum  CC=2  out:2
-    process_data  CC=1  out:2
+    process_data  CC=2  out:2
   examples.04-custom-rules.custom_rules.no_todo_rule  [1 funcs]
     __init__  CC=1  out:3
   examples.06-api-usage.example  [4 funcs]
@@ -1307,26 +1228,10 @@ MODULES:
   examples.run_examples  [2 funcs]
     find_examples  CC=4  out:5
     main  CC=8  out:25
-  examples.sample-project.cli  [3 funcs]
-    admin  CC=1  out:2
+  examples.sample-project.cli  [1 funcs]
     main  CC=2  out:18
-    users  CC=2  out:7
-  examples.sample-project.core  [3 funcs]
-    __init__  CC=1  out:1
-    calculate_sum  CC=2  out:2
-    process_data  CC=1  out:2
-  examples.sample-project.models  [3 funcs]
-    __post_init__  CC=2  out:3
-    __post_init__  CC=2  out:3
-    load_users_from_file  CC=2  out:4
-  examples.sample-project.utils  [4 funcs]
-    __init__  CC=1  out:1
-    format_name  CC=1  out:1
+  examples.sample-project.utils  [1 funcs]
     helper_function  CC=1  out:1
-    validate_email  CC=2  out:3
-  project.map.toon  [2 funcs]
-    check  CC=0  out:0
-    open  CC=0  out:0
   src.prefact.autonomous.dependency_checker  [2 funcs]
     __init__  CC=1  out:2
     _query_pip_outdated  CC=6  out:10
@@ -1335,8 +1240,6 @@ MODULES:
     update_planfile  CC=27  out:41
   src.prefact.autonomous.project_scanner  [1 funcs]
     __init__  CC=2  out:2
-  src.prefact.autonomous.setup_manager  [1 funcs]
-    create_refact_config  CC=2  out:7
   src.prefact.autonomous.todo_manager  [2 funcs]
     __init__  CC=1  out:2
     _generate_current_todos  CC=8  out:11
@@ -1354,23 +1257,15 @@ MODULES:
   src.prefact.config_extended.config  [2 funcs]
     __init__  CC=10  out:5
     to_dict  CC=1  out:3
-  src.prefact.config_extended.generator  [1 funcs]
-    save_config  CC=1  out:2
   src.prefact.config_extended.models  [3 funcs]
     __init__  CC=6  out:4
     from_yaml  CC=13  out:27
     to_dict  CC=1  out:3
   src.prefact.config_extended.utils  [1 funcs]
     deep_merge  CC=5  out:5
-  src.prefact.engine  [1 funcs]
-    _preload_sources  CC=9  out:10
   src.prefact.fixer  [1 funcs]
     __init__  CC=3  out:4
-  src.prefact.git_hooks  [8 funcs]
-    _find_git_dir  CC=2  out:5
-    _install_hook  CC=2  out:9
-    uninstall_hooks  CC=6  out:8
-    install  CC=3  out:11
+  src.prefact.git_hooks  [4 funcs]
     install_git_hooks  CC=4  out:9
     list_git_hooks  CC=4  out:6
     main  CC=8  out:12
@@ -1379,8 +1274,7 @@ MODULES:
     __init__  CC=1  out:2
     __init__  CC=2  out:3
     __init__  CC=1  out:2
-  src.prefact.performance.cache  [10 funcs]
-    set  CC=1  out:1
+  src.prefact.performance.cache  [9 funcs]
     __enter__  CC=1  out:1
     __exit__  CC=1  out:1
     cached_file_operation  CC=1  out:16
@@ -1390,19 +1284,17 @@ MODULES:
     get_cache  CC=2  out:1
     get_cache_info  CC=4  out:7
     get_hash_cache  CC=2  out:1
+  src.prefact.performance.cache_adapters  [1 funcs]
+    set  CC=1  out:2
   src.prefact.performance.cache_state  [2 funcs]
     get_cache  CC=2  out:1
     initialize_cache  CC=2  out:8
-  src.prefact.performance.parallel  [4 funcs]
+  src.prefact.performance.parallel  [3 funcs]
     _get_enabled_rule_ids  CC=3  out:4
     _scan_with_process_pool  CC=5  out:9
-    _calculate_file_hash  CC=2  out:4
     execute  CC=4  out:10
-  src.prefact.plugins  [4 funcs]
+  src.prefact.plugins  [1 funcs]
     __init__  CC=1  out:4
-    _discover_entry_point_plugins  CC=6  out:7
-    _discover_local_plugins  CC=4  out:14
-    load_plugin  CC=10  out:15
   src.prefact.reporters.json_reporter  [2 funcs]
     dump  CC=2  out:3
     to_dict  CC=4  out:3
@@ -1418,7 +1310,7 @@ MODULES:
     __init__  CC=1  out:2
     build_autoflake_check_command  CC=3  out:3
   src.prefact.rules.benchmark  [4 funcs]
-    benchmark_file  CC=6  out:21
+    benchmark_file  CC=6  out:20
     benchmark_project  CC=7  out:10
     main  CC=1  out:12
     print_benchmark_results  CC=4  out:16
@@ -1429,13 +1321,11 @@ MODULES:
     __init__  CC=1  out:4
     __init__  CC=1  out:3
     __init__  CC=1  out:4
-  src.prefact.rules.import_linter_based  [6 funcs]
-    __init__  CC=1  out:3
-    create_config  CC=5  out:4
+  src.prefact.rules.import_linter_based  [4 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-    generate_import_linter_config  CC=7  out:7
+    __init__  CC=1  out:3
   src.prefact.rules.importchecker_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
@@ -1452,22 +1342,19 @@ MODULES:
   src.prefact.rules.magic_numbers  [2 funcs]
     __init__  CC=1  out:5
     _load_allowed_numbers  CC=1  out:3
-  src.prefact.rules.migration  [4 funcs]
+  src.prefact.rules.migration  [3 funcs]
     _load_rules  CC=5  out:6
     compare_implementations  CC=5  out:8
     create_hybrid_rule  CC=2  out:16
-    add_ruff_config_to_prefact_yaml  CC=3  out:4
   src.prefact.rules.mypy_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     _analyze_return_types  CC=4  out:5
-  src.prefact.rules.pylint_based  [4 funcs]
-    register  CC=1  out:0
+  src.prefact.rules.pylint_based  [3 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
-  src.prefact.rules.registry  [7 funcs]
-    _load_module  CC=3  out:2
+  src.prefact.rules.registry  [6 funcs]
     get_all_rules  CC=3  out:1
     _initialize_built_in_rules  CC=1  out:31
     get_all_rules  CC=1  out:2
@@ -1480,13 +1367,9 @@ MODULES:
     leave_ImportFrom  CC=6  out:9
     _module_to_str  CC=4  out:3
     _str_to_module  CC=2  out:4
-  src.prefact.rules.ruff_based  [1 funcs]
-    fix_source  CC=2  out:7
   src.prefact.rules.sorted_imports  [2 funcs]
     scan_file  CC=7  out:8
     _sort_key  CC=6  out:5
-  src.prefact.rules.strategies  [1 funcs]
-    scan  CC=4  out:6
   src.prefact.rules.string_concat  [3 funcs]
     scan_file  CC=5  out:6
     _flatten_add  CC=3  out:4
@@ -1494,10 +1377,9 @@ MODULES:
   src.prefact.rules.string_transformations  [2 funcs]
     __init__  CC=1  out:2
     _is_string_concat  CC=2  out:9
-  src.prefact.rules.unimport_based  [5 funcs]
+  src.prefact.rules.unimport_based  [4 funcs]
     __init__  CC=1  out:3
     __init__  CC=1  out:2
-    fix_source  CC=2  out:7
     __init__  CC=1  out:2
     __init__  CC=1  out:3
   src.prefact.rules.unused_imports  [5 funcs]
@@ -1527,162 +1409,167 @@ MODULES:
 
 EDGES:
   benchmark_ram_optimization.create_test_files → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  benchmark_ram_optimization.run_benchmark → Taskfile.print
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
-  benchmark_ram_optimization.main → Taskfile.print
+  examples.sample-project.cli.main → examples.01-individual-rules.unused-imports.before.process_data
   examples.run_examples.main → examples.run_examples.find_examples
-  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
-  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
   examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
   examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  examples.01-individual-rules.unused-imports.after.read_file → project.map.toon.open
-  examples.01-individual-rules.unused-imports.before.read_file → project.map.toon.open
-  examples.01-individual-rules.print-statements.after.process_data → Taskfile.print
-  examples.01-individual-rules.print-statements.after.calculate → Taskfile.print
-  examples.01-individual-rules.print-statements.before.process_data → Taskfile.print
-  examples.01-individual-rules.print-statements.before.calculate → Taskfile.print
-  examples.02-multiple-rules.messy_module.process_users → Taskfile.print
-  examples.02-multiple-rules.messy_module.generate_report → Taskfile.print
-  examples.02-multiple-rules.messy_module.DataProcessor.__init__ → Taskfile.print
-  examples.02-multiple-rules.messy_module.DataProcessor.process → Taskfile.print
-  examples.sample-project.cli.main → Taskfile.print
-  examples.sample-project.cli.main → examples.01-individual-rules.duplicate-imports.after.process_data
-  examples.sample-project.cli.admin → Taskfile.print
-  examples.sample-project.cli.users → Taskfile.print
-  examples.sample-project.utils.format_name → Taskfile.print
-  examples.sample-project.utils.validate_email → Taskfile.print
-  examples.sample-project.utils.UtilClass.__init__ → Taskfile.print
-  examples.sample-project.models.User.__post_init__ → Taskfile.print
-  examples.sample-project.models.Post.__post_init__ → Taskfile.print
-  examples.sample-project.models.load_users_from_file → project.map.toon.open
-  examples.sample-project.core.process_data → Taskfile.print
-  examples.sample-project.core.calculate_sum → Taskfile.print
-  examples.sample-project.core.DataProcessor.__init__ → Taskfile.print
-  examples.03-output-formats.sample_code.process_data → Taskfile.print
-  examples.03-output-formats.sample_code.calculate_sum → Taskfile.print
-  examples.06-api-usage.example.run_prefact_example → Taskfile.print
-  examples.06-api-usage.example.custom_rule_example → Taskfile.print
-  examples.06-api-usage.example.batch_processing_example → Taskfile.print
-  examples.06-api-usage.example.main → examples.06-api-usage.example.run_prefact_example
-  examples.06-api-usage.example.main → examples.06-api-usage.example.custom_rule_example
-  examples.06-api-usage.example.main → examples.06-api-usage.example.batch_processing_example
   examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.engine.RefactoringEngine._preload_sources → Taskfile.print
-  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.git_hooks.GitHooks._find_git_dir → project.map.toon.open
-  src.prefact.git_hooks.GitHooks._install_hook → Taskfile.print
-  src.prefact.git_hooks.GitHooks.uninstall_hooks → Taskfile.print
-  src.prefact.git_hooks.PreCommitConfig.install → Taskfile.print
-  src.prefact.git_hooks.install_git_hooks → Taskfile.print
+  examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
+  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.git_hooks.main → src.prefact.git_hooks.install_git_hooks
+  src.prefact.git_hooks.main → src.prefact.git_hooks.uninstall_git_hooks
+  src.prefact.git_hooks.main → src.prefact.git_hooks.list_git_hooks
+  src.prefact.logging.exceptions.PprefactException.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.logging.exceptions.RuleError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.logging.exceptions.PluginError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.performance.parallel.ParallelScanTask.execute → src.prefact.performance.cache_state.get_cache
+  src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids → src.prefact.rules.registry.get_lazy_registry
+  src.prefact.performance.cache.cached_result → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.cached_file_operation → src.prefact.performance.cache.get_hash_cache
+  src.prefact.performance.cache.cached_file_operation → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.clear_cache → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.get_cache_info → src.prefact.performance.cache.get_cache
+  src.prefact.performance.cache.CacheContext.__enter__ → src.prefact.performance.cache_state.initialize_cache
+  src.prefact.performance.cache.CacheContext.__exit__ → src.prefact.performance.cache.cleanup_cache
+  src.prefact.reporters.json_reporter.dump → src.prefact.reporters.json_reporter.to_dict
+  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.autonomous.docs_manager.DocsManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.magic_numbers.MagicNumberRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.rules.composite_factory.register_composite_rules → src.prefact.rules.registry.register
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_imported_names
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_used_names
+  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_all_exports
+  src.prefact.rules.unused_imports.UnusedImports.fix → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.unused_imports._collect_used_names → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.unused_imports._collect_all_exports → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.rules.registry.get_all_rules → src.prefact.rules.registry.get_lazy_registry
 ```
 
 ### Code Analysis (`project/analysis.toon.yaml`)
 
 ```toon markpact:analysis path=project/analysis.toon.yaml
-# code2llm | 157f 123880L | python:105,yaml:37,json:4,shell:3,txt:2,cfg:1,yml:1,typescript:1,toml:1 | 2026-05-03
-# CC̄=0.7 | critical:2/3496 | dups:15 | cycles:0
+# code2llm | 145f 21099L | python:106,yaml:26,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-05-24
+# generated in 0.04s
+# CC̄=3.0 | critical:2/779 | dups:15 | cycles:0
 
-HEALTH[3]:
+HEALTH[5]:
   🔴 DUP   15 classes duplicated
+  🔴 GOD   src/prefact/rules/isort_based.py = 519L, 4 classes, 23m, max CC=13
+  🔴 GOD   src/prefact/rules/string_transformations.py = 501L, 6 classes, 27m, max CC=8
   🟡 CC    run CC=15 (limit:15)
   🟡 CC    update_planfile CC=27 (limit:15)
 
-REFACTOR[2]:
+REFACTOR[4]:
   1. rm duplicates  (-15 dup classes)
-  2. split 2 high-CC methods  (CC>15)
+  2. split src/prefact/rules/isort_based.py  (god module)
+  3. split src/prefact/rules/string_transformations.py  (god module)
+  4. split 2 high-CC methods  (CC>15)
 
-PIPELINES[610]:
-  [1] Src [main]: main → print
+PIPELINES[609]:
+  [1] Src [format_timestamp]: format_timestamp
       PURITY: 100% pure
-  [2] Src [main]: main → find_examples
+  [2] Src [read_file]: read_file
       PURITY: 100% pure
-  [3] Src [process_user]: process_user → helper_function
+  [3] Src [__init__]: __init__
       PURITY: 100% pure
-  [4] Src [__init__]: __init__
+  [4] Src [get_data]: get_data
       PURITY: 100% pure
-  [5] Src [process]: process → format_data
+  [5] Src [process_data]: process_data
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
-  │ string_transformations     495L  6C   27m  CC=8      ←0
-  │ importchecker_based        484L  5C   24m  CC=14     ←0
-  │ isort_based                470L  4C   23m  CC=13     ←0
-  │ import_linter_based        451L  5C   24m  CC=8      ←0
-  │ unimport_based             444L  5C   22m  CC=14     ←0
-  │ cache                      439L  6C   37m  CC=5      ←9  ×DUP
-  │ mypy_based                 398L  6C   22m  CC=9      ←0
-  │ pylint_based               396L  5C   22m  CC=6      ←1
+  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
+  │ !! isort_based                519L  4C   23m  CC=13     ←0
+  │ !! string_transformations     501L  6C   27m  CC=8      ←0
+  │ importchecker_based        499L  5C   24m  CC=14     ←0
+  │ import_linter_based        480L  5C   24m  CC=8      ←0
+  │ unimport_based             459L  5C   22m  CC=14     ←0
+  │ cache                      440L  6C   37m  CC=5      ←0  ×DUP
+  │ todo_manager               430L  1C   15m  CC=13     ←0
+  │ pylint_based               424L  5C   22m  CC=6      ←0
+  │ cli                        424L  0C   11m  CC=7      ←1
+  │ mypy_based                 416L  6C   22m  CC=9      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
-  │ todo_manager               368L  1C   15m  CC=13     ←0
-  │ parallel                   353L  4C   23m  CC=7      ←0
-  │ __init__                   320L  3C   17m  CC=10     ←0
-  │ ruff_based                 311L  6C   19m  CC=4      ←0
-  │ cli                        306L  0C   11m  CC=7      ←0
-  │ benchmark                  293L  1C    6m  CC=7      ←0
-  │ __init__                   290L  1C   19m  CC=7      ←0
-  │ autoflake_based            277L  3C   19m  CC=7      ←0
-  │ composite_rules            276L  3C   16m  CC=12     ←0
-  │ !! docs_manager               261L  1C   10m  CC=27     ←0
-  │ registry                   255L  1C   13m  CC=8      ←8
-  │ __init__                   248L  1C    8m  CC=3      ←0
-  │ project_scanner            244L  1C    7m  CC=11     ←0
+  │ ruff_based                 359L  6C   19m  CC=4      ←0
+  │ parallel                   357L  4C   23m  CC=7      ←0
+  │ __init__                   330L  3C   17m  CC=10     ←0
+  │ __init__                   312L  1C   19m  CC=7      ←0
+  │ benchmark                  311L  1C    6m  CC=7      ←0
+  │ autoflake_based            297L  3C   19m  CC=7      ←0
+  │ project_scanner            296L  1C    7m  CC=11     ←0
+  │ composite_rules            292L  3C   16m  CC=12     ←0
+  │ !! docs_manager               285L  1C   10m  CC=27     ←0
+  │ unused_imports             277L  1C   11m  CC=10     ←0
+  │ registry                   273L  1C   13m  CC=8      ←8
+  │ __init__                   256L  1C    8m  CC=3      ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
-  │ unused_imports             232L  1C   11m  CC=10     ←0
-  │ migration                  232L  3C   10m  CC=5      ←0
-  │ relative_imports           219L  2C    9m  CC=14     ←0
-  │ !! testql_manager             215L  1C    3m  CC=15     ←0
-  │ llm_hallucinations         214L  1C    9m  CC=8      ←0
-  │ config                     192L  2C   13m  CC=5      ←3
-  │ llm_generated_code         186L  1C    9m  CC=7      ←0
-  │ generator                  171L  1C    3m  CC=12     ←1
+  │ relative_imports           235L  2C    9m  CC=14     ←0
+  │ migration                  234L  3C   10m  CC=5      ←0
+  │ llm_hallucinations         220L  1C    9m  CC=8      ←0
+  │ !! testql_manager             218L  1C    3m  CC=15     ←0
+  │ llm_generated_code         196L  1C    9m  CC=7      ←0
+  │ config                     177L  2C   13m  CC=5      ←0
+  │ engine                     170L  1C    5m  CC=13     ←0
+  │ scanner                    167L  1C    7m  CC=14     ←0
+  │ generator                  161L  1C    3m  CC=12     ←0
   │ benchmark                  161L  0C    4m  CC=7      ←0
-  │ engine                     158L  1C    5m  CC=13     ←0
-  │ scanner                    157L  1C    7m  CC=12     ←0
-  │ strategies                 152L  4C   10m  CC=5      ←0
-  │ magic_numbers              134L  1C    8m  CC=7      ←0
-  │ config                     128L  1C    8m  CC=10     ←4
-  │ setup_manager              120L  1C    3m  CC=9      ←0
-  │ composite_factory          119L  1C    2m  CC=4      ←0
-  │ cache_adapters             106L  4C   16m  CC=3      ←0  ×DUP
-  │ base                        99L  1C    7m  CC=3      ←0  ×DUP
-  │ models                      91L  6C    0m  CC=0.0    ←0
-  │ duplicate_imports           80L  1C    3m  CC=11     ←0
-  │ cache_state                 74L  0C    7m  CC=2      ←2
-  │ ai_boilerplate              72L  1C    5m  CC=3      ←0
-  │ _base                       66L  1C    3m  CC=10     ←0
-  │ string_concat               66L  1C    5m  CC=6      ←0
-  │ logger                      65L  2C   15m  CC=3      ←0
-  │ validation                  65L  1C    6m  CC=6      ←1  ×DUP
-  │ console                     64L  0C    1m  CC=14     ←0
-  │ sorted_imports              63L  1C    4m  CC=7      ←0
-  │ scan                        59L  1C    5m  CC=1      ←0  ×DUP
-  │ print_statements            58L  1C    3m  CC=9      ←0
-  │ json_reporter               57L  0C    2m  CC=4      ←1
-  │ _ast_cache                  51L  0C    2m  CC=4      ←0
-  │ globals                     50L  0C    3m  CC=2      ←0
-  │ fixer                       49L  1C    3m  CC=7      ←0
-  │ models                      49L  1C    3m  CC=13     ←0
-  │ rule                        47L  1C    4m  CC=1      ←0  ×DUP
-  │ type_hints                  46L  1C    3m  CC=6      ←0
-  │ wildcard_imports            45L  1C    3m  CC=7      ←0
-  │ validators                  44L  1C    4m  CC=5      ←1  ×DUP
+  │ strategies                 158L  4C   10m  CC=5      ←0
+  │ logger                     153L  2C   15m  CC=3      ←0
+  │ setup_manager              142L  1C    3m  CC=9      ←0
+  │ config                     142L  1C    8m  CC=10     ←0
+  │ magic_numbers              138L  1C    8m  CC=7      ←0
+  │ cache_adapters             130L  4C   16m  CC=3      ←9  ×DUP
+  │ composite_factory          121L  1C    2m  CC=4      ←0
+  │ base                       102L  1C    7m  CC=3      ←0  ×DUP
+  │ duplicate_imports          102L  1C    3m  CC=7      ←0
+  │ models                      90L  6C    0m  CC=0.0    ←0
+  │ models                      83L  1C    3m  CC=13     ←0
+  │ ai_boilerplate              78L  1C    5m  CC=3      ←0
+  │ _base                       73L  1C    3m  CC=10     ←0
+  │ cache_state                 72L  0C    7m  CC=2      ←2
+  │ string_concat               72L  1C    5m  CC=6      ←0
+  │ sorted_imports              71L  1C    4m  CC=7      ←0
+  │ console                     70L  0C    1m  CC=14     ←0
+  │ validation                  70L  1C    6m  CC=6      ←0  ×DUP
+  │ print_statements            62L  1C    3m  CC=9      ←0
+  │ fixer                       58L  1C    3m  CC=7      ←0
+  │ json_reporter               57L  0C    2m  CC=4      ←0
+  │ scan                        53L  1C    5m  CC=1      ←0  ×DUP
+  │ validators                  52L  1C    4m  CC=5      ←0  ×DUP
+  │ globals                     51L  0C    3m  CC=2      ←0
+  │ type_hints                  50L  1C    3m  CC=6      ←0
+  │ wildcard_imports            49L  1C    3m  CC=7      ←0
+  │ _ast_cache                  49L  0C    2m  CC=4      ←0
   │ __init__                    41L  0C    0m  CC=0.0    ←0
-  │ config                      31L  1C    4m  CC=1      ←0  ×DUP
+  │ rule                        39L  1C    4m  CC=1      ←0  ×DUP
+  │ exceptions                  35L  4C    3m  CC=2      ←0
+  │ validator                   32L  1C    2m  CC=4      ←0
+  │ config                      32L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
-  │ validator                   29L  1C    2m  CC=4      ←0
-  │ exceptions                  24L  4C    3m  CC=2      ←0
-  │ formatters                  24L  1C    1m  CC=2      ←0
-  │ constants                   24L  0C    0m  CC=0.0    ←0
+  │ formatters                  26L  1C    1m  CC=2      ←0
+  │ defaults                    21L  0C    0m  CC=0.0    ←0
+  │ constants                   15L  0C    0m  CC=0.0    ←0
   │ levels                      13L  1C    0m  CC=0.0    ←0
-  │ builtin                     13L  0C    0m  CC=0.0    ←0
   │ __init__                    13L  0C    0m  CC=0.0    ←0
-  │ utils                       10L  0C    1m  CC=5      ←1
+  │ builtin                     13L  0C    0m  CC=0.0    ←0
+  │ __init__                    12L  0C    0m  CC=0.0    ←0
+  │ utils                       11L  0C    1m  CC=5      ←1
   │ _base                        6L  0C    0m  CC=0.0    ←0
-  │ __init__                     6L  0C    0m  CC=0.0    ←0
-  │ __init__                     5L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
   │
@@ -1692,45 +1579,46 @@ LAYERS:
   │ .eslintrc.json              19L  0C    0m  CC=0.0    ←0
   │ tsconfig.json               16L  0C    0m  CC=0.0    ←0
   │
-  ./                              CC̄=2.2    ←in:0  →out:0
+  ./                              CC̄=2.6    ←in:0  →out:0
   │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
-  │ goal.yaml                  480L  0C    0m  CC=0.0    ←0
-  │ pyproject.toml             340L  0C    0m  CC=0.0    ←0
-  │ benchmark_ram_optimization   222L  0C    5m  CC=7      ←0
-  │ Taskfile.yml               186L  0C    1m  CC=0.0    ←16
+  │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
+  │ Makefile                   293L  0C    0m  CC=0.0    ←0
+  │ benchmark_ram_optimization   235L  0C    5m  CC=7      ←0
+  │ Taskfile.yml               186L  0C    0m  CC=0.0    ←0
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
-  │ prefact.yaml                84L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
   │ project.sh                  47L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
   │ tree.sh                      1L  0C    0m  CC=0.0    ←0
-  │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
   examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
   │ prefact.yaml               344L  0C    0m  CC=0.0    ←0
   │ prefact.yaml               281L  0C    0m  CC=0.0    ←0
-  │ generate_examples          233L  0C    0m  CC=0.0    ←0
-  │ example                    185L  0C    4m  CC=11     ←0
+  │ generate_examples          232L  0C    0m  CC=0.0    ←0
+  │ example                    198L  0C    4m  CC=11     ←0
   │ run_all.sh                 143L  0C    3m  CC=0.0    ←0
+  │ run_examples               137L  0C    3m  CC=8      ←0
   │ prefact.yaml               129L  0C    0m  CC=0.0    ←0
   │ prefact.yaml               123L  0C    0m  CC=0.0    ←0
-  │ run_examples               119L  0C    3m  CC=8      ←0
-  │ no_todo_rule               108L  2C    7m  CC=6      ←0
+  │ no_todo_rule               112L  2C    7m  CC=6      ←0
+  │ .gitlab-ci.yml             108L  0C    0m  CC=0.0    ←0
   │ prefact.yaml               101L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
-  │ messy_module                67L  1C    4m  CC=2      ←0
-  │ cli                         65L  0C    3m  CC=2      ←0
-  │ models                      62L  2C    5m  CC=2      ←0
+  │ cli                         62L  0C    3m  CC=2      ←0
+  │ models                      59L  2C    5m  CC=2      ←0
+  │ messy_module                54L  1C    4m  CC=2      ←0
+  │ before                      41L  1C    6m  CC=2      ←1  ×DUP
   │ after                       41L  1C    6m  CC=2      ←0  ×DUP
-  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
-  │ after                       27L  1C    3m  CC=1      ←0
-  │ before                      27L  1C    3m  CC=1      ←0
+  │ before                      26L  1C    3m  CC=1      ←0
+  │ after                       26L  1C    3m  CC=1      ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
@@ -1739,69 +1627,39 @@ LAYERS:
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
-  │ sample_code                 21L  0C    2m  CC=2      ←0
+  │ after                       19L  1C    3m  CC=1      ←0
+  │ before                      19L  1C    3m  CC=1      ←0
   │ prefact.yaml                18L  0C    0m  CC=0.0    ←0
-  │ after                       16L  1C    3m  CC=1      ←0
-  │ before                      16L  1C    3m  CC=1      ←0
-  │ before                      14L  0C    1m  CC=1      ←0
-  │ after                       13L  0C    1m  CC=1      ←0
-  │ before                      13L  0C    1m  CC=1      ←0
-  │ after                       13L  0C    2m  CC=1      ←0
+  │ sample_code                 17L  0C    2m  CC=2      ←0
+  │ after                       15L  0C    2m  CC=1      ←0
+  │ before                      15L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    2m  CC=1      ←2
   │ before                      13L  0C    2m  CC=1      ←0
+  │ before                      13L  0C    1m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
   │ requirements.txt            13L  0C    0m  CC=0.0    ←0
-  │ after                       11L  0C    1m  CC=1      ←0
-  │ before                      11L  0C    1m  CC=1      ←0
-  │ after                       11L  0C    1m  CC=1      ←1
-  │ after                       11L  0C    2m  CC=1      ←2
-  │ before                      11L  0C    2m  CC=1      ←0
+  │ after                        8L  0C    1m  CC=1      ←0
+  │ before                       8L  0C    1m  CC=1      ←0
+  │ after                        6L  0C    1m  CC=1      ←0
+  │ before                       6L  0C    1m  CC=1      ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
-  │
-  project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml            96743L  0C  2716m  CC=0.0    ←20
-  │ !! calls.yaml                6008L  0C    0m  CC=0.0    ←0
-  │ calls.toon.yaml            362L  0C    0m  CC=0.0    ←0
-  │ duplication.toon.yaml      332L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         217L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         116L  0C    0m  CC=0.0    ←0
-  │ validation.toon.yaml       105L  0C    0m  CC=0.0    ←0
-  │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
-  │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         43L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         39L  0C    0m  CC=0.0    ←0
   │
   testql-scenarios/               CC̄=0.0    ←in:0  →out:0
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
   │
-  .taskill/                       CC̄=0.0    ←in:0  →out:0
-  │ state.json                  11L  0C    0m  CC=0.0    ←0
-  │
-  ── zero ──
-     Makefile                                  0L
 
 COUPLING:
-                                                    Taskfile                   src.prefact          vscode-extension.src         examples.06-api-usage    benchmark_ram_optimization                   project.map       examples.sample-project  examples.01-individual-rules    examples.02-multiple-rules    examples.03-output-formats      examples.04-custom-rules
-                      Taskfile                            ──                           ←43                                                         ←34                           ←25                                                         ←17                            ←6                            ←6                            ←2                                hub
-                   src.prefact                            43                            ──                            46                            ←1                                                          23                                                                                                                                                        !! fan-out
-          vscode-extension.src                                                         ←46                            ──                                                          ←1                                                                                                                                                                                  ←1  hub
-         examples.06-api-usage                            34                             1                                                          ──                                                                                                                                                                                                                    !! fan-out
-    benchmark_ram_optimization                            25                                                           1                                                          ──                                                                                                                                                                                      !! fan-out
-                   project.map                                                         ←23                                                                                                                      ──                            ←1                            ←2                                                                                            hub
-       examples.sample-project                            17                                                                                                                                                     1                            ──                             1                                                                                            !! fan-out
-  examples.01-individual-rules                             6                                                                                                                                                     2                             2                            ──                                                                                            !! fan-out
-    examples.02-multiple-rules                             6                                                                                                                                                                                                                                              ──                                                            
-    examples.03-output-formats                             2                                                                                                                                                                                                                                                                            ──                              
-      examples.04-custom-rules                                                                                         1                                                                                                                                                                                                                                              ──
+                                        vscode-extension.src                   src.prefact  examples.01-individual-rules       examples.sample-project    benchmark_ram_optimization      examples.04-custom-rules
+          vscode-extension.src                            ──                           ←46                                                                                        ←1                            ←1  hub
+                   src.prefact                            46                            ──                                                                                                                          !! fan-out
+  examples.01-individual-rules                                                                                        ──                             2                                                            
+       examples.sample-project                                                                                         1                            ──                                                            
+    benchmark_ram_optimization                             1                                                                                                                      ──                              
+      examples.04-custom-rules                             1                                                                                                                                                    ──
   CYCLES: none
-  HUB: Taskfile/ (fan-in=133)
   HUB: vscode-extension.src/ (fan-in=48)
-  HUB: project.map/ (fan-in=26)
-  SMELL: examples.06-api-usage/ fan-out=35 → split needed
-  SMELL: src.prefact/ fan-out=112 → split needed
-  SMELL: benchmark_ram_optimization/ fan-out=26 → split needed
-  SMELL: examples.sample-project/ fan-out=19 → split needed
-  SMELL: examples.01-individual-rules/ fan-out=10 → split needed
+  SMELL: src.prefact/ fan-out=46 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
@@ -1811,157 +1669,171 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 40 groups | 99f 13454L | 2026-05-03
+# redup/duplication | 46 groups | 100f 14449L | 2026-05-24
 
 SUMMARY:
-  files_scanned: 99
-  total_lines:   13454
-  dup_groups:    40
-  dup_fragments: 109
-  saved_lines:   363
-  scan_ms:       35272
+  files_scanned: 100
+  total_lines:   14449
+  dup_groups:    46
+  dup_fragments: 120
+  saved_lines:   434
+  scan_ms:       2670
 
 HOTSPOTS[7] (files with most duplication):
-  src/prefact/rules/unimport_based.py  dup=72L  groups=3  frags=7  (0.5%)
-  src/prefact/rules/composite_rules.py  dup=56L  groups=3  frags=6  (0.4%)
-  src/prefact/rules/import_linter_based.py  dup=54L  groups=3  frags=9  (0.4%)
-  src/prefact/performance/cache.py  dup=41L  groups=3  frags=7  (0.3%)
-  src/prefact/rules/pylint_based.py  dup=37L  groups=2  frags=5  (0.3%)
-  src/prefact/rules/mypy_based.py  dup=29L  groups=3  frags=6  (0.2%)
+  src/prefact/rules/unimport_based.py  dup=84L  groups=4  frags=7  (0.6%)
+  src/prefact/rules/import_linter_based.py  dup=62L  groups=4  frags=9  (0.4%)
+  src/prefact/rules/composite_rules.py  dup=54L  groups=3  frags=6  (0.4%)
+  src/prefact/performance/cache.py  dup=46L  groups=4  frags=8  (0.3%)
+  src/prefact/rules/pylint_based.py  dup=45L  groups=2  frags=5  (0.3%)
+  src/prefact/rules/mypy_based.py  dup=44L  groups=4  frags=7  (0.3%)
   examples/04-custom-rules/custom_rules/no_todo_rule.py  dup=28L  groups=2  frags=4  (0.2%)
 
-DUPLICATES[40] (ranked by impact):
-  [fb8a4c52c4513ef3] ! EXAC  fix  L=3 N=14 saved=39 sim=1.00
-      examples/04-custom-rules/custom_rules/no_todo_rule.py:46-48  (fix)
-      examples/04-custom-rules/custom_rules/no_todo_rule.py:94-96  (fix)
-      src/prefact/rules/ai_boilerplate.py:65-67  (fix)
-      src/prefact/rules/import_linter_based.py:168-171  (fix)
-      src/prefact/rules/import_linter_based.py:307-309  (fix)
-      src/prefact/rules/importchecker_based.py:366-368  (fix)
-      src/prefact/rules/importchecker_based.py:474-476  (fix)
-      src/prefact/rules/llm_generated_code.py:179-181  (fix)
-      src/prefact/rules/llm_hallucinations.py:201-203  (fix)
-      src/prefact/rules/magic_numbers.py:127-129  (fix)
-      src/prefact/rules/mypy_based.py:146-149  (fix)
-      src/prefact/rules/mypy_based.py:210-212  (fix)
-      src/prefact/rules/ruff_based.py:93-95  (fix)
-      src/prefact/rules/ruff_based.py:305-308  (fix)
-  [fd9736dd4e8df736] ! STRU  fix  L=18 N=3 saved=36 sim=1.00
-      src/prefact/rules/unimport_based.py:185-202  (fix)
-      src/prefact/rules/unimport_based.py:276-293  (fix)
-      src/prefact/rules/unimport_based.py:397-414  (fix)
-  [fe7129d46d801afa]   STRU  validate  L=10 N=4 saved=30 sim=1.00
-      src/prefact/rules/import_linter_based.py:173-182  (validate)
-      src/prefact/rules/import_linter_based.py:255-264  (validate)
-      src/prefact/rules/import_linter_based.py:311-319  (validate)
-      src/prefact/rules/import_linter_based.py:397-405  (validate)
+DUPLICATES[46] (ranked by impact):
+  [2f0b5f60dff6d87a] ! EXAC  fix  L=5 N=14 saved=65 sim=1.00
+      examples/04-custom-rules/custom_rules/no_todo_rule.py:46-50  (fix)
+      examples/04-custom-rules/custom_rules/no_todo_rule.py:98-102  (fix)
+      src/prefact/rules/ai_boilerplate.py:69-73  (fix)
+      src/prefact/rules/import_linter_based.py:172-177  (fix)
+      src/prefact/rules/import_linter_based.py:327-331  (fix)
+      src/prefact/rules/importchecker_based.py:378-382  (fix)
+      src/prefact/rules/importchecker_based.py:490-494  (fix)
+      src/prefact/rules/llm_generated_code.py:187-191  (fix)
+      src/prefact/rules/llm_hallucinations.py:203-207  (fix)
+      src/prefact/rules/magic_numbers.py:129-133  (fix)
+      src/prefact/rules/mypy_based.py:155-160  (fix)
+      src/prefact/rules/mypy_based.py:225-229  (fix)
+      src/prefact/rules/ruff_based.py:112-116  (fix)
+      src/prefact/rules/ruff_based.py:351-356  (fix)
+  [b65e5e76ebaa28e7] ! STRU  fix  L=22 N=3 saved=44 sim=1.00
+      src/prefact/rules/unimport_based.py:181-202  (fix)
+      src/prefact/rules/unimport_based.py:278-299  (fix)
+      src/prefact/rules/unimport_based.py:411-432  (fix)
   [61838ef52572f18b]   STRU  get_cache  L=5 N=5 saved=20 sim=1.00
-      src/prefact/performance/cache.py:273-277  (get_cache)
-      src/prefact/performance/cache.py:280-284  (get_scan_cache)
-      src/prefact/performance/cache.py:287-291  (get_config_cache)
-      src/prefact/performance/cache.py:294-298  (get_rule_cache)
-      src/prefact/performance/cache.py:301-305  (get_hash_cache)
-  [90331f4920e98fd7]   STRU  validate  L=4 N=6 saved=20 sim=1.00
-      src/prefact/rules/ai_boilerplate.py:69-72  (validate)
-      src/prefact/rules/importchecker_based.py:253-256  (validate)
-      src/prefact/rules/llm_generated_code.py:183-186  (validate)
-      src/prefact/rules/magic_numbers.py:131-134  (validate)
-      src/prefact/rules/unimport_based.py:295-298  (validate)
-      src/prefact/rules/unimport_based.py:356-359  (validate)
-  [9e61a0169b46b783]   EXAC  validate  L=16 N=2 saved=16 sim=1.00
-      src/prefact/rules/composite_rules.py:185-200  (validate)
-      src/prefact/rules/composite_rules.py:261-276  (validate)
+      src/prefact/performance/cache.py:268-272  (get_cache)
+      src/prefact/performance/cache.py:275-279  (get_scan_cache)
+      src/prefact/performance/cache.py:282-286  (get_config_cache)
+      src/prefact/performance/cache.py:289-293  (get_rule_cache)
+      src/prefact/performance/cache.py:296-300  (get_hash_cache)
+  [8a88275822553ad5]   STRU  validate  L=18 N=2 saved=18 sim=1.00
+      src/prefact/rules/pylint_based.py:162-179  (validate)
+      src/prefact/rules/pylint_based.py:234-251  (validate)
+  [02b90c71278bdfe9]   EXAC  fix  L=4 N=5 saved=16 sim=1.00
+      src/prefact/rules/print_statements.py:56-59  (fix)
+      src/prefact/rules/sorted_imports.py:65-68  (fix)
+      src/prefact/rules/string_concat.py:66-69  (fix)
+      src/prefact/rules/type_hints.py:44-47  (fix)
+      src/prefact/rules/wildcard_imports.py:43-46  (fix)
   [00e3ba6791c8b05d]   STRU  get_cache  L=4 N=5 saved=16 sim=1.00
-      src/prefact/performance/cache_state.py:36-39  (get_cache)
-      src/prefact/performance/cache_state.py:42-45  (get_scan_cache)
-      src/prefact/performance/cache_state.py:48-51  (get_config_cache)
-      src/prefact/performance/cache_state.py:54-57  (get_rule_cache)
-      src/prefact/performance/cache_state.py:60-63  (get_hash_cache)
-  [9b03faadcb4a354b]   STRU  validate  L=14 N=2 saved=14 sim=1.00
-      src/prefact/rules/pylint_based.py:150-163  (validate)
-      src/prefact/rules/pylint_based.py:210-223  (validate)
-  [ad988c8760eff899]   EXAC  validate  L=11 N=2 saved=11 sim=1.00
-      examples/04-custom-rules/custom_rules/no_todo_rule.py:50-60  (validate)
-      examples/04-custom-rules/custom_rules/no_todo_rule.py:98-108  (validate)
+      src/prefact/performance/cache_state.py:34-37  (get_cache)
+      src/prefact/performance/cache_state.py:40-43  (get_scan_cache)
+      src/prefact/performance/cache_state.py:46-49  (get_config_cache)
+      src/prefact/performance/cache_state.py:52-55  (get_rule_cache)
+      src/prefact/performance/cache_state.py:58-61  (get_hash_cache)
+  [c9d89c232e41d853]   EXAC  validate  L=13 N=2 saved=13 sim=1.00
+      src/prefact/rules/composite_rules.py:203-215  (validate)
+      src/prefact/rules/composite_rules.py:280-292  (validate)
+  [a613d4975a07742c]   EXAC  fix  L=6 N=3 saved=12 sim=1.00
+      src/prefact/rules/composite_factory.py:74-79  (fix)
+      src/prefact/rules/composite_rules.py:101-108  (fix)
+      src/prefact/rules/composite_rules.py:194-201  (fix)
+  [90331f4920e98fd7]   STRU  validate  L=4 N=4 saved=12 sim=1.00
+      src/prefact/rules/ai_boilerplate.py:75-78  (validate)
+      src/prefact/rules/llm_generated_code.py:193-196  (validate)
+      src/prefact/rules/magic_numbers.py:135-138  (validate)
+      src/prefact/rules/unimport_based.py:370-373  (validate)
+  [02b48514187ed5cf]   EXAC  to_dict  L=11 N=2 saved=11 sim=1.00
+      src/prefact/config_extended/config.py:132-142  (to_dict)
+      src/prefact/config_extended/models.py:73-83  (to_dict)
+  [414281b035028eb5]   EXAC  validate  L=11 N=2 saved=11 sim=1.00
+      src/prefact/rules/mypy_based.py:406-416  (validate)
+      src/prefact/rules/string_transformations.py:361-371  (validate)
+  [07201fe17c618549]   STRU  validate  L=11 N=2 saved=11 sim=1.00
+      src/prefact/rules/import_linter_based.py:333-343  (validate)
+      src/prefact/rules/import_linter_based.py:424-434  (validate)
   [0012aae792aa3fda]   EXAC  get_hash  L=10 N=2 saved=10 sim=1.00
-      src/prefact/performance/cache.py:229-238  (get_hash)
-      src/prefact/performance/cache_adapters.py:95-101  (get_hash)
+      src/prefact/performance/cache.py:222-231  (get_hash)
+      src/prefact/performance/cache_adapters.py:119-125  (get_hash)
+  [3229e7f5682165ed]   EXAC  validate  L=10 N=2 saved=10 sim=1.00
+      src/prefact/rules/duplicate_imports.py:93-102  (validate)
+      src/prefact/rules/unused_imports.py:48-57  (validate)
+  [45b23d72e656b184]   STRU  validate  L=10 N=2 saved=10 sim=1.00
+      src/prefact/rules/import_linter_based.py:179-188  (validate)
+      src/prefact/rules/import_linter_based.py:271-280  (validate)
+  [637c7e586b5ac6f6]   EXAC  validate  L=9 N=2 saved=9 sim=1.00
+      examples/04-custom-rules/custom_rules/no_todo_rule.py:52-60  (validate)
+      examples/04-custom-rules/custom_rules/no_todo_rule.py:104-112  (validate)
   [ea7177ce519c189d]   EXAC  _get_relative_file_path  L=9 N=2 saved=9 sim=1.00
-      src/prefact/autonomous/docs_manager.py:253-261  (_get_relative_file_path)
-      src/prefact/autonomous/todo_manager.py:186-194  (_get_relative_file_path)
+      src/prefact/autonomous/docs_manager.py:277-285  (_get_relative_file_path)
+      src/prefact/autonomous/todo_manager.py:224-232  (_get_relative_file_path)
   [8edfe22670ef44e1]   EXAC  process_data  L=8 N=2 saved=8 sim=1.00
       examples/01-individual-rules/unused-imports/after.py:7-14  (process_data)
       examples/01-individual-rules/unused-imports/before.py:7-14  (process_data)
   [7db25b6baa69639e]   EXAC  scan_file  L=4 N=3 saved=8 sim=1.00
-      src/prefact/rules/composite_factory.py:73-76  (scan_file)
-      src/prefact/rules/composite_rules.py:86-91  (scan_file)
-      src/prefact/rules/composite_rules.py:171-176  (scan_file)
-  [4a3cdf885b861207]   EXAC  fix  L=4 N=3 saved=8 sim=1.00
-      src/prefact/rules/composite_factory.py:78-81  (fix)
-      src/prefact/rules/composite_rules.py:93-98  (fix)
-      src/prefact/rules/composite_rules.py:178-183  (fix)
-  [c245c0aa11f8ea14]   EXAC  validate  L=8 N=2 saved=8 sim=1.00
-      src/prefact/rules/duplicate_imports.py:73-80  (validate)
-      src/prefact/rules/unused_imports.py:47-54  (validate)
-  [06dc55e08866a299]   EXAC  _load_mypy_config  L=8 N=2 saved=8 sim=1.00
-      src/prefact/rules/mypy_based.py:103-110  (_load_mypy_config)
-      src/prefact/rules/mypy_based.py:178-185  (_load_mypy_config)
+      src/prefact/rules/composite_factory.py:69-72  (scan_file)
+      src/prefact/rules/composite_rules.py:94-99  (scan_file)
+      src/prefact/rules/composite_rules.py:187-192  (scan_file)
+  [cb356507d857797f]   EXAC  validate  L=8 N=2 saved=8 sim=1.00
+      src/prefact/rules/importchecker_based.py:263-270  (validate)
+      src/prefact/rules/unimport_based.py:301-308  (validate)
+  [618cd0669047c527]   EXAC  _load_mypy_config  L=8 N=2 saved=8 sim=1.00
+      src/prefact/rules/mypy_based.py:108-115  (_load_mypy_config)
+      src/prefact/rules/mypy_based.py:192-199  (_load_mypy_config)
   [94f4bfa96465f169]   EXAC  calculate_sum  L=7 N=2 saved=7 sim=1.00
-      examples/03-output-formats/sample_code.py:15-21  (calculate_sum)
+      examples/03-output-formats/sample_code.py:11-17  (calculate_sum)
       examples/sample-project/core.py:13-19  (calculate_sum)
   [53efaf6dde1d343f]   EXAC  process_data  L=6 N=2 saved=6 sim=1.00
-      examples/01-individual-rules/print-statements/after.py:3-8  (process_data)
-      examples/01-individual-rules/print-statements/before.py:3-8  (process_data)
+      examples/01-individual-rules/print-statements/after.py:4-9  (process_data)
+      examples/01-individual-rules/print-statements/before.py:4-9  (process_data)
   [52878821d84977d2]   EXAC  __init__  L=6 N=2 saved=6 sim=1.00
       src/prefact/fixer.py:12-17  (__init__)
-      src/prefact/validator.py:12-17  (__init__)
+      src/prefact/validator.py:11-16  (__init__)
   [55804bb29d6c13a1]   EXAC  set_hash  L=6 N=2 saved=6 sim=1.00
-      src/prefact/performance/cache.py:240-245  (set_hash)
-      src/prefact/performance/cache_adapters.py:103-106  (set_hash)
+      src/prefact/performance/cache.py:233-238  (set_hash)
+      src/prefact/performance/cache_adapters.py:127-130  (set_hash)
   [50fd28cabdf165f6]   EXAC  __init__  L=3 N=3 saved=6 sim=1.00
-      src/prefact/rules/import_linter_based.py:128-130  (__init__)
-      src/prefact/rules/import_linter_based.py:192-194  (__init__)
-      src/prefact/rules/import_linter_based.py:274-276  (__init__)
+      src/prefact/rules/import_linter_based.py:126-128  (__init__)
+      src/prefact/rules/import_linter_based.py:198-200  (__init__)
+      src/prefact/rules/import_linter_based.py:290-292  (__init__)
   [17783b0f3fb50cdb]   EXAC  __init__  L=3 N=3 saved=6 sim=1.00
-      src/prefact/rules/pylint_based.py:87-89  (__init__)
-      src/prefact/rules/pylint_based.py:173-175  (__init__)
-      src/prefact/rules/pylint_based.py:245-247  (__init__)
+      src/prefact/rules/pylint_based.py:88-90  (__init__)
+      src/prefact/rules/pylint_based.py:189-191  (__init__)
+      src/prefact/rules/pylint_based.py:273-275  (__init__)
   [16897491a14d9018]   STRU  get_performance_monitor  L=6 N=2 saved=6 sim=1.00
-      src/prefact/performance/parallel.py:348-353  (get_performance_monitor)
-      src/prefact/rules/registry.py:179-184  (get_lazy_registry)
+      src/prefact/performance/parallel.py:352-357  (get_performance_monitor)
+      src/prefact/rules/registry.py:169-174  (get_lazy_registry)
   [772c77ab0afca55b]   EXAC  process_user  L=5 N=2 saved=5 sim=1.00
-      examples/01-individual-rules/relative-imports/after.py:11-15  (process_user)
-      examples/01-individual-rules/relative-imports/before.py:11-15  (process_user)
-  [b2a3226830ad4536]   STRU  __init__  L=5 N=2 saved=5 sim=1.00
-      src/prefact/rules/unimport_based.py:223-227  (__init__)
-      src/prefact/rules/unimport_based.py:309-313  (__init__)
+      examples/01-individual-rules/relative-imports/after.py:8-12  (process_user)
+      examples/01-individual-rules/relative-imports/before.py:8-12  (process_user)
+  [a6697fd3227f7e47]   EXAC  get_key  L=5 N=2 saved=5 sim=1.00
+      src/prefact/performance/cache.py:189-193  (get_key)
+      src/prefact/performance/cache_adapters.py:87-90  (get_key)
   [8c3b4878cda6c2a9]   EXAC  calculate  L=4 N=2 saved=4 sim=1.00
-      examples/01-individual-rules/print-statements/after.py:10-13  (calculate)
-      examples/01-individual-rules/print-statements/before.py:10-13  (calculate)
-  [d25fff731ecfc648]   EXAC  read_file  L=4 N=2 saved=4 sim=1.00
+      examples/01-individual-rules/print-statements/after.py:12-15  (calculate)
+      examples/01-individual-rules/print-statements/before.py:12-15  (calculate)
+  [d783de7edd92287c]   EXAC  read_file  L=4 N=2 saved=4 sim=1.00
       examples/01-individual-rules/unused-imports/after.py:22-25  (read_file)
       examples/01-individual-rules/unused-imports/before.py:22-25  (read_file)
   [641667a4d5a7609f]   EXAC  process  L=4 N=2 saved=4 sim=1.00
-      examples/01-individual-rules/wildcard-imports/after.py:8-11  (process)
-      examples/01-individual-rules/wildcard-imports/before.py:8-11  (process)
+      examples/01-individual-rules/wildcard-imports/after.py:10-13  (process)
+      examples/01-individual-rules/wildcard-imports/before.py:10-13  (process)
   [c522b15451457d34]   STRU  format_data  L=4 N=2 saved=4 sim=1.00
-      examples/01-individual-rules/string-concat/before.py:8-11  (format_data)
+      examples/01-individual-rules/string-concat/before.py:10-13  (format_data)
       examples/sample-project/utils.py:23-26  (helper_function)
   [ced691da4eea9c77]   EXAC  process_data  L=3 N=2 saved=3 sim=1.00
-      examples/01-individual-rules/duplicate-imports/after.py:9-11  (process_data)
-      examples/01-individual-rules/duplicate-imports/before.py:12-14  (process_data)
+      examples/01-individual-rules/duplicate-imports/after.py:6-8  (process_data)
+      examples/01-individual-rules/duplicate-imports/before.py:6-8  (process_data)
   [d45b7d0f286fc4fd]   EXAC  add  L=3 N=2 saved=3 sim=1.00
-      examples/01-individual-rules/missing-return-type/after.py:3-5  (add)
-      examples/01-individual-rules/missing-return-type/before.py:3-5  (add)
+      examples/01-individual-rules/missing-return-type/after.py:4-6  (add)
+      examples/01-individual-rules/missing-return-type/before.py:4-6  (add)
   [9baec9052aef7a75]   EXAC  get_user  L=3 N=2 saved=3 sim=1.00
-      examples/01-individual-rules/missing-return-type/after.py:7-9  (get_user)
-      examples/01-individual-rules/missing-return-type/before.py:7-9  (get_user)
+      examples/01-individual-rules/missing-return-type/after.py:9-11  (get_user)
+      examples/01-individual-rules/missing-return-type/before.py:9-11  (get_user)
   [47c667d00e4443d6]   EXAC  process  L=3 N=2 saved=3 sim=1.00
-      examples/01-individual-rules/missing-return-type/after.py:14-16  (process)
-      examples/01-individual-rules/missing-return-type/before.py:14-16  (process)
+      examples/01-individual-rules/missing-return-type/after.py:17-19  (process)
+      examples/01-individual-rules/missing-return-type/before.py:17-19  (process)
   [6979933d3c997c8c]   EXAC  process  L=3 N=2 saved=3 sim=1.00
-      examples/01-individual-rules/sorted-imports/after.py:11-13  (process)
-      examples/01-individual-rules/sorted-imports/before.py:11-13  (process)
+      examples/01-individual-rules/sorted-imports/after.py:4-6  (process)
+      examples/01-individual-rules/sorted-imports/before.py:4-6  (process)
   [95b3fc542348f5d0]   EXAC  format_timestamp  L=3 N=2 saved=3 sim=1.00
       examples/01-individual-rules/unused-imports/after.py:17-19  (format_timestamp)
       examples/01-individual-rules/unused-imports/before.py:17-19  (format_timestamp)
@@ -1975,155 +1847,176 @@ DUPLICATES[40] (ranked by impact):
       examples/01-individual-rules/unused-imports/after.py:39-41  (get_data)
       examples/01-individual-rules/unused-imports/before.py:39-41  (get_data)
   [89f4308d864bd180]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
-      src/prefact/rules/importchecker_based.py:102-104  (__init__)
-      src/prefact/rules/importchecker_based.py:267-269  (__init__)
+      src/prefact/rules/importchecker_based.py:100-102  (__init__)
+      src/prefact/rules/importchecker_based.py:281-283  (__init__)
   [53e9ef8f2a396333]   EXAC  __init__  L=3 N=2 saved=3 sim=1.00
-      src/prefact/rules/mypy_based.py:99-101  (__init__)
-      src/prefact/rules/mypy_based.py:174-176  (__init__)
+      src/prefact/rules/mypy_based.py:104-106  (__init__)
+      src/prefact/rules/mypy_based.py:188-190  (__init__)
+  [abd7b44abf133457]   STRU  __init__  L=3 N=2 saved=3 sim=1.00
+      src/prefact/rules/unimport_based.py:223-225  (__init__)
+      src/prefact/rules/unimport_based.py:319-321  (__init__)
 
-REFACTOR[40] (ranked by priority):
+REFACTOR[46] (ranked by priority):
   [1] ○ extract_function   → utils/fix.py
-      WHY: 14 occurrences of 3-line block across 9 files — saves 39 lines
+      WHY: 14 occurrences of 5-line block across 9 files — saves 65 lines
       FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py, src/prefact/rules/ai_boilerplate.py, src/prefact/rules/import_linter_based.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py +4 more
   [2] ○ extract_function   → src/prefact/rules/utils/fix.py
-      WHY: 3 occurrences of 18-line block across 1 files — saves 36 lines
+      WHY: 3 occurrences of 22-line block across 1 files — saves 44 lines
       FILES: src/prefact/rules/unimport_based.py
-  [3] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 4 occurrences of 10-line block across 1 files — saves 30 lines
-      FILES: src/prefact/rules/import_linter_based.py
-  [4] ○ extract_function   → src/prefact/performance/utils/get_cache.py
+  [3] ○ extract_function   → src/prefact/performance/utils/get_cache.py
       WHY: 5 occurrences of 5-line block across 1 files — saves 20 lines
       FILES: src/prefact/performance/cache.py
-  [5] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 6 occurrences of 4-line block across 5 files — saves 20 lines
-      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/importchecker_based.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
-  [6] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 2 occurrences of 16-line block across 1 files — saves 16 lines
-      FILES: src/prefact/rules/composite_rules.py
-  [7] ○ extract_function   → src/prefact/performance/utils/get_cache.py
+  [4] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 2 occurrences of 18-line block across 1 files — saves 18 lines
+      FILES: src/prefact/rules/pylint_based.py
+  [5] ○ extract_function   → src/prefact/rules/utils/fix.py
+      WHY: 5 occurrences of 4-line block across 5 files — saves 16 lines
+      FILES: src/prefact/rules/print_statements.py, src/prefact/rules/sorted_imports.py, src/prefact/rules/string_concat.py, src/prefact/rules/type_hints.py, src/prefact/rules/wildcard_imports.py
+  [6] ○ extract_function   → src/prefact/performance/utils/get_cache.py
       WHY: 5 occurrences of 4-line block across 1 files — saves 16 lines
       FILES: src/prefact/performance/cache_state.py
-  [8] ○ extract_function   → src/prefact/rules/utils/validate.py
-      WHY: 2 occurrences of 14-line block across 1 files — saves 14 lines
-      FILES: src/prefact/rules/pylint_based.py
-  [9] ○ extract_function   → examples/04-custom-rules/custom_rules/utils/validate.py
+  [7] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 2 occurrences of 13-line block across 1 files — saves 13 lines
+      FILES: src/prefact/rules/composite_rules.py
+  [8] ○ extract_function   → src/prefact/rules/utils/fix.py
+      WHY: 3 occurrences of 6-line block across 2 files — saves 12 lines
+      FILES: src/prefact/rules/composite_factory.py, src/prefact/rules/composite_rules.py
+  [9] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 4 occurrences of 4-line block across 4 files — saves 12 lines
+      FILES: src/prefact/rules/ai_boilerplate.py, src/prefact/rules/llm_generated_code.py, src/prefact/rules/magic_numbers.py, src/prefact/rules/unimport_based.py
+  [10] ○ extract_class      → src/prefact/config_extended/utils/to_dict.py
+      WHY: 2 occurrences of 11-line block across 2 files — saves 11 lines
+      FILES: src/prefact/config_extended/config.py, src/prefact/config_extended/models.py
+  [11] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 2 occurrences of 11-line block across 2 files — saves 11 lines
+      FILES: src/prefact/rules/mypy_based.py, src/prefact/rules/string_transformations.py
+  [12] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 2 occurrences of 11-line block across 1 files — saves 11 lines
-      FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py
-  [10] ○ extract_class      → src/prefact/performance/utils/get_hash.py
+      FILES: src/prefact/rules/import_linter_based.py
+  [13] ○ extract_class      → src/prefact/performance/utils/get_hash.py
       WHY: 2 occurrences of 10-line block across 2 files — saves 10 lines
       FILES: src/prefact/performance/cache.py, src/prefact/performance/cache_adapters.py
-  [11] ○ extract_function   → src/prefact/autonomous/utils/_get_relative_file_path.py
+  [14] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 2 occurrences of 10-line block across 2 files — saves 10 lines
+      FILES: src/prefact/rules/duplicate_imports.py, src/prefact/rules/unused_imports.py
+  [15] ○ extract_function   → src/prefact/rules/utils/validate.py
+      WHY: 2 occurrences of 10-line block across 1 files — saves 10 lines
+      FILES: src/prefact/rules/import_linter_based.py
+  [16] ○ extract_function   → examples/04-custom-rules/custom_rules/utils/validate.py
+      WHY: 2 occurrences of 9-line block across 1 files — saves 9 lines
+      FILES: examples/04-custom-rules/custom_rules/no_todo_rule.py
+  [17] ○ extract_function   → src/prefact/autonomous/utils/_get_relative_file_path.py
       WHY: 2 occurrences of 9-line block across 2 files — saves 9 lines
       FILES: src/prefact/autonomous/docs_manager.py, src/prefact/autonomous/todo_manager.py
-  [12] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/process_data.py
+  [18] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/process_data.py
       WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [13] ○ extract_function   → src/prefact/rules/utils/scan_file.py
+  [19] ○ extract_function   → src/prefact/rules/utils/scan_file.py
       WHY: 3 occurrences of 4-line block across 2 files — saves 8 lines
       FILES: src/prefact/rules/composite_factory.py, src/prefact/rules/composite_rules.py
-  [14] ○ extract_function   → src/prefact/rules/utils/fix.py
-      WHY: 3 occurrences of 4-line block across 2 files — saves 8 lines
-      FILES: src/prefact/rules/composite_factory.py, src/prefact/rules/composite_rules.py
-  [15] ○ extract_function   → src/prefact/rules/utils/validate.py
+  [20] ○ extract_function   → src/prefact/rules/utils/validate.py
       WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines
-      FILES: src/prefact/rules/duplicate_imports.py, src/prefact/rules/unused_imports.py
-  [16] ○ extract_function   → src/prefact/rules/utils/_load_mypy_config.py
+      FILES: src/prefact/rules/importchecker_based.py, src/prefact/rules/unimport_based.py
+  [21] ○ extract_function   → src/prefact/rules/utils/_load_mypy_config.py
       WHY: 2 occurrences of 8-line block across 1 files — saves 8 lines
       FILES: src/prefact/rules/mypy_based.py
-  [17] ○ extract_function   → examples/utils/calculate_sum.py
+  [22] ○ extract_function   → examples/utils/calculate_sum.py
       WHY: 2 occurrences of 7-line block across 2 files — saves 7 lines
       FILES: examples/03-output-formats/sample_code.py, examples/sample-project/core.py
-  [18] ○ extract_function   → examples/01-individual-rules/print-statements/utils/process_data.py
+  [23] ○ extract_function   → examples/01-individual-rules/print-statements/utils/process_data.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: examples/01-individual-rules/print-statements/after.py, examples/01-individual-rules/print-statements/before.py
-  [19] ○ extract_function   → src/prefact/utils/__init__.py
+  [24] ○ extract_function   → src/prefact/utils/__init__.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/fixer.py, src/prefact/validator.py
-  [20] ○ extract_class      → src/prefact/performance/utils/set_hash.py
+  [25] ○ extract_class      → src/prefact/performance/utils/set_hash.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/performance/cache.py, src/prefact/performance/cache_adapters.py
-  [21] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [26] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 3 occurrences of 3-line block across 1 files — saves 6 lines
       FILES: src/prefact/rules/import_linter_based.py
-  [22] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [27] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 3 occurrences of 3-line block across 1 files — saves 6 lines
       FILES: src/prefact/rules/pylint_based.py
-  [23] ○ extract_function   → src/prefact/utils/get_performance_monitor.py
+  [28] ○ extract_function   → src/prefact/utils/get_performance_monitor.py
       WHY: 2 occurrences of 6-line block across 2 files — saves 6 lines
       FILES: src/prefact/performance/parallel.py, src/prefact/rules/registry.py
-  [24] ○ extract_function   → examples/01-individual-rules/relative-imports/utils/process_user.py
+  [29] ○ extract_function   → examples/01-individual-rules/relative-imports/utils/process_user.py
       WHY: 2 occurrences of 5-line block across 2 files — saves 5 lines
       FILES: examples/01-individual-rules/relative-imports/after.py, examples/01-individual-rules/relative-imports/before.py
-  [25] ○ extract_function   → src/prefact/rules/utils/__init__.py
-      WHY: 2 occurrences of 5-line block across 1 files — saves 5 lines
-      FILES: src/prefact/rules/unimport_based.py
-  [26] ○ extract_function   → examples/01-individual-rules/print-statements/utils/calculate.py
+  [30] ○ extract_class      → src/prefact/performance/utils/get_key.py
+      WHY: 2 occurrences of 5-line block across 2 files — saves 5 lines
+      FILES: src/prefact/performance/cache.py, src/prefact/performance/cache_adapters.py
+  [31] ○ extract_function   → examples/01-individual-rules/print-statements/utils/calculate.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/print-statements/after.py, examples/01-individual-rules/print-statements/before.py
-  [27] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/read_file.py
+  [32] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/read_file.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [28] ○ extract_function   → examples/01-individual-rules/wildcard-imports/utils/process.py
+  [33] ○ extract_function   → examples/01-individual-rules/wildcard-imports/utils/process.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/wildcard-imports/after.py, examples/01-individual-rules/wildcard-imports/before.py
-  [29] ○ extract_function   → examples/utils/format_data.py
+  [34] ○ extract_function   → examples/utils/format_data.py
       WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
       FILES: examples/01-individual-rules/string-concat/before.py, examples/sample-project/utils.py
-  [30] ○ extract_function   → examples/01-individual-rules/duplicate-imports/utils/process_data.py
+  [35] ○ extract_function   → examples/01-individual-rules/duplicate-imports/utils/process_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/duplicate-imports/after.py, examples/01-individual-rules/duplicate-imports/before.py
-  [31] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/add.py
+  [36] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/add.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [32] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/get_user.py
+  [37] ○ extract_function   → examples/01-individual-rules/missing-return-type/utils/get_user.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [33] ○ extract_class      → examples/01-individual-rules/missing-return-type/utils/process.py
+  [38] ○ extract_class      → examples/01-individual-rules/missing-return-type/utils/process.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/missing-return-type/after.py, examples/01-individual-rules/missing-return-type/before.py
-  [34] ○ extract_function   → examples/01-individual-rules/sorted-imports/utils/process.py
+  [39] ○ extract_function   → examples/01-individual-rules/sorted-imports/utils/process.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/sorted-imports/after.py, examples/01-individual-rules/sorted-imports/before.py
-  [35] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/format_timestamp.py
+  [40] ○ extract_function   → examples/01-individual-rules/unused-imports/utils/format_timestamp.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [36] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/__init__.py
+  [41] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [37] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/add_data.py
+  [42] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/add_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [38] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/get_data.py
+  [43] ○ extract_class      → examples/01-individual-rules/unused-imports/utils/get_data.py
       WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
       FILES: examples/01-individual-rules/unused-imports/after.py, examples/01-individual-rules/unused-imports/before.py
-  [39] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [44] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
       FILES: src/prefact/rules/importchecker_based.py
-  [40] ○ extract_function   → src/prefact/rules/utils/__init__.py
+  [45] ○ extract_function   → src/prefact/rules/utils/__init__.py
       WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
       FILES: src/prefact/rules/mypy_based.py
+  [46] ○ extract_function   → src/prefact/rules/utils/__init__.py
+      WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
+      FILES: src/prefact/rules/unimport_based.py
 
-QUICK_WINS[23] (low risk, high savings — do first):
-  [1] extract_function   saved=39L  → utils/fix.py
+QUICK_WINS[28] (low risk, high savings — do first):
+  [1] extract_function   saved=65L  → utils/fix.py
       FILES: no_todo_rule.py, ai_boilerplate.py, import_linter_based.py +6
-  [2] extract_function   saved=36L  → src/prefact/rules/utils/fix.py
+  [2] extract_function   saved=44L  → src/prefact/rules/utils/fix.py
       FILES: unimport_based.py
-  [3] extract_function   saved=30L  → src/prefact/rules/utils/validate.py
-      FILES: import_linter_based.py
-  [4] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
+  [3] extract_function   saved=20L  → src/prefact/performance/utils/get_cache.py
       FILES: cache.py
-  [5] extract_function   saved=20L  → src/prefact/rules/utils/validate.py
-      FILES: ai_boilerplate.py, importchecker_based.py, llm_generated_code.py +2
-  [6] extract_function   saved=16L  → src/prefact/rules/utils/validate.py
-      FILES: composite_rules.py
-  [7] extract_function   saved=16L  → src/prefact/performance/utils/get_cache.py
-      FILES: cache_state.py
-  [8] extract_function   saved=14L  → src/prefact/rules/utils/validate.py
+  [4] extract_function   saved=18L  → src/prefact/rules/utils/validate.py
       FILES: pylint_based.py
-  [9] extract_function   saved=11L  → examples/04-custom-rules/custom_rules/utils/validate.py
-      FILES: no_todo_rule.py
-  [10] extract_class      saved=10L  → src/prefact/performance/utils/get_hash.py
-      FILES: cache.py, cache_adapters.py
+  [5] extract_function   saved=16L  → src/prefact/rules/utils/fix.py
+      FILES: print_statements.py, sorted_imports.py, string_concat.py +2
+  [6] extract_function   saved=16L  → src/prefact/performance/utils/get_cache.py
+      FILES: cache_state.py
+  [7] extract_function   saved=13L  → src/prefact/rules/utils/validate.py
+      FILES: composite_rules.py
+  [8] extract_function   saved=12L  → src/prefact/rules/utils/fix.py
+      FILES: composite_factory.py, composite_rules.py
+  [9] extract_function   saved=12L  → src/prefact/rules/utils/validate.py
+      FILES: ai_boilerplate.py, llm_generated_code.py, magic_numbers.py +1
+  [10] extract_class      saved=11L  → src/prefact/config_extended/utils/to_dict.py
+      FILES: config.py, models.py
 
 DEPENDENCY_RISK[1] (duplicates spanning multiple packages):
   fix  packages=2  files=9
@@ -2133,45 +2026,61 @@ DEPENDENCY_RISK[1] (duplicates spanning multiple packages):
       src/prefact/rules/importchecker_based.py
       +5 more
 
-EFFORT_ESTIMATE (total ≈ 13.4h):
-  hard   fix                                 saved=39L  ~156min
-  medium fix                                 saved=36L  ~72min
-  medium validate                            saved=30L  ~60min
+EFFORT_ESTIMATE (total ≈ 16.6h):
+  hard   fix                                 saved=65L  ~260min
+  medium fix                                 saved=44L  ~88min
   medium get_cache                           saved=20L  ~40min
-  medium validate                            saved=20L  ~40min
-  medium validate                            saved=16L  ~32min
+  medium validate                            saved=18L  ~36min
+  medium fix                                 saved=16L  ~32min
   medium get_cache                           saved=16L  ~32min
-  easy   validate                            saved=14L  ~28min
-  easy   validate                            saved=11L  ~22min
-  easy   get_hash                            saved=10L  ~20min
-  ... +30 more (~302min)
+  easy   validate                            saved=13L  ~26min
+  easy   fix                                 saved=12L  ~24min
+  easy   validate                            saved=12L  ~24min
+  easy   to_dict                             saved=11L  ~22min
+  ... +36 more (~414min)
 
 METRICS-TARGET:
-  dup_groups:  40 → 0
-  saved_lines: 363 lines recoverable
+  dup_groups:  46 → 0
+  saved_lines: 434 lines recoverable
 ```
 
 ### Evolution / Churn (`project/evolution.toon.yaml`)
 
 ```toon markpact:analysis path=project/evolution.toon.yaml
-# code2llm/evolution | 3417 func | 71f | 2026-05-03
+# code2llm/evolution | 700 func | 69f | 2026-05-24
+# generated in 0.00s
 
-NEXT[2] (ranked by impact):
-  [1] !! SPLIT-FUNC      DocsManager.update_planfile  CC=27  fan=23
+NEXT[5] (ranked by impact):
+  [1] !! SPLIT           src/prefact/rules/isort_based.py
+      WHY: 519L, 4 classes, max CC=13
+      EFFORT: ~4h  IMPACT: 6747
+
+  [2] !! SPLIT-FUNC      DocsManager.update_planfile  CC=27  fan=23
       WHY: CC=27 exceeds 15
       EFFORT: ~1h  IMPACT: 621
 
-  [2] !  SPLIT-FUNC      TestQLManager.run  CC=15  fan=12
+  [3] !  SPLIT-FUNC      TestQLManager.run  CC=15  fan=12
       WHY: CC=15 exceeds 15
       EFFORT: ~1h  IMPACT: 180
 
+  [4] !! SPLIT           planfile.yaml
+      WHY: 2126L, 0 classes, max CC=0
+      EFFORT: ~4h  IMPACT: 0
 
-RISKS[0]: none
+  [5] !! SPLIT           goal.yaml
+      WHY: 512L, 0 classes, max CC=0
+      EFFORT: ~4h  IMPACT: 0
+
+
+RISKS[3]:
+  ⚠ Splitting planfile.yaml may break 0 import paths
+  ⚠ Splitting src/prefact/rules/isort_based.py may break 23 import paths
+  ⚠ Splitting goal.yaml may break 0 import paths
 
 METRICS-TARGET:
-  CC̄:          0.6 → ≤0.4
+  CC̄:          3.1 → ≤2.2
   max-CC:      27 → ≤13
-  god-modules: 0 → 0
+  god-modules: 4 → 0
   high-CC(≥15): 2 → ≤1
   hub-types:   0 → ≤0
 
@@ -2200,7 +2109,7 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=0.6 → now CC̄=0.6
+  prev CC̄=0.6 → now CC̄=3.1
 ```
 
 ### Validation (`project/validation.toon.yaml`)
