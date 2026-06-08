@@ -2,19 +2,49 @@
 
 app {
   name: prefact;
-  version: 0.0.0;
+  version: 0.1.58;
+  description: "Python code quality tool with LLM-aware rules, plugin system, and enterprise features";
+  license: Apache-2.0;
+  authors: "Tom Sapletta <tom@sapletta.com>";
+  keywords: "python, linting, code-quality, refactoring, llm, static-analysis, plugin-system, enterprise";
+  homepage: https://github.com/prefact/prefact;
+  repository: https://github.com/prefact/prefact;
 }
 
 dependencies {
   runtime: "ast-decompiler>=0.7.0, click>=8.0.0, libcst>=0.4.0, pyyaml>=6.0, rich>=12.0.0, tomli>=2.0.0; python_version<'3.11', goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60, planfile>=0.1.86";
+  ruff: ruff>=0.5.0;
+  mypy: mypy>=1.0.0;
+  isort: isort>=5.10.0;
+  autoflake: autoflake>=2.0.0;
+  pylint: pylint>=3.0.0;
+  unimport: unimport>=1.0.0;
+  importchecker: importchecker>=0.1.0;
+  import-linter: import-linter>=2.0.0;
+  performance: diskcache>=5.4.0;
+  monitoring: prometheus-client>=0.16.0;
   dev: "pytest>=7.0.0, pytest-cov>=4.0.0, pytest-asyncio>=0.21.0, black>=23.0.0, isort>=5.10.0, mypy>=1.0.0, ruff>=0.5.0, pre-commit>=3.0.0, goal>=2.1.218, costs>=0.1.20, pfix>=0.1.60";
+  docs: "mkdocs>=1.5.0, mkdocs-material>=9.0.0, mkdocstrings[python]>=0.22.0";
+  all: "prefact[ruff,mypy,isort,autoflake,pylint,unimport,importchecker,import-linter], prefact[performance,monitoring]";
 }
 
 interface[type="cli"] {
   framework: click;
 }
 interface[type="cli"] page[name="prefact"] {
-
+  entry: prefact.cli:main;
+}
+interface[type="cli"] page[name="prefact-scan"] {
+  entry: prefact.cli:scan_main;
+}
+interface[type="cli"] page[name="prefact-fix"] {
+  entry: prefact.cli:fix_main;
+}
+interface[type="cli"] page[name="prefact-config"] {
+  entry: prefact.cli:config_main;
+}
+interface[type="cli"] page[name="prefact-git-hooks"] {
+  entry: prefact.git_hooks:main;
 }
 
 workflow[name="venv"] {
@@ -412,12 +442,24 @@ print('Generated SUMR.json')
 " 2>/dev/null || echo 'Python generation failed, using fallback';
 }
 
+tests {
+  import: testql-scenarios/**/*.testql.toon.yaml;
+}
+
+env_vars {
+  keys: OPENROUTER_API_KEY, LLM_MODEL, PFIX_AUTO_APPLY, PFIX_AUTO_INSTALL_DEPS, PFIX_AUTO_RESTART, PFIX_MAX_RETRIES, PFIX_DRY_RUN, PFIX_ENABLED, PFIX_GIT_COMMIT, PFIX_GIT_PREFIX, PFIX_CREATE_BACKUPS, PFIX_MODEL;
+}
+
 deploy {
   target: makefile;
 }
 
 environment[name="local"] {
-  runtime: docker-compose;
+  runtime: python;
   env_file: .env;
+  template_file: .env.example;
   python_version: >=3.10;
+  vars: LLM_MODEL, OPENROUTER_API_KEY, PFIX_AUTO_APPLY, PFIX_AUTO_INSTALL_DEPS, PFIX_AUTO_RESTART, PFIX_CREATE_BACKUPS, PFIX_DRY_RUN, PFIX_ENABLED, PFIX_GIT_COMMIT, PFIX_GIT_PREFIX, PFIX_MAX_RETRIES, PFIX_MODEL;
+  runtime_llm: OPENROUTER_API_KEY;
+  runtime_pfix: PFIX_AUTO_APPLY, PFIX_AUTO_INSTALL_DEPS, PFIX_AUTO_RESTART, PFIX_CREATE_BACKUPS, PFIX_DRY_RUN, PFIX_ENABLED, PFIX_GIT_COMMIT, PFIX_GIT_PREFIX, PFIX_MAX_RETRIES, PFIX_MODEL;
 }
