@@ -1,4 +1,4 @@
-# code2llm/evolution | 700 func | 69f | 2026-05-24
+# code2llm/evolution | 700 func | 69f | 2026-06-02
 # generated in 0.00s
 
 NEXT[5] (ranked by impact):
@@ -15,7 +15,7 @@ NEXT[5] (ranked by impact):
       EFFORT: ~1h  IMPACT: 180
 
   [4] !! SPLIT           planfile.yaml
-      WHY: 2126L, 0 classes, max CC=0
+      WHY: 2048L, 0 classes, max CC=0
       EFFORT: ~4h  IMPACT: 0
 
   [5] !! SPLIT           goal.yaml
@@ -60,4 +60,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=0.6 → now CC̄=3.1
+  prev CC̄=3.1 → now CC̄=3.1

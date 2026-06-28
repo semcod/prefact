@@ -1,4 +1,5 @@
 .env.example
+.code2llm_cache
 examples/.env.example
 vscode-extension/.env.example
 .idea

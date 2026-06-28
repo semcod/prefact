@@ -6,24 +6,24 @@ flowchart TD
 
     subgraph Core
         benchmark_ram_optimization__main["main"]
-        src__prefact__validator__Validator__validate_file["validate_file"]
+        src__prefact__config__Config__from_yaml["from_yaml"]
+        src__prefact__config__Config___parse_rules["_parse_rules"]
+        src__prefact__config__Config___get_default_patterns["_get_default_patterns"]
+        src__prefact__config__Config__rule_enabled["rule_enabled"]
+        src__prefact__config__Config__is_rule_enabled["is_rule_enabled"]
+        src__prefact__config__Config__rule_options["rule_options"]
+        src__prefact__config__Config__get_rule_option["get_rule_option"]
+        src__prefact__config__Config__set_rule_option["set_rule_option"]
+        src__prefact__config__Config__detect_package_name["detect_package_name"]
+        src__prefact__config__Config___detect_from_pyproject["_detect_from_pyproject"]
+        src__prefact__config__Config___get_tomllib["_get_tomllib"]
+        src__prefact__config__Config___detect_from_src_layout["_detect_from_src_layout"]
+        src__prefact__config__Config___detect_from_root_layout["_detect_from_root_layout"]
         src__prefact__engine__RefactoringEngine__run["run"]
-        src__prefact__engine__RefactoringEngine__scan_only["scan_only"]
-        src__prefact__engine__RefactoringEngine__run_file["run_file"]
-        src__prefact__engine__RefactoringEngine___preload_sources["_preload_sources"]
-        src__prefact__fixer__Fixer__fix_file["fix_file"]
-        src__prefact__fixer__Fixer__fix_file_with_source["fix_file_with_source"]
-        src__prefact__scanner___match_gitignore_pattern["_match_gitignore_pattern"]
-        src__prefact__scanner__Scanner__collect_files["collect_files"]
-        src__prefact__scanner__Scanner__scan["scan"]
-        src__prefact__scanner__Scanner__scan_sources["scan_sources"]
-        src__prefact__scanner__Scanner___excluded["_excluded"]
-        src__prefact__git_hooks__GitHooks___find_git_dir["_find_git_dir"]
-        src__prefact__git_hooks__GitHooks__install_hooks["install_hooks"]
         ...["+556 more"]
     end
 
     subgraph Exporters
     end
 
-    class benchmark_ram_optimization__main,src__prefact__validator__Validator__validate_file,src__prefact__engine__RefactoringEngine__run,src__prefact__engine__RefactoringEngine__scan_only,src__prefact__engine__RefactoringEngine__run_file,src__prefact__engine__RefactoringEngine___preload_sources,src__prefact__fixer__Fixer__fix_file,src__prefact__fixer__Fixer__fix_file_with_source,src__prefact__scanner___match_gitignore_pattern,src__prefact__scanner__Scanner__collect_files entry
+    class benchmark_ram_optimization__main,src__prefact__config__Config__from_yaml,src__prefact__config__Config___parse_rules,src__prefact__config__Config___get_default_patterns,src__prefact__config__Config__rule_enabled,src__prefact__config__Config__is_rule_enabled,src__prefact__config__Config__rule_options,src__prefact__config__Config__get_rule_option,src__prefact__config__Config__set_rule_option,src__prefact__config__Config__detect_package_name entry

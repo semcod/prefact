@@ -1,4 +1,4 @@
-# prefact | 129f 18582L | python:121,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-05-24
+# prefact | 129f 18582L | python:121,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-06-02
 # stats: 182 func | 158 cls | 129 mod | CC̄=3.0 | critical:5 | cycles:0
 # alerts[5]: CC print_report=14; CC _match_gitignore_pattern=12; CC run_prefact_example=11; CC test_run_testql_creates_and_syncs_tickets=11; CC _collect_all_exports=10
 # hotspots[5]: run_integration_tests fan=16; main fan=13; cached_file_operation fan=13; test_ruff_integration fan=13; test_performance_comparison fan=13

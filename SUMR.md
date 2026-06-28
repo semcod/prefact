@@ -815,7 +815,7 @@ pfix>=0.1.60
 
 ## Call Graph
 
-*183 nodes · 169 edges · 51 modules · CC̄=3.0*
+*184 nodes · 169 edges · 50 modules · CC̄=3.0*
 
 ### Hubs (by degree)
 
@@ -825,15 +825,15 @@ pfix>=0.1.60
 | `update_planfile` *(in src.prefact.autonomous.docs_manager.DocsManager)* | 27 ⚠ | 0 | 41 | **41** |
 | `_initialize_built_in_rules` *(in src.prefact.rules.registry)* | 1 | 0 | 31 | **31** |
 | `run_prefact_example` *(in examples.06-api-usage.example)* | 11 ⚠ | 1 | 28 | **29** |
-| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 27 | **27** |
 | `build_prefact_suite` *(in src.prefact.benchmark)* | 3 | 1 | 26 | **27** |
+| `from_yaml` *(in src.prefact.config_extended.models.ExtendedConfig)* | 13 ⚠ | 0 | 27 | **27** |
 | `main` *(in examples.run_examples)* | 8 | 0 | 25 | **25** |
 | `benchmark_file` *(in src.prefact.rules.benchmark)* | 6 | 1 | 20 | **21** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# generated in 0.10s
-# nodes: 183 | edges: 169 | modules: 51
+# generated in 0.11s
+# nodes: 184 | edges: 169 | modules: 50
 # CC̄=3.0
 
 HUBS[20]:
@@ -845,30 +845,30 @@ HUBS[20]:
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:20  total:21
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
-    CC=1  in:0  out:20  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
   examples.06-api-usage.example.batch_processing_example
     CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:0  out:18  total:18
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
+    CC=1  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
-  src.prefact.rules.benchmark.print_benchmark_results
-    CC=4  in:1  out:16  total:17
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
   src.prefact.cli._build_config
@@ -884,6 +884,8 @@ MODULES:
     benchmark_without_rampreload  CC=1  out:14
     create_test_files  CC=3  out:5
     run_benchmark  CC=1  out:16
+  examples.01-individual-rules.duplicate-imports.after  [1 funcs]
+    process_data  CC=1  out:1
   examples.01-individual-rules.relative-imports.after  [2 funcs]
     process  CC=1  out:1
     process_user  CC=1  out:2
@@ -892,8 +894,6 @@ MODULES:
     process_user  CC=1  out:2
   examples.01-individual-rules.string-concat.after  [1 funcs]
     format_data  CC=1  out:0
-  examples.01-individual-rules.unused-imports.before  [1 funcs]
-    process_data  CC=2  out:2
   examples.04-custom-rules.custom_rules.no_todo_rule  [1 funcs]
     __init__  CC=1  out:3
   examples.06-api-usage.example  [4 funcs]
@@ -950,7 +950,8 @@ MODULES:
     __init__  CC=1  out:2
     __init__  CC=2  out:3
     __init__  CC=1  out:2
-  src.prefact.performance.cache  [9 funcs]
+  src.prefact.performance.cache  [10 funcs]
+    set  CC=1  out:1
     __enter__  CC=1  out:1
     __exit__  CC=1  out:1
     cached_file_operation  CC=1  out:16
@@ -960,8 +961,6 @@ MODULES:
     get_cache  CC=2  out:1
     get_cache_info  CC=4  out:7
     get_hash_cache  CC=2  out:1
-  src.prefact.performance.cache_adapters  [1 funcs]
-    set  CC=1  out:2
   src.prefact.performance.cache_state  [2 funcs]
     get_cache  CC=2  out:1
     initialize_cache  CC=2  out:8
@@ -1026,7 +1025,8 @@ MODULES:
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     _analyze_return_types  CC=4  out:5
-  src.prefact.rules.pylint_based  [3 funcs]
+  src.prefact.rules.pylint_based  [4 funcs]
+    register  CC=1  out:0
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
@@ -1088,26 +1088,38 @@ EDGES:
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
-  examples.sample-project.cli.main → examples.01-individual-rules.unused-imports.before.process_data
   examples.run_examples.main → examples.run_examples.find_examples
-  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
-  examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
   examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
-  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache_adapters.ScanResultCache.set
+  examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  examples.sample-project.cli.main → examples.01-individual-rules.duplicate-imports.after.process_data
+  examples.06-api-usage.example.main → examples.06-api-usage.example.run_prefact_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.custom_rule_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.batch_processing_example
+  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
   src.prefact.git_hooks.main → src.prefact.git_hooks.install_git_hooks
   src.prefact.git_hooks.main → src.prefact.git_hooks.uninstall_git_hooks
   src.prefact.git_hooks.main → src.prefact.git_hooks.list_git_hooks
+  src.prefact.cli.scan → src.prefact.cli._build_config
+  src.prefact.cli.scan → src.prefact.cli._output
+  src.prefact.cli.fix → src.prefact.cli._build_config
+  src.prefact.cli.fix → src.prefact.cli._output
+  src.prefact.cli.check → src.prefact.cli._build_config
+  src.prefact.cli.check → src.prefact.cli._output
+  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
+  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache.Cache.set
+  src.prefact.benchmark.ScanProbe.run → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.benchmark._make_inprocess_probe → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.benchmark.main → src.prefact.benchmark.build_prefact_suite
   src.prefact.logging.exceptions.PprefactException.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   src.prefact.logging.exceptions.RuleError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   src.prefact.logging.exceptions.PluginError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache.Cache.set
   src.prefact.performance.parallel.ParallelScanTask.execute → src.prefact.performance.cache_state.get_cache
   src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
   src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids → src.prefact.rules.registry.get_lazy_registry
@@ -1119,21 +1131,9 @@ EDGES:
   src.prefact.performance.cache.CacheContext.__enter__ → src.prefact.performance.cache_state.initialize_cache
   src.prefact.performance.cache.CacheContext.__exit__ → src.prefact.performance.cache.cleanup_cache
   src.prefact.reporters.json_reporter.dump → src.prefact.reporters.json_reporter.to_dict
-  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated → src.prefact.performance.cache_adapters.ScanResultCache.set
   src.prefact.autonomous.docs_manager.DocsManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.magic_numbers.MagicNumberRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.rules.composite_factory.register_composite_rules → src.prefact.rules.registry.register
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_imported_names
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_used_names
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_all_exports
-  src.prefact.rules.unused_imports.UnusedImports.fix → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.unused_imports._collect_used_names → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.unused_imports._collect_all_exports → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.registry.get_all_rules → src.prefact.rules.registry.get_lazy_registry
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache.Cache.set
+  src.prefact.autonomous.todo_manager.TodoManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
 ```
 
 ## Test Contracts
@@ -1156,8 +1156,8 @@ EDGES:
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/prefact
-# generated in 0.10s
-# nodes: 183 | edges: 169 | modules: 51
+# generated in 0.11s
+# nodes: 184 | edges: 169 | modules: 50
 # CC̄=3.0
 
 HUBS[20]:
@@ -1169,30 +1169,30 @@ HUBS[20]:
     CC=1  in:0  out:31  total:31
   examples.06-api-usage.example.run_prefact_example
     CC=11  in:1  out:28  total:29
-  src.prefact.config_extended.models.ExtendedConfig.from_yaml
-    CC=13  in:0  out:27  total:27
   src.prefact.benchmark.build_prefact_suite
     CC=3  in:1  out:26  total:27
+  src.prefact.config_extended.models.ExtendedConfig.from_yaml
+    CC=13  in:0  out:27  total:27
   examples.run_examples.main
     CC=8  in:0  out:25  total:25
   src.prefact.rules.benchmark.benchmark_file
     CC=6  in:1  out:20  total:21
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
-    CC=1  in:0  out:20  total:20
   vscode-extension.src.extension.PrefactTreeProvider.activate
     CC=14  in:0  out:20  total:20
   examples.06-api-usage.example.batch_processing_example
     CC=6  in:1  out:19  total:20
-  src.prefact.scanner._match_gitignore_pattern
-    CC=12  in:0  out:18  total:18
+  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule
+    CC=1  in:0  out:20  total:20
   examples.sample-project.cli.main
     CC=2  in:0  out:18  total:18
-  examples.06-api-usage.example.custom_rule_example
-    CC=4  in:1  out:16  total:17
-  src.prefact.rules.benchmark.print_benchmark_results
-    CC=4  in:1  out:16  total:17
+  src.prefact.scanner._match_gitignore_pattern
+    CC=12  in:0  out:18  total:18
   benchmark_ram_optimization.run_benchmark
     CC=1  in:1  out:16  total:17
+  src.prefact.rules.benchmark.print_benchmark_results
+    CC=4  in:1  out:16  total:17
+  examples.06-api-usage.example.custom_rule_example
+    CC=4  in:1  out:16  total:17
   src.prefact.benchmark.ScanProbe.run
     CC=5  in:0  out:17  total:17
   src.prefact.cli._build_config
@@ -1208,6 +1208,8 @@ MODULES:
     benchmark_without_rampreload  CC=1  out:14
     create_test_files  CC=3  out:5
     run_benchmark  CC=1  out:16
+  examples.01-individual-rules.duplicate-imports.after  [1 funcs]
+    process_data  CC=1  out:1
   examples.01-individual-rules.relative-imports.after  [2 funcs]
     process  CC=1  out:1
     process_user  CC=1  out:2
@@ -1216,8 +1218,6 @@ MODULES:
     process_user  CC=1  out:2
   examples.01-individual-rules.string-concat.after  [1 funcs]
     format_data  CC=1  out:0
-  examples.01-individual-rules.unused-imports.before  [1 funcs]
-    process_data  CC=2  out:2
   examples.04-custom-rules.custom_rules.no_todo_rule  [1 funcs]
     __init__  CC=1  out:3
   examples.06-api-usage.example  [4 funcs]
@@ -1274,7 +1274,8 @@ MODULES:
     __init__  CC=1  out:2
     __init__  CC=2  out:3
     __init__  CC=1  out:2
-  src.prefact.performance.cache  [9 funcs]
+  src.prefact.performance.cache  [10 funcs]
+    set  CC=1  out:1
     __enter__  CC=1  out:1
     __exit__  CC=1  out:1
     cached_file_operation  CC=1  out:16
@@ -1284,8 +1285,6 @@ MODULES:
     get_cache  CC=2  out:1
     get_cache_info  CC=4  out:7
     get_hash_cache  CC=2  out:1
-  src.prefact.performance.cache_adapters  [1 funcs]
-    set  CC=1  out:2
   src.prefact.performance.cache_state  [2 funcs]
     get_cache  CC=2  out:1
     initialize_cache  CC=2  out:8
@@ -1350,7 +1349,8 @@ MODULES:
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     _analyze_return_types  CC=4  out:5
-  src.prefact.rules.pylint_based  [3 funcs]
+  src.prefact.rules.pylint_based  [4 funcs]
+    register  CC=1  out:0
     __init__  CC=1  out:3
     __init__  CC=1  out:3
     __init__  CC=1  out:3
@@ -1412,26 +1412,38 @@ EDGES:
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.create_test_files
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_without_rampreload
   benchmark_ram_optimization.run_benchmark → benchmark_ram_optimization.benchmark_with_rampreload
-  examples.sample-project.cli.main → examples.01-individual-rules.unused-imports.before.process_data
   examples.run_examples.main → examples.run_examples.find_examples
-  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
-  examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   examples.01-individual-rules.relative-imports.after.process_user → examples.sample-project.utils.helper_function
   examples.01-individual-rules.relative-imports.after.Processor.process → examples.01-individual-rules.string-concat.after.format_data
-  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
-  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
-  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache_adapters.ScanResultCache.set
+  examples.01-individual-rules.relative-imports.before.process_user → examples.sample-project.utils.helper_function
+  examples.01-individual-rules.relative-imports.before.Processor.process → examples.01-individual-rules.string-concat.after.format_data
+  examples.sample-project.cli.main → examples.01-individual-rules.duplicate-imports.after.process_data
+  examples.06-api-usage.example.main → examples.06-api-usage.example.run_prefact_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.custom_rule_example
+  examples.06-api-usage.example.main → examples.06-api-usage.example.batch_processing_example
+  examples.04-custom-rules.custom_rules.no_todo_rule.NoTodoRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
+  src.prefact.validator.Validator.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
   src.prefact.git_hooks.main → src.prefact.git_hooks.install_git_hooks
   src.prefact.git_hooks.main → src.prefact.git_hooks.uninstall_git_hooks
   src.prefact.git_hooks.main → src.prefact.git_hooks.list_git_hooks
+  src.prefact.cli.scan → src.prefact.cli._build_config
+  src.prefact.cli.scan → src.prefact.cli._output
+  src.prefact.cli.fix → src.prefact.cli._build_config
+  src.prefact.cli.fix → src.prefact.cli._output
+  src.prefact.cli.check → src.prefact.cli._build_config
+  src.prefact.cli.check → src.prefact.cli._output
+  src.prefact.fixer.Fixer.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner._match_gitignore_pattern → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.scanner.Scanner.__init__ → src.prefact.scanner._load_gitignore
+  src.prefact.scanner.Scanner.__init__ → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
+  src.prefact.scanner.Scanner.collect_files → src.prefact.performance.cache.Cache.set
+  src.prefact.benchmark.ScanProbe.run → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.benchmark._make_inprocess_probe → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
+  src.prefact.benchmark.main → src.prefact.benchmark.build_prefact_suite
   src.prefact.logging.exceptions.PprefactException.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   src.prefact.logging.exceptions.RuleError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
   src.prefact.logging.exceptions.PluginError.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache_adapters.ScanResultCache.set
+  src.prefact.plugins.PluginManager.__init__ → src.prefact.performance.cache.Cache.set
   src.prefact.performance.parallel.ParallelScanTask.execute → src.prefact.performance.cache_state.get_cache
   src.prefact.performance.parallel.ParallelEngine._scan_with_process_pool → vscode-extension.src.extension.PrefactDiagnosticsProvider.range
   src.prefact.performance.parallel.ParallelEngine._get_enabled_rule_ids → src.prefact.rules.registry.get_lazy_registry
@@ -1443,36 +1455,24 @@ EDGES:
   src.prefact.performance.cache.CacheContext.__enter__ → src.prefact.performance.cache_state.initialize_cache
   src.prefact.performance.cache.CacheContext.__exit__ → src.prefact.performance.cache.cleanup_cache
   src.prefact.reporters.json_reporter.dump → src.prefact.reporters.json_reporter.to_dict
-  src.prefact.autonomous.dependency_checker.DependencyChecker.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.autonomous.dependency_checker.DependencyChecker._query_pip_outdated → src.prefact.performance.cache_adapters.ScanResultCache.set
   src.prefact.autonomous.docs_manager.DocsManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.magic_numbers.MagicNumberRule.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
-  src.prefact.rules.magic_numbers.MagicNumberRule._load_allowed_numbers → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.composite_factory.CompositeRuleFactory.create_composite_rule → src.prefact.rules.registry.LazyRuleRegistry.get_all_rules
-  src.prefact.rules.composite_factory.register_composite_rules → src.prefact.rules.registry.register
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_imported_names
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_used_names
-  src.prefact.rules.unused_imports.UnusedImports.scan_file → src.prefact.rules.unused_imports._collect_all_exports
-  src.prefact.rules.unused_imports.UnusedImports.fix → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.unused_imports._collect_used_names → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.unused_imports._collect_all_exports → src.prefact.performance.cache_adapters.ScanResultCache.set
-  src.prefact.rules.registry.get_all_rules → src.prefact.rules.registry.get_lazy_registry
+  src.prefact.autonomous.docs_manager.DocsManager.update_planfile → src.prefact.performance.cache.Cache.set
+  src.prefact.autonomous.todo_manager.TodoManager.__init__ → vscode-extension.src.extension.PrefactTreeItem.super
 ```
 
 ### Code Analysis (`project/analysis.toon.yaml`)
 
 ```toon markpact:analysis path=project/analysis.toon.yaml
-# code2llm | 145f 21099L | python:106,yaml:26,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-05-24
+# code2llm | 148f 21014L | python:106,yaml:28,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-06-02
 # generated in 0.04s
-# CC̄=3.0 | critical:2/779 | dups:15 | cycles:0
+# CC̅=3.0 | critical:2/779 | dups:15 | cycles:0
 
 HEALTH[5]:
   🔴 DUP   15 classes duplicated
   🔴 GOD   src/prefact/rules/isort_based.py = 519L, 4 classes, 23m, max CC=13
   🔴 GOD   src/prefact/rules/string_transformations.py = 501L, 6 classes, 27m, max CC=8
-  🟡 CC    run CC=15 (limit:15)
   🟡 CC    update_planfile CC=27 (limit:15)
+  🟡 CC    run CC=15 (limit:15)
 
 REFACTOR[4]:
   1. rm duplicates  (-15 dup classes)
@@ -1480,16 +1480,106 @@ REFACTOR[4]:
   3. split src/prefact/rules/string_transformations.py  (god module)
   4. split 2 high-CC methods  (CC>15)
 
-PIPELINES[609]:
-  [1] Src [format_timestamp]: format_timestamp
+PIPELINES[610]:
+  [1] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
       PURITY: 100% pure
-  [2] Src [read_file]: read_file
+  [2] Src [main]: main → find_examples
       PURITY: 100% pure
-  [3] Src [__init__]: __init__
+  [3] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [4] Src [get_data]: get_data
+  [4] Src [__init__]: __init__
       PURITY: 100% pure
-  [5] Src [process_data]: process_data
+  [5] Src [process]: process → format_data
+      PURITY: 100% pure
+  [6] Src [process_user]: process_user → helper_function
+      PURITY: 100% pure
+  [7] Src [__init__]: __init__
+      PURITY: 100% pure
+  [8] Src [process]: process → format_data
+      PURITY: 100% pure
+  [9] Src [process]: process
+      PURITY: 100% pure
+  [10] Src [process]: process
+      PURITY: 100% pure
+  [11] Src [process]: process
+      PURITY: 100% pure
+  [12] Src [process]: process
+      PURITY: 100% pure
+  [13] Src [process_data]: process_data
+      PURITY: 100% pure
+  [14] Src [process_data]: process_data
+      PURITY: 100% pure
+  [15] Src [format_timestamp]: format_timestamp
+      PURITY: 100% pure
+  [16] Src [read_file]: read_file
+      PURITY: 100% pure
+  [17] Src [__init__]: __init__
+      PURITY: 100% pure
+  [18] Src [get_data]: get_data
+      PURITY: 100% pure
+  [19] Src [process_data]: process_data
+      PURITY: 100% pure
+  [20] Src [format_timestamp]: format_timestamp
+      PURITY: 100% pure
+  [21] Src [read_file]: read_file
+      PURITY: 100% pure
+  [22] Src [__init__]: __init__
+      PURITY: 100% pure
+  [23] Src [get_data]: get_data
+      PURITY: 100% pure
+  [24] Src [greet]: greet
+      PURITY: 100% pure
+  [25] Src [format_data]: format_data
+      PURITY: 100% pure
+  [26] Src [process_data]: process_data
+      PURITY: 100% pure
+  [27] Src [calculate]: calculate
+      PURITY: 100% pure
+  [28] Src [process_data]: process_data
+      PURITY: 100% pure
+  [29] Src [calculate]: calculate
+      PURITY: 100% pure
+  [30] Src [process_users]: process_users
+      PURITY: 100% pure
+  [31] Src [generate_report]: generate_report
+      PURITY: 100% pure
+  [32] Src [__init__]: __init__
+      PURITY: 100% pure
+  [33] Src [process]: process
+      PURITY: 100% pure
+  [34] Src [main]: main → process_data
+      PURITY: 100% pure
+  [35] Src [admin]: admin
+      PURITY: 100% pure
+  [36] Src [users]: users
+      PURITY: 100% pure
+  [37] Src [format_name]: format_name
+      PURITY: 100% pure
+  [38] Src [__init__]: __init__
+      PURITY: 100% pure
+  [39] Src [__post_init__]: __post_init__
+      PURITY: 100% pure
+  [40] Src [__post_init__]: __post_init__
+      PURITY: 100% pure
+  [41] Src [create_user]: create_user
+      PURITY: 100% pure
+  [42] Src [load_users_from_file]: load_users_from_file
+      PURITY: 100% pure
+  [43] Src [process_data]: process_data
+      PURITY: 100% pure
+  [44] Src [calculate_sum]: calculate_sum
+      PURITY: 100% pure
+  [45] Src [__init__]: __init__
+      PURITY: 100% pure
+  [46] Src [add_item]: add_item
+      PURITY: 100% pure
+  [47] Src [get_summary]: get_summary
+      PURITY: 100% pure
+  [48] Src [process_data]: process_data
+      PURITY: 100% pure
+  [49] Src [calculate_sum]: calculate_sum
+      PURITY: 100% pure
+  [50] Src [main]: main → run_prefact_example
       PURITY: 100% pure
 
 LAYERS:
@@ -1499,10 +1589,9 @@ LAYERS:
   │ importchecker_based        499L  5C   24m  CC=14     ←0
   │ import_linter_based        480L  5C   24m  CC=8      ←0
   │ unimport_based             459L  5C   22m  CC=14     ←0
-  │ cache                      440L  6C   37m  CC=5      ←0  ×DUP
   │ todo_manager               430L  1C   15m  CC=13     ←0
-  │ pylint_based               424L  5C   22m  CC=6      ←0
   │ cli                        424L  0C   11m  CC=7      ←1
+  │ pylint_based               424L  5C   22m  CC=6      ←1
   │ mypy_based                 416L  6C   22m  CC=9      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
   │ ruff_based                 359L  6C   19m  CC=4      ←0
@@ -1533,7 +1622,7 @@ LAYERS:
   │ setup_manager              142L  1C    3m  CC=9      ←0
   │ config                     142L  1C    8m  CC=10     ←0
   │ magic_numbers              138L  1C    8m  CC=7      ←0
-  │ cache_adapters             130L  4C   16m  CC=3      ←9  ×DUP
+  │ cache_adapters             130L  4C   16m  CC=3      ←0  ×DUP
   │ composite_factory          121L  1C    2m  CC=4      ←0
   │ base                       102L  1C    7m  CC=3      ←0  ×DUP
   │ duplicate_imports          102L  1C    3m  CC=7      ←0
@@ -1561,6 +1650,7 @@ LAYERS:
   │ validator                   32L  1C    2m  CC=4      ←0
   │ config                      32L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
+  │ __init__                    30L  0C    0m  CC=0.0    ←0
   │ formatters                  26L  1C    1m  CC=2      ←0
   │ defaults                    21L  0C    0m  CC=0.0    ←0
   │ constants                   15L  0C    0m  CC=0.0    ←0
@@ -1572,6 +1662,7 @@ LAYERS:
   │ _base                        6L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
+  │ cache                        0L  6C   37m  CC=5      ←9  ×DUP
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
   │ extension.ts               437L  5C   48m  CC=14     ←27
@@ -1580,12 +1671,13 @@ LAYERS:
   │ tsconfig.json               16L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=2.6    ←in:0  →out:0
-  │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
+  │ !! planfile.yaml             2048L  0C    0m  CC=0.0    ←0
   │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
   │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
   │ Makefile                   293L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   235L  0C    5m  CC=7      ←0
   │ Taskfile.yml               186L  0C    0m  CC=0.0    ←0
+  │ koru.yaml                  133L  0C    0m  CC=0.0    ←0
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
@@ -1611,14 +1703,14 @@ LAYERS:
   │ cli                         62L  0C    3m  CC=2      ←0
   │ models                      59L  2C    5m  CC=2      ←0
   │ messy_module                54L  1C    4m  CC=2      ←0
-  │ before                      41L  1C    6m  CC=2      ←1  ×DUP
   │ after                       41L  1C    6m  CC=2      ←0  ×DUP
+  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
-  │ before                      26L  1C    3m  CC=1      ←0
   │ after                       26L  1C    3m  CC=1      ←0
+  │ before                      26L  1C    3m  CC=1      ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
@@ -1633,12 +1725,12 @@ LAYERS:
   │ sample_code                 17L  0C    2m  CC=2      ←0
   │ after                       15L  0C    2m  CC=1      ←0
   │ before                      15L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
+  │ before                      13L  0C    1m  CC=1      ←0
   │ after                       13L  0C    2m  CC=1      ←2
   │ before                      13L  0C    2m  CC=1      ←0
-  │ before                      13L  0C    1m  CC=1      ←0
-  │ after                       13L  0C    1m  CC=1      ←0
   │ requirements.txt            13L  0C    0m  CC=0.0    ←0
-  │ after                        8L  0C    1m  CC=1      ←0
+  │ after                        8L  0C    1m  CC=1      ←1
   │ before                       8L  0C    1m  CC=1      ←0
   │ after                        6L  0C    1m  CC=1      ←0
   │ before                       6L  0C    1m  CC=1      ←0
@@ -1648,6 +1740,11 @@ LAYERS:
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
   │
+  docs/                           CC̄=0.0    ←in:0  →out:0
+  │ koru-interface-registry.yaml   270L  0C    0m  CC=0.0    ←0
+  │
+  ── zero ──
+     src/prefact/performance/cache.py          0L
 
 COUPLING:
                                         vscode-extension.src                   src.prefact  examples.01-individual-rules       examples.sample-project    benchmark_ram_optimization      examples.04-custom-rules
@@ -1669,7 +1766,7 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 46 groups | 100f 14449L | 2026-05-24
+# redup/duplication | 46 groups | 100f 14449L | 2026-06-02
 
 SUMMARY:
   files_scanned: 100
@@ -1677,7 +1774,7 @@ SUMMARY:
   dup_groups:    46
   dup_fragments: 120
   saved_lines:   434
-  scan_ms:       2670
+  scan_ms:       2293
 
 HOTSPOTS[7] (files with most duplication):
   src/prefact/rules/unimport_based.py  dup=84L  groups=4  frags=7  (0.6%)
@@ -2047,7 +2144,7 @@ METRICS-TARGET:
 ### Evolution / Churn (`project/evolution.toon.yaml`)
 
 ```toon markpact:analysis path=project/evolution.toon.yaml
-# code2llm/evolution | 700 func | 69f | 2026-05-24
+# code2llm/evolution | 700 func | 69f | 2026-06-02
 # generated in 0.00s
 
 NEXT[5] (ranked by impact):
@@ -2064,7 +2161,7 @@ NEXT[5] (ranked by impact):
       EFFORT: ~1h  IMPACT: 180
 
   [4] !! SPLIT           planfile.yaml
-      WHY: 2126L, 0 classes, max CC=0
+      WHY: 2048L, 0 classes, max CC=0
       EFFORT: ~4h  IMPACT: 0
 
   [5] !! SPLIT           goal.yaml
@@ -2109,7 +2206,7 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=0.6 → now CC̄=3.1
+  prev CC̄=3.1 → now CC̄=3.1
 ```
 
 ### Validation (`project/validation.toon.yaml`)

@@ -1,4 +1,4 @@
-# redup/duplication | 46 groups | 100f 14449L | 2026-05-24
+# redup/duplication | 46 groups | 100f 14449L | 2026-06-02
 
 SUMMARY:
   files_scanned: 100
@@ -6,7 +6,7 @@ SUMMARY:
   dup_groups:    46
   dup_fragments: 120
   saved_lines:   434
-  scan_ms:       2670
+  scan_ms:       2293
 
 HOTSPOTS[7] (files with most duplication):
   src/prefact/rules/unimport_based.py  dup=84L  groups=4  frags=7  (0.6%)

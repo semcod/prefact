@@ -1,13 +1,13 @@
-# code2llm | 145f 21099L | python:106,yaml:26,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-05-24
+# code2llm | 148f 21014L | python:106,yaml:28,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-06-02
 # generated in 0.04s
-# CC̄=3.0 | critical:2/779 | dups:15 | cycles:0
+# CC̅=3.0 | critical:2/779 | dups:15 | cycles:0
 
 HEALTH[5]:
   🔴 DUP   15 classes duplicated
   🔴 GOD   src/prefact/rules/isort_based.py = 519L, 4 classes, 23m, max CC=13
   🔴 GOD   src/prefact/rules/string_transformations.py = 501L, 6 classes, 27m, max CC=8
-  🟡 CC    run CC=15 (limit:15)
   🟡 CC    update_planfile CC=27 (limit:15)
+  🟡 CC    run CC=15 (limit:15)
 
 REFACTOR[4]:
   1. rm duplicates  (-15 dup classes)
@@ -15,16 +15,106 @@ REFACTOR[4]:
   3. split src/prefact/rules/string_transformations.py  (god module)
   4. split 2 high-CC methods  (CC>15)
 
-PIPELINES[609]:
-  [1] Src [format_timestamp]: format_timestamp
+PIPELINES[610]:
+  [1] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
       PURITY: 100% pure
-  [2] Src [read_file]: read_file
+  [2] Src [main]: main → find_examples
       PURITY: 100% pure
-  [3] Src [__init__]: __init__
+  [3] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [4] Src [get_data]: get_data
+  [4] Src [__init__]: __init__
       PURITY: 100% pure
-  [5] Src [process_data]: process_data
+  [5] Src [process]: process → format_data
+      PURITY: 100% pure
+  [6] Src [process_user]: process_user → helper_function
+      PURITY: 100% pure
+  [7] Src [__init__]: __init__
+      PURITY: 100% pure
+  [8] Src [process]: process → format_data
+      PURITY: 100% pure
+  [9] Src [process]: process
+      PURITY: 100% pure
+  [10] Src [process]: process
+      PURITY: 100% pure
+  [11] Src [process]: process
+      PURITY: 100% pure
+  [12] Src [process]: process
+      PURITY: 100% pure
+  [13] Src [process_data]: process_data
+      PURITY: 100% pure
+  [14] Src [process_data]: process_data
+      PURITY: 100% pure
+  [15] Src [format_timestamp]: format_timestamp
+      PURITY: 100% pure
+  [16] Src [read_file]: read_file
+      PURITY: 100% pure
+  [17] Src [__init__]: __init__
+      PURITY: 100% pure
+  [18] Src [get_data]: get_data
+      PURITY: 100% pure
+  [19] Src [process_data]: process_data
+      PURITY: 100% pure
+  [20] Src [format_timestamp]: format_timestamp
+      PURITY: 100% pure
+  [21] Src [read_file]: read_file
+      PURITY: 100% pure
+  [22] Src [__init__]: __init__
+      PURITY: 100% pure
+  [23] Src [get_data]: get_data
+      PURITY: 100% pure
+  [24] Src [greet]: greet
+      PURITY: 100% pure
+  [25] Src [format_data]: format_data
+      PURITY: 100% pure
+  [26] Src [process_data]: process_data
+      PURITY: 100% pure
+  [27] Src [calculate]: calculate
+      PURITY: 100% pure
+  [28] Src [process_data]: process_data
+      PURITY: 100% pure
+  [29] Src [calculate]: calculate
+      PURITY: 100% pure
+  [30] Src [process_users]: process_users
+      PURITY: 100% pure
+  [31] Src [generate_report]: generate_report
+      PURITY: 100% pure
+  [32] Src [__init__]: __init__
+      PURITY: 100% pure
+  [33] Src [process]: process
+      PURITY: 100% pure
+  [34] Src [main]: main → process_data
+      PURITY: 100% pure
+  [35] Src [admin]: admin
+      PURITY: 100% pure
+  [36] Src [users]: users
+      PURITY: 100% pure
+  [37] Src [format_name]: format_name
+      PURITY: 100% pure
+  [38] Src [__init__]: __init__
+      PURITY: 100% pure
+  [39] Src [__post_init__]: __post_init__
+      PURITY: 100% pure
+  [40] Src [__post_init__]: __post_init__
+      PURITY: 100% pure
+  [41] Src [create_user]: create_user
+      PURITY: 100% pure
+  [42] Src [load_users_from_file]: load_users_from_file
+      PURITY: 100% pure
+  [43] Src [process_data]: process_data
+      PURITY: 100% pure
+  [44] Src [calculate_sum]: calculate_sum
+      PURITY: 100% pure
+  [45] Src [__init__]: __init__
+      PURITY: 100% pure
+  [46] Src [add_item]: add_item
+      PURITY: 100% pure
+  [47] Src [get_summary]: get_summary
+      PURITY: 100% pure
+  [48] Src [process_data]: process_data
+      PURITY: 100% pure
+  [49] Src [calculate_sum]: calculate_sum
+      PURITY: 100% pure
+  [50] Src [main]: main → run_prefact_example
       PURITY: 100% pure
 
 LAYERS:
@@ -34,10 +124,9 @@ LAYERS:
   │ importchecker_based        499L  5C   24m  CC=14     ←0
   │ import_linter_based        480L  5C   24m  CC=8      ←0
   │ unimport_based             459L  5C   22m  CC=14     ←0
-  │ cache                      440L  6C   37m  CC=5      ←0  ×DUP
   │ todo_manager               430L  1C   15m  CC=13     ←0
-  │ pylint_based               424L  5C   22m  CC=6      ←0
   │ cli                        424L  0C   11m  CC=7      ←1
+  │ pylint_based               424L  5C   22m  CC=6      ←1
   │ mypy_based                 416L  6C   22m  CC=9      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
   │ ruff_based                 359L  6C   19m  CC=4      ←0
@@ -68,7 +157,7 @@ LAYERS:
   │ setup_manager              142L  1C    3m  CC=9      ←0
   │ config                     142L  1C    8m  CC=10     ←0
   │ magic_numbers              138L  1C    8m  CC=7      ←0
-  │ cache_adapters             130L  4C   16m  CC=3      ←9  ×DUP
+  │ cache_adapters             130L  4C   16m  CC=3      ←0  ×DUP
   │ composite_factory          121L  1C    2m  CC=4      ←0
   │ base                       102L  1C    7m  CC=3      ←0  ×DUP
   │ duplicate_imports          102L  1C    3m  CC=7      ←0
@@ -96,6 +185,7 @@ LAYERS:
   │ validator                   32L  1C    2m  CC=4      ←0
   │ config                      32L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
+  │ __init__                    30L  0C    0m  CC=0.0    ←0
   │ formatters                  26L  1C    1m  CC=2      ←0
   │ defaults                    21L  0C    0m  CC=0.0    ←0
   │ constants                   15L  0C    0m  CC=0.0    ←0
@@ -107,6 +197,7 @@ LAYERS:
   │ _base                        6L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
+  │ cache                        0L  6C   37m  CC=5      ←9  ×DUP
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
   │ extension.ts               437L  5C   48m  CC=14     ←27
@@ -115,12 +206,13 @@ LAYERS:
   │ tsconfig.json               16L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=2.6    ←in:0  →out:0
-  │ !! planfile.yaml             2126L  0C    0m  CC=0.0    ←0
+  │ !! planfile.yaml             2048L  0C    0m  CC=0.0    ←0
   │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
   │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
   │ Makefile                   293L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   235L  0C    5m  CC=7      ←0
   │ Taskfile.yml               186L  0C    0m  CC=0.0    ←0
+  │ koru.yaml                  133L  0C    0m  CC=0.0    ←0
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
@@ -146,14 +238,14 @@ LAYERS:
   │ cli                         62L  0C    3m  CC=2      ←0
   │ models                      59L  2C    5m  CC=2      ←0
   │ messy_module                54L  1C    4m  CC=2      ←0
-  │ before                      41L  1C    6m  CC=2      ←1  ×DUP
   │ after                       41L  1C    6m  CC=2      ←0  ×DUP
+  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
-  │ before                      26L  1C    3m  CC=1      ←0
   │ after                       26L  1C    3m  CC=1      ←0
+  │ before                      26L  1C    3m  CC=1      ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
@@ -168,12 +260,12 @@ LAYERS:
   │ sample_code                 17L  0C    2m  CC=2      ←0
   │ after                       15L  0C    2m  CC=1      ←0
   │ before                      15L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
+  │ before                      13L  0C    1m  CC=1      ←0
   │ after                       13L  0C    2m  CC=1      ←2
   │ before                      13L  0C    2m  CC=1      ←0
-  │ before                      13L  0C    1m  CC=1      ←0
-  │ after                       13L  0C    1m  CC=1      ←0
   │ requirements.txt            13L  0C    0m  CC=0.0    ←0
-  │ after                        8L  0C    1m  CC=1      ←0
+  │ after                        8L  0C    1m  CC=1      ←1
   │ before                       8L  0C    1m  CC=1      ←0
   │ after                        6L  0C    1m  CC=1      ←0
   │ before                       6L  0C    1m  CC=1      ←0
@@ -183,6 +275,11 @@ LAYERS:
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
   │
+  docs/                           CC̄=0.0    ←in:0  →out:0
+  │ koru-interface-registry.yaml   270L  0C    0m  CC=0.0    ←0
+  │
+  ── zero ──
+     src/prefact/performance/cache.py          0L
 
 COUPLING:
                                         vscode-extension.src                   src.prefact  examples.01-individual-rules       examples.sample-project    benchmark_ram_optimization      examples.04-custom-rules
