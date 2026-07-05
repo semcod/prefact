@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- `prefact.performance` was completely unimportable (`ImportError: cannot import
+  name 'CacheContext' from 'prefact.performance.cache'`): an in-progress refactor
+  from a flat `cache.py` to a `cache/` package had left `cache.py` and `cache_state.py`
+  as orphaned, unreferenced files — `cache.py` collided with the new `cache/` package's
+  name (Python resolved to the package, shadowing the old module), and `cache_state.py`
+  imported a nonexistent `.cache_core` module. Neither file was imported by anything else
+  in the codebase (confirmed via full-repo grep), so this had gone unnoticed. Completed
+  the refactor: ported the six names the old `cache.py` had that `cache/__init__.py`
+  didn't yet re-export (`CacheContext`, `cleanup_cache`, `clear_cache`, `get_config_cache`,
+  `get_hash_cache`, `get_rule_cache`) into `cache/globals.py` using the new package's
+  `Cache` class (same API surface: `.get`/`.set`/`.delete`/`.clear`/`.close`), then
+  deleted both orphaned files. Added `tests/test_performance_cache.py` (previously zero
+  test coverage existed for this subpackage) — an import-surface test that runs
+  unconditionally (the regression needed no diskcache instance, just the names to
+  resolve) plus a `CacheContext` lifecycle test gated on `pytest.importorskip("diskcache")`
+  since it's an optional extra. Full test suite (85 tests, 2 correctly skipped) passes.
 - `DEFAULT_EXCLUDE` used prefix globs (`**/.venv*/**`, `**/venv*/**`) and the scanner's
   hardcoded fallback used `part.startswith("venv")` / `part.startswith(".venv")`, matching
   any directory component that merely starts with those names (e.g. a real `venv_utils/` or
@@ -16,6 +32,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.62] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_performance_cache.py
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.61] - 2026-07-05
 

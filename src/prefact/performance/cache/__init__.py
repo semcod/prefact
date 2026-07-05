@@ -8,7 +8,17 @@ from .base import (
     Cache,
 )
 from .config import ConfigCache
-from .globals import get_cache, get_scan_cache, initialize_cache
+from .globals import (
+    CacheContext,
+    cleanup_cache,
+    clear_cache,
+    get_cache,
+    get_config_cache,
+    get_hash_cache,
+    get_rule_cache,
+    get_scan_cache,
+    initialize_cache,
+)
 from .hash import FileHashCache
 from .rule import RuleResultCache
 from .scan import ScanResultCache
@@ -24,7 +34,13 @@ __all__ = [
     "ConfigCache",
     "RuleResultCache",
     "FileHashCache",
+    "CacheContext",
     "initialize_cache",
+    "cleanup_cache",
+    "clear_cache",
     "get_cache",
     "get_scan_cache",
+    "get_config_cache",
+    "get_rule_cache",
+    "get_hash_cache",
 ]

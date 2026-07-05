@@ -49,3 +49,64 @@ def get_scan_cache() -> ScanResultCache:
     if _scan_cache is None:
         raise RuntimeError("Cache not initialized. Call initialize_cache() first.")
     return _scan_cache
+
+
+def get_config_cache() -> ConfigCache:
+    """Get the configuration cache instance."""
+    if _config_cache is None:
+        raise RuntimeError("Cache not initialized. Call initialize_cache() first.")
+    return _config_cache
+
+
+def get_rule_cache() -> RuleResultCache:
+    """Get the rule result cache instance."""
+    if _rule_cache is None:
+        raise RuntimeError("Cache not initialized. Call initialize_cache() first.")
+    return _rule_cache
+
+
+def get_hash_cache() -> FileHashCache:
+    """Get the file hash cache instance."""
+    if _hash_cache is None:
+        raise RuntimeError("Cache not initialized. Call initialize_cache() first.")
+    return _hash_cache
+
+
+def cleanup_cache() -> None:
+    """Close the cache and clear all global instances."""
+    global _cache, _scan_cache, _config_cache, _rule_cache, _hash_cache
+
+    if _cache:
+        _cache.close()
+
+    _cache = None
+    _scan_cache = None
+    _config_cache = None
+    _rule_cache = None
+    _hash_cache = None
+
+
+def clear_cache(pattern: Optional[str] = None) -> None:
+    """Clear cache entries, optionally only those whose key contains `pattern`."""
+    cache = get_cache()
+
+    if pattern:
+        keys_to_delete = [key for key in cache.cache.iterkeys() if pattern in key]
+        for key in keys_to_delete:
+            cache.delete(key)
+    else:
+        cache.clear()
+
+
+class CacheContext:
+    """Context manager that initializes the cache on entry and cleans it up on exit."""
+
+    def __init__(self, config: Config):
+        self.config = config
+
+    def __enter__(self) -> "CacheContext":
+        initialize_cache(self.config)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        cleanup_cache()
