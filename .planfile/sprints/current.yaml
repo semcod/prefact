@@ -224,9 +224,10 @@ sprint:
         by responsibility.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T17:48:36.471204Z'
         max_attempts: 1
         queue: default
-        state: ready
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -240,6 +241,21 @@ sprint:
           by responsibility.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.102659+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T17:48:35.916400+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T17:48:36.476311+00:00'
       id: PLF-004
       inputs:
         api_headers: {}
@@ -260,7 +276,11 @@ sprint:
       name: 'Split god module: src/prefact/rules/isort_based.py'
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - Split into isort_based/ package (helper.py, sorted_imports.py, section_separator.py,
+          custom_organization.py) with full backward-compat facade __init__.py. Verified
+          end-to-end with isort installed and via fallback path. Published as prefact
+          0.1.63.
       priority: high
       source:
         context:
@@ -287,9 +307,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.102659+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: done
       sync: {}
-      updated_at: '2026-06-01T19:31:43.102659+00:00'
+      updated_at: '2026-07-05T17:48:36.476284+00:00'
     PLF-005:
       blocked_by: []
       blocks: []
@@ -301,7 +321,8 @@ sprint:
         attempt: 0
         max_attempts: 1
         queue: default
-        state: ready
+        started_at: '2026-07-05T17:48:57.884838Z'
+        state: running
       executor:
         kind: human
         mode: interactive
@@ -315,6 +336,16 @@ sprint:
           by responsibility.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.131141+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: running
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: in_progress
+        timestamp: '2026-07-05T17:48:57.889831+00:00'
       id: PLF-005
       inputs:
         api_headers: {}
@@ -362,9 +393,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.131141+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: in_progress
       sync: {}
-      updated_at: '2026-06-01T19:31:43.131141+00:00'
+      updated_at: '2026-07-05T17:48:57.889804+00:00'
     PLF-006:
       blocked_by: []
       blocks: []

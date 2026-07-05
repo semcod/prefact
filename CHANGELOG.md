@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Split `src/prefact/rules/string_transformations.py` (501 lines, 6 classes) into a
+  package of three transformer+rule pairs: `string_concat.py`
+  (`StringConcatTransformer`/`StringConcatToFString`), `flynt_formatting.py`
+  (`FlyntHelper`/`FlyntStringFormatting`), `context_aware_concat.py`
+  (`ContextAwareStringTransformer`/`ContextAwareStringConcat`, which imports from
+  `string_concat` — preserved as a submodule import). `__init__.py` re-exports every
+  original name and eagerly imports every submodule so `@register` still fires.
+  Verified end-to-end (scan/fix/validate on real string-concatenation and
+  `.format()`/`%`-formatting source) for all three rule classes; full test suite
+  (85 passed, 2 correctly skipped) passes.
 - Split `src/prefact/rules/isort_based.py` (519 lines, 4 classes) into a package
   (`isort_based/{helper,sorted_imports,section_separator,custom_organization}.py`)
   with `__init__.py` re-exporting every original name (including `HAS_ISORT`) and
@@ -45,6 +55,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.64] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.63] - 2026-07-05
 
