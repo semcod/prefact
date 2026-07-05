@@ -1,0 +1,12 @@
+# local.dev.txt — locally developed dependencies of this project (generated 2026-07-04)
+# by ~/github/local.dev.sh — DO NOT EDIT; see ~/github/local.dev.md
+# project: prefact dynamic (python) at /home/tom/github/semcod/prefact
+# deps declared: 29 | with local source: 4
+
+## LOCAL DEPS  (dep | required | local source (version) | installed | status)
+costs | >=0.1.20 | /home/tom/github/semcod/costs (0.1.53) | 0.1.51 non-editable | STALE-INSTALL (local 0.1.53) -> fix: pip install -e /home/tom/github/semcod/costs  [pyproject.toml]
+goal | >=2.1.218 | /home/tom/github/semcod/goal (2.1.266) | 2.1.234 non-editable | STALE-INSTALL (local 2.1.266) -> fix: pip install -e /home/tom/github/semcod/goal  [pyproject.toml]
+pfix | >=0.1.60 | /home/tom/github/semcod/pfix (0.1.76) | 0.1.73 non-editable | STALE-INSTALL (local 0.1.76) -> fix: pip install -e /home/tom/github/semcod/pfix  [pyproject.toml]
+planfile | >=0.1.86 | /home/tom/github/semcod/planfile (0.1.106) | 0.1.100 non-editable | STALE-INSTALL (local 0.1.106) -> fix: pip install -e /home/tom/github/semcod/planfile  [pyproject.toml]
+
+## EXTERNAL DEPS (no local source, 24): ast-decompiler, autoflake, black, click, diskcache, import-linter, importchecker, isort, libcst, mkdocs, mkdocs-material, mkdocstrings, mypy, pre-commit, prometheus-client, pylint, pytest, pytest-asyncio, pytest-cov, pyyaml, rich, ruff, tomli, unimport

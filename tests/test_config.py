@@ -69,13 +69,19 @@ rules:
         assert cfg.exclude == DEFAULT_EXCLUDE
 
     def test_venv_variants_in_defaults(self) -> None:
-        for pattern in ("**/.venv/**", "**/.venv*/**", "**/venv/**", "**/venv*/**", "**/env/**"):
+        for pattern in ("**/.venv/**", "**/venv/**", "**/env/**", "**/.env/**"):
             assert pattern in DEFAULT_EXCLUDE, f"Missing pattern: {pattern}"
+        # Prefix-glob variants matched any path component starting with
+        # venv/env (e.g. a real "venv_utils" or "environment" directory),
+        # silently excluding legitimate source. Only exact venv dir names
+        # should be excluded.
+        for pattern in ("**/.venv*/**", "**/venv*/**"):
+            assert pattern not in DEFAULT_EXCLUDE, f"Overly broad pattern present: {pattern}"
 
-    def test_scanner_excludes_venv_test(self, tmp_path: Path) -> None:
+    def test_scanner_excludes_venv_dir(self, tmp_path: Path) -> None:
         from prefact.scanner import Scanner
 
-        venv_dir = tmp_path / ".venv_test" / "lib"
+        venv_dir = tmp_path / ".venv" / "lib"
         venv_dir.mkdir(parents=True)
         (venv_dir / "foo.py").write_text("x = 1\n")
         (tmp_path / "main.py").write_text("x = 1\n")
@@ -85,7 +91,23 @@ rules:
         files = scanner.collect_files()
         names = [f.name for f in files]
         assert "main.py" in names
-        assert "foo.py" not in names, ".venv_test should be excluded"
+        assert "foo.py" not in names, ".venv should be excluded"
+
+    def test_scanner_does_not_exclude_venv_like_source_dir(self, tmp_path: Path) -> None:
+        """A real source directory that merely starts with 'venv'/'env' must not be skipped."""
+        from prefact.scanner import Scanner
+
+        pkg_dir = tmp_path / "venv_utils"
+        pkg_dir.mkdir(parents=True)
+        (pkg_dir / "helpers.py").write_text("x = 1\n")
+        (tmp_path / "main.py").write_text("x = 1\n")
+
+        cfg = Config(project_root=tmp_path)
+        scanner = Scanner(cfg)
+        files = scanner.collect_files()
+        names = [f.name for f in files]
+        assert "main.py" in names
+        assert "helpers.py" in names, "venv_utils/ is a real source dir, not a virtualenv"
 
     def test_config_extended_constants_reexport(self) -> None:
         from prefact.config_extended.constants import DEFAULT_EXCLUDE as CE_EXCLUDE

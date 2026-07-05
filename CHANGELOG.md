@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- `DEFAULT_EXCLUDE` used prefix globs (`**/.venv*/**`, `**/venv*/**`) and the scanner's
+  hardcoded fallback used `part.startswith("venv")` / `part.startswith(".venv")`, matching
+  any directory component that merely starts with those names (e.g. a real `venv_utils/` or
+  `environment/` source directory), silently dropping it from analysis. Replaced with exact
+  directory-name matches (`venv`, `.venv`, `env`, `.env`, `virtualenv`, `site-packages`).
+- `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
+  (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
+  Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.60] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_config.py
+
+### Other
+- Update local.dev.txt
+- Update vscode-extension/local.dev.txt
+
 ## [0.1.10] - 2026-05-24
 
 ### Fixed

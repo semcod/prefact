@@ -90,13 +90,32 @@ class Scanner:
                 self._rules.append(rule_cls(config))
 
     def collect_files(self) -> list[Path]:
+        """Walk the project tree collecting files that match an include pattern.
+
+        Uses os.walk with topdown pruning so excluded directories (venv,
+        node_modules, ...) are skipped before descending into them, instead
+        of the previous root.glob() approach which fully traversed the tree
+        (stat'ing every file inside a populated virtualenv) before filtering.
+        """
         root = self.config.project_root.resolve()
+        include_patterns = self.config.include or []
         files: list[Path] = []
-        for pattern in self.config.include or []:
-            # Path.glob already handles ** patterns
-            for p in root.glob(pattern):
-                if p.is_file() and not self._excluded(p):
-                    files.append(p)
+        for dirpath, dirnames, filenames in os.walk(root, topdown=True):
+            current_dir = Path(dirpath)
+            dirnames[:] = [d for d in dirnames if not self._excluded(current_dir / d)]
+            for filename in filenames:
+                file_path = current_dir / filename
+                if self._excluded(file_path):
+                    continue
+                try:
+                    rel_str = str(file_path.relative_to(root))
+                except ValueError:
+                    continue
+                if any(
+                    _match_gitignore_pattern(rel_str, pattern)
+                    for pattern in include_patterns
+                ):
+                    files.append(file_path)
         return sorted(set(files))
 
     def scan(self, files: list[Path] | None = None) -> dict[Path, list[Issue]]:
@@ -155,13 +174,18 @@ class Scanner:
                     return True
 
         # Hardcoded safety for common folders if not caught by patterns
-        _skip_dirs = {".git", "node_modules", "__pycache__", "env"}
-        if any(
-            part in _skip_dirs
-            or part.startswith(".venv")
-            or part.startswith("venv")
-            for part in abs_path.parts
-        ):
+        _skip_dirs = {
+            ".git",
+            "node_modules",
+            "__pycache__",
+            "env",
+            ".env",
+            "venv",
+            ".venv",
+            "virtualenv",
+            "site-packages",
+        }
+        if any(part in _skip_dirs for part in abs_path.parts):
             return True
 
         return False
