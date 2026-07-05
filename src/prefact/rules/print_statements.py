@@ -17,7 +17,7 @@ except ImportError:
 
 @register
 class PrintStatements(BaseRule):
-    rule_id = "print-statements"
+    rule_id = "ast-print-statements"
     description = "Detect print() calls that may be leftover debug statements."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

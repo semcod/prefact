@@ -397,7 +397,11 @@ def rules() -> None:
     table.add_column("Auto-fix")
     for rule_id, rule_cls in sorted(get_all_rules().items()):
         # Heuristic: if fix() returns source unchanged, it's scan-only
-        has_fix = rule_id in ("relative-imports", "unused-imports", "duplicate-imports")
+        has_fix = rule_id in (
+            "relative-imports",
+            "ast-unused-imports",
+            "ast-duplicate-imports",
+        )
         table.add_row(
             rule_id, rule_cls.description, "✅" if has_fix else "🔍 scan-only"
         )

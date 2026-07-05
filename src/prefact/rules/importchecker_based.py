@@ -94,7 +94,7 @@ class ImportCheckerHelper:
 class ImportCheckerUnusedImports(BaseRule):
     """Detect unused imports using importchecker."""
 
-    rule_id = "unused-imports"
+    rule_id = "importchecker-unused-imports"
     description = "Detect unused imports using importchecker library"
 
     def __init__(self, config: Config) -> None:
@@ -198,7 +198,7 @@ class ImportCheckerUnusedImports(BaseRule):
 class ImportCheckerDuplicateImports(BaseRule):
     """Detect duplicate imports using importchecker."""
 
-    rule_id = "duplicate-imports"
+    rule_id = "importchecker-duplicate-imports"
     description = "Detect duplicate imports using importchecker library"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -315,7 +315,7 @@ class ImportDependencyAnalysis(BaseRule):
 
         # Check import depth
         for imp in imports:
-            if imp.count(".") > self.checker_config["max_depth"]:
+            if imp["name"].count(".") > self.checker_config["max_depth"]:
                 issues.append(
                     Issue(
                         rule_id=self.rule_id,

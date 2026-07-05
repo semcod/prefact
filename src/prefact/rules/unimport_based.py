@@ -118,7 +118,7 @@ class UnimportHelper:
 class UnimportUnusedImports(BaseRule):
     """Remove unused imports using unimport."""
 
-    rule_id = "unused-imports"
+    rule_id = "unimport-unused-imports"
     description = "Remove unused imports using unimport library"
 
     def __init__(self, config: Config) -> None:
@@ -217,7 +217,7 @@ class UnimportUnusedImports(BaseRule):
 class UnimportDuplicateImports(BaseRule):
     """Remove duplicate imports using unimport."""
 
-    rule_id = "duplicate-imports"
+    rule_id = "unimport-duplicate-imports"
     description = "Remove duplicate imports using unimport library"
 
     def __init__(self, config: Config) -> None:
@@ -313,7 +313,7 @@ class UnimportDuplicateImports(BaseRule):
 class UnimportStarImports(BaseRule):
     """Handle star imports using unimport."""
 
-    rule_id = "wildcard-imports"
+    rule_id = "unimport-star-imports"
     description = "Handle star imports using unimport library"
 
     def __init__(self, config: Config) -> None:

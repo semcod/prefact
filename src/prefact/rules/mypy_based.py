@@ -98,7 +98,7 @@ class MyPyHelper:
 class MyPyMissingReturnType(BaseRule):
     """Detect missing return type annotations using MyPy."""
 
-    rule_id = "missing-return-type"
+    rule_id = "mypy-missing-return-type"
     description = "Detect functions missing return type annotations"
 
     def __init__(self, config: Config) -> None:

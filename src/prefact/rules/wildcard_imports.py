@@ -13,7 +13,7 @@ except ImportError:
 
 @register
 class WildcardImports(BaseRule):
-    rule_id = "wildcard-imports"
+    rule_id = "ast-wildcard-imports"
     description = "Detect 'from x import *' statements (scan-only, no auto-fix)."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

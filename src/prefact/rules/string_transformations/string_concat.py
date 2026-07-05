@@ -141,7 +141,7 @@ class StringConcatTransformer(cst.CSTTransformer):
 class StringConcatToFString(BaseRule):
     """Convert string concatenations to f-strings."""
 
-    rule_id = "string-concat"
+    rule_id = "string-concat-fstring"
     description = "Convert string concatenations to f-strings"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:

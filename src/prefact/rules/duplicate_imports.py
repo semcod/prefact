@@ -13,7 +13,7 @@ except ImportError:
 
 @register
 class DuplicateImports(BaseRule):
-    rule_id = "duplicate-imports"
+    rule_id = "ast-duplicate-imports"
     description = "Detect the same name being imported multiple times."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

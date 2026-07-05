@@ -82,7 +82,7 @@ class PylintHelper:
 class PylintPrintStatements(BaseRule):
     """Detect print statements using Pylint."""
 
-    rule_id = "print-statements"
+    rule_id = "pylint-print-statements"
     description = "Detect print statements using Pylint"
 
     def __init__(self, config: Config) -> None:
@@ -183,7 +183,7 @@ class PylintPrintStatements(BaseRule):
 class PylintStringConcat(BaseRule):
     """Detect string concatenation using Pylint."""
 
-    rule_id = "string-concat"
+    rule_id = "pylint-string-concat"
     description = "Detect string concatenation that should use f-strings"
 
     def __init__(self, config: Config) -> None:

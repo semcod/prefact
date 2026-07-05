@@ -246,7 +246,7 @@ class AutoflakeHelper:
 class AutoflakeUnusedImports(BaseRule):
     """Remove unused imports using Autoflake."""
 
-    rule_id = "unused-imports"
+    rule_id = "autoflake-unused-imports"
     description = "Remove unused imports using Autoflake"
 
     def __init__(self, config: Config) -> None:
@@ -295,3 +295,84 @@ class AutoflakeUnusedVariables(BaseRule):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
+        self.autoflake_config = self._load_autoflake_config()
+
+    def _load_autoflake_config(self) -> Dict:
+        """Load Autoflake configuration."""
+        return {
+            "remove_rhs_for_unused_variables": self.config.get_rule_option(
+                self.rule_id, "remove_rhs_for_unused_variables", False
+            ),
+        }
+
+    def scan_file(self, path: Path, source: str) -> List[Issue]:
+        issues = []
+        results = AutoflakeHelper.check_source(source, self.autoflake_config)
+
+        line_num = 1
+        for item in results:
+            if item["type"] == "unused_variable":
+                var_name = self._extract_variable_name(item["line"])
+
+                issues.append(
+                    Issue(
+                        rule_id=self.rule_id,
+                        file=path,
+                        line=line_num,
+                        col=0,
+                        message=f"Unused variable: {var_name}",
+                        severity=Severity.INFO,
+                        original=var_name,
+                    )
+                )
+            line_num += 1
+
+        return issues
+
+    def _extract_variable_name(self, line: str) -> str:
+        """Extract the variable name from a diff line."""
+        clean_line = line[2:] if line.startswith("- ") else line
+
+        if "=" in clean_line:
+            var_name = clean_line.split("=")[0].strip()
+            if ":" in var_name:
+                var_name = var_name.split(":")[0].strip()
+            return var_name
+
+        return "unknown"
+
+    def fix(
+        self, path: Path, source: str, issues: List[Issue]
+    ) -> tuple[str, List[Fix]]:
+        if not issues:
+            return source, []
+
+        fixed_source = AutoflakeHelper.fix_source(source, self.autoflake_config)
+        fixes = []
+
+        if fixed_source != source:
+            for issue in issues:
+                fixes.append(
+                    Fix(
+                        issue=issue,
+                        file=path,
+                        original_code=issue.original,
+                        fixed_code="",
+                        applied=True,
+                    )
+                )
+
+        return fixed_source, fixes
+
+    def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
+        remaining = AutoflakeHelper.check_source(fixed, self.autoflake_config)
+        unused_vars = [r for r in remaining if r["type"] == "unused_variable"]
+
+        return ValidationResult(
+            file=path,
+            passed=len(unused_vars) == 0,
+            checks=["no_unused_variables"] if not unused_vars else [],
+            errors=[f"Still has {len(unused_vars)} unused variables"]
+            if unused_vars
+            else [],
+        )

@@ -32,7 +32,7 @@ def _sort_key(node: ast.stmt) -> tuple[int, str]:
 
 @register
 class SortedImports(BaseRule):
-    rule_id = "sorted-imports"
+    rule_id = "ast-sorted-imports"
     description = "Detect unsorted import blocks (report only)."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

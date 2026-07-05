@@ -21,15 +21,18 @@ class LazyRuleRegistry:
     def __init__(self):
         # Map rule IDs to module paths for lazy loading
         self._rule_modules: Dict[str, str] = {
-            # Core AST-based rules
+            # Core AST-based rules (dependency-free canonical implementations;
+            # "ast-" distinguishes them from same-family tool-backed variants
+            # below, which used to collide on these same bare ids — see
+            # CHANGELOG for the rule_id collision fix this resolved)
             "relative-imports": "prefact.rules.relative_imports",
-            "unused-imports": "prefact.rules.unused_imports",
-            "duplicate-imports": "prefact.rules.duplicate_imports",
-            "wildcard-imports": "prefact.rules.wildcard_imports",
-            "sorted-imports": "prefact.rules.sorted_imports",
-            "string-concat": "prefact.rules.string_concat",
-            "print-statements": "prefact.rules.print_statements",
-            "missing-return-type": "prefact.rules.type_hints",
+            "ast-unused-imports": "prefact.rules.unused_imports",
+            "ast-duplicate-imports": "prefact.rules.duplicate_imports",
+            "ast-wildcard-imports": "prefact.rules.wildcard_imports",
+            "ast-sorted-imports": "prefact.rules.sorted_imports",
+            "ast-string-concat": "prefact.rules.string_concat",
+            "ast-print-statements": "prefact.rules.print_statements",
+            "ast-missing-return-type": "prefact.rules.type_hints",
             # Ruff-based rules
             "ruff-unused-imports": "prefact.rules.ruff_based",
             "ruff-duplicate-imports": "prefact.rules.ruff_based",
@@ -147,6 +150,15 @@ class LazyRuleRegistry:
             rule_class = self.get_rule(rule_id)
             if rule_class:
                 all_rules[rule_id] = rule_class
+
+        # _rule_cache reflects every class actually registered via @register
+        # at import time (ground truth). Some rule_ids (e.g. composite-*,
+        # the llm_specific.py rules) are missing from _rule_modules, or that
+        # static dict points at a stale/wrong module path for them, so
+        # relying on _rule_modules alone silently drops them from
+        # scan/fix/validate/CLI output. Merge both, preferring the
+        # eagerly-registered ground truth over a lazy re-load attempt.
+        all_rules.update(self._rule_cache)
         return all_rules
 
     def list_available_rules(self) -> List[str]:

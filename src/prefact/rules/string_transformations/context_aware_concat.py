@@ -75,7 +75,7 @@ class ContextAwareStringTransformer(cst.CSTTransformer):
             return True
 
         # Skip if configured to skip
-        if self.config.get_rule_option("string-concat", "skip_in_tests", False):
+        if self.config.get_rule_option("string-concat-fstring", "skip_in_tests", False):
             # Check if in test file
             # (implementation depends on your project structure)
             pass

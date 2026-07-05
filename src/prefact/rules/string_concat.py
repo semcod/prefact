@@ -40,7 +40,7 @@ def _flatten_add(node: ast.expr) -> list[ast.expr]:
 
 @register
 class StringConcatToFstring(BaseRule):
-    rule_id = "string-concat"
+    rule_id = "ast-string-concat"
     description = "Detect string concatenation that could be f-strings (scan-only)."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

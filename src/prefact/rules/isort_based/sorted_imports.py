@@ -19,7 +19,7 @@ from .helper import HAS_ISORT, ISortHelper
 class ISortedImports(BaseRule):
     """Sort imports using ISort."""
 
-    rule_id = "sorted-imports"
+    rule_id = "isorted-imports"
     description = "Sort imports according to PEP8 using ISort"
 
     def __init__(self, config: Config) -> None:

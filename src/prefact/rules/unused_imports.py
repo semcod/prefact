@@ -12,7 +12,7 @@ except ImportError:
 
 @register
 class UnusedImports(BaseRule):
-    rule_id = "unused-imports"
+    rule_id = "ast-unused-imports"
     description = "Detect unused imports in Python files"
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

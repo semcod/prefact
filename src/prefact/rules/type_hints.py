@@ -13,7 +13,7 @@ except ImportError:
 
 @register
 class MissingReturnType(BaseRule):
-    rule_id = "missing-return-type"
+    rule_id = "ast-missing-return-type"
     description = "Detect public functions missing return type annotations (scan-only)."
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:

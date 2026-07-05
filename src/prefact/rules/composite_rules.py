@@ -51,7 +51,7 @@ class CompositeUnusedImports(BaseRule):
                 "tool_priorities",
                 {
                     "ruff-unused-imports": 3,
-                    "unused-imports": 2,
+                    "ast-unused-imports": 2,
                     "unimport-unused-imports": 1,
                 },
             )

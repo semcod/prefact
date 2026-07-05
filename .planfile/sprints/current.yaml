@@ -628,10 +628,11 @@ sprint:
         Extract sub-functions, simplify conditionals, or split into strategy pattern.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T18:08:45.064667Z'
         max_attempts: 1
         queue: default
         started_at: '2026-07-05T18:03:24.647221Z'
-        state: running
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -653,6 +654,21 @@ sprint:
         source: planfile.store
         status: in_progress
         timestamp: '2026-07-05T18:03:24.655144+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T18:08:44.481111+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: running
+        previous_status: in_progress
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T18:08:45.070610+00:00'
       id: PLF-008
       inputs:
         api_headers: {}
@@ -672,7 +688,10 @@ sprint:
       name: 'Reduce cyclomatic complexity: run (CC=15, limit=15)'
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - Extracted _create_and_sync_tickets from TestQLManager.run to reduce CC from
+          15 to below the limit. No behavior change, existing 7 tests pass. Published
+          as prefact 0.1.66.
       priority: normal
       source:
         context:
@@ -698,9 +717,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.325883+00:00'
         tool: koru-scan
       sprint: current
-      status: in_progress
+      status: done
       sync: {}
-      updated_at: '2026-07-05T18:03:24.655094+00:00'
+      updated_at: '2026-07-05T18:08:45.070573+00:00'
     PLF-009:
       blocked_by: []
       blocks: []

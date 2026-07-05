@@ -7,6 +7,73 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — rule_id collision architecture (breaking config change)
+- **Root cause**: 7 groups of rule classes (`sorted-imports`, `string-concat`,
+  `unused-imports`, `duplicate-imports`, `wildcard-imports`, `print-statements`,
+  `missing-return-type`) silently shared a bare `rule_id` across their AST-only
+  and tool-backed (ruff/isort/mypy/pylint/autoflake/unimport/importchecker)
+  implementations. `@register` just overwrites `_rule_cache[rule_id]`, so
+  whichever module `prefact/rules/__init__.py` happened to import *last* won —
+  an unlabeled, import-order-dependent choice with zero user-facing way to
+  select an implementation (the `migration.py`/`MIGRATION_MAP` mechanism that
+  looked like it should govern this was confirmed dead code, never wired into
+  the runtime pipeline). Concretely, e.g. `SortedImports` (dependency-free,
+  detect-only, deliberately delegates fixing "to isort/ruff") was completely
+  unreachable — always shadowed by whichever backend-specific class imported
+  last.
+- **Fix**: every backend-specific class now has its own namespaced `rule_id`
+  — `ruff-sorted-imports`, `isorted-imports`, `pylint-string-concat`,
+  `autoflake-unused-imports`, `unimport-duplicate-imports`,
+  `importchecker-unused-imports`, `mypy-missing-return-type`, etc. These were
+  already the exact keys `LazyRuleRegistry._rule_modules` expected for these
+  modules (evidence the namespacing scheme was the original intent; the class
+  attributes just never got updated to match). The AST-only canonical rule in
+  each group keeps its own `ast-`-prefixed id (`ast-sorted-imports`,
+  `ast-unused-imports`, ...) instead of the bare name, for naming symmetry
+  with its now-independent siblings. All are independently selectable via the
+  existing `rules:` section in `prefact.yaml` (`config.rule_enabled(rule_id)`)
+  — no new mechanism needed, just real, unique identities. Also updated same-
+  package cross-references that read a sibling's config by the old bare id
+  (`isort_based/section_separator.py`, `string_transformations/
+  context_aware_concat.py`) and `composite_rules.py`'s `tool_priorities` dict
+  (which matches issues by literal `rule_id`, unlike its `is_rule_enabled(...)`
+  family-level toggles, which needed no change since they're free-standing
+  config keys, not rule identities).
+- **Migration**: any existing `prefact.yaml` with a `rules:` entry keyed by one
+  of the old bare ids (`sorted-imports`, `string-concat`, `unused-imports`,
+  `duplicate-imports`, `wildcard-imports`, `print-statements`,
+  `missing-return-type`) now targets a nonexistent rule id and silently has no
+  effect — rename it to `ast-<name>` (or to the specific backend id you meant)
+  to keep prior behavior.
+- **Fixed `get_all_rules()`** (`registry.py`, used by `scanner.py`/`fixer.py`/
+  `validator.py`/`prefact rules`): it iterated only `LazyRuleRegistry.
+  _rule_modules`'s keys — a static dict with several stale entries (module
+  paths pointing at files that don't exist, e.g. `prefact.rules.composite`
+  instead of the real `composite_rules.py`) and missing keys entirely for
+  others (`unused-variables`, `no-relative-imports`, ...). Now also merges in
+  `_rule_cache` (every class actually registered via `@register` at import
+  time — ground truth). `get_all_rules()` went from surfacing ~21 of the ~46
+  actually-registered rules to all of them.
+- **Adjacent bugs this uncovered** (both previously unreachable, now
+  instantiated by the fixed `get_all_rules()`, so both had to be fixed for the
+  full test suite / a real scan to pass):
+  - `AutoflakeUnusedVariables` (`autoflake_based.py`) was missing its
+    `scan_file`/`fix`/`validate` implementations entirely — an abstract,
+    uninstantiable stub. Restored the complete implementation (recovered from
+    a stray `autoflake_based.py.bak` in the same directory).
+  - `ImportDependencyAnalysis.scan_file` (`importchecker_based.py`) did
+    `imp.count(".")` where `imp` is a `dict` (`{"name": ..., "line": ...}`),
+    raising `AttributeError` on every file with any import — fixed to
+    `imp["name"].count(".")`, matching the same loop's other accesses.
+- **Verified**: `tests/test_rule_registry.py` (new) asserts the 7 previously-
+  colliding groups resolve to their intended classes, that no two live
+  (non-`.bak`) classes share a `rule_id` literal, and that `get_all_rules()`
+  surfaces ids absent from `_rule_modules`. Ran `prefact rules` (CLI listing,
+  now shows 46 rules, up from ~21, no instantiation errors) and `prefact
+  check` against a real multi-issue file end-to-end. Full test suite (98
+  tests with `isort`/`diskcache` installed, 96 + 2 correctly skipped without)
+  passes.
+
 ### Changed
 - Reduced `TestQLManager.run`'s cyclomatic complexity (flagged CC=15, at the
   project's own limit) by extracting the ticket-creation/upsert/sync block
@@ -79,6 +146,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.67] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_rule_registry.py
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.66] - 2026-07-05
 

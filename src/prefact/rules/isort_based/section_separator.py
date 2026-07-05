@@ -24,7 +24,7 @@ class ImportSectionSeparator(BaseRule):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.isort_config = {
-            "profile": config.get_rule_option("sorted-imports", "profile", "black"),
+            "profile": config.get_rule_option("isorted-imports", "profile", "black"),
             "known_first_party": [config.package_name or "prefact"],
         }
 

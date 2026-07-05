@@ -87,7 +87,7 @@ class RuffHelper:
 class RuffWildcardImports(BaseRule):
     """Wildcard imports detection using Ruff."""
 
-    rule_id = "wildcard-imports"
+    rule_id = "ruff-wildcard-imports"
     description = "Detect wildcard imports (from x import *)"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -123,7 +123,7 @@ class RuffWildcardImports(BaseRule):
 class RuffPrintStatements(BaseRule):
     """Print statements detection using Ruff."""
 
-    rule_id = "print-statements"
+    rule_id = "ruff-print-statements"
     description = "Detect print statements"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -188,7 +188,7 @@ class RuffPrintStatements(BaseRule):
 class RuffUnusedImports(BaseRule):
     """Unused imports detection and removal using Ruff."""
 
-    rule_id = "unused-imports"
+    rule_id = "ruff-unused-imports"
     description = "Detect and remove unused imports"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -255,7 +255,7 @@ class RuffUnusedImports(BaseRule):
 class RuffSortedImports(BaseRule):
     """Import sorting using Ruff."""
 
-    rule_id = "sorted-imports"
+    rule_id = "ruff-sorted-imports"
     description = "Sort imports according to PEP8"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
@@ -320,7 +320,7 @@ class RuffSortedImports(BaseRule):
 class RuffDuplicateImports(BaseRule):
     """Duplicate imports detection using Ruff."""
 
-    rule_id = "duplicate-imports"
+    rule_id = "ruff-duplicate-imports"
     description = "Detect duplicate imports"
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
