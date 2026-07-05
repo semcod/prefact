@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Reduced `TestQLManager.run`'s cyclomatic complexity (flagged CC=15, at the
+  project's own limit) by extracting the ticket-creation/upsert/sync block
+  into `_create_and_sync_tickets`. No behavior change; existing
+  `tests/test_testql_manager.py` (7 tests) passes unmodified.
+
 ### Fixed
 - `DocsManager.update_changelog_md` (autonomous mode) hardcoded `version = "0.1.10"`
   for every changelog entry it wrote, regardless of the actual target project's
@@ -73,6 +79,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.66] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.65] - 2026-07-05
 

@@ -39,10 +39,10 @@ class TestQLManager(BaseManager):
         """
         try:
             from planfile import (
-                build_testql_tickets,
+                build_testql_tickets,  # noqa: F401 - import-guards the exc branch below
                 run_testql_validation,
-                sync_testql_tickets,
-                upsert_testql_tickets,
+                sync_testql_tickets,  # noqa: F401
+                upsert_testql_tickets,  # noqa: F401
             )
         except ImportError as exc:  # pragma: no cover - dependency missing
             raise ImportError(
@@ -84,31 +84,14 @@ class TestQLManager(BaseManager):
         }
 
         if not bool(validation.get("ok")) and create_tickets:
-            tickets = build_testql_tickets(
+            self._create_and_sync_tickets(
                 validation,
                 scenario_path=scenario_path,
                 max_tickets=max_tickets,
+                strategy=strategy,
+                sync_targets=sync_targets,
+                payload=payload,
             )
-            payload["tickets"]["generated"] = len(tickets)
-
-            if tickets:
-                upsert_report = upsert_testql_tickets(
-                    strategy_path=strategy,
-                    tickets=tickets,
-                    project_path=self.project_root,
-                )
-                payload["tickets"]["created"] = int(upsert_report.get("created") or 0)
-                payload["tickets"]["skipped"] = int(upsert_report.get("skipped") or 0)
-                payload["tickets"]["created_ticket_ids"] = (
-                    upsert_report.get("created_ticket_ids") or []
-                )
-
-                if sync_targets:
-                    payload["tickets"]["sync"] = sync_testql_tickets(
-                        tickets,
-                        project_path=self.project_root,
-                        include_configured=True,
-                    )
 
         console.print(
             f"🧪 TestQL: ok={payload['validation']['ok']} "
@@ -122,6 +105,55 @@ class TestQLManager(BaseManager):
         )
 
         return payload
+
+    def _create_and_sync_tickets(
+        self,
+        validation: dict[str, Any],
+        *,
+        scenario_path: str | Path,
+        max_tickets: int,
+        strategy: str,
+        sync_targets: bool,
+        payload: dict[str, Any],
+    ) -> None:
+        """Build tickets from a failed validation, upsert them, and sync them.
+
+        Mutates ``payload["tickets"]`` in place; only called once ``run()``
+        already imported the ``planfile`` integration successfully.
+        """
+        from planfile import (
+            build_testql_tickets,
+            sync_testql_tickets,
+            upsert_testql_tickets,
+        )
+
+        tickets = build_testql_tickets(
+            validation,
+            scenario_path=scenario_path,
+            max_tickets=max_tickets,
+        )
+        payload["tickets"]["generated"] = len(tickets)
+
+        if not tickets:
+            return
+
+        upsert_report = upsert_testql_tickets(
+            strategy_path=strategy,
+            tickets=tickets,
+            project_path=self.project_root,
+        )
+        payload["tickets"]["created"] = int(upsert_report.get("created") or 0)
+        payload["tickets"]["skipped"] = int(upsert_report.get("skipped") or 0)
+        payload["tickets"]["created_ticket_ids"] = (
+            upsert_report.get("created_ticket_ids") or []
+        )
+
+        if sync_targets:
+            payload["tickets"]["sync"] = sync_testql_tickets(
+                tickets,
+                project_path=self.project_root,
+                include_configured=True,
+            )
 
     def discover_scenarios(
         self,

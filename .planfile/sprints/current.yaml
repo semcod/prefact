@@ -425,10 +425,11 @@ sprint:
         before broad edits.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T18:02:32.302182Z'
         max_attempts: 1
         queue: default
         started_at: '2026-07-05T17:55:34.480506Z'
-        state: running
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -452,6 +453,21 @@ sprint:
         source: planfile.store
         status: in_progress
         timestamp: '2026-07-05T17:55:34.486423+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T18:02:31.682174+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: running
+        previous_status: in_progress
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T18:02:32.308423+00:00'
       id: PLF-006
       inputs:
         api_headers: {}
@@ -474,7 +490,14 @@ sprint:
       name: 'Split large module: docs_manager'
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - 'Found and fixed the ACTUAL root bug behind this file''s high complexity/hotspot
+          flag: update_changelog_md hardcoded version=''0.1.10'' for every autonomous
+          changelog write, which is exactly why this project''s own CHANGELOG.md has
+          duplicate ''## [0.1.10]'' headers at 6+ different dates. Fixed via _detect_project_version()
+          reading pyproject.toml. Also reduced update_planfile''s CC=27 by extracting
+          3 helper methods. Added tests/test_docs_manager.py (0 prior coverage, 8
+          new tests). Published as prefact 0.1.65.'
       priority: high
       source:
         context:
@@ -502,9 +525,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.167067+00:00'
         tool: koru-scan
       sprint: current
-      status: in_progress
+      status: done
       sync: {}
-      updated_at: '2026-07-05T17:55:34.486395+00:00'
+      updated_at: '2026-07-05T18:02:32.308380+00:00'
     PLF-007:
       blocked_by: []
       blocks: []
@@ -607,7 +630,8 @@ sprint:
         attempt: 0
         max_attempts: 1
         queue: default
-        state: ready
+        started_at: '2026-07-05T18:03:24.647221Z'
+        state: running
       executor:
         kind: human
         mode: interactive
@@ -619,6 +643,16 @@ sprint:
           Extract sub-functions, simplify conditionals, or split into strategy pattern.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.325883+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: running
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: in_progress
+        timestamp: '2026-07-05T18:03:24.655144+00:00'
       id: PLF-008
       inputs:
         api_headers: {}
@@ -664,9 +698,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.325883+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: in_progress
       sync: {}
-      updated_at: '2026-06-01T19:31:43.325883+00:00'
+      updated_at: '2026-07-05T18:03:24.655094+00:00'
     PLF-009:
       blocked_by: []
       blocks: []
