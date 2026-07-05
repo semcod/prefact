@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
 
+## [0.1.61] - 2026-07-05
+
+### Docs
+- Update README.md
+
+### Other
+- Update .gitignore
+- Update .planfile/.koru/nfo-events.jsonl
+- Update .planfile/.koru/operator-steps/mcp_koru.ticket
+- Update .planfile/.koru/queue-runner.lock
+- Update project/planfile-tickets.yaml
+
 ## [0.1.60] - 2026-07-05
 
 ### Docs

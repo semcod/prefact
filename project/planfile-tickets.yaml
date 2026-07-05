@@ -1,5 +1,4 @@
 source: code2llm
-# generated in 0.46s
 schema: code2llm.planfile_tickets.v1
 project_root: /home/tom/github/semcod/prefact
 tickets:
@@ -9664,5 +9663,115 @@ tickets:
   - vscode-extension/src/extension.ts
   dedupe_key: 'code2llm:smell:god_function:vscode-extension/src/extension.ts:1:God
     Module: vscode-extension.src.extension'
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_scan_only'
+  description: 'Test `tests.test_engine.TestEngine.test_scan_only` took 9.56s to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_scan_only
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_full_pipeline_apply'
+  description: 'Test `tests.test_engine.TestEngine.test_full_pipeline_apply` took
+    9.48s to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_full_pipeline_apply
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_full_pipeline_dry_run'
+  description: 'Test `tests.test_engine.TestEngine.test_full_pipeline_dry_run` took
+    9.48s to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_full_pipeline_dry_run
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_clean_project_no_issues'
+  description: 'Test `tests.test_engine.TestEngine.test_clean_project_no_issues` took
+    3.79s to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_clean_project_no_issues
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_integrations.test_full_pipeline'
+  description: 'Test `tests.test_integrations.test_full_pipeline` took 2.47s to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_integrations.py
+  dedupe_key: test-optimization:tests.test_integrations:test_full_pipeline
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_run_single_file'
+  description: 'Test `tests.test_engine.TestEngine.test_run_single_file` took 1.91s
+    to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_run_single_file
+- signal: slow_test_warning
+  title: 'Address slow test: tests.test_engine.TestEngine.test_backup_created'
+  description: 'Test `tests.test_engine.TestEngine.test_backup_created` took 1.88s
+    to run.
+
+
+    Optimize its setup, mock slow external dependencies, or refactor its logic to
+    reduce overall test suite execution time.'
+  priority: medium
+  labels:
+  - llm-ready
+  - test-optimization
+  - slow-test
+  files:
+  - tests/test_engine.py
+  dedupe_key: test-optimization:tests.test_engine.TestEngine:test_backup_created
 applied: []
 skipped: []

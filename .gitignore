@@ -235,6 +235,9 @@ htmlcov/
 .planfile_analysis/
 **/.planfile_analysis/
 planfile-from-files.yaml
+
+# koru ephemeral run logs/locks — regenerated every run, not project state
+.planfile/.koru/
 examples/*/generated.yaml
 examples/*/external*.yaml
 examples/*/full-analysis.yaml
