@@ -27,14 +27,35 @@ class DocsManager(BaseManager):
         else:
             planfile = self.create_default_planfile()
 
-        # Cleanup: Remove tickets for issues that are no longer present
+        self._remove_obsolete_tickets(planfile)
+        new_tickets, skipped_tickets = self._collect_new_tickets(planfile)
+        self._insert_new_tickets(planfile, new_tickets)
+
+        # Save planfile
+        with open(self.planfile_path, "w") as f:
+            yaml.dump(planfile, f, default_flow_style=False, sort_keys=False)
+
+        self.tickets_created = new_tickets
+        if skipped_tickets > 0:
+            console.print(
+                f"🎫 Created {len(new_tickets)} tickets in planfile.yaml ({skipped_tickets} issue groups skipped by limit)",
+                style="yellow",
+            )
+        else:
+            console.print(f"🎫 Created {len(new_tickets)} tickets in planfile.yaml")
+
+    def _current_issue_keys(self) -> set[tuple[str, tuple[str, ...]]]:
         current_issue_keys = set()
         for issue_group in self.issues_found:
             rel_file = self._get_relative_file_path(issue_group["file"])
             current_issue_keys.add((issue_group["rule_id"], tuple([rel_file])))
+        return current_issue_keys
 
+    def _remove_obsolete_tickets(self, planfile: Dict[str, Any]) -> None:
+        """Remove tickets for issues that are no longer present, in place."""
+        current_issue_keys = self._current_issue_keys()
         removed_count = 0
-        # Cleanup backlog
+
         if "backlog" in planfile and isinstance(planfile["backlog"], list):
             patterns = planfile["backlog"]
             planfile["backlog"] = [
@@ -44,7 +65,6 @@ class DocsManager(BaseManager):
             ]
             removed_count += len(patterns) - len(planfile["backlog"])
 
-        # Cleanup sprints
         for sprint in planfile.get("sprints", []):
             for field in ["tasks", "task_patterns"]:
                 if field in sprint and isinstance(sprint[field], list):
@@ -63,75 +83,71 @@ class DocsManager(BaseManager):
                 f"🧹 Removed {removed_count} obsolete tickets from planfile.yaml"
             )
 
-        # Add tickets for issues
-        new_tickets = []
+    def _collect_new_tickets(
+        self, planfile: Dict[str, Any]
+    ) -> tuple[List[Dict[str, Any]], int]:
+        """Build the list of new tickets to add, honoring the ticket limit."""
+        new_tickets: List[Dict[str, Any]] = []
         seen_tickets = set()
         max_tickets = self.get_autonomous_limit("autonomous_max_tickets")
         skipped_tickets = 0
+
         for issue_group in self.issues_found:
             ticket = self.create_ticket_from_issue(issue_group)
-
-            # Create unique key for deduplication
             ticket_key = (ticket["rule_id"], tuple(ticket["files"]))
 
-            # Check if ticket already exists in planfile or current run
-            if ticket_key not in seen_tickets and not self.ticket_exists(
-                planfile, ticket
+            if ticket_key in seen_tickets or self.ticket_exists(planfile, ticket):
+                continue
+
+            if (
+                self._count_existing_tickets(planfile) + len(new_tickets)
+                >= max_tickets
             ):
-                if (
-                    self._count_existing_tickets(planfile) + len(new_tickets)
-                    >= max_tickets
-                ):
-                    skipped_tickets = len(self.issues_found) - len(new_tickets)
-                    console.print(
-                        f"⚠️ Ticket limit reached ({max_tickets}); skipping {max(0, skipped_tickets)} remaining autonomous tickets.",
-                        style="yellow",
-                    )
-                    break
-                new_tickets.append(ticket)
-                seen_tickets.add(ticket_key)
+                skipped_tickets = len(self.issues_found) - len(new_tickets)
+                console.print(
+                    f"⚠️ Ticket limit reached ({max_tickets}); skipping {max(0, skipped_tickets)} remaining autonomous tickets.",
+                    style="yellow",
+                )
+                break
 
-        # Add new tickets to planfile
-        if new_tickets:
-            if "backlog" in planfile:
-                if not isinstance(planfile["backlog"], list):
-                    planfile["backlog"] = []
-                planfile["backlog"].extend(new_tickets)
-            else:
-                if "sprints" not in planfile:
-                    planfile["sprints"] = []
+            new_tickets.append(ticket)
+            seen_tickets.add(ticket_key)
 
-                if not planfile["sprints"]:
-                    planfile["sprints"].append(
-                        {
-                            "id": "sprint-1",
-                            "name": "Code Quality Improvements",
-                            "duration": "2 weeks",
-                            "objectives": ["Fix code quality issues"],
-                            "task_patterns": [],
-                        }
-                    )
+        return new_tickets, skipped_tickets
 
-                # Add new tickets to first sprint
-                sprint = planfile["sprints"][0]
-                field = "tasks" if "tasks" in sprint else "task_patterns"
-                if field not in sprint:
-                    sprint[field] = []
+    def _insert_new_tickets(
+        self, planfile: Dict[str, Any], new_tickets: List[Dict[str, Any]]
+    ) -> None:
+        """Insert new tickets into the planfile's backlog or first sprint, in place."""
+        if not new_tickets:
+            return
 
-                sprint[field].extend(new_tickets)
+        if "backlog" in planfile:
+            if not isinstance(planfile["backlog"], list):
+                planfile["backlog"] = []
+            planfile["backlog"].extend(new_tickets)
+            return
 
-        # Save planfile
-        with open(self.planfile_path, "w") as f:
-            yaml.dump(planfile, f, default_flow_style=False, sort_keys=False)
+        if "sprints" not in planfile:
+            planfile["sprints"] = []
 
-        self.tickets_created = new_tickets
-        if skipped_tickets > 0:
-            console.print(
-                f"🎫 Created {len(new_tickets)} tickets in planfile.yaml ({skipped_tickets} issue groups skipped by limit)",
-                style="yellow",
+        if not planfile["sprints"]:
+            planfile["sprints"].append(
+                {
+                    "id": "sprint-1",
+                    "name": "Code Quality Improvements",
+                    "duration": "2 weeks",
+                    "objectives": ["Fix code quality issues"],
+                    "task_patterns": [],
+                }
             )
-        else:
-            console.print(f"🎫 Created {len(new_tickets)} tickets in planfile.yaml")
+
+        sprint = planfile["sprints"][0]
+        field = "tasks" if "tasks" in sprint else "task_patterns"
+        if field not in sprint:
+            sprint[field] = []
+
+        sprint[field].extend(new_tickets)
 
     def _count_existing_tickets(self, planfile: Dict[str, Any]) -> int:
         total = 0
@@ -241,13 +257,37 @@ class DocsManager(BaseManager):
                         return True
         return False
 
+    def _detect_project_version(self) -> str:
+        """Read the target project's own version from its pyproject.toml.
+
+        Falls back to "Unreleased" (rather than a hardcoded placeholder) when
+        the file is missing or has no [project].version — the entry still
+        needs a heading, but claiming a specific version number that wasn't
+        actually read from the project would be misleading.
+        """
+        pyproject = self.project_root / "pyproject.toml"
+        if not pyproject.exists():
+            return "Unreleased"
+
+        try:
+            try:
+                import tomllib  # Python 3.11+
+            except ModuleNotFoundError:
+                import tomli as tomllib  # type: ignore[no-redef]
+
+            data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+            version = data.get("project", {}).get("version")
+            return version if isinstance(version, str) and version else "Unreleased"
+        except Exception:
+            return "Unreleased"
+
     def update_changelog_md(self) -> None:
         """Update CHANGELOG.md with recent changes."""
         if not self.tickets_created:
             return
 
         # Create changelog entry
-        version = "0.1.10"  # Could be detected from project
+        version = self._detect_project_version()
         date = datetime.now().strftime("%Y-%m-%d")
 
         entry = f"## [{version}] - {date}\n\n"

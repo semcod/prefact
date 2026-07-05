@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `DocsManager.update_changelog_md` (autonomous mode) hardcoded `version = "0.1.10"`
+  for every changelog entry it wrote, regardless of the actual target project's
+  version — this is the direct cause of the many duplicate `## [0.1.10] - <date>`
+  headers scattered through this very CHANGELOG.md's history at six different
+  dates. Added `_detect_project_version()`, which reads `[project].version` from
+  the target project's own `pyproject.toml` (falling back to `"Unreleased"`,
+  never a stale placeholder, when the file or field is missing).
+  Verified with `tests/test_docs_manager.py` (new file, 0 prior coverage):
+  version detection with/without pyproject.toml/version field, and that
+  `update_changelog_md` writes the detected version instead of `0.1.10`.
+
 ### Changed
+- Reduced `DocsManager.update_planfile`'s cyclomatic complexity (flagged CC=27,
+  the module's `code2llm` "layer hotspot") by extracting three focused private
+  methods: `_remove_obsolete_tickets`, `_collect_new_tickets`,
+  `_insert_new_tickets` — same logic, no behavior change. Verified with 5 new
+  tests covering ticket creation, cross-issue-group dedup, obsolete-ticket
+  cleanup on re-run, and the `autonomous_max_tickets` limit.
 - Split `src/prefact/rules/string_transformations.py` (501 lines, 6 classes) into a
   package of three transformer+rule pairs: `string_concat.py`
   (`StringConcatTransformer`/`StringConcatToFString`), `flynt_formatting.py`
@@ -55,6 +73,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.65] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Test
+- Update tests/test_docs_manager.py
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.64] - 2026-07-05
 

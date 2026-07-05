@@ -319,10 +319,11 @@ sprint:
         by responsibility.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T17:55:17.548452Z'
         max_attempts: 1
         queue: default
         started_at: '2026-07-05T17:48:57.884838Z'
-        state: running
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -346,6 +347,21 @@ sprint:
         source: planfile.store
         status: in_progress
         timestamp: '2026-07-05T17:48:57.889831+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T17:55:16.915049+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: running
+        previous_status: in_progress
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T17:55:17.554180+00:00'
       id: PLF-005
       inputs:
         api_headers: {}
@@ -366,7 +382,10 @@ sprint:
       name: 'Split god module: src/prefact/rules/string_transformations.py'
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - Split into string_transformations/ package (string_concat.py, flynt_formatting.py,
+          context_aware_concat.py) with full backward-compat facade. Verified end-to-end.
+          Published as prefact 0.1.64.
       priority: high
       source:
         context:
@@ -393,9 +412,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.131141+00:00'
         tool: koru-scan
       sprint: current
-      status: in_progress
+      status: done
       sync: {}
-      updated_at: '2026-07-05T17:48:57.889804+00:00'
+      updated_at: '2026-07-05T17:55:17.554139+00:00'
     PLF-006:
       blocked_by: []
       blocks: []
@@ -408,7 +427,8 @@ sprint:
         attempt: 0
         max_attempts: 1
         queue: default
-        state: ready
+        started_at: '2026-07-05T17:55:34.480506Z'
+        state: running
       executor:
         kind: human
         mode: interactive
@@ -422,6 +442,16 @@ sprint:
           before broad edits.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.167067+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: running
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: in_progress
+        timestamp: '2026-07-05T17:55:34.486423+00:00'
       id: PLF-006
       inputs:
         api_headers: {}
@@ -472,9 +502,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.167067+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: in_progress
       sync: {}
-      updated_at: '2026-06-01T19:31:43.167067+00:00'
+      updated_at: '2026-07-05T17:55:34.486395+00:00'
     PLF-007:
       blocked_by: []
       blocks: []
