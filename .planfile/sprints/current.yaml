@@ -453,10 +453,11 @@ sprint:
         / the project validation task and refresh the report.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T17:39:30.598144Z'
         max_attempts: 1
         queue: default
         started_at: '2026-07-05T17:28:09.261665Z'
-        state: running
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -479,6 +480,21 @@ sprint:
         source: planfile.store
         status: in_progress
         timestamp: '2026-07-05T17:28:09.267141+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T17:39:29.983667+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: running
+        previous_status: in_progress
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T17:39:30.603148+00:00'
       id: PLF-007
       inputs:
         api_headers: {}
@@ -498,7 +514,14 @@ sprint:
       name: Repair VALLM validation findings
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - prefact.performance was completely unimportable (incomplete cache.py ->
+          cache/ refactor left orphaned cache.py/cache_state.py colliding + broken
+          import). Completed the refactor, added tests/test_performance_cache.py (0
+          prior coverage). This was the highest-impact finding among the 21 VALLM
+          errors -- most others (examples/ teaching snippets, tests/ 'pytest not found')
+          are false positives from vallm scanning non-source/wrong-env files, not
+          real prefact bugs. Published as prefact 0.1.62.
       priority: high
       source:
         context:
@@ -510,9 +533,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.270420+00:00'
         tool: koru-scan
       sprint: current
-      status: in_progress
+      status: done
       sync: {}
-      updated_at: '2026-07-05T17:28:09.267114+00:00'
+      updated_at: '2026-07-05T17:39:30.603116+00:00'
     PLF-008:
       blocked_by: []
       blocks: []

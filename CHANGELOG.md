@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Split `src/prefact/rules/isort_based.py` (519 lines, 4 classes) into a package
+  (`isort_based/{helper,sorted_imports,section_separator,custom_organization}.py`)
+  with `__init__.py` re-exporting every original name (including `HAS_ISORT`) and
+  eagerly importing every rule submodule so their `@register` decorators still
+  fire on package import. Also removed a duplicated `if not HAS_ISORT: return []`
+  check in `ISortedImports.scan_file` found while porting it (dead, harmless, but
+  no reason to carry it forward).
+  Verified: all four classes exercised end-to-end with `isort` actually installed
+  (scan/fix/validate on real unsorted source) in addition to the `HAS_ISORT=False`
+  fallback path; full test suite (86 tests with isort installed, 85 + 2 skipped
+  without) passes either way.
+
 ### Fixed
 - `prefact.performance` was completely unimportable (`ImportError: cannot import
   name 'CacheContext' from 'prefact.performance.cache'`): an in-progress refactor
@@ -32,6 +45,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Scanner.collect_files()` used `root.glob(pattern)`, which fully traverses the tree
   (stat'ing every file inside a populated virtualenv) before exclusion patterns are applied.
   Rewrote to walk with `os.walk` and prune excluded directories before descending into them.
+
+## [0.1.63] - 2026-07-05
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .planfile/sprints/current.yaml
 
 ## [0.1.62] - 2026-07-05
 
