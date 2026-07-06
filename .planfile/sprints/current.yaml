@@ -150,9 +150,11 @@ sprint:
         to refresh.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T18:49:23.376884Z'
         max_attempts: 1
         queue: default
-        state: ready
+        started_at: '2026-07-05T18:49:21.199245Z'
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -165,6 +167,31 @@ sprint:
           to refresh.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.080013+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: running
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: in_progress
+        timestamp: '2026-07-05T18:49:21.208335+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T18:49:21.880505+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: running
+        previous_status: in_progress
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T18:49:23.382767+00:00'
       id: PLF-003
       inputs:
         api_headers: {}
@@ -185,7 +212,22 @@ sprint:
       name: Remove 15 duplicated classes (code2llm analysis)
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - 'Investigated deeply -- this was NOT simple code duplication (extracting
+          shared helpers wasn''t the fix). Root cause: 7 groups of rule classes silently
+          shared a bare rule_id (sorted-imports, string-concat, unused-imports, duplicate-imports,
+          wildcard-imports, print-statements, missing-return-type) across AST-only
+          vs ruff/isort/mypy/pylint/autoflake/unimport/importchecker-backed implementations.
+          @register overwrote the shared registry slot -- whichever module happened
+          to import last silently won, with zero user-facing way to choose. Fixed
+          by giving every backend its own namespaced rule_id (already anticipated
+          by registry.py''s _rule_modules dict keys, just never matched by the classes).
+          Also fixed get_all_rules() which was hiding ~24 of ~46 registered rules
+          due to a stale static dict. Uncovered and fixed 2 more previously-unreachable
+          bugs (AutoflakeUnusedVariables missing methods, ImportDependencyAnalysis
+          dict/string type bug). New tests/test_rule_registry.py guards against regression.
+          Published as prefact 0.1.67. BREAKING: existing prefact.yaml configs referencing
+          the old bare rule ids need updating to ast-<name> -- documented in CHANGELOG.'
       priority: high
       source:
         context:
@@ -212,9 +254,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.080013+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: done
       sync: {}
-      updated_at: '2026-06-01T19:31:43.080013+00:00'
+      updated_at: '2026-07-05T18:49:23.382735+00:00'
     PLF-004:
       blocked_by: []
       blocks: []
@@ -729,9 +771,10 @@ sprint:
         to verify.'
       execution:
         attempt: 0
+        finished_at: '2026-07-05T18:49:24.582561Z'
         max_attempts: 1
         queue: default
-        state: ready
+        state: done
       executor:
         kind: human
         mode: interactive
@@ -744,6 +787,21 @@ sprint:
           to verify.'
         source: koru task
         timestamp: '2026-06-01T19:31:43.498028+00:00'
+      - action: update
+        changes:
+        - outputs
+        source: planfile.store
+        timestamp: '2026-07-05T18:49:23.985682+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-05T18:49:24.588687+00:00'
       id: PLF-009
       inputs:
         api_headers: {}
@@ -763,7 +821,9 @@ sprint:
       name: 'code2llm refactor: rm duplicates'
       outputs:
         artifacts: []
-        notes: []
+        notes:
+        - 'Duplicate of PLF-003 (same underlying finding). See PLF-003 for full resolution:
+          rule_id collision architecture fix, published as prefact 0.1.67.'
       priority: normal
       source:
         context:
@@ -790,9 +850,9 @@ sprint:
         timestamp: '2026-06-01T19:31:43.498028+00:00'
         tool: koru-scan
       sprint: current
-      status: open
+      status: done
       sync: {}
-      updated_at: '2026-06-01T19:31:43.498028+00:00'
+      updated_at: '2026-07-05T18:49:24.588648+00:00'
     PLF-010:
       blocked_by: []
       blocks: []
