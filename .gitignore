@@ -244,3 +244,9 @@ examples/*/full-analysis.yaml
 examples/quick-start/quick-start.yaml
 .redsl/
 *.bak
+.algitex/
+.github/
+.koru/
+.planfile/
+.pyqual/
+.taskill/
