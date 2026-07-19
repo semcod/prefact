@@ -1,21 +1,14 @@
-# code2llm | 148f 21014L | python:106,yaml:28,shell:3,json:3,yml:2,cfg:1,toml:1,txt:1,typescript:1 | 2026-06-02
-# generated in 0.04s
-# CC̅=3.0 | critical:2/779 | dups:15 | cycles:0
+# code2llm | 155f 21347L | python:112,yaml:28,shell:3,txt:3,json:3,yml:2,cfg:1,typescript:1,toml:1 | 2026-07-15
+# generated in 0.06s
+# CC̅=3.0 | critical:0/754 | dups:5 | cycles:0
 
-HEALTH[5]:
-  🔴 DUP   15 classes duplicated
-  🔴 GOD   src/prefact/rules/isort_based.py = 519L, 4 classes, 23m, max CC=13
-  🔴 GOD   src/prefact/rules/string_transformations.py = 501L, 6 classes, 27m, max CC=8
-  🟡 CC    update_planfile CC=27 (limit:15)
-  🟡 CC    run CC=15 (limit:15)
+HEALTH[1]:
+  🔴 DUP   5 duplicate class groups
 
-REFACTOR[4]:
-  1. rm duplicates  (-15 dup classes)
-  2. split src/prefact/rules/isort_based.py  (god module)
-  3. split src/prefact/rules/string_transformations.py  (god module)
-  4. split 2 high-CC methods  (CC>15)
+REFACTOR[1]:
+  1. rm duplicates  (-5 dup groups)
 
-PIPELINES[610]:
+PIPELINES[591]:
   [1] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
       PURITY: 100% pure
   [2] Src [main]: main → find_examples
@@ -118,54 +111,59 @@ PIPELINES[610]:
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.1    ←in:0  →out:0  ×DUP
-  │ !! isort_based                519L  4C   23m  CC=13     ←0
-  │ !! string_transformations     501L  6C   27m  CC=8      ←0
+  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
   │ importchecker_based        499L  5C   24m  CC=14     ←0
   │ import_linter_based        480L  5C   24m  CC=8      ←0
   │ unimport_based             459L  5C   22m  CC=14     ←0
   │ todo_manager               430L  1C   15m  CC=13     ←0
-  │ cli                        424L  0C   11m  CC=7      ←1
-  │ pylint_based               424L  5C   22m  CC=6      ←1
+  │ cli                        428L  0C   11m  CC=7      ←1
+  │ pylint_based               424L  5C   22m  CC=6      ←0
   │ mypy_based                 416L  6C   22m  CC=9      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
+  │ autoflake_based            378L  3C   24m  CC=7      ←0
   │ ruff_based                 359L  6C   19m  CC=4      ←0
   │ parallel                   357L  4C   23m  CC=7      ←0
   │ __init__                   330L  3C   17m  CC=10     ←0
+  │ docs_manager               325L  1C   15m  CC=12     ←0
   │ __init__                   312L  1C   19m  CC=7      ←0
   │ benchmark                  311L  1C    6m  CC=7      ←0
-  │ autoflake_based            297L  3C   19m  CC=7      ←0
   │ project_scanner            296L  1C    7m  CC=11     ←0
   │ composite_rules            292L  3C   16m  CC=12     ←0
-  │ !! docs_manager               285L  1C   10m  CC=27     ←0
+  │ registry                   285L  1C   13m  CC=8      ←1
   │ unused_imports             277L  1C   11m  CC=10     ←0
-  │ registry                   273L  1C   13m  CC=8      ←8
-  │ __init__                   256L  1C    8m  CC=3      ←0
+  │ __init__                   256L  1C    8m  CC=3      ←7
+  │ string_concat              256L  2C   11m  CC=8      ←0
+  │ testql_manager             250L  1C    4m  CC=10     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
   │ relative_imports           235L  2C    9m  CC=14     ←0
   │ migration                  234L  3C   10m  CC=5      ←0
   │ llm_hallucinations         220L  1C    9m  CC=8      ←0
-  │ !! testql_manager             218L  1C    3m  CC=15     ←0
   │ llm_generated_code         196L  1C    9m  CC=7      ←0
+  │ scanner                    191L  1C    7m  CC=12     ←0
+  │ custom_organization        180L  1C    7m  CC=13     ←0
   │ config                     177L  2C   13m  CC=5      ←0
   │ engine                     170L  1C    5m  CC=13     ←0
-  │ scanner                    167L  1C    7m  CC=14     ←0
+  │ helper                     162L  1C    7m  CC=9      ←0
   │ generator                  161L  1C    3m  CC=12     ←0
   │ benchmark                  161L  0C    4m  CC=7      ←0
   │ strategies                 158L  4C   10m  CC=5      ←0
   │ logger                     153L  2C   15m  CC=3      ←0
+  │ context_aware_concat       145L  2C   12m  CC=4      ←0
   │ setup_manager              142L  1C    3m  CC=9      ←0
   │ config                     142L  1C    8m  CC=10     ←0
   │ magic_numbers              138L  1C    8m  CC=7      ←0
-  │ cache_adapters             130L  4C   16m  CC=3      ←0  ×DUP
+  │ cache_adapters             130L  4C   16m  CC=3      ←9  ×DUP
   │ composite_factory          121L  1C    2m  CC=4      ←0
-  │ base                       102L  1C    7m  CC=3      ←0  ×DUP
+  │ flynt_formatting           120L  2C    4m  CC=5      ←0
+  │ sorted_imports             116L  1C    5m  CC=5      ←0
+  │ globals                    112L  1C   11m  CC=5      ←1
+  │ base                       102L  1C    7m  CC=3      ←0
   │ duplicate_imports          102L  1C    3m  CC=7      ←0
   │ models                      90L  6C    0m  CC=0.0    ←0
+  │ section_separator           88L  1C    4m  CC=4      ←0
   │ models                      83L  1C    3m  CC=13     ←0
   │ ai_boilerplate              78L  1C    5m  CC=3      ←0
   │ _base                       73L  1C    3m  CC=10     ←0
-  │ cache_state                 72L  0C    7m  CC=2      ←2
   │ string_concat               72L  1C    5m  CC=6      ←0
   │ sorted_imports              71L  1C    4m  CC=7      ←0
   │ console                     70L  0C    1m  CC=14     ←0
@@ -175,18 +173,19 @@ LAYERS:
   │ json_reporter               57L  0C    2m  CC=4      ←0
   │ scan                        53L  1C    5m  CC=1      ←0  ×DUP
   │ validators                  52L  1C    4m  CC=5      ←0  ×DUP
-  │ globals                     51L  0C    3m  CC=2      ←0
   │ type_hints                  50L  1C    3m  CC=6      ←0
-  │ wildcard_imports            49L  1C    3m  CC=7      ←0
   │ _ast_cache                  49L  0C    2m  CC=4      ←0
+  │ wildcard_imports            49L  1C    3m  CC=7      ←0
+  │ __init__                    46L  0C    0m  CC=0.0    ←0
   │ __init__                    41L  0C    0m  CC=0.0    ←0
   │ rule                        39L  1C    4m  CC=1      ←0  ×DUP
   │ exceptions                  35L  4C    3m  CC=2      ←0
   │ validator                   32L  1C    2m  CC=4      ←0
   │ config                      32L  1C    4m  CC=1      ←0  ×DUP
   │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
-  │ __init__                    30L  0C    0m  CC=0.0    ←0
   │ formatters                  26L  1C    1m  CC=2      ←0
+  │ __init__                    26L  0C    0m  CC=0.0    ←0
+  │ __init__                    25L  0C    0m  CC=0.0    ←0
   │ defaults                    21L  0C    0m  CC=0.0    ←0
   │ constants                   15L  0C    0m  CC=0.0    ←0
   │ levels                      13L  1C    0m  CC=0.0    ←0
@@ -197,17 +196,17 @@ LAYERS:
   │ _base                        6L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │ __init__                     1L  0C    0m  CC=0.0    ←0
-  │ cache                        0L  6C   37m  CC=5      ←9  ×DUP
   │
   vscode-extension/               CC̄=2.9    ←in:0  →out:0
-  │ extension.ts               437L  5C   48m  CC=14     ←27
+  │ extension.ts               437L  5C   48m  CC=14     ←30
   │ package.json               187L  0C    0m  CC=0.0    ←0
   │ .eslintrc.json              19L  0C    0m  CC=0.0    ←0
   │ tsconfig.json               16L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt                8L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=2.6    ←in:0  →out:0
   │ !! planfile.yaml             2048L  0C    0m  CC=0.0    ←0
-  │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
+  │ !! goal.yaml                  529L  0C    0m  CC=0.0    ←0
   │ pyproject.toml             337L  0C    0m  CC=0.0    ←0
   │ Makefile                   293L  0C    0m  CC=0.0    ←0
   │ benchmark_ram_optimization   235L  0C    5m  CC=7      ←0
@@ -219,10 +218,11 @@ LAYERS:
   │ project.sh                  47L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
+  │ local.dev.txt               12L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
   │ tree.sh                      1L  0C    0m  CC=0.0    ←0
   │
-  examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
+  examples/                       CC̄=1.7    ←in:0  →out:0
   │ prefact.yaml               344L  0C    0m  CC=0.0    ←0
   │ prefact.yaml               281L  0C    0m  CC=0.0    ←0
   │ generate_examples          232L  0C    0m  CC=0.0    ←0
@@ -238,8 +238,8 @@ LAYERS:
   │ cli                         62L  0C    3m  CC=2      ←0
   │ models                      59L  2C    5m  CC=2      ←0
   │ messy_module                54L  1C    4m  CC=2      ←0
-  │ after                       41L  1C    6m  CC=2      ←0  ×DUP
-  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
+  │ after                       41L  1C    6m  CC=2      ←0
+  │ before                      41L  1C    6m  CC=2      ←0
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
@@ -271,15 +271,13 @@ LAYERS:
   │ before                       6L  0C    1m  CC=1      ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │
+  docs/                           CC̄=0.0    ←in:0  →out:0
+  │ koru-interface-registry.yaml   270L  0C    0m  CC=0.0    ←0
+  │
   testql-scenarios/               CC̄=0.0    ←in:0  →out:0
   │ generated-from-pytests.testql.toon.yaml    14L  0C    0m  CC=0.0    ←0
   │ generated-cli-tests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
   │
-  docs/                           CC̄=0.0    ←in:0  →out:0
-  │ koru-interface-registry.yaml   270L  0C    0m  CC=0.0    ←0
-  │
-  ── zero ──
-     src/prefact/performance/cache.py          0L
 
 COUPLING:
                                         vscode-extension.src                   src.prefact  examples.01-individual-rules       examples.sample-project    benchmark_ram_optimization      examples.04-custom-rules

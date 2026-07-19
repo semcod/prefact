@@ -1,140 +1,313 @@
-# prefact | 129f 18582L | python:121,shell:3,javascript:2,css:1,less:1,typescript:1 | 2026-06-02
-# stats: 182 func | 158 cls | 129 mod | CC̄=3.0 | critical:5 | cycles:0
-# alerts[5]: CC print_report=14; CC _match_gitignore_pattern=12; CC run_prefact_example=11; CC test_run_testql_creates_and_syncs_tickets=11; CC _collect_all_exports=10
-# hotspots[5]: run_integration_tests fan=16; main fan=13; cached_file_operation fan=13; test_ruff_integration fan=13; test_performance_comparison fan=13
-# evolution: baseline
+# prefact | 155f 21347L | yaml:28,cfg:1,python:112,shell:3,yml:2,txt:3,json:3,typescript:1,toml:1 | 2026-07-15
+# generated in 0.03s
+# stats: 754 func | 0 cls | 155 mod | CC̄=3.0 | critical:0 | cycles:0
+# alerts[5]: fan-out PrefactTreeProvider.activate=20; fan-out CompositeRuleFactory.create_composite_rule=18; fan-out ProjectScanner.scan_project=18; fan-out ProjectScanner._scan_files_parallel=15; fan-out RefactoringEngine.run=15
+# hotspots[5]: PrefactTreeProvider.activate fan=20; ProjectScanner.scan_project fan=18; CompositeRuleFactory.create_composite_rule fan=18; RefactoringEngine.run fan=15; ProjectScanner._scan_files_parallel fan=15
+# evolution: CC̄ 3.1→3.0 (improved -0.1)
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[129]:
-  app.doql.css,74
-  app.doql.less,424
-  benchmark_ram_optimization.py,236
-  examples/01-individual-rules/duplicate-imports/after.py,9
-  examples/01-individual-rules/duplicate-imports/before.py,9
-  examples/01-individual-rules/missing-return-type/after.py,20
-  examples/01-individual-rules/missing-return-type/before.py,20
-  examples/01-individual-rules/print-statements/after.py,16
-  examples/01-individual-rules/print-statements/before.py,16
-  examples/01-individual-rules/relative-imports/after.py,27
-  examples/01-individual-rules/relative-imports/before.py,27
-  examples/01-individual-rules/sorted-imports/after.py,7
-  examples/01-individual-rules/sorted-imports/before.py,7
-  examples/01-individual-rules/string-concat/after.py,14
-  examples/01-individual-rules/string-concat/before.py,14
-  examples/01-individual-rules/unused-imports/after.py,42
-  examples/01-individual-rules/unused-imports/before.py,42
-  examples/01-individual-rules/wildcard-imports/after.py,14
-  examples/01-individual-rules/wildcard-imports/before.py,14
-  examples/02-multiple-rules/messy_module.py,55
-  examples/03-output-formats/sample_code.py,18
-  examples/04-custom-rules/custom_rules/__init__.py,7
-  examples/04-custom-rules/custom_rules/no_todo_rule.py,113
-  examples/06-api-usage/example.py,199
-  examples/generate_examples.py,233
-  examples/run_all.sh,144
-  examples/run_examples.py,138
-  examples/sample-project/cli.py,63
-  examples/sample-project/core.py,37
-  examples/sample-project/models.py,60
-  examples/sample-project/utils.py,41
-  examples/tests/test_examples.py,7
+M[155]:
+  Makefile,293
+  Taskfile.yml,186
+  benchmark_ram_optimization.py,235
+  docs/interfaces/koru-interface-registry.yaml,270
+  examples/01-individual-rules/duplicate-imports/after.py,8
+  examples/01-individual-rules/duplicate-imports/before.py,8
+  examples/01-individual-rules/duplicate-imports/prefact.yaml,25
+  examples/01-individual-rules/missing-return-type/after.py,19
+  examples/01-individual-rules/missing-return-type/before.py,19
+  examples/01-individual-rules/missing-return-type/prefact.yaml,25
+  examples/01-individual-rules/print-statements/after.py,15
+  examples/01-individual-rules/print-statements/before.py,15
+  examples/01-individual-rules/print-statements/prefact.yaml,25
+  examples/01-individual-rules/relative-imports/after.py,26
+  examples/01-individual-rules/relative-imports/before.py,26
+  examples/01-individual-rules/relative-imports/prefact.yaml,26
+  examples/01-individual-rules/sorted-imports/after.py,6
+  examples/01-individual-rules/sorted-imports/before.py,6
+  examples/01-individual-rules/sorted-imports/prefact.yaml,25
+  examples/01-individual-rules/string-concat/after.py,13
+  examples/01-individual-rules/string-concat/before.py,13
+  examples/01-individual-rules/string-concat/prefact.yaml,25
+  examples/01-individual-rules/unused-imports/after.py,41
+  examples/01-individual-rules/unused-imports/before.py,41
+  examples/01-individual-rules/unused-imports/prefact.yaml,26
+  examples/01-individual-rules/wildcard-imports/after.py,13
+  examples/01-individual-rules/wildcard-imports/before.py,13
+  examples/01-individual-rules/wildcard-imports/prefact.yaml,25
+  examples/02-multiple-rules/messy_module.py,54
+  examples/02-multiple-rules/prefact.yaml,35
+  examples/03-output-formats/prefact.yaml,18
+  examples/03-output-formats/sample_code.py,17
+  examples/04-custom-rules/custom_rules/__init__.py,6
+  examples/04-custom-rules/custom_rules/no_todo_rule.py,112
+  examples/05-ci-cd/.gitlab-ci.yml,108
+  examples/06-api-usage/example.py,198
+  examples/07-enterprise/prefact.yaml,281
+  examples/08-llm-focused/prefact.yaml,101
+  examples/09-high-performance/prefact.yaml,123
+  examples/10-plugin-development/prefact.yaml,87
+  examples/11-ci-cd/prefact.yaml,129
+  examples/12-complete-example/prefact.yaml,344
+  examples/generate_examples.py,232
+  examples/requirements.txt,13
+  examples/run_all.sh,143
+  examples/run_examples.py,137
+  examples/sample-project/cli.py,62
+  examples/sample-project/core.py,36
+  examples/sample-project/models.py,59
+  examples/sample-project/prefact.yaml,35
+  examples/sample-project/utils.py,40
+  goal.yaml,529
+  koru.yaml,133
+  local.dev.txt,12
+  planfile.yaml,2048
+  prefact.yaml,87
   project.sh,47
-  src/prefact/__init__.py,4
-  src/prefact/_base.py,7
-  src/prefact/autonomous/__init__.py,313
-  src/prefact/autonomous/_base.py,74
-  src/prefact/autonomous/dependency_checker.py,238
-  src/prefact/autonomous/docs_manager.py,286
-  src/prefact/autonomous/project_scanner.py,297
-  src/prefact/autonomous/setup_manager.py,143
-  src/prefact/autonomous/testql_manager.py,219
-  src/prefact/autonomous/todo_manager.py,431
-  src/prefact/autonomous.py,18
-  src/prefact/benchmark.py,312
-  src/prefact/cli.py,425
-  src/prefact/config.py,178
-  src/prefact/config_extended/__init__.py,13
-  src/prefact/config_extended/config.py,143
-  src/prefact/config_extended/constants.py,16
-  src/prefact/config_extended/generator.py,162
-  src/prefact/config_extended/models.py,84
-  src/prefact/config_extended/utils.py,12
-  src/prefact/config_extended/validation.py,71
-  src/prefact/config_extended/validators.py,53
-  src/prefact/defaults.py,22
-  src/prefact/engine.py,171
-  src/prefact/fixer.py,59
-  src/prefact/git_hooks.py,384
-  src/prefact/logging/__init__.py,14
-  src/prefact/logging/exceptions.py,36
-  src/prefact/logging/formatters.py,27
-  src/prefact/logging/levels.py,14
-  src/prefact/logging/logger.py,154
-  src/prefact/models.py,91
-  src/prefact/performance/__init__.py,42
-  src/prefact/performance/cache/__init__.py,31
-  src/prefact/performance/cache/base.py,103
-  src/prefact/performance/cache/config.py,33
-  src/prefact/performance/cache/globals.py,52
-  src/prefact/performance/cache/hash.py,32
-  src/prefact/performance/cache/rule.py,40
-  src/prefact/performance/cache/scan.py,54
-  src/prefact/performance/cache.py,441
-  src/prefact/performance/cache_adapters.py,131
-  src/prefact/performance/cache_state.py,73
-  src/prefact/performance/parallel.py,358
-  src/prefact/plugins/__init__.py,331
-  src/prefact/plugins/builtin.py,14
-  src/prefact/reporters/__init__.py,2
-  src/prefact/reporters/console.py,71
-  src/prefact/reporters/json_reporter.py,58
-  src/prefact/rules/__init__.py,257
-  src/prefact/rules/_ast_cache.py,50
-  src/prefact/rules/ai_boilerplate.py,79
-  src/prefact/rules/autoflake_based.py,298
-  src/prefact/rules/benchmark.py,162
-  src/prefact/rules/composite_factory.py,122
-  src/prefact/rules/composite_rules.py,293
-  src/prefact/rules/duplicate_imports.py,103
-  src/prefact/rules/import_linter_based.py,481
-  src/prefact/rules/importchecker_based.py,500
-  src/prefact/rules/isort_based.py,520
-  src/prefact/rules/llm_generated_code.py,197
-  src/prefact/rules/llm_hallucinations.py,221
-  src/prefact/rules/magic_numbers.py,139
-  src/prefact/rules/migration.py,235
-  src/prefact/rules/mypy_based.py,417
-  src/prefact/rules/print_statements.py,63
-  src/prefact/rules/pylint_based.py,425
-  src/prefact/rules/registry.py,274
-  src/prefact/rules/relative_imports.py,236
-  src/prefact/rules/ruff_based.py,360
-  src/prefact/rules/sorted_imports.py,72
-  src/prefact/rules/strategies.py,159
-  src/prefact/rules/string_concat.py,73
-  src/prefact/rules/string_transformations.py,502
-  src/prefact/rules/type_hints.py,51
-  src/prefact/rules/unimport_based.py,460
-  src/prefact/rules/unused_imports.py,278
-  src/prefact/rules/wildcard_imports.py,50
-  src/prefact/scanner.py,168
-  src/prefact/validator.py,33
-  test_large_files.py,50
-  test_ram_implementation.py,54
-  tests/test_autonomous_limits.py,350
-  tests/test_config.py,96
-  tests/test_dependency_checker.py,153
-  tests/test_engine.py,102
-  tests/test_integrations.py,550
-  tests/test_refactoring.py,12
-  tests/test_relative_imports.py,134
-  tests/test_rules.py,162
-  tests/test_testql_manager.py,243
-  tests/test_unused_imports.py,66
-  tree.sh,2
-  vscode-extension/out/extension.js,355
-  vscode-extension/src/extension.ts,438
-  vscode-extension/test/prefact.test.js,6
+  pyproject.toml,337
+  pyqual.yaml,124
+  redsl.yaml,72
+  redsl_refactor_plan.toon.yaml,23
+  redsl_refactor_report.toon.yaml,25
+  setup.cfg,4
+  src/prefact/__init__.py,3
+  src/prefact/_base.py,6
+  src/prefact/autonomous/__init__.py,312
+  src/prefact/autonomous/_base.py,73
+  src/prefact/autonomous/dependency_checker.py,237
+  src/prefact/autonomous/docs_manager.py,325
+  src/prefact/autonomous/project_scanner.py,296
+  src/prefact/autonomous/setup_manager.py,142
+  src/prefact/autonomous/testql_manager.py,250
+  src/prefact/autonomous/todo_manager.py,430
+  src/prefact/benchmark.py,311
+  src/prefact/cli.py,428
+  src/prefact/config.py,177
+  src/prefact/config_extended/__init__.py,12
+  src/prefact/config_extended/config.py,142
+  src/prefact/config_extended/constants.py,15
+  src/prefact/config_extended/generator.py,161
+  src/prefact/config_extended/models.py,83
+  src/prefact/config_extended/utils.py,11
+  src/prefact/config_extended/validation.py,70
+  src/prefact/config_extended/validators.py,52
+  src/prefact/defaults.py,21
+  src/prefact/engine.py,170
+  src/prefact/fixer.py,58
+  src/prefact/git_hooks.py,383
+  src/prefact/logging/__init__.py,13
+  src/prefact/logging/exceptions.py,35
+  src/prefact/logging/formatters.py,26
+  src/prefact/logging/levels.py,13
+  src/prefact/logging/logger.py,153
+  src/prefact/models.py,90
+  src/prefact/performance/__init__.py,41
+  src/prefact/performance/cache/__init__.py,46
+  src/prefact/performance/cache/base.py,102
+  src/prefact/performance/cache/config.py,32
+  src/prefact/performance/cache/globals.py,112
+  src/prefact/performance/cache/hash.py,31
+  src/prefact/performance/cache/rule.py,39
+  src/prefact/performance/cache/scan.py,53
+  src/prefact/performance/cache_adapters.py,130
+  src/prefact/performance/parallel.py,357
+  src/prefact/plugins/__init__.py,330
+  src/prefact/plugins/builtin.py,13
+  src/prefact/reporters/__init__.py,1
+  src/prefact/reporters/console.py,70
+  src/prefact/reporters/json_reporter.py,57
+  src/prefact/rules/__init__.py,256
+  src/prefact/rules/_ast_cache.py,49
+  src/prefact/rules/ai_boilerplate.py,78
+  src/prefact/rules/autoflake_based.py,378
+  src/prefact/rules/benchmark.py,161
+  src/prefact/rules/composite_factory.py,121
+  src/prefact/rules/composite_rules.py,292
+  src/prefact/rules/duplicate_imports.py,102
+  src/prefact/rules/import_linter_based.py,480
+  src/prefact/rules/importchecker_based.py,499
+  src/prefact/rules/isort_based/__init__.py,25
+  src/prefact/rules/isort_based/custom_organization.py,180
+  src/prefact/rules/isort_based/helper.py,162
+  src/prefact/rules/isort_based/section_separator.py,88
+  src/prefact/rules/isort_based/sorted_imports.py,116
+  src/prefact/rules/llm_generated_code.py,196
+  src/prefact/rules/llm_hallucinations.py,220
+  src/prefact/rules/magic_numbers.py,138
+  src/prefact/rules/migration.py,234
+  src/prefact/rules/mypy_based.py,416
+  src/prefact/rules/print_statements.py,62
+  src/prefact/rules/pylint_based.py,424
+  src/prefact/rules/registry.py,285
+  src/prefact/rules/relative_imports.py,235
+  src/prefact/rules/ruff_based.py,359
+  src/prefact/rules/sorted_imports.py,71
+  src/prefact/rules/strategies.py,158
+  src/prefact/rules/string_concat.py,72
+  src/prefact/rules/string_transformations/__init__.py,26
+  src/prefact/rules/string_transformations/context_aware_concat.py,145
+  src/prefact/rules/string_transformations/flynt_formatting.py,120
+  src/prefact/rules/string_transformations/string_concat.py,256
+  src/prefact/rules/type_hints.py,50
+  src/prefact/rules/unimport_based.py,459
+  src/prefact/rules/unused_imports.py,277
+  src/prefact/rules/wildcard_imports.py,49
+  src/prefact/scanner.py,191
+  src/prefact/validator.py,32
+  testql-scenarios/generated-cli-tests.testql.toon.yaml,12
+  testql-scenarios/generated-from-pytests.testql.toon.yaml,14
+  tree.sh,1
+  vscode-extension/.eslintrc.json,19
+  vscode-extension/local.dev.txt,8
+  vscode-extension/package.json,187
+  vscode-extension/src/extension.ts,437
+  vscode-extension/tsconfig.json,16
 D:
+  src/prefact/reporters/console.py:
+    e: print_report
+    print_report(result)
+  src/prefact/rules/relative_imports.py:
+    e: _RelativeImportFixer,RelativeToAbsoluteImports,_module_to_str,_str_to_module
+    _RelativeImportFixer(cst.CSTTransformer): __init__(3),leave_ImportFrom(2),_resolve(2)  # Transform relative imports to absolute using the resolved pa...
+    RelativeToAbsoluteImports(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)
+    _module_to_str(node)
+    _str_to_module(dotted)
+  vscode-extension/src/extension.ts:
+    i: child_process,vscode
+    e: PrefactIssue,PrefactResult,PrefactDiagnosticsProvider,PrefactTreeItem,PrefactTreeProvider
+    PrefactIssue:
+    PrefactResult:
+    PrefactDiagnosticsProvider: scanFile(-1),config(-1),result(-1),scanWorkspace(-1),workspaceFolders(-1),config(-1),result(-1),fixFile(-1),doc(-1),fixWorkspace(-1),workspaceFolders(-1),runPrefact(-1),config(-1),executablePath(-1),child(-1),resolve(-1),reject(-1),reject(-1),updateDiagnostics(-1),range(-1),severity(-1),diagnostic(-1),updateWorkspaceDiagnostics(-1),diagnosticsByFile(-1),diagnostics(-1),range(-1),severity(-1),diagnostic(-1),entries(-1),getSeverity(-1),showOutput(-1),dispose(-1)
+    PrefactTreeItem: super(-1)
+    PrefactTreeProvider: refresh(-1),getTreeItem(-1),getChildren(-1),issuesByFile(-1),file(-1),item(-1),fileIssues(-1),item(-1),activate(-1),diagnosticsProvider(-1),treeProvider(-1),treeView(-1),scanCommand(-1),document(-1),scanWorkspaceCommand(-1),fixCommand(-1),document(-1),fixWorkspaceCommand(-1),configureCommand(-1),installHooksCommand(-1),workspaceFolders(-1),onSave(-1),config(-1),setInterval(-1),deactivate(-1)
+  src/prefact/rules/unimport_based.py:
+    e: UnimportHelper,UnimportUnusedImports,UnimportDuplicateImports,UnimportStarImports,UnimportAll
+    UnimportHelper: check_file(1),check_source(1),_extract_import_name(0),fix_file(1),fix_source(1)  # Helper class for unimport operations...
+    UnimportUnusedImports(BaseRule): __init__(1),_load_unimport_config(0),scan_file(2),fix(3),validate(3)  # Remove unused imports using unimport...
+    UnimportDuplicateImports(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Remove duplicate imports using unimport...
+    UnimportStarImports(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Handle star imports using unimport...
+    UnimportAll(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Apply all unimport fixes...
+  src/prefact/rules/importchecker_based.py:
+    e: ImportCheckerHelper,ImportCheckerUnusedImports,ImportCheckerDuplicateImports,ImportDependencyAnalysis,ImportOptimizer
+    ImportCheckerHelper: check_file(0),_get_module_name(0),check_source(1)  # Helper class for importchecker operations...
+    ImportCheckerUnusedImports(BaseRule): __init__(1),_load_checker_config(0),scan_file(2),_find_import_lines(1),fix(3),validate(3)  # Detect unused imports using importchecker...
+    ImportCheckerDuplicateImports(BaseRule): scan_file(2),fix(3),validate(3)  # Detect duplicate imports using importchecker...
+    ImportDependencyAnalysis(BaseRule): __init__(1),_load_checker_config(0),scan_file(2),_extract_imports(1),_detect_circular_imports(2),fix(3),validate(3)  # Analyze import dependencies using importchecker...
+    ImportOptimizer(BaseRule): scan_file(2),_extract_all_imports(1),_count_usage(2),fix(3),validate(3)  # Optimize imports based on importchecker analysis...
+  src/prefact/engine.py:
+    e: RefactoringEngine
+    RefactoringEngine: __init__(1),run(0),scan_only(0),run_file(1),_preload_sources(1)  # Main entry point: scan the project, apply fixes, validate re...
+  src/prefact/autonomous/todo_manager.py:
+    e: TodoManager
+    TodoManager(BaseManager): __init__(1),update_todo_md(0),_parse_existing_todos(0),_generate_current_todos(1),_find_completed_tasks(2),_write_todo_md(4),_get_relative_file_path(1),execute_todos(0),_parse_todo_tasks(0),_get_refactoring_config(0),_limit_todo_execution_tasks(1),_execute_todo_tasks(1),_group_tasks_by_file(1),_process_file_tasks(4),_update_todo_with_execution_results(4)  # Manages TODO.md file operations...
+  src/prefact/config_extended/models.py:
+    e: ExtendedConfig
+    ExtendedConfig(Config): __init__(9),from_yaml(2),to_dict(0)
+  src/prefact/rules/isort_based/custom_organization.py:
+    e: CustomImportOrganization
+    CustomImportOrganization(BaseRule): __init__(1),_load_custom_rules(0),scan_file(2),_check_grouping(2),_check_alphabetical(2),fix(3),validate(3)  # Organize imports according to custom rules...
+  src/prefact/config_extended/generator.py:
+    e: ConfigGenerator
+    ConfigGenerator: generate_extended_config(2),generate_composite_rule_config(3),save_config(1)  # Generate configuration files...
+  src/prefact/autonomous/docs_manager.py:
+    e: DocsManager
+    DocsManager(BaseManager): __init__(1),update_planfile(0),_current_issue_keys(0),_remove_obsolete_tickets(1),_collect_new_tickets(1),_insert_new_tickets(2),_count_existing_tickets(1),_should_remove_obsolete_ticket(2),_is_autonomous_ticket(0),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),_detect_project_version(0),update_changelog_md(0),_get_relative_file_path(1)  # Manages documentation files - planfile.yaml and CHANGELOG.md...
+  src/prefact/scanner.py:
+    e: Scanner,_load_gitignore,_match_gitignore_pattern
+    Scanner: __init__(1),collect_files(0),scan(1),scan_sources(1),_excluded(1)  # Discovers Python files and runs all enabled rules against th...
+    _load_gitignore(root)
+    _match_gitignore_pattern(path;pattern)
+  src/prefact/rules/composite_rules.py:
+    e: CompositeUnusedImports,CompositeImportRules,CompositeTypeChecking
+    CompositeUnusedImports(BaseRule): __init__(1),_create_strategy(0),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for unused imports using multiple tools...
+    CompositeImportRules(BaseRule): __init__(1),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for all import-related checks...
+    CompositeTypeChecking(BaseRule): __init__(1),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for type checking using multiple tools...
+  examples/06-api-usage/example.py:
+    e: run_prefact_example,custom_rule_example,batch_processing_example,main
+    run_prefact_example(project_path;config_file;dry_run)
+    custom_rule_example()
+    batch_processing_example()
+    main()
+  src/prefact/autonomous/project_scanner.py:
+    e: ProjectScanner
+    ProjectScanner(BaseManager): __init__(2),scan_project(0),_scan_files_with_progress(3),_scan_files_parallel(6),_scan_files_sequential(5),_scan_single_file(2),group_issues(1)  # Handles project scanning operations...
+  src/prefact/plugins/__init__.py:
+    e: PluginMetadata,PluginValidator,PluginManager,get_plugin_manager,register_plugin_rule
+    PluginMetadata: __init__(6),_check_compatibility(0)  # Metadata for a loaded plugin...
+    PluginValidator: validate_plugin_module(0),validate_plugin_path(0)  # Validates plugins before loading...
+    PluginManager: __init__(1),discover_plugins(0),_discover_entry_point_plugins(0),_discover_local_plugins(1),load_plugin(1),load_all_plugins(0),get_rule(1),_load_plugin_for_rule(1),list_plugins(0),_is_rule_from_plugin(2),unload_plugin(1)  # Manages loading and registration of plugins...
+    get_plugin_manager(config)
+    register_plugin_rule(plugin_name;version)
+  src/prefact/autonomous/dependency_checker.py:
+    e: DependencyChecker
+    DependencyChecker(BaseManager): __init__(1),check_dependencies(0),_collect_declared_deps(0),_parse_pyproject_toml(0),_parse_requirements_files(0),_query_pip_outdated(0),_build_issue_groups(0),_find_dep_source_file(0),_find_dep_line(2),_normalize(0),_parse_dep_string(0)  # Checks for outdated project dependencies...
+  src/prefact/autonomous/_base.py:
+    e: BaseManager
+    BaseManager: __init__(1),get_autonomous_limit(1),_load_autonomous_limits(0)  # Base class for autonomous managers...
+  src/prefact/config_extended/config.py:
+    e: ExtendedConfig
+    ExtendedConfig(Config): __init__(9),from_yaml(2),_parse_rules(0),_deep_merge(1),get_tool_config(1),get_performance_setting(2),get_plugin_config(1),to_dict(0)  # Extended configuration with additional features...
+  src/prefact/autonomous/testql_manager.py:
+    e: TestQLManager
+    TestQLManager(BaseManager): run(1),_create_and_sync_tickets(1),discover_scenarios(1),run_all(0)  # Run TestQL DSL validation and bridge results into planfile...
+  src/prefact/rules/unused_imports.py:
+    e: UnusedImports,_collect_imported_names,_collect_used_names,_collect_all_exports
+    UnusedImports(BaseRule): scan_file(2),validate(3),fix(3),remove_lines(2),process_import_from(7),process_import(7),_remove_unused_from_line(2),_remove_unused_from_import_line(2)
+    _collect_imported_names(tree)
+    _collect_used_names(tree)
+    _collect_all_exports(tree)
+  src/prefact/autonomous/setup_manager.py:
+    e: SetupManager
+    SetupManager(BaseManager): create_refact_config(0),detect_project_info(0),run_examples(0)  # Handles project setup - configuration and examples...
+  src/prefact/rules/print_statements.py:
+    e: PrintStatements
+    PrintStatements(BaseRule): scan_file(2),fix(3),validate(3)
+  src/prefact/rules/isort_based/helper.py:
+    e: ISortHelper
+    ISortHelper: check_file(1),check_source(1),_find_import_blocks(0),_is_block_sorted(1),_needs_section_separators(1),fix_file(1),fix_source(1)  # Helper class for ISort operations...
+  src/prefact/rules/mypy_based.py:
+    e: MyPyHelper,MyPyMissingReturnType,MyPyTypeChecking,ReturnTypeInferrer,ReturnTypeAdder,SmartReturnTypeRule
+    MyPyHelper: check_file(1),check_source(1)  # Helper class for MyPy operations...
+    MyPyMissingReturnType(BaseRule): __init__(1),_load_mypy_config(0),scan_file(2),_is_public_function(2),fix(3),validate(3)  # Detect missing return type annotations using MyPy...
+    MyPyTypeChecking(BaseRule): __init__(1),_load_mypy_config(0),scan_file(2),fix(3),validate(3)  # General type checking using MyPy...
+    ReturnTypeInferrer: infer_return_type(1),_analyze_return_types(0),_get_return_value_type(0),_unify_types(0)  # Infer return types for simple functions...
+    ReturnTypeAdder(cst.CSTTransformer): __init__(2),leave_FunctionDef(2)  # Transformer to add return type annotations to functions...
+    SmartReturnTypeRule(BaseRule): scan_file(2),fix(3),validate(3)  # Smart return type detection with inference suggestions...
+  examples/run_examples.py:
+    e: run_example,find_examples,main
+    run_example(example_dir)
+    find_examples(examples_dir)
+    main()
+  src/prefact/git_hooks.py:
+    e: GitHooks,PreCommitConfig,install_git_hooks,uninstall_git_hooks,list_git_hooks,main
+    GitHooks: __init__(2),_find_git_dir(0),install_hooks(1),_install_hook(2),_generate_hook_script(1),_pre_commit_hook(0),_pre_push_hook(0),_commit_msg_hook(0),uninstall_hooks(1),list_hooks(0),test_hook(1)  # Manages Git hooks for prefact...
+    PreCommitConfig: generate_config(0),install(0)  # Generate pre-commit configuration for prefact...
+    install_git_hooks(repo_root)
+    uninstall_git_hooks(repo_root)
+    list_git_hooks(repo_root)
+    main()
+  src/prefact/rules/import_linter_based.py:
+    e: ImportLinterHelper,ImportLinterLayers,ImportLinterNoRelative,ImportLinterIndependence,ImportLinterCustomArchitecture,generate_import_linter_config
+    ImportLinterHelper: create_config(1),run_linter(0),check_file(1)  # Helper class for import-linter operations...
+    ImportLinterLayers(BaseRule): __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Enforce import layering rules using import-linter...
+    ImportLinterNoRelative(BaseRule): __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Block relative imports using import-linter...
+    ImportLinterIndependence(BaseRule): __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Ensure module independence using import-linter...
+    ImportLinterCustomArchitecture(BaseRule): __init__(1),_load_custom_config(0),scan_file(2),fix(3),validate(3)  # Enforce custom architectural rules using import-linter...
+    generate_import_linter_config(config;output_path)
+  src/prefact/rules/llm_hallucinations.py:
+    e: LLMHallucinationRule
+    LLMHallucinationRule(BaseRule): __init__(1),_load_patterns(0),scan_file(2),_check_ast_patterns(2),_is_suspicious_function_name(1),_is_suspicious_import(1),_map_severity(1),fix(3),validate(3)  # Detect LLM hallucination patterns in code...
+  src/prefact/rules/registry.py:
+    e: LazyRuleRegistry,get_lazy_registry,get_all_rules,get_rule,register,_initialize_built_in_rules
+    LazyRuleRegistry: __init__(0),get_rule(1),_load_module(1),_find_rule_class(2),get_all_rules(0),list_available_rules(0),register_rule(2),register_rule_module(2)  # Registry that lazily loads rule classes...
+    get_lazy_registry()
+    get_all_rules()
+    get_rule(rule_id)
+    register(rule_class)
+    _initialize_built_in_rules()
+  src/prefact/rules/string_transformations/string_concat.py:
+    e: StringConcatTransformer,StringConcatToFString
+    StringConcatTransformer(cst.CSTTransformer): __init__(0),_get_line_number(1),leave_BinaryOperation(2),_collect_string_parts(1),_eval_string(1),_should_transform(1),_create_fstring(1)  # Transform string concatenations to f-strings...
+    StringConcatToFString(BaseRule): scan_file(2),_is_string_concat(1),fix(3),validate(3)  # Convert string concatenations to f-strings...
   benchmark_ram_optimization.py:
     e: create_test_files,benchmark_without_rampreload,benchmark_with_rampreload,run_benchmark,main
     create_test_files(base_dir;num_files;file_size_kb)
@@ -142,155 +315,64 @@ D:
     benchmark_with_rampreload(config)
     run_benchmark(num_files;file_size_kb)
     main()
-  examples/01-individual-rules/duplicate-imports/after.py:
-    e: process_data
-    process_data()
-  examples/01-individual-rules/duplicate-imports/before.py:
-    e: process_data
-    process_data()
-  examples/01-individual-rules/missing-return-type/after.py:
-    e: add,get_user,Processor
-    Processor: process(1)  # Processor class.
-    add(a;b)
-    get_user(user_id)
-  examples/01-individual-rules/missing-return-type/before.py:
-    e: add,get_user,Processor
-    Processor: process(1)  # Processor class.
-    add(a;b)
-    get_user(user_id)
-  examples/01-individual-rules/print-statements/after.py:
-    e: process_data,calculate
-    process_data(data)
-    calculate(a;b)
-  examples/01-individual-rules/print-statements/before.py:
-    e: process_data,calculate
-    process_data(data)
-    calculate(a;b)
-  examples/01-individual-rules/relative-imports/after.py:
-    e: process_user,Processor
-    Processor: __init__(0),process(0)  # Processor class with absolute imports.
-    process_user(user_id)
-  examples/01-individual-rules/relative-imports/before.py:
-    e: process_user,Processor
-    Processor: __init__(0),process(0)  # Processor class with relative imports.
-    process_user(user_id)
-  examples/01-individual-rules/sorted-imports/after.py:
-    e: process
-    process()
-  examples/01-individual-rules/sorted-imports/before.py:
-    e: process
-    process()
-  examples/01-individual-rules/string-concat/after.py:
-    e: greet,format_data
-    greet(name;age)
-    format_data(data)
-  examples/01-individual-rules/string-concat/before.py:
-    e: greet,format_data
-    greet(name;age)
-    format_data(data)
-  examples/01-individual-rules/unused-imports/after.py:
-    e: process_data,format_timestamp,read_file,DataProcessor
-    DataProcessor: __init__(0),add_data(2),get_data(1)  # A class with clean imports.
-    process_data(data)
-    format_timestamp(ts)
-    read_file(filepath)
-  examples/01-individual-rules/unused-imports/before.py:
-    e: process_data,format_timestamp,read_file,DataProcessor
-    DataProcessor: __init__(0),add_data(2),get_data(1)  # A class with unused imports.
-    process_data(data)
-    format_timestamp(ts)
-    read_file(filepath)
-  examples/01-individual-rules/wildcard-imports/after.py:
-    e: process
-    process()
-  examples/01-individual-rules/wildcard-imports/before.py:
-    e: process
-    process()
-  examples/02-multiple-rules/messy_module.py:
-    e: process_users,generate_report,DataProcessor
-    DataProcessor: __init__(0),process(1)  # A class with various issues.
-    process_users(users)
-    generate_report(data)
-  examples/03-output-formats/sample_code.py:
-    e: process_data,calculate_sum
-    process_data(data)
-    calculate_sum(numbers)
-  examples/04-custom-rules/custom_rules/__init__.py:
-  examples/04-custom-rules/custom_rules/no_todo_rule.py:
-    e: NoTodoRule,NoPrintRule
-    NoTodoRule: __init__(1),scan_file(2),fix(3),validate(3)  # Rule that detects TODO comments in code.
-    NoPrintRule: scan_file(2),fix(3),validate(3)  # Custom rule that detects print statements (alternative to bu
-  examples/06-api-usage/example.py:
-    e: run_prefact_example,custom_rule_example,batch_processing_example,main
-    run_prefact_example(project_path;config_file;dry_run)
-    custom_rule_example()
-    batch_processing_example()
-    main()
-  examples/generate_examples.py:
-  examples/run_examples.py:
-    e: run_example,find_examples,main
-    run_example(example_dir)
-    find_examples(examples_dir)
-    main()
-  examples/sample-project/cli.py:
-    e: main,admin,users
-    main(name;email)
-    admin()
-    users()
-  examples/sample-project/core.py:
-    e: process_data,calculate_sum,DataProcessor
-    DataProcessor: __init__(0),add_item(1),get_summary(0)  # A class that processes data.
-    process_data(data)
-    calculate_sum(numbers)
-  examples/sample-project/models.py:
-    e: create_user,load_users_from_file,User,Post
-    User: __post_init__(0)  # User model.
-    Post: __post_init__(0),get_summary(0)  # Post model.
-    create_user(name;email)
-    load_users_from_file(filepath)
-  examples/sample-project/utils.py:
-    e: format_name,validate_email,helper_function,UtilClass
-    UtilClass: __init__(0),get_cached(1)  # Utility class.
-    format_name(first;last)
-    validate_email(email)
-    helper_function(data)
-  examples/tests/test_examples.py:
-    e: test_placeholder
-    test_placeholder()
-  src/prefact/__init__.py:
-  src/prefact/_base.py:
   src/prefact/autonomous/__init__.py:
     e: AutonomousRefact
-    AutonomousRefact: __init__(2),run_autonomous(1),create_refact_config(0),detect_project_info(0),run_examples(0),scan_project(0),group_issues(1),update_planfile(0),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),manage_documentation(0),update_todo_md(0),execute_todos(0),update_changelog_md(0),run_testql(1),run_testql_all(0),_print_autonomous_summary(0),run_tests(0)  # Autonomous prefact manager.
-  src/prefact/autonomous/_base.py:
-    e: BaseManager
-    BaseManager: __init__(1),get_autonomous_limit(1),_load_autonomous_limits(0)  # Base class for autonomous managers.
-  src/prefact/autonomous/dependency_checker.py:
-    e: DependencyChecker
-    DependencyChecker: __init__(1),check_dependencies(0),_collect_declared_deps(0),_parse_pyproject_toml(0),_parse_requirements_files(0),_query_pip_outdated(0),_build_issue_groups(0),_find_dep_source_file(0),_find_dep_line(2),_normalize(1),_parse_dep_string(1)  # Checks for outdated project dependencies.
-  src/prefact/autonomous/docs_manager.py:
-    e: DocsManager
-    DocsManager: __init__(1),update_planfile(0),_count_existing_tickets(1),_should_remove_obsolete_ticket(2),_is_autonomous_ticket(1),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),update_changelog_md(0),_get_relative_file_path(1)  # Manages documentation files - planfile.yaml and CHANGELOG.md
-  src/prefact/autonomous/project_scanner.py:
-    e: ProjectScanner
-    ProjectScanner: __init__(2),scan_project(0),_scan_files_with_progress(3),_scan_files_parallel(6),_scan_files_sequential(5),_scan_single_file(2),group_issues(1)  # Handles project scanning operations.
-  src/prefact/autonomous/setup_manager.py:
-    e: SetupManager
-    SetupManager: create_refact_config(0),detect_project_info(0),run_examples(0)  # Handles project setup - configuration and examples.
-  src/prefact/autonomous/testql_manager.py:
-    e: TestQLManager
-    TestQLManager: run(1),discover_scenarios(1),run_all(0)  # Run TestQL DSL validation and bridge results into planfile.
-  src/prefact/autonomous/todo_manager.py:
-    e: TodoManager
-    TodoManager: __init__(1),update_todo_md(0),_parse_existing_todos(0),_generate_current_todos(1),_find_completed_tasks(2),_write_todo_md(4),_get_relative_file_path(1),execute_todos(0),_parse_todo_tasks(0),_get_refactoring_config(0),_limit_todo_execution_tasks(1),_execute_todo_tasks(1),_group_tasks_by_file(1),_process_file_tasks(4),_update_todo_with_execution_results(4)  # Manages TODO.md file operations.
-  src/prefact/autonomous.py:
+    AutonomousRefact: __init__(2),run_autonomous(1),create_refact_config(0),detect_project_info(0),run_examples(0),scan_project(0),group_issues(1),update_planfile(0),create_default_planfile(0),create_ticket_from_issue(1),ticket_exists(2),manage_documentation(0),update_todo_md(0),execute_todos(0),update_changelog_md(0),run_testql(1),run_testql_all(0),_print_autonomous_summary(0),run_tests(0)  # Autonomous prefact manager...
+  src/prefact/fixer.py:
+    e: Fixer
+    Fixer: __init__(1),fix_file(2),fix_file_with_source(3)
   src/prefact/benchmark.py:
-    e: _make_inprocess_probe,build_prefact_suite,benchmark_library,main,ScanProbe
-    ScanProbe: __init__(4),run(0)  # Prefact-specific: creates N temp Python files and measures s
+    e: ScanProbe,_make_inprocess_probe,build_prefact_suite,benchmark_library,main
+    ScanProbe(BenchmarkProbe): __init__(4),run(0)  # Prefact-specific: creates N temp Python files and measures s...
     _make_inprocess_probe()
     build_prefact_suite()
     benchmark_library(module;cli_commands;test_path;threshold_import;threshold_cli;threshold_tests)
     main()
+  src/prefact/performance/parallel.py:
+    e: ParallelScanTask,ParallelEngine,ParallelScanner,PerformanceMonitor,init_worker,scan_file_worker,get_performance_monitor
+    ParallelScanTask: __init__(4),_calculate_file_hash(0),execute(0)  # A task for parallel scanning...
+    ParallelEngine: __init__(1),scan_files(2),_scan_with_thread_pool(1),_scan_with_process_pool(1),_execute_task_wrapper(0),_get_enabled_rule_ids(0),fix_files(2)  # Parallel processing engine for prefact...
+    ParallelScanner: __init__(1),scan_directory(4),scan_workspace(1),get_performance_stats(0)  # High-level interface for parallel scanning...
+    PerformanceMonitor: __init__(0),start_timing(0),end_timing(1),record_cache_hit(0),record_cache_miss(0),get_stats(0)  # Monitor performance of parallel operations...
+    init_worker()
+    scan_file_worker(args)
+    get_performance_monitor()
+  src/prefact/rules/magic_numbers.py:
+    e: MagicNumberRule
+    MagicNumberRule(BaseRule): __init__(1),_load_allowed_numbers(0),scan_file(2),_extract_literal_issues(2),_extract_comparison_issues(2),_is_magic_number(1),fix(3),validate(3)  # Detect magic numbers in code...
+  src/prefact/rules/llm_generated_code.py:
+    e: LLMGeneratedCodeRule
+    LLMGeneratedCodeRule(BaseRule): __init__(1),_load_indicators(0),scan_file(2),_check_comment_ratio(2),_check_docstring_patterns(2),_has_llm_docstring_pattern(1),_map_severity(1),fix(3),validate(3)  # Detect code that appears to be LLM-generated...
+  src/prefact/rules/benchmark.py:
+    e: benchmark_file,benchmark_project,print_benchmark_results,main
+    benchmark_file(file_path;config)
+    benchmark_project(project_root;config)
+    print_benchmark_results(results)
+    main()
+  src/prefact/rules/sorted_imports.py:
+    e: SortedImports,_sort_key
+    SortedImports(BaseRule): scan_file(2),fix(3),validate(3)
+    _sort_key(node)
+  src/prefact/rules/duplicate_imports.py:
+    e: DuplicateImports
+    DuplicateImports(BaseRule): scan_file(2),fix(3),validate(3)
+  src/prefact/rules/autoflake_based.py:
+    e: AutoflakeHelper,AutoflakeUnusedImports,AutoflakeUnusedVariables,build_autoflake_check_command,parse_autoflake_output,run_autoflake_command,create_temp_file_with_source,build_autoflake_fix_command,create_issues_from_results,extract_import_name,create_fixes_from_issues,validate_unused_imports
+    AutoflakeHelper: check_file(1),check_source(1),fix_file(1),fix_source(1)  # Helper class for Autoflake operations...
+    AutoflakeUnusedImports(BaseRule): __init__(1),_load_autoflake_config(0),scan_file(2),fix(3),validate(3)  # Remove unused imports using Autoflake...
+    AutoflakeUnusedVariables(BaseRule): __init__(1),_load_autoflake_config(0),scan_file(2),_extract_variable_name(1),fix(3),validate(3)  # Remove unused variables using Autoflake...
+    build_autoflake_check_command(file_path;config)
+    parse_autoflake_output(output_lines)
+    run_autoflake_command(cmd)
+    create_temp_file_with_source(source)
+    build_autoflake_fix_command(file_path;config)
+    create_issues_from_results(results;path;rule_id)
+    extract_import_name(line)
+    create_fixes_from_issues(issues;path)
+    validate_unused_imports(fixed;autoflake_config;path)
+  src/prefact/rules/wildcard_imports.py:
+    e: WildcardImports
+    WildcardImports(BaseRule): scan_file(2),fix(3),validate(3)
   src/prefact/cli.py:
     e: main,_common_options,_build_config,scan,fix,check,init,autonomous_cmd,testql_cmd,rules,_output
     main(ctx;autonomous;init_only;skip_tests;skip_examples;exclude;with_testql;testql_dir)
@@ -304,100 +386,54 @@ D:
     testql_cmd(scenario_path;project_path;url;dry_run;strategy_path;create_tickets;sync_targets;max_tickets;testql_bin;testql_repo_path)
     rules()
     _output(result;kwargs)
+  examples/04-custom-rules/custom_rules/no_todo_rule.py:
+    e: NoTodoRule,NoPrintRule
+    NoTodoRule(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Rule that detects TODO comments in code...
+    NoPrintRule(BaseRule): scan_file(2),fix(3),validate(3)  # Custom rule that detects print statements (alternative to bu...
+  src/prefact/config_extended/validation.py:
+    e: ConfigValidator
+    ConfigValidator: validate(0),_validate_ruff_config(0),_validate_mypy_config(0),_validate_isort_config(0),_validate_performance_config(0),_validate_rule_config(1)  # Validate configuration files...
+  src/prefact/rules/pylint_based.py:
+    e: PylintHelper,PylintPrintStatements,PylintStringConcat,PprefactPylintPlugin,PylintComprehensive,generate_pylint_rc
+    PylintHelper: check_file(1),check_source(1),fix_file(1)  # Helper class for Pylint operations...
+    PylintPrintStatements(BaseRule): __init__(1),_load_pylint_config(0),scan_file(2),fix(3),validate(3)  # Detect print statements using Pylint...
+    PylintStringConcat(BaseRule): __init__(1),_load_pylint_config(0),scan_file(2),fix(3),validate(3)  # Detect string concatenation using Pylint...
+    PprefactPylintPlugin: register(0)  # Custom Pylint plugin for prefact-specific checks...
+    PylintComprehensive(BaseRule): __init__(1),_load_pylint_config(0),scan_file(2),_map_pylint_to_prefact(1),_map_pylint_severity(1),fix(3),validate(3)  # Comprehensive analysis using Pylint with custom rules...
+    generate_pylint_rc(config;output_path)
+  src/prefact/rules/type_hints.py:
+    e: MissingReturnType
+    MissingReturnType(BaseRule): scan_file(2),fix(3),validate(3)
+  src/prefact/rules/string_concat.py:
+    e: StringConcatToFstring,_is_str_concat,_flatten_add
+    StringConcatToFstring(BaseRule): scan_file(2),fix(3),validate(3)
+    _is_str_concat(node)
+    _flatten_add(node)
   src/prefact/config.py:
     e: RuleConfig,Config
-    RuleConfig:  # Configuration for a single rule.
-    Config: from_yaml(2),_parse_rules(2),_get_default_patterns(1),rule_enabled(1),is_rule_enabled(1),rule_options(1),get_rule_option(3),set_rule_option(3),detect_package_name(0),_detect_from_pyproject(0),_get_tomllib(0),_detect_from_src_layout(0),_detect_from_root_layout(0)  # Top-level configuration.
-  src/prefact/config_extended/__init__.py:
-  src/prefact/config_extended/config.py:
-    e: ExtendedConfig
-    ExtendedConfig: __init__(9),from_yaml(3),_parse_rules(1),_deep_merge(2),get_tool_config(1),get_performance_setting(2),get_plugin_config(1),to_dict(0)  # Extended configuration with additional features.
-  src/prefact/config_extended/constants.py:
-  src/prefact/config_extended/generator.py:
-    e: ConfigGenerator
-    ConfigGenerator: generate_extended_config(3),generate_composite_rule_config(4),save_config(2)  # Generate configuration files.
-  src/prefact/config_extended/models.py:
-    e: ExtendedConfig
-    ExtendedConfig: __init__(9),from_yaml(3),to_dict(0)
+    RuleConfig:  # Configuration for a single rule...
+    Config: from_yaml(1),_parse_rules(1),_get_default_patterns(0),rule_enabled(1),is_rule_enabled(1),rule_options(1),get_rule_option(3),set_rule_option(3),detect_package_name(0),_detect_from_pyproject(0),_get_tomllib(0),_detect_from_src_layout(0),_detect_from_root_layout(0)  # Top-level configuration...
   src/prefact/config_extended/utils.py:
     e: deep_merge
     deep_merge(base;override)
-  src/prefact/config_extended/validation.py:
-    e: ConfigValidator
-    ConfigValidator: validate(1),_validate_ruff_config(1),_validate_mypy_config(1),_validate_isort_config(1),_validate_performance_config(1),_validate_rule_config(2)  # Validate configuration files.
   src/prefact/config_extended/validators.py:
     e: ConfigValidator
-    ConfigValidator: validate(1),_validate_ruff_config(1),_validate_mypy_config(1),_validate_performance_config(1)
-  src/prefact/defaults.py:
-  src/prefact/engine.py:
-    e: RefactoringEngine
-    RefactoringEngine: __init__(1),run(0),scan_only(0),run_file(1),_preload_sources(1)  # Main entry point: scan the project, apply fixes, validate re
-  src/prefact/fixer.py:
-    e: Fixer
-    Fixer: __init__(1),fix_file(2),fix_file_with_source(3)
-  src/prefact/git_hooks.py:
-    e: install_git_hooks,uninstall_git_hooks,list_git_hooks,main,GitHooks,PreCommitConfig
-    GitHooks: __init__(2),_find_git_dir(0),install_hooks(1),_install_hook(2),_generate_hook_script(1),_pre_commit_hook(0),_pre_push_hook(0),_commit_msg_hook(0),uninstall_hooks(1),list_hooks(0),test_hook(1)  # Manages Git hooks for prefact.
-    PreCommitConfig: generate_config(1),install(1)  # Generate pre-commit configuration for prefact.
-    install_git_hooks(repo_root)
-    uninstall_git_hooks(repo_root)
-    list_git_hooks(repo_root)
-    main()
-  src/prefact/logging/__init__.py:
-  src/prefact/logging/exceptions.py:
-    e: PprefactException,ConfigurationError,RuleError,PluginError
-    PprefactException: __init__(3)
-    ConfigurationError:
-    RuleError: __init__(3)
-    PluginError: __init__(2)
-  src/prefact/logging/formatters.py:
-    e: JsonFormatter
-    JsonFormatter: format(1)
-  src/prefact/logging/levels.py:
-    e: LogLevel
-    LogLevel:  # Log levels for prefact.
-  src/prefact/logging/logger.py:
-    e: LogLevel,PprefactLogger
-    LogLevel:
-    PprefactLogger: __init__(5),_setup_handlers(0),debug(1),info(1),warning(1),error(2),critical(2),_log(2),_send_telemetry(1),add_telemetry_callback(1),log_scan_start(2),log_scan_complete(3),log_rule_execution(4),log_plugin_loaded(2),log_performance_metrics(1)
-  src/prefact/models.py:
-    e: Severity,Phase,Issue,Fix,ValidationResult,PipelineResult
-    Severity:  # How critical an issue is.
-    Phase:  # Pipeline phase.
-    Issue: location(0)  # A single detected problem in the codebase.
-    Fix:  # A concrete code change to apply.
-    ValidationResult:  # Result of post-fix validation.
-    PipelineResult: total_issues(0),total_fixed(0),total_failed(0),all_valid(0)  # Aggregate result of the full scan → fix → validate pipeline.
-  src/prefact/performance/__init__.py:
-  src/prefact/performance/cache/__init__.py:
-  src/prefact/performance/cache/base.py:
-    e: Cache
-    Cache: __init__(2),get(2),set(3),delete(1),clear(0),get_stats(0),close(0)  # Wrapper for diskcache with additional functionality.
-  src/prefact/performance/cache/config.py:
-    e: ConfigCache
-    ConfigCache: __init__(1),get_key(1),get(1),set(2)  # Cache for rule configurations.
+    ConfigValidator: validate(0),_validate_ruff_config(0),_validate_mypy_config(0),_validate_performance_config(0)
+  src/prefact/rules/strategies.py:
+    e: ToolStrategy,ParallelScanStrategy,SequentialScanStrategy,PriorityBasedStrategy
+    ToolStrategy(ABC): scan(3),fix(4)  # Abstract base class for tool orchestration strategies...
+    ParallelScanStrategy(ToolStrategy): __init__(1),scan(3),fix(4)  # Run all tools in parallel and merge results...
+    SequentialScanStrategy(ToolStrategy): scan(3),fix(4)  # Run tools sequentially, passing results between them...
+    PriorityBasedStrategy(ToolStrategy): __init__(1),scan(3),fix(4)  # Use tool priority to resolve conflicts...
+  src/prefact/rules/migration.py:
+    e: RuleMigrationManager,HybridScanner,PerformanceProfiler,add_ruff_config_to_prefact_yaml
+    RuleMigrationManager: __init__(1),get_migrated_rule(1),should_use_ruff(1),create_hybrid_rule(1)  # Manages migration from AST-based rules to Ruff-based rules...
+    HybridScanner: __init__(1),_load_rules(0),scan_file(2)  # Scanner that can use both AST and Ruff-based rules...
+    PerformanceProfiler: profile_rule(2),compare_implementations(2)  # Compare performance between AST and Ruff implementations...
+    add_ruff_config_to_prefact_yaml(config_path)
   src/prefact/performance/cache/globals.py:
-    e: initialize_cache,get_cache,get_scan_cache
-    initialize_cache(config)
-    get_cache()
-    get_scan_cache()
-  src/prefact/performance/cache/hash.py:
-    e: FileHashCache
-    FileHashCache: __init__(1),get_hash(1),set_hash(2)  # Cache for file hashes.
-  src/prefact/performance/cache/rule.py:
-    e: RuleResultCache
-    RuleResultCache: __init__(1),get_key(4),get(4),set(6)  # Cache for individual rule results.
-  src/prefact/performance/cache/scan.py:
-    e: ScanResultCache
-    ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results.
-  src/prefact/performance/cache.py:
-    e: initialize_cache,get_cache,get_scan_cache,get_config_cache,get_rule_cache,get_hash_cache,cleanup_cache,cached_result,cached_file_operation,clear_cache,get_cache_info,Cache,ScanResultCache,ConfigCache,RuleResultCache,FileHashCache,CacheContext
-    Cache: __init__(2),get(2),set(3),delete(1),clear(0),get_stats(0),close(0)  # Wrapper for diskcache with additional functionality.
-    ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results.
-    ConfigCache: __init__(1),get_key(1),get(1),set(2)  # Cache for rule configurations.
-    RuleResultCache: __init__(1),get_key(4),get(4),set(6)  # Cache for individual rule results.
-    FileHashCache: __init__(1),get_hash(1),set_hash(2)  # Cache for file hashes.
-    CacheContext: __init__(1),__enter__(0),__exit__(3)  # Context manager for cache operations.
+    e: CacheContext,initialize_cache,get_cache,get_scan_cache,get_config_cache,get_rule_cache,get_hash_cache,cleanup_cache,clear_cache
+    CacheContext: __init__(1),__enter__(0),__exit__(3)  # Context manager that initializes the cache on entry and clea...
     initialize_cache(config)
     get_cache()
     get_scan_cache()
@@ -405,301 +441,250 @@ D:
     get_rule_cache()
     get_hash_cache()
     cleanup_cache()
-    cached_result(expire;key_func)
-    cached_file_operation(expire)
     clear_cache(pattern)
-    get_cache_info()
-  src/prefact/performance/cache_adapters.py:
-    e: ScanResultCache,ConfigCache,RuleResultCache,FileHashCache
-    ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results.
-    ConfigCache: __init__(1),get_key(1),get(1),set(2)  # Cache for rule configurations.
-    RuleResultCache: __init__(1),get_key(4),get(4),set(6)  # Cache for individual rule results.
-    FileHashCache: __init__(1),get_hash(1),set_hash(2)  # Cache for file hashes.
-  src/prefact/performance/cache_state.py:
-    e: initialize_cache,get_cache,get_scan_cache,get_config_cache,get_rule_cache,get_hash_cache,close_cache
-    initialize_cache(config)
-    get_cache()
-    get_scan_cache()
-    get_config_cache()
-    get_rule_cache()
-    get_hash_cache()
-    close_cache()
-  src/prefact/performance/parallel.py:
-    e: init_worker,scan_file_worker,get_performance_monitor,ParallelScanTask,ParallelEngine,ParallelScanner,PerformanceMonitor
-    ParallelScanTask: __init__(4),_calculate_file_hash(0),execute(0)  # A task for parallel scanning.
-    ParallelEngine: __init__(1),scan_files(2),_scan_with_thread_pool(1),_scan_with_process_pool(1),_execute_task_wrapper(1),_get_enabled_rule_ids(0),fix_files(2)  # Parallel processing engine for prefact.
-    ParallelScanner: __init__(1),scan_directory(4),scan_workspace(1),get_performance_stats(0)  # High-level interface for parallel scanning.
-    PerformanceMonitor: __init__(0),start_timing(0),end_timing(1),record_cache_hit(0),record_cache_miss(0),get_stats(0)  # Monitor performance of parallel operations.
-    init_worker()
-    scan_file_worker(args)
-    get_performance_monitor()
-  src/prefact/plugins/__init__.py:
-    e: get_plugin_manager,register_plugin_rule,PluginMetadata,PluginValidator,PluginManager
-    PluginMetadata: __init__(6),_check_compatibility(0)  # Metadata for a loaded plugin.
-    PluginValidator: validate_plugin_module(1),validate_plugin_path(1)  # Validates plugins before loading.
-    PluginManager: __init__(1),discover_plugins(0),_discover_entry_point_plugins(0),_discover_local_plugins(1),load_plugin(1),load_all_plugins(0),get_rule(1),_load_plugin_for_rule(1),list_plugins(0),_is_rule_from_plugin(2),unload_plugin(1)  # Manages loading and registration of plugins.
-    get_plugin_manager(config)
-    register_plugin_rule(plugin_name;version)
-  src/prefact/plugins/builtin.py:
-  src/prefact/reporters/__init__.py:
-  src/prefact/reporters/console.py:
-    e: print_report
-    print_report(result)
+  src/prefact/rules/isort_based/sorted_imports.py:
+    e: ISortedImports
+    ISortedImports(BaseRule): __init__(1),_load_isort_config(0),scan_file(2),fix(3),validate(3)  # Sort imports using ISort...
+  src/prefact/rules/string_transformations/flynt_formatting.py:
+    e: FlyntHelper,FlyntStringFormatting
+    FlyntHelper: fix_source(0)  # Helper for using flynt library for string formatting...
+    FlyntStringFormatting(BaseRule): scan_file(2),fix(3),validate(3)  # Use flynt library for string formatting optimizations...
+  src/prefact/validator.py:
+    e: Validator
+    Validator: __init__(1),validate_file(4)
   src/prefact/reporters/json_reporter.py:
     e: to_dict,dump
     to_dict(result)
     dump(result)
-  src/prefact/rules/__init__.py:
-    e: register,get_all_rules,get_rule,BaseRule
-    BaseRule: __init__(1),scan_file(2),fix(3),validate(3),_validate_by_rescan(5)  # Base class every prefactoring rule must implement.
-    register(cls)
-    get_all_rules()
-    get_rule(rule_id)
+  src/prefact/rules/composite_factory.py:
+    e: CompositeRuleFactory,register_composite_rules
+    CompositeRuleFactory: create_composite_rule(4)  # Factory for creating composite rules dynamically...
+    register_composite_rules(config)
   src/prefact/rules/_ast_cache.py:
     e: parse_cached,clear
     parse_cached(source)
     clear()
-  src/prefact/rules/ai_boilerplate.py:
-    e: AIBoilerplateRule
-    AIBoilerplateRule: _get_boilerplate_patterns(0),_check_line(3),scan_file(2),fix(3),validate(3)  # Detect AI boilerplate and template code.
-  src/prefact/rules/autoflake_based.py:
-    e: build_autoflake_check_command,parse_autoflake_output,run_autoflake_command,create_temp_file_with_source,build_autoflake_fix_command,create_issues_from_results,extract_import_name,create_fixes_from_issues,validate_unused_imports,AutoflakeHelper,AutoflakeUnusedImports,AutoflakeUnusedVariables
-    AutoflakeHelper: check_file(2),check_source(2),fix_file(2),fix_source(2)  # Helper class for Autoflake operations.
-    AutoflakeUnusedImports: __init__(1),_load_autoflake_config(0),scan_file(2),fix(3),validate(3)  # Remove unused imports using Autoflake.
-    AutoflakeUnusedVariables: __init__(1)  # Remove unused variables using Autoflake.
-    build_autoflake_check_command(file_path;config)
-    parse_autoflake_output(output_lines)
-    run_autoflake_command(cmd)
-    create_temp_file_with_source(source)
-    build_autoflake_fix_command(file_path;config)
-    create_issues_from_results(results;path;rule_id)
-    extract_import_name(line)
-    create_fixes_from_issues(issues;path)
-    validate_unused_imports(fixed;autoflake_config;path)
-  src/prefact/rules/benchmark.py:
-    e: benchmark_file,benchmark_project,print_benchmark_results,main
-    benchmark_file(file_path;config)
-    benchmark_project(project_root;config)
-    print_benchmark_results(results)
-    main()
-  src/prefact/rules/composite_factory.py:
-    e: register_composite_rules,CompositeRuleFactory
-    CompositeRuleFactory: create_composite_rule(5)  # Factory for creating composite rules dynamically.
-    register_composite_rules(config)
-  src/prefact/rules/composite_rules.py:
-    e: CompositeUnusedImports,CompositeImportRules,CompositeTypeChecking
-    CompositeUnusedImports: __init__(1),_create_strategy(0),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for unused imports using multiple tools.
-    CompositeImportRules: __init__(1),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for all import-related checks.
-    CompositeTypeChecking: __init__(1),_load_tools(0),scan_file(2),fix(3),validate(3)  # Composite rule for type checking using multiple tools.
-  src/prefact/rules/duplicate_imports.py:
-    e: DuplicateImports
-    DuplicateImports: scan_file(2),fix(3),validate(3)
-  src/prefact/rules/import_linter_based.py:
-    e: generate_import_linter_config,ImportLinterHelper,ImportLinterLayers,ImportLinterNoRelative,ImportLinterIndependence,ImportLinterCustomArchitecture
-    ImportLinterHelper: create_config(2),run_linter(1),check_file(2)  # Helper class for import-linter operations.
-    ImportLinterLayers: __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Enforce import layering rules using import-linter.
-    ImportLinterNoRelative: __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Block relative imports using import-linter.
-    ImportLinterIndependence: __init__(1),_load_linter_config(0),scan_file(2),fix(3),validate(3)  # Ensure module independence using import-linter.
-    ImportLinterCustomArchitecture: __init__(1),_load_custom_config(0),scan_file(2),fix(3),validate(3)  # Enforce custom architectural rules using import-linter.
-    generate_import_linter_config(config;output_path)
-  src/prefact/rules/importchecker_based.py:
-    e: ImportCheckerHelper,ImportCheckerUnusedImports,ImportCheckerDuplicateImports,ImportDependencyAnalysis,ImportOptimizer
-    ImportCheckerHelper: check_file(1),_get_module_name(1),check_source(2)  # Helper class for importchecker operations.
-    ImportCheckerUnusedImports: __init__(1),_load_checker_config(0),scan_file(2),_find_import_lines(1),fix(3),validate(3)  # Detect unused imports using importchecker.
-    ImportCheckerDuplicateImports: scan_file(2),fix(3),validate(3)  # Detect duplicate imports using importchecker.
-    ImportDependencyAnalysis: __init__(1),_load_checker_config(0),scan_file(2),_extract_imports(1),_detect_circular_imports(2),fix(3),validate(3)  # Analyze import dependencies using importchecker.
-    ImportOptimizer: scan_file(2),_extract_all_imports(1),_count_usage(2),fix(3),validate(3)  # Optimize imports based on importchecker analysis.
-  src/prefact/rules/isort_based.py:
-    e: ISortHelper,ISortedImports,ImportSectionSeparator,CustomImportOrganization
-    ISortHelper: check_file(2),check_source(2),_find_import_blocks(1),_is_block_sorted(2),_needs_section_separators(2),fix_file(2),fix_source(2)  # Helper class for ISort operations.
-    ISortedImports: __init__(1),_load_isort_config(0),scan_file(2),fix(3),validate(3)  # Sort imports using ISort.
-    ImportSectionSeparator: __init__(1),scan_file(2),fix(3),validate(3)  # Ensure import sections are properly separated.
-    CustomImportOrganization: __init__(1),_load_custom_rules(0),scan_file(2),_check_grouping(2),_check_alphabetical(2),fix(3),validate(3)  # Organize imports according to custom rules.
-  src/prefact/rules/llm_generated_code.py:
-    e: LLMGeneratedCodeRule
-    LLMGeneratedCodeRule: __init__(1),_load_indicators(0),scan_file(2),_check_comment_ratio(2),_check_docstring_patterns(2),_has_llm_docstring_pattern(1),_map_severity(1),fix(3),validate(3)  # Detect code that appears to be LLM-generated.
-  src/prefact/rules/llm_hallucinations.py:
-    e: LLMHallucinationRule
-    LLMHallucinationRule: __init__(1),_load_patterns(0),scan_file(2),_check_ast_patterns(2),_is_suspicious_function_name(1),_is_suspicious_import(1),_map_severity(1),fix(3),validate(3)  # Detect LLM hallucination patterns in code.
-  src/prefact/rules/magic_numbers.py:
-    e: MagicNumberRule
-    MagicNumberRule: __init__(1),_load_allowed_numbers(0),scan_file(2),_extract_literal_issues(2),_extract_comparison_issues(2),_is_magic_number(1),fix(3),validate(3)  # Detect magic numbers in code.
-  src/prefact/rules/migration.py:
-    e: add_ruff_config_to_prefact_yaml,RuleMigrationManager,HybridScanner,PerformanceProfiler
-    RuleMigrationManager: __init__(1),get_migrated_rule(1),should_use_ruff(1),create_hybrid_rule(1)  # Manages migration from AST-based rules to Ruff-based rules.
-    HybridScanner: __init__(1),_load_rules(0),scan_file(2)  # Scanner that can use both AST and Ruff-based rules.
-    PerformanceProfiler: profile_rule(3),compare_implementations(3)  # Compare performance between AST and Ruff implementations.
-    add_ruff_config_to_prefact_yaml(config_path)
-  src/prefact/rules/mypy_based.py:
-    e: MyPyHelper,MyPyMissingReturnType,MyPyTypeChecking,ReturnTypeInferrer,ReturnTypeAdder,SmartReturnTypeRule
-    MyPyHelper: check_file(2),check_source(2)  # Helper class for MyPy operations.
-    MyPyMissingReturnType: __init__(1),_load_mypy_config(0),scan_file(2),_is_public_function(2),fix(3),validate(3)  # Detect missing return type annotations using MyPy.
-    MyPyTypeChecking: __init__(1),_load_mypy_config(0),scan_file(2),fix(3),validate(3)  # General type checking using MyPy.
-    ReturnTypeInferrer: infer_return_type(2),_analyze_return_types(1),_get_return_value_type(1),_unify_types(1)  # Infer return types for simple functions.
-    ReturnTypeAdder: __init__(2),leave_FunctionDef(2)  # Transformer to add return type annotations to functions.
-    SmartReturnTypeRule: scan_file(2),fix(3),validate(3)  # Smart return type detection with inference suggestions.
-  src/prefact/rules/print_statements.py:
-    e: PrintStatements
-    PrintStatements: scan_file(2),fix(3),validate(3)
-  src/prefact/rules/pylint_based.py:
-    e: generate_pylint_rc,PylintHelper,PylintPrintStatements,PylintStringConcat,PprefactPylintPlugin,PylintComprehensive
-    PylintHelper: check_file(2),check_source(2),fix_file(2)  # Helper class for Pylint operations.
-    PylintPrintStatements: __init__(1),_load_pylint_config(0),scan_file(2),fix(3),validate(3)  # Detect print statements using Pylint.
-    PylintStringConcat: __init__(1),_load_pylint_config(0),scan_file(2),fix(3),validate(3)  # Detect string concatenation using Pylint.
-    PprefactPylintPlugin: register(1)  # Custom Pylint plugin for prefact-specific checks.
-    PylintComprehensive: __init__(1),_load_pylint_config(0),scan_file(2),_map_pylint_to_prefact(1),_map_pylint_severity(1),fix(3),validate(3)  # Comprehensive analysis using Pylint with custom rules.
-    generate_pylint_rc(config;output_path)
-  src/prefact/rules/registry.py:
-    e: get_lazy_registry,get_all_rules,get_rule,register,_initialize_built_in_rules,LazyRuleRegistry
-    LazyRuleRegistry: __init__(0),get_rule(1),_load_module(1),_find_rule_class(2),get_all_rules(0),list_available_rules(0),register_rule(2),register_rule_module(2)  # Registry that lazily loads rule classes.
-    get_lazy_registry()
-    get_all_rules()
-    get_rule(rule_id)
-    register(rule_class)
-    _initialize_built_in_rules()
-  src/prefact/rules/relative_imports.py:
-    e: _module_to_str,_str_to_module,_RelativeImportFixer,RelativeToAbsoluteImports
-    _RelativeImportFixer: __init__(3),leave_ImportFrom(2),_resolve(2)  # Transform relative imports to absolute using the resolved pa
-    RelativeToAbsoluteImports: __init__(1),scan_file(2),fix(3),validate(3)
-    _module_to_str(node)
-    _str_to_module(dotted)
+  src/prefact/rules/isort_based/section_separator.py:
+    e: ImportSectionSeparator
+    ImportSectionSeparator(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Ensure import sections are properly separated...
   src/prefact/rules/ruff_based.py:
     e: RuffHelper,RuffWildcardImports,RuffPrintStatements,RuffUnusedImports,RuffSortedImports,RuffDuplicateImports
-    RuffHelper: check_file(2),fix_file(2),fix_source(2)  # Helper class for Ruff operations.
-    RuffWildcardImports: scan_file(2),fix(3),validate(3)  # Wildcard imports detection using Ruff.
-    RuffPrintStatements: scan_file(2),_should_ignore_file(1),fix(3),validate(3)  # Print statements detection using Ruff.
-    RuffUnusedImports: scan_file(2),fix(3),validate(3)  # Unused imports detection and removal using Ruff.
-    RuffSortedImports: scan_file(2),fix(3),validate(3)  # Import sorting using Ruff.
-    RuffDuplicateImports: scan_file(2),fix(3),validate(3)  # Duplicate imports detection using Ruff.
-  src/prefact/rules/sorted_imports.py:
-    e: _sort_key,SortedImports
-    SortedImports: scan_file(2),fix(3),validate(3)
-    _sort_key(node)
-  src/prefact/rules/strategies.py:
-    e: ToolStrategy,ParallelScanStrategy,SequentialScanStrategy,PriorityBasedStrategy
-    ToolStrategy: scan(3),fix(4)  # Abstract base class for tool orchestration strategies.
-    ParallelScanStrategy: __init__(1),scan(3),fix(4)  # Run all tools in parallel and merge results.
-    SequentialScanStrategy: scan(3),fix(4)  # Run tools sequentially, passing results between them.
-    PriorityBasedStrategy: __init__(1),scan(3),fix(4)  # Use tool priority to resolve conflicts.
-  src/prefact/rules/string_concat.py:
-    e: _is_str_concat,_flatten_add,StringConcatToFstring
-    StringConcatToFstring: scan_file(2),fix(3),validate(3)
-    _is_str_concat(node)
-    _flatten_add(node)
-  src/prefact/rules/string_transformations.py:
-    e: StringConcatTransformer,StringConcatToFString,FlyntHelper,FlyntStringFormatting,ContextAwareStringTransformer,ContextAwareStringConcat
-    StringConcatTransformer: __init__(0),_get_line_number(1),leave_BinaryOperation(2),_collect_string_parts(1),_eval_string(1),_should_transform(1),_create_fstring(1)  # Transform string concatenations to f-strings.
-    StringConcatToFString: scan_file(2),_is_string_concat(1),fix(3),validate(3)  # Convert string concatenations to f-strings.
-    FlyntHelper: fix_source(1)  # Helper for using flynt library for string formatting.
-    FlyntStringFormatting: scan_file(2),fix(3),validate(3)  # Use flynt library for string formatting optimizations.
-    ContextAwareStringTransformer: __init__(1),visit_FunctionDef(1),leave_FunctionDef(1),visit_ClassDef(1),leave_ClassDef(1),leave_BinaryOperation(2),_should_skip_context(1),_is_in_logging_statement(1)  # Transform string concatenations with context awareness.
-    ContextAwareStringConcat: __init__(1),scan_file(2),fix(3),validate(3)  # Context-aware string concatenation to f-string conversion.
-  src/prefact/rules/type_hints.py:
-    e: MissingReturnType
-    MissingReturnType: scan_file(2),fix(3),validate(3)
-  src/prefact/rules/unimport_based.py:
-    e: UnimportHelper,UnimportUnusedImports,UnimportDuplicateImports,UnimportStarImports,UnimportAll
-    UnimportHelper: check_file(2),check_source(2),_extract_import_name(1),fix_file(2),fix_source(2)  # Helper class for unimport operations.
-    UnimportUnusedImports: __init__(1),_load_unimport_config(0),scan_file(2),fix(3),validate(3)  # Remove unused imports using unimport.
-    UnimportDuplicateImports: __init__(1),scan_file(2),fix(3),validate(3)  # Remove duplicate imports using unimport.
-    UnimportStarImports: __init__(1),scan_file(2),fix(3),validate(3)  # Handle star imports using unimport.
-    UnimportAll: __init__(1),scan_file(2),fix(3),validate(3)  # Apply all unimport fixes.
-  src/prefact/rules/unused_imports.py:
-    e: _collect_imported_names,_collect_used_names,_collect_all_exports,UnusedImports
-    UnusedImports: scan_file(2),validate(3),fix(3),remove_lines(2),process_import_from(7),process_import(7),_remove_unused_from_line(2),_remove_unused_from_import_line(2)
-    _collect_imported_names(tree)
-    _collect_used_names(tree)
-    _collect_all_exports(tree)
-  src/prefact/rules/wildcard_imports.py:
-    e: WildcardImports
-    WildcardImports: scan_file(2),fix(3),validate(3)
-  src/prefact/scanner.py:
-    e: _load_gitignore,_match_gitignore_pattern,Scanner
-    Scanner: __init__(1),collect_files(0),scan(1),scan_sources(1),_excluded(1)  # Discovers Python files and runs all enabled rules against th
-    _load_gitignore(root)
-    _match_gitignore_pattern(path;pattern)
-  src/prefact/validator.py:
-    e: Validator
-    Validator: __init__(1),validate_file(4)
-  test_large_files.py:
-    e: test_large_file_handling
-    test_large_file_handling()
-  test_ram_implementation.py:
-  tests/test_autonomous_limits.py:
-    e: _write_prefact_config,_issue_group,test_config_generator_includes_autonomous_limits,test_config_validator_rejects_invalid_autonomous_limits,test_project_scanner_respects_configured_example_limit,test_project_scanner_caps_files_to_scan,test_project_scanner_caps_issues_per_file,test_autonomous_refact_caps_grouped_issues_before_distribution,test_autonomous_refact_stops_before_docs_when_time_limit_exceeded,test_autonomous_refact_prints_final_summary,test_docs_manager_respects_total_ticket_limit,test_docs_manager_reports_skipped_ticket_count,test_todo_manager_reports_skipped_todo_counts,test_todo_manager_limits_output_and_normalizes_existing_paths,test_todo_manager_execute_todos_respects_execution_limit
-    _write_prefact_config(project_root;performance)
-    _issue_group(file_path;rule_id;example_count)
-    test_config_generator_includes_autonomous_limits(tmp_path)
-    test_config_validator_rejects_invalid_autonomous_limits(tmp_path)
-    test_project_scanner_respects_configured_example_limit(tmp_path)
-    test_project_scanner_caps_files_to_scan(tmp_path)
-    test_project_scanner_caps_issues_per_file(tmp_path)
-    test_autonomous_refact_caps_grouped_issues_before_distribution(tmp_path)
-    test_autonomous_refact_stops_before_docs_when_time_limit_exceeded(tmp_path)
-    test_autonomous_refact_prints_final_summary(tmp_path;capsys)
-    test_docs_manager_respects_total_ticket_limit(tmp_path)
-    test_docs_manager_reports_skipped_ticket_count(tmp_path;capsys)
-    test_todo_manager_reports_skipped_todo_counts(tmp_path;capsys)
-    test_todo_manager_limits_output_and_normalizes_existing_paths(tmp_path)
-    test_todo_manager_execute_todos_respects_execution_limit(tmp_path)
-  tests/test_config.py:
-    e: project_with_pyproject,TestConfig
-    TestConfig: test_detect_from_pyproject(1),test_detect_from_src_layout(1),test_detect_top_level_package(1),test_from_yaml(1),test_rule_defaults(0),test_config_uses_defaults_include(0),test_config_uses_defaults_exclude(0),test_venv_variants_in_defaults(0),test_scanner_excludes_venv_test(1),test_config_extended_constants_reexport(0)
-    project_with_pyproject(tmp_path)
-  tests/test_dependency_checker.py:
-    e: project_with_pyproject,project_with_requirements,pip_outdated_json,TestDependencyChecker
-    TestDependencyChecker: test_parse_pyproject_toml(1),test_parse_requirements_txt(1),test_no_dep_files(1),test_outdated_filtering(3),test_all_up_to_date(2),test_issue_group_shape(3),test_line_number_detection(3),test_normalize(0),test_pip_failure_graceful(2)
-    project_with_pyproject(tmp_path)
-    project_with_requirements(tmp_path)
-    pip_outdated_json()
-  tests/test_engine.py:
-    e: project,TestEngine
-    TestEngine: test_scan_only(1),test_full_pipeline_dry_run(1),test_full_pipeline_apply(1),test_run_single_file(1),test_backup_created(1),test_clean_project_no_issues(1)
-    project(tmp_path)
-  tests/test_integrations.py:
-    e: test_ruff_integration,test_mypy_integration,test_isort_integration,test_autoflake_integration,test_string_transformations,test_full_pipeline,test_performance_comparison,run_integration_tests,IntegrationTestCase,IntegrationTestSuite
-    IntegrationTestCase: __init__(3),run(1)  # Base class for integration test cases.
-    IntegrationTestSuite: __init__(0),_create_test_cases(0),run_all_tests(1),_compare_results(2),_issues_match(2)  # Comprehensive test suite for all integrations.
-    test_ruff_integration()
-    test_mypy_integration()
-    test_isort_integration()
-    test_autoflake_integration()
-    test_string_transformations()
-    test_full_pipeline()
-    test_performance_comparison()
-    run_integration_tests()
-  tests/test_refactoring.py:
-    e: test_placeholder,test_import
-    test_placeholder()
-    test_import()
-  tests/test_relative_imports.py:
-    e: config,TestScan,TestFix,TestValidate
-    TestScan: test_detects_relative_imports(1),test_ignores_absolute_imports(1),test_handles_syntax_error_gracefully(1)
-    TestFix: test_converts_single_dot_import(1),test_converts_deep_relative_import(1),test_preserves_absolute_imports(1),test_no_fix_without_package_name(1)
-    TestValidate: test_valid_after_fix(1),test_invalid_if_relative_remains(1)
-    config(tmp_path)
-  tests/test_rules.py:
-    e: config,TestDuplicateImports,TestWildcardImports,TestStringConcat,TestPrintStatements,TestMissingReturnType,TestSortedImports
-    TestDuplicateImports: test_detects_duplicate(1),test_no_duplicates(1),test_fix_removes_duplicate_line(1)
-    TestWildcardImports: test_detects_wildcard(1),test_no_autofix(1)
-    TestStringConcat: test_detects_concat(1),test_ignores_pure_string_concat(1),test_ignores_numeric_add(1)
-    TestPrintStatements: test_detects_print(1),test_no_print_no_issue(1)
-    TestMissingReturnType: test_detects_missing(1),test_has_return_type(1),test_skips_private(1)
-    TestSortedImports: test_detects_unsorted(1),test_sorted_ok(1)
-    config(tmp_path)
-  tests/test_testql_manager.py:
-    e: planfile_stub,test_run_testql_creates_and_syncs_tickets,test_run_testql_respects_no_create_tickets,test_discover_scenarios_returns_sorted_glob,test_run_testql_all_skips_when_no_scenarios,test_run_testql_all_aggregates_results,_stub_pipeline_steps,test_run_autonomous_with_testql_invokes_run_all,test_run_autonomous_default_skips_testql
-    planfile_stub(monkeypatch)
-    test_run_testql_creates_and_syncs_tickets(tmp_path;planfile_stub)
-    test_run_testql_respects_no_create_tickets(tmp_path;planfile_stub)
-    test_discover_scenarios_returns_sorted_glob(tmp_path)
-    test_run_testql_all_skips_when_no_scenarios(tmp_path;planfile_stub)
-    test_run_testql_all_aggregates_results(tmp_path;planfile_stub)
-    _stub_pipeline_steps(auto;monkeypatch)
-    test_run_autonomous_with_testql_invokes_run_all(tmp_path;monkeypatch)
-    test_run_autonomous_default_skips_testql(tmp_path;monkeypatch)
-  tests/test_unused_imports.py:
-    e: config,TestScanUnused,TestFixUnused
-    TestScanUnused: test_detects_unused(1),test_used_import_not_flagged(1),test_respects_all_exports(1),test_skips_underscore_imports(1),test_attribute_access_counts_as_used(1)
-    TestFixUnused: test_removes_unused_line(1)
-    config(tmp_path)
+    RuffHelper: check_file(1),fix_file(1),fix_source(1)  # Helper class for Ruff operations...
+    RuffWildcardImports(BaseRule): scan_file(2),fix(3),validate(3)  # Wildcard imports detection using Ruff...
+    RuffPrintStatements(BaseRule): scan_file(2),_should_ignore_file(1),fix(3),validate(3)  # Print statements detection using Ruff...
+    RuffUnusedImports(BaseRule): scan_file(2),fix(3),validate(3)  # Unused imports detection and removal using Ruff...
+    RuffSortedImports(BaseRule): scan_file(2),fix(3),validate(3)  # Import sorting using Ruff...
+    RuffDuplicateImports(BaseRule): scan_file(2),fix(3),validate(3)  # Duplicate imports detection using Ruff...
+  src/prefact/rules/string_transformations/context_aware_concat.py:
+    e: ContextAwareStringTransformer,ContextAwareStringConcat
+    ContextAwareStringTransformer(cst.CSTTransformer): __init__(1),visit_FunctionDef(1),leave_FunctionDef(1),visit_ClassDef(1),leave_ClassDef(1),leave_BinaryOperation(2),_should_skip_context(1),_is_in_logging_statement(1)  # Transform string concatenations with context awareness...
+    ContextAwareStringConcat(BaseRule): __init__(1),scan_file(2),fix(3),validate(3)  # Context-aware string concatenation to f-string conversion...
+  src/prefact/logging/logger.py:
+    e: LogLevel,PprefactLogger
+    LogLevel(str,Enum):
+    PprefactLogger: __init__(5),_setup_handlers(0),debug(1),info(1),warning(1),error(2),critical(2),_log(2),_send_telemetry(1),add_telemetry_callback(1),log_scan_start(2),log_scan_complete(3),log_rule_execution(4),log_plugin_loaded(2),log_performance_metrics(1)
+  src/prefact/performance/cache_adapters.py:
+    e: ScanResultCache,ConfigCache,RuleResultCache,FileHashCache
+    ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results...
+    ConfigCache: __init__(1),get_key(1),get(1),set(2)  # Cache for rule configurations...
+    RuleResultCache: __init__(1),get_key(4),get(4),set(6)  # Cache for individual rule results...
+    FileHashCache: __init__(1),get_hash(1),set_hash(2)  # Cache for file hashes...
+  src/prefact/performance/cache/base.py:
+    e: Cache
+    Cache: __init__(2),get(2),set(3),delete(1),clear(0),get_stats(0),close(0)  # Wrapper for diskcache with additional functionality...
+  src/prefact/performance/cache/hash.py:
+    e: FileHashCache
+    FileHashCache: __init__(1),get_hash(1),set_hash(2)  # Cache for file hashes...
+  src/prefact/rules/__init__.py:
+    e: BaseRule,register,get_all_rules,get_rule
+    BaseRule(abc.ABC): __init__(1),scan_file(2),fix(3),validate(3),_validate_by_rescan(5)  # Base class every prefactoring rule must implement...
+    register(cls)
+    get_all_rules()
+    get_rule(rule_id)
+  src/prefact/rules/ai_boilerplate.py:
+    e: AIBoilerplateRule
+    AIBoilerplateRule(BaseRule): _get_boilerplate_patterns(0),_check_line(3),scan_file(2),fix(3),validate(3)  # Detect AI boilerplate and template code...
+  examples/01-individual-rules/unused-imports/after.py:
+    e: DataProcessor,process_data,format_timestamp,read_file
+    DataProcessor: __init__(0),add_data(2),get_data(1)  # A class with clean imports...
+    process_data(data)
+    format_timestamp(ts)
+    read_file(filepath)
+  examples/01-individual-rules/unused-imports/before.py:
+    e: DataProcessor,process_data,format_timestamp,read_file
+    DataProcessor: __init__(0),add_data(2),get_data(1)  # A class with unused imports...
+    process_data(data)
+    format_timestamp(ts)
+    read_file(filepath)
+  examples/02-multiple-rules/messy_module.py:
+    e: DataProcessor,process_users,generate_report
+    DataProcessor: __init__(0),process(1)  # A class with various issues...
+    process_users(users)
+    generate_report(data)
+  examples/sample-project/cli.py:
+    e: main,admin,users
+    main(name;email)
+    admin()
+    users()
+  examples/sample-project/utils.py:
+    e: UtilClass,format_name,validate_email,helper_function
+    UtilClass: __init__(0),get_cached(1)  # Utility class...
+    format_name(first;last)
+    validate_email(email)
+    helper_function(data)
+  examples/sample-project/models.py:
+    e: User,Post,create_user,load_users_from_file
+    User: __post_init__(0)  # User model...
+    Post: __post_init__(0),get_summary(0)  # Post model...
+    create_user(name;email)
+    load_users_from_file(filepath)
+  examples/sample-project/core.py:
+    e: DataProcessor,process_data,calculate_sum
+    DataProcessor: __init__(0),add_item(1),get_summary(0)  # A class that processes data...
+    process_data(data)
+    calculate_sum(numbers)
+  examples/03-output-formats/sample_code.py:
+    e: process_data,calculate_sum
+    process_data(data)
+    calculate_sum(numbers)
+  src/prefact/logging/exceptions.py:
+    e: PprefactException,ConfigurationError,RuleError,PluginError
+    PprefactException(Exception): __init__(3)
+    ConfigurationError(PprefactException):
+    RuleError(PprefactException): __init__(3)
+    PluginError(PprefactException): __init__(2)
+  src/prefact/logging/formatters.py:
+    e: JsonFormatter
+    JsonFormatter(logging.Formatter): format(1)
+  examples/01-individual-rules/relative-imports/after.py:
+    e: Processor,process_user
+    Processor: __init__(0),process(0)  # Processor class with absolute imports...
+    process_user(user_id)
+  examples/01-individual-rules/relative-imports/before.py:
+    e: Processor,process_user
+    Processor: __init__(0),process(0)  # Processor class with relative imports...
+    process_user(user_id)
+  examples/01-individual-rules/wildcard-imports/after.py:
+    e: process
+    process()
+  examples/01-individual-rules/wildcard-imports/before.py:
+    e: process
+    process()
+  examples/01-individual-rules/missing-return-type/after.py:
+    e: Processor,add,get_user
+    Processor: process(1)  # Processor class...
+    add(a;b)
+    get_user(user_id)
+  examples/01-individual-rules/missing-return-type/before.py:
+    e: Processor,add,get_user
+    Processor: process(1)  # Processor class...
+    add(a;b)
+    get_user(user_id)
+  examples/01-individual-rules/duplicate-imports/after.py:
+    e: process_data
+    process_data()
+  examples/01-individual-rules/duplicate-imports/before.py:
+    e: process_data
+    process_data()
+  examples/01-individual-rules/string-concat/after.py:
+    e: greet,format_data
+    greet(name;age)
+    format_data(data)
+  examples/01-individual-rules/string-concat/before.py:
+    e: greet,format_data
+    greet(name;age)
+    format_data(data)
+  examples/01-individual-rules/sorted-imports/after.py:
+    e: process
+    process()
+  examples/01-individual-rules/sorted-imports/before.py:
+    e: process
+    process()
+  examples/01-individual-rules/print-statements/after.py:
+    e: process_data,calculate
+    process_data(data)
+    calculate(a;b)
+  examples/01-individual-rules/print-statements/before.py:
+    e: process_data,calculate
+    process_data(data)
+    calculate(a;b)
+  src/prefact/performance/cache/config.py:
+    e: ConfigCache
+    ConfigCache: __init__(1),get_key(1),get(1),set(2)  # Cache for rule configurations...
+  src/prefact/performance/cache/rule.py:
+    e: RuleResultCache
+    RuleResultCache: __init__(1),get_key(4),get(4),set(6)  # Cache for individual rule results...
+  src/prefact/performance/cache/scan.py:
+    e: ScanResultCache
+    ScanResultCache: __init__(1),get_key(4),get(4),set(6),invalidate_file(1)  # Specialized cache for scan results...
+  redsl_refactor_report.toon.yaml:
+  redsl.yaml:
+  setup.cfg:
+  planfile.yaml:
+  Makefile:
+  redsl_refactor_plan.toon.yaml:
+  koru.yaml:
+  pyqual.yaml:
+  tree.sh:
+  prefact.yaml:
+  Taskfile.yml:
+  project.sh:
+  docs/interfaces/koru-interface-registry.yaml:
+  examples/run_all.sh:
+    e: print_status,print_warning,print_error
+    print_status()
+    print_warning()
+    print_error()
+  examples/requirements.txt:
+  examples/generate_examples.py:
+  examples/01-individual-rules/relative-imports/prefact.yaml:
+  examples/01-individual-rules/wildcard-imports/prefact.yaml:
+  examples/01-individual-rules/missing-return-type/prefact.yaml:
+  examples/01-individual-rules/duplicate-imports/prefact.yaml:
+  examples/01-individual-rules/unused-imports/prefact.yaml:
+  examples/01-individual-rules/string-concat/prefact.yaml:
+  examples/01-individual-rules/sorted-imports/prefact.yaml:
+  examples/01-individual-rules/print-statements/prefact.yaml:
+  examples/07-enterprise/prefact.yaml:
+  examples/09-high-performance/prefact.yaml:
+  examples/02-multiple-rules/prefact.yaml:
+  examples/12-complete-example/prefact.yaml:
+  examples/sample-project/prefact.yaml:
+  examples/05-ci-cd/.gitlab-ci.yml:
+  examples/03-output-formats/prefact.yaml:
+  examples/10-plugin-development/prefact.yaml:
+  examples/11-ci-cd/prefact.yaml:
+  examples/08-llm-focused/prefact.yaml:
+  examples/04-custom-rules/custom_rules/__init__.py:
+  src/prefact/models.py:
+    e: Severity,Phase,Issue,Fix,ValidationResult,PipelineResult
+    Severity(enum.Enum):  # How critical an issue is...
+    Phase(enum.Enum):  # Pipeline phase...
+    Issue:  # A single detected problem in the codebase...
+    Fix:  # A concrete code change to apply...
+    ValidationResult:  # Result of post-fix validation...
+    PipelineResult:  # Aggregate result of the full scan → fix → validate pipeline...
+  src/prefact/_base.py:
+  src/prefact/logging/__init__.py:
+  src/prefact/logging/levels.py:
+    e: LogLevel
+    LogLevel(str,Enum):  # Log levels for prefact...
+  src/prefact/plugins/builtin.py:
+  src/prefact/performance/__init__.py:
+  src/prefact/reporters/__init__.py:
+  src/prefact/config_extended/__init__.py:
+  src/prefact/config_extended/constants.py:
+  testql-scenarios/generated-from-pytests.testql.toon.yaml:
+  testql-scenarios/generated-cli-tests.testql.toon.yaml:
+  vscode-extension/tsconfig.json:
+  vscode-extension/.eslintrc.json:
+  vscode-extension/package.json:
+  goal.yaml:
+  local.dev.txt:
+  pyproject.toml:
+  src/prefact/performance/cache/__init__.py:
+  src/prefact/rules/isort_based/__init__.py:
+  src/prefact/rules/string_transformations/__init__.py:
+  vscode-extension/local.dev.txt:
+  src/prefact/__init__.py:
+  src/prefact/defaults.py:

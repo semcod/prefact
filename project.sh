@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+# Author: Tom Sapletta · https://tom.sapletta.com
+# Part of the ifURI solution.
+
 set -e
 clear
+
+export PIP_DISABLE_PIP_VERSION_CHECK=1
 
 VENV="venv"
 PIP="$VENV/bin/pip"
@@ -10,7 +15,9 @@ if [ ! -f "$PIP" ]; then
     python3 -m venv "$VENV"
 fi
 
-$PIP install -e .
+"$PIP" install --upgrade pip -q 2>/dev/null || true
+
+#$PIP install -e .
 $PIP install regix --upgrade --quiet
 #$PIP install pyqual --upgrade --quiet
 $PIP install prefact --upgrade --quiet
@@ -25,7 +32,7 @@ $VENV/bin/code2llm ./ -f all -o ./project --no-chunk --exclude '*.md'
 
 #$PIP install code2docs --upgrade --quiet
 #$VENV/bin/code2docs ./ --readme-only
-$VENV/bin/redup scan . --format toon --output ./project
+$VENV/bin/redup scan . --format toon --output ./project --ext .mjs,.js,.php,.sh
 #$VENV/bin/redup scan . --functions-only -f toon --output ./project
 #$VENV/bin/vallm batch ./src --recursive --semantic --model qwen2.5-coder:7b
 #$VENV/bin/vallm batch --parallel .
@@ -40,8 +47,20 @@ $PIP install sumd --upgrade --quiet
 $VENV/bin/sumd .
 $VENV/bin/sumr .
 
-tree.sh
 
-pip install -U goal
-$PIP install goal --upgrade --quiet
-$VENV/bin/goal -a
+if [ -d "../goal/goal" ] && [ -f "../goal/pyproject.toml" ]; then
+    pip install -e ../goal
+    $PIP install -e ../goal --quiet
+else
+    pip install -U goal
+    $PIP install goal --upgrade --quiet
+fi
+#$VENV/bin/goal -a
+
+if [ -x "./tree.sh" ]; then
+    bash ./tree.sh
+elif command -v tree >/dev/null 2>&1; then
+    tree -L 2
+else
+    echo "Skipping tree snapshot: ./tree.sh not found and 'tree' is not installed."
+fi

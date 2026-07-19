@@ -1,52 +1,52 @@
-# prefact | 779 func | 95f | 21014L | python | 2026-06-02
+# prefact | 754 func | 98f | 21366L | python | 2026-07-15
 # generated in 0.00s
 
 HEALTH:
-  CC̄=3.0  critical=22 (limit:10)  dup=10  cycles=0
+  CC̄=3.0  critical=23 (limit:10)  dup=9  cycles=0
 
 ALERTS[20]:
-  !!! cc_exceeded      DocsManager.update_planfile = 27 (limit:15)
-  !!! high_fan_out     DocsManager.update_planfile = 23 (limit:10)
   !!! high_fan_out     PrefactTreeProvider.activate = 20 (limit:10)
   !!  high_fan_out     ProjectScanner.scan_project = 18 (limit:10)
   !!  high_fan_out     CompositeRuleFactory.create_composite_rule = 18 (limit:10)
   !!  high_fan_out     RefactoringEngine.run = 15 (limit:10)
   !!  high_fan_out     ProjectScanner._scan_files_parallel = 15 (limit:10)
-  !   cc_exceeded      TestQLManager.run = 15 (limit:15)
   !   high_fan_out     AutonomousRefact.run_autonomous = 14 (limit:10)
   !   high_fan_out     ExtendedConfig.from_yaml = 14 (limit:10)
+  !   high_fan_out     benchmark_without_rampreload = 13 (limit:10)
+  !   high_fan_out     main = 13 (limit:10)
+  !   high_fan_out     ScanProbe.run = 13 (limit:10)
 
-MODULES[148] (top by size):
+MODULES[155] (top by size):
   M[planfile.yaml] 2048L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/prefact/rules/isort_based.py] 519L C:4 F:23 CC↑13 D:0 (python)
-  M[goal.yaml] 512L C:0 F:0 CC↑0 D:0 (yaml)
-  M[src/prefact/rules/string_transformations.py] 501L C:6 F:27 CC↑8 D:0 (python)
+  M[goal.yaml] 529L C:0 F:0 CC↑0 D:0 (yaml)
   M[src/prefact/rules/importchecker_based.py] 499L C:5 F:24 CC↑14 D:0 (python)
   M[src/prefact/rules/import_linter_based.py] 480L C:5 F:24 CC↑8 D:0 (python)
   M[src/prefact/rules/unimport_based.py] 459L C:5 F:22 CC↑14 D:0 (python)
-  M[vscode-extension/src/extension.ts] 437L C:5 F:48 CC↑14 D:27 (typescript)
+  M[vscode-extension/src/extension.ts] 437L C:5 F:48 CC↑14 D:30 (typescript)
   M[src/prefact/autonomous/todo_manager.py] 430L C:1 F:15 CC↑13 D:0 (python)
-  M[src/prefact/cli.py] 424L C:0 F:11 CC↑7 D:1 (python)
-  M[src/prefact/rules/pylint_based.py] 424L C:5 F:22 CC↑6 D:1 (python)
+  M[src/prefact/cli.py] 428L C:0 F:11 CC↑7 D:1 (python)
+  M[src/prefact/rules/pylint_based.py] 424L C:5 F:22 CC↑6 D:0 (python)
   M[src/prefact/rules/mypy_based.py] 416L C:6 F:22 CC↑9 D:0 (python)
   M[src/prefact/git_hooks.py] 383L C:2 F:17 CC↑8 D:0 (python)
+  M[src/prefact/rules/autoflake_based.py] 378L C:3 F:24 CC↑7 D:0 (python)
   M[src/prefact/rules/ruff_based.py] 359L C:6 F:19 CC↑4 D:0 (python)
   M[src/prefact/performance/parallel.py] 357L C:4 F:23 CC↑7 D:0 (python)
-  LANGS: python:107/yaml:28/shell:3/json:3/yml:2/typescript:1/other:1/txt:1/toml:1/cfg:1
+  M[examples/12-complete-example/prefact.yaml] 344L C:0 F:0 CC↑0 D:0 (yaml)
+  LANGS: python:112/yaml:28/txt:3/shell:3/json:3/yml:2/typescript:1/other:1/toml:1/cfg:1
 
 HOTSPOTS[10]:
-  ★ DocsManager.update_planfile fan=23  // Update planfile.yaml with new tickets.
   ★ PrefactTreeProvider.activate fan=20  // Orchestrates 20 calls
   ★ ProjectScanner.scan_project fan=18  // Scan project for issues.
   ★ CompositeRuleFactory.create_composite_rule fan=18  // Create a composite rule dynamically.
   ★ RefactoringEngine.run fan=15  // Orchestrates 15 calls
+  ★ ProjectScanner._scan_files_parallel fan=15  // Scan files using parallel processing.
 
-REFACTOR[9]:
-  [1] H/L Split DocsManager.update_planfile (CC=27)
-  [2] H/H Split god module src/prefact/rules/isort_based.py (519L, 4 classes)
-  [3] H/H Split god module src/prefact/rules/string_transformations.py (501L, 6 classes)
-  [4] H/H Split god module goal.yaml (512L, 0 classes)
-  [5] H/H Split god module planfile.yaml (2048L, 0 classes)
+REFACTOR[5]:
+  [1] H/H Split god module goal.yaml (529L, 0 classes)
+  [2] H/H Split god module planfile.yaml (2048L, 0 classes)
+  [3] M/M Reduce PrefactTreeProvider.activate fan-out (currently 20)
+  [4] M/M Reduce ProjectScanner.scan_project fan-out (currently 18)
+  [5] M/M Reduce CompositeRuleFactory.create_composite_rule fan-out (currently 18)
 
 EVOLUTION:
-  2026-06-02 CC̄=3.0 crit=22 21014L // Automated analysis
+  2026-07-15 CC̄=3.0 crit=23 21366L // Automated analysis
