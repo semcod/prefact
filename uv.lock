@@ -2818,7 +2818,7 @@ wheels = [
 
 [[package]]
 name = "planfile"
-version = "0.1.100"
+version = "0.1.117"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
@@ -2832,9 +2832,9 @@ dependencies = [
     { name = "rich" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/70/21/2b5bcd5cf05e1ed1c7f7887e231352b0fe06cd2661d28557319e49f7261b/planfile-0.1.100.tar.gz", hash = "sha256:988c903bf016817afeed709230ca231c7492ce58bab4766e6a0a4e9c144ae1f7", size = 206408, upload-time = "2026-05-24T19:24:36.26Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/a0/b84dc6ce2abf05412dc15021bea08ca87cf76250678f0ac30968552c4933/planfile-0.1.117.tar.gz", hash = "sha256:3461c7d8dde6f68ebce19901791a95b4e486df612254b69c92240fd1631a8335", size = 267346, upload-time = "2026-07-20T08:26:41.109Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/92/c1/b9ee663848d0667939ca7304909ca5524144dd6947424ad9d4631358db35/planfile-0.1.100-py3-none-any.whl", hash = "sha256:6da2b2bab6b64e5be2960ffe9f708d1babed12fa66a489d400d92b15c64ea7a4", size = 222703, upload-time = "2026-05-24T19:24:34.177Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/95/942617cd2131f29bdc134ab694e2afa59cf46a294562f465405fb70c5898/planfile-0.1.117-py3-none-any.whl", hash = "sha256:99388abba094146bead15b92fe3363892147e5e7b794e40aa6d84b2c3f16906d", size = 259055, upload-time = "2026-07-20T08:26:39.225Z" },
 ]
 
 [[package]]
@@ -2978,7 +2978,7 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'mypy'", specifier = ">=1.0.0" },
     { name = "pfix", specifier = ">=0.1.60" },
     { name = "pfix", marker = "extra == 'dev'", specifier = ">=0.1.60" },
-    { name = "planfile", specifier = ">=0.1.86" },
+    { name = "planfile", specifier = ">=0.1.117" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.0.0" },
     { name = "prometheus-client", marker = "extra == 'all'", specifier = ">=0.16.0" },
     { name = "prometheus-client", marker = "extra == 'monitoring'", specifier = ">=0.16.0" },
