@@ -74,6 +74,26 @@ def _match_gitignore_pattern(path: str, pattern: str) -> bool:
         return False
 
 
+def _dedupe_issues(issues: list[Issue]) -> list[Issue]:
+    """Drop issues that repeat an earlier one exactly, preserving order.
+
+    Composite rules wrap the very same rule objects the scanner also registers
+    standalone, so a file scanned once yields each finding from both paths —
+    identical rule_id, location and message. Reports and generated TODO lists
+    consumed those duplicates as separate work items. Deduplicating here covers
+    every producer instead of one call site.
+    """
+    seen: set[tuple[str, str, int, int, str]] = set()
+    unique: list[Issue] = []
+    for issue in issues:
+        key = (issue.rule_id, str(issue.file), issue.line, issue.col, issue.message)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(issue)
+    return unique
+
+
 class Scanner:
     """Discovers Python files and runs all enabled rules against them."""
 
@@ -138,6 +158,7 @@ class Scanner:
             file_issues: list[Issue] = []
             for rule in self._rules:
                 file_issues.extend(rule.scan_file(path, source))
+            file_issues = _dedupe_issues(file_issues)
             if file_issues:
                 results[path] = file_issues
         return results

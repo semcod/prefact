@@ -211,33 +211,87 @@ include:
 {include_lines}
 exclude:
 {exclude_lines}
+# Keys must be rule ids, exactly as a rule reports them — `prefact check`
+# prints the id in its Rule column. A key that matches no rule configures
+# nothing silently, because an unlisted rule defaults to enabled.
+#
+# prefact ships one rule per (defect, tool) pair, so a defect has several ids.
+# Enabling one does not disable its siblings; list the ones you do not want.
 rules:
   relative-imports:
     enabled: true
     severity: warning
-  unused-imports:
+  no-relative-imports:
+    enabled: false
+
+  ruff-unused-imports:
     enabled: true
     severity: info
-  duplicate-imports:
+  ast-unused-imports:
+    enabled: false
+  autoflake-unused-imports:
+    enabled: false
+  importchecker-unused-imports:
+    enabled: false
+  unimport-unused-imports:
+    enabled: false
+
+  ruff-duplicate-imports:
     enabled: true
     severity: warning
-  wildcard-imports:
+  ast-duplicate-imports:
+    enabled: false
+  importchecker-duplicate-imports:
+    enabled: false
+  unimport-duplicate-imports:
+    enabled: false
+
+  ruff-wildcard-imports:
     enabled: true
     severity: error
-  sorted-imports:
+  ast-wildcard-imports:
+    enabled: false
+  unimport-star-imports:
+    enabled: false
+
+  ruff-sorted-imports:
     enabled: false
     severity: info
-  string-concat:
+  ast-sorted-imports:
+    enabled: false
+
+  ast-string-concat:
     enabled: true
     severity: info
-  print-statements:
+  pylint-string-concat:
+    enabled: false
+
+  ruff-print-statements:
     enabled: true
     severity: info
     options:
       ignore_patterns: ["cli.py", "scripts/"]
-  missing-return-type:
+  ast-print-statements:
+    enabled: false
+  pylint-print-statements:
+    enabled: false
+
+  mypy-missing-return-type:
     enabled: false
     severity: info
+  ast-missing-return-type:
+    enabled: false
+  smart-return-type:
+    enabled: false
+
+  # Composites re-run the rules above; leave them off unless you want their
+  # parallel strategy instead of the standalone rules.
+  composite-imports:
+    enabled: false
+  composite-unused-imports:
+    enabled: false
+  composite-type-checking:
+    enabled: false
 """
     dest = Path(project_path).resolve() / "prefact.yaml"
     if dest.exists():

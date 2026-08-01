@@ -5,7 +5,6 @@ to provide more comprehensive code analysis and fixing.
 """
 
 from pathlib import Path
-from typing import List
 
 from prefact.config import Config
 from prefact.models import Fix, Issue, ValidationResult
@@ -16,6 +15,18 @@ except ImportError:
     from ..rules import BaseRule, register
 
 from prefact.rules.strategies import ParallelScanStrategy, ToolStrategy
+
+
+def _enabled_tools(config: Config, tools: list[BaseRule]) -> list[BaseRule]:
+    """Keep only sub-tools whose own rule_id is enabled.
+
+    The `is_rule_enabled` guards below name defect classes ("unused-imports"),
+    not rule ids, and `rule_enabled` returns True for any id it does not know —
+    so those guards never excluded anything and a rule disabled in prefact.yaml
+    still ran, and still reported, from inside a composite. Gate on the id the
+    sub-tool actually emits.
+    """
+    return [tool for tool in tools if config.rule_enabled(tool.rule_id)]
 
 
 @register
@@ -60,9 +71,9 @@ class CompositeUnusedImports(BaseRule):
             max_workers = self.config.get_rule_option(self.rule_id, "max_workers", 4)
             return ParallelScanStrategy(max_workers)
 
-    def _load_tools(self) -> List[BaseRule]:
+    def _load_tools(self) -> list[BaseRule]:
         """Load the tools to use."""
-        tools = []
+        tools: list[BaseRule] = []
 
         # Try to load Ruff-based rule
         try:
@@ -89,9 +100,9 @@ class CompositeUnusedImports(BaseRule):
         except ImportError:
             pass
 
-        return tools
+        return _enabled_tools(self.config, tools)
 
-    def scan_file(self, path: Path, source: str) -> List[Issue]:
+    def scan_file(self, path: Path, source: str) -> list[Issue]:
         """Scan using all configured tools."""
         if not self.tools:
             return []
@@ -99,8 +110,8 @@ class CompositeUnusedImports(BaseRule):
         return self.strategy.scan(path, source, self.tools)
 
     def fix(
-        self, path: Path, source: str, issues: List[Issue]
-    ) -> tuple[str, List[Fix]]:
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         """Fix using the strategy."""
         if not self.tools:
             return source, []
@@ -128,9 +139,9 @@ class CompositeImportRules(BaseRule):
         self.strategy = ParallelScanStrategy(max_workers=6)
         self.tools = self._load_tools()
 
-    def _load_tools(self) -> List[BaseRule]:
+    def _load_tools(self) -> list[BaseRule]:
         """Load all import-related tools."""
-        tools = []
+        tools: list[BaseRule] = []
 
         # Unused imports
         if self.config.is_rule_enabled("unused-imports"):
@@ -182,9 +193,9 @@ class CompositeImportRules(BaseRule):
             except ImportError:
                 pass
 
-        return tools
+        return _enabled_tools(self.config, tools)
 
-    def scan_file(self, path: Path, source: str) -> List[Issue]:
+    def scan_file(self, path: Path, source: str) -> list[Issue]:
         """Scan using all import tools."""
         if not self.tools:
             return []
@@ -192,8 +203,8 @@ class CompositeImportRules(BaseRule):
         return self.strategy.scan(path, source, self.tools)
 
     def fix(
-        self, path: Path, source: str, issues: List[Issue]
-    ) -> tuple[str, List[Fix]]:
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         """Fix using appropriate tools."""
         if not self.tools:
             return source, []
@@ -226,9 +237,9 @@ class CompositeTypeChecking(BaseRule):
         super().__init__(config)
         self.tools = self._load_tools()
 
-    def _load_tools(self) -> List[BaseRule]:
+    def _load_tools(self) -> list[BaseRule]:
         """Load type checking tools."""
-        tools = []
+        tools: list[BaseRule] = []
 
         # MyPy
         if self.config.is_rule_enabled("missing-return-type"):
@@ -247,9 +258,9 @@ class CompositeTypeChecking(BaseRule):
         except ImportError:
             pass
 
-        return tools
+        return _enabled_tools(self.config, tools)
 
-    def scan_file(self, path: Path, source: str) -> List[Issue]:
+    def scan_file(self, path: Path, source: str) -> list[Issue]:
         """Scan using all type checking tools."""
         if not self.tools:
             return []
@@ -258,8 +269,8 @@ class CompositeTypeChecking(BaseRule):
         return strategy.scan(path, source, self.tools)
 
     def fix(
-        self, path: Path, source: str, issues: List[Issue]
-    ) -> tuple[str, List[Fix]]:
+        self, path: Path, source: str, issues: list[Issue]
+    ) -> tuple[str, list[Fix]]:
         """Fix type-related issues."""
         if not self.tools:
             return source, []
