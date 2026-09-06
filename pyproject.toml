@@ -43,7 +43,6 @@ dependencies = [
     "pyyaml>=6.0",
     "rich>=12.0.0",
     "tomli>=2.0.0; python_version<'3.11'",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
     "planfile>=0.1.117",
@@ -76,7 +75,6 @@ dev = [
     "mypy>=1.0.0",
     "ruff>=0.5.0",
     "pre-commit>=3.0.0",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
 ]
@@ -152,7 +150,6 @@ exclude = [
 [tool.hatch.envs.default]
 dependencies = [
     "prefact[dev]",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
 ]
@@ -160,7 +157,6 @@ dependencies = [
 [tool.hatch.envs.test]
 dependencies = [
     "prefact[dev]",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
     "pytest-xdist>=3.0.0",
@@ -171,7 +167,6 @@ python = ["3.10", "3.11", "3.12", "3.13"]
 [tool.hatch.envs.docs]
 dependencies = [
     "prefact[docs]",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
 ]
@@ -181,7 +176,6 @@ dependencies = [
     "build>=0.10.0",
     "twine>=4.0.0",
     "wheel>=0.40.0",
-    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
 ]
@@ -335,3 +329,9 @@ max_commits = 500
 
 # Cost thresholds for badge colors (USD)
 badge_color_thresholds = { low = 1.0, medium = 5.0, high = 10.0, critical = 50.0 }
+
+[dependency-groups]
+automation = ["goal>=2.2.0"]
+
+[tool.uv.dependency-groups.automation]
+requires-python = ">=3.12"
