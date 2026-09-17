@@ -40,6 +40,10 @@ class Config:
     verbose: bool = False
     backup: bool = True
 
+    # Event sourcing: when set, the engine appends domain events to this
+    # JSON-lines file so a run can be replayed later.
+    event_store: Path | None = None
+
     # --- helpers --------------------------------------------------------
 
     @classmethod

@@ -1,4 +1,9 @@
-<!-- code2docs:start --># prefact
+<!-- code2docs:start -->
+## Architecture decisions
+
+- [ADR-0001 — CQRS + Event Sourcing foundation](./decisions/0001-cqrs-event-sourcing.md)
+
+# prefact
 
 ![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-738-green)
 > **738** functions | **143** classes | **102** files | CC̄ = 3.0
