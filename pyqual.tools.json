@@ -1,0 +1,8 @@
+{
+  "code2llm": {
+    "binary": "code2llm",
+    "command": "code2llm {workdir} -f all -o ./project --no-chunk --exclude examples",
+    "output": "",
+    "allow_failure": false
+  }
+}

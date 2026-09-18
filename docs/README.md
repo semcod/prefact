@@ -2,6 +2,7 @@
 ## Architecture decisions
 
 - [ADR-0001 — CQRS + Event Sourcing foundation](./decisions/0001-cqrs-event-sourcing.md)
+- [ADR-0002 — Exclude example fixtures from code2llm analysis](./decisions/0002-exclude-example-fixtures-from-code2llm-analysis.md)
 
 # prefact
 
