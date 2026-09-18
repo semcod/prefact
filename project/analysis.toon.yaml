@@ -1,122 +1,124 @@
-# code2llm | 155f 21347L | python:112,yaml:28,shell:3,txt:3,json:3,yml:2,cfg:1,typescript:1,toml:1 | 2026-07-15
+# code2llm | 153f 21373L | python:110,yaml:28,shell:3,txt:3,json:3,yml:2,cfg:1,toml:1,typescript:1 | 2026-09-17
 # generated in 0.06s
-# CC̅=3.0 | critical:0/754 | dups:5 | cycles:0
+# CC̅=3.1 | critical:1/738 | dups:1 | cycles:0
 
-HEALTH[1]:
-  🔴 DUP   5 duplicate class groups
+HEALTH[2]:
+  🔴 DUP   1 classes duplicated
+  🟡 CC    _classify_legacy_lines CC=18 (limit:15)
 
-REFACTOR[1]:
-  1. rm duplicates  (-5 dup groups)
+REFACTOR[2]:
+  1. rm duplicates  (-1 dup classes)
+  2. split 1 high-CC methods  (CC>15)
 
-PIPELINES[591]:
-  [1] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
+PIPELINES[578]:
+  [1] Src [main]: main → find_examples
       PURITY: 100% pure
-  [2] Src [main]: main → find_examples
+  [2] Src [calculate]: calculate
       PURITY: 100% pure
-  [3] Src [process_user]: process_user → helper_function
+  [3] Src [process_data]: process_data
       PURITY: 100% pure
-  [4] Src [__init__]: __init__
+  [4] Src [calculate]: calculate
       PURITY: 100% pure
-  [5] Src [process]: process → format_data
+  [5] Src [process_user]: process_user → helper_function
       PURITY: 100% pure
-  [6] Src [process_user]: process_user → helper_function
+  [6] Src [__init__]: __init__
       PURITY: 100% pure
-  [7] Src [__init__]: __init__
+  [7] Src [process]: process → format_data
       PURITY: 100% pure
-  [8] Src [process]: process → format_data
+  [8] Src [process_data]: process_data
       PURITY: 100% pure
-  [9] Src [process]: process
+  [9] Src [format_timestamp]: format_timestamp
       PURITY: 100% pure
-  [10] Src [process]: process
+  [10] Src [read_file]: read_file
       PURITY: 100% pure
-  [11] Src [process]: process
+  [11] Src [__init__]: __init__
       PURITY: 100% pure
-  [12] Src [process]: process
+  [12] Src [get_data]: get_data
       PURITY: 100% pure
-  [13] Src [process_data]: process_data
+  [13] Src [format_name]: format_name
       PURITY: 100% pure
-  [14] Src [process_data]: process_data
+  [14] Src [__init__]: __init__
       PURITY: 100% pure
-  [15] Src [format_timestamp]: format_timestamp
+  [15] Src [process_users]: process_users
       PURITY: 100% pure
-  [16] Src [read_file]: read_file
+  [16] Src [generate_report]: generate_report
       PURITY: 100% pure
   [17] Src [__init__]: __init__
       PURITY: 100% pure
-  [18] Src [get_data]: get_data
+  [18] Src [process]: process
       PURITY: 100% pure
-  [19] Src [process_data]: process_data
+  [19] Src [main]: main → process_data
       PURITY: 100% pure
-  [20] Src [format_timestamp]: format_timestamp
+  [20] Src [admin]: admin
       PURITY: 100% pure
-  [21] Src [read_file]: read_file
+  [21] Src [users]: users
       PURITY: 100% pure
-  [22] Src [__init__]: __init__
+  [22] Src [process_data]: process_data
       PURITY: 100% pure
-  [23] Src [get_data]: get_data
+  [23] Src [calculate_sum]: calculate_sum
       PURITY: 100% pure
-  [24] Src [greet]: greet
+  [24] Src [__init__]: __init__
       PURITY: 100% pure
-  [25] Src [format_data]: format_data
+  [25] Src [add_item]: add_item
       PURITY: 100% pure
-  [26] Src [process_data]: process_data
+  [26] Src [get_summary]: get_summary
       PURITY: 100% pure
-  [27] Src [calculate]: calculate
+  [27] Src [process_data]: process_data
       PURITY: 100% pure
-  [28] Src [process_data]: process_data
+  [28] Src [calculate_sum]: calculate_sum
       PURITY: 100% pure
-  [29] Src [calculate]: calculate
+  [29] Src [__init__]: __init__ → super
       PURITY: 100% pure
-  [30] Src [process_users]: process_users
+  [30] Src [scan_file]: scan_file
       PURITY: 100% pure
-  [31] Src [generate_report]: generate_report
+  [31] Src [validate]: validate
       PURITY: 100% pure
-  [32] Src [__init__]: __init__
+  [32] Src [scan_file]: scan_file
       PURITY: 100% pure
-  [33] Src [process]: process
+  [33] Src [validate]: validate
       PURITY: 100% pure
-  [34] Src [main]: main → process_data
+  [34] Src [main]: main → run_benchmark → create_test_files → range → ...(1 more)
       PURITY: 100% pure
-  [35] Src [admin]: admin
+  [35] Src [process_data]: process_data
       PURITY: 100% pure
-  [36] Src [users]: users
+  [36] Src [__init__]: __init__ → get_all_rules
       PURITY: 100% pure
-  [37] Src [format_name]: format_name
+  [37] Src [validate_file]: validate_file
       PURITY: 100% pure
-  [38] Src [__init__]: __init__
+  [38] Src [greet]: greet
       PURITY: 100% pure
-  [39] Src [__post_init__]: __post_init__
+  [39] Src [__init__]: __init__
       PURITY: 100% pure
-  [40] Src [__post_init__]: __post_init__
+  [40] Src [run]: run
       PURITY: 100% pure
-  [41] Src [create_user]: create_user
+  [41] Src [scan_only]: scan_only
       PURITY: 100% pure
-  [42] Src [load_users_from_file]: load_users_from_file
+  [42] Src [run_file]: run_file
       PURITY: 100% pure
-  [43] Src [process_data]: process_data
+  [43] Src [_preload_sources]: _preload_sources
       PURITY: 100% pure
-  [44] Src [calculate_sum]: calculate_sum
+  [44] Src [process]: process
       PURITY: 100% pure
-  [45] Src [__init__]: __init__
+  [45] Src [__init__]: __init__ → get_all_rules
       PURITY: 100% pure
-  [46] Src [add_item]: add_item
+  [46] Src [fix_file]: fix_file
       PURITY: 100% pure
-  [47] Src [get_summary]: get_summary
+  [47] Src [fix_file_with_source]: fix_file_with_source
       PURITY: 100% pure
-  [48] Src [process_data]: process_data
+  [48] Src [__init__]: __init__
       PURITY: 100% pure
-  [49] Src [calculate_sum]: calculate_sum
+  [49] Src [_find_git_dir]: _find_git_dir
       PURITY: 100% pure
-  [50] Src [main]: main → run_prefact_example
+  [50] Src [install_hooks]: install_hooks
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.2    ←in:0  →out:0  ×DUP
+  src/                            CC̄=3.3    ←in:0  →out:0
+  │ !! todo_manager               551L  1C   19m  CC=18     ←0
   │ importchecker_based        499L  5C   24m  CC=14     ←0
+  │ cli                        482L  0C   11m  CC=7      ←1
   │ import_linter_based        480L  5C   24m  CC=8      ←0
   │ unimport_based             459L  5C   22m  CC=14     ←0
-  │ todo_manager               430L  1C   15m  CC=13     ←0
-  │ cli                        428L  0C   11m  CC=7      ←1
   │ pylint_based               424L  5C   22m  CC=6      ←0
   │ mypy_based                 416L  6C   22m  CC=9      ←0
   │ git_hooks                  383L  2C   17m  CC=8      ←0
@@ -127,19 +129,19 @@ LAYERS:
   │ docs_manager               325L  1C   15m  CC=12     ←0
   │ __init__                   312L  1C   19m  CC=7      ←0
   │ benchmark                  311L  1C    6m  CC=7      ←0
+  │ composite_rules            303L  3C   17m  CC=12     ←0
   │ project_scanner            296L  1C    7m  CC=11     ←0
-  │ composite_rules            292L  3C   16m  CC=12     ←0
-  │ registry                   285L  1C   13m  CC=8      ←1
+  │ registry                   285L  1C   13m  CC=8      ←8
   │ unused_imports             277L  1C   11m  CC=10     ←0
-  │ __init__                   256L  1C    8m  CC=3      ←7
+  │ __init__                   256L  1C    8m  CC=3      ←0
   │ string_concat              256L  2C   11m  CC=8      ←0
   │ testql_manager             250L  1C    4m  CC=10     ←0
   │ dependency_checker         237L  1C   11m  CC=10     ←0
   │ relative_imports           235L  2C    9m  CC=14     ←0
   │ migration                  234L  3C   10m  CC=5      ←0
   │ llm_hallucinations         220L  1C    9m  CC=8      ←0
+  │ scanner                    212L  1C    8m  CC=12     ←0
   │ llm_generated_code         196L  1C    9m  CC=7      ←0
-  │ scanner                    191L  1C    7m  CC=12     ←0
   │ custom_organization        180L  1C    7m  CC=13     ←0
   │ config                     177L  2C   13m  CC=5      ←0
   │ engine                     170L  1C    5m  CC=13     ←0
@@ -152,7 +154,6 @@ LAYERS:
   │ setup_manager              142L  1C    3m  CC=9      ←0
   │ config                     142L  1C    8m  CC=10     ←0
   │ magic_numbers              138L  1C    8m  CC=7      ←0
-  │ cache_adapters             130L  4C   16m  CC=3      ←9  ×DUP
   │ composite_factory          121L  1C    2m  CC=4      ←0
   │ flynt_formatting           120L  2C    4m  CC=5      ←0
   │ sorted_imports             116L  1C    5m  CC=5      ←0
@@ -167,22 +168,21 @@ LAYERS:
   │ string_concat               72L  1C    5m  CC=6      ←0
   │ sorted_imports              71L  1C    4m  CC=7      ←0
   │ console                     70L  0C    1m  CC=14     ←0
-  │ validation                  70L  1C    6m  CC=6      ←0  ×DUP
   │ print_statements            62L  1C    3m  CC=9      ←0
   │ fixer                       58L  1C    3m  CC=7      ←0
   │ json_reporter               57L  0C    2m  CC=4      ←0
-  │ scan                        53L  1C    5m  CC=1      ←0  ×DUP
-  │ validators                  52L  1C    4m  CC=5      ←0  ×DUP
+  │ scan                        53L  1C    5m  CC=1      ←0
+  │ validators                  52L  1C    4m  CC=5      ←0
   │ type_hints                  50L  1C    3m  CC=6      ←0
-  │ _ast_cache                  49L  0C    2m  CC=4      ←0
   │ wildcard_imports            49L  1C    3m  CC=7      ←0
+  │ _ast_cache                  49L  0C    2m  CC=4      ←0
   │ __init__                    46L  0C    0m  CC=0.0    ←0
   │ __init__                    41L  0C    0m  CC=0.0    ←0
-  │ rule                        39L  1C    4m  CC=1      ←0  ×DUP
+  │ rule                        39L  1C    4m  CC=1      ←0
   │ exceptions                  35L  4C    3m  CC=2      ←0
   │ validator                   32L  1C    2m  CC=4      ←0
-  │ config                      32L  1C    4m  CC=1      ←0  ×DUP
-  │ hash                        31L  1C    3m  CC=3      ←0  ×DUP
+  │ config                      32L  1C    4m  CC=1      ←9
+  │ hash                        31L  1C    3m  CC=3      ←0
   │ formatters                  26L  1C    1m  CC=2      ←0
   │ __init__                    26L  0C    0m  CC=0.0    ←0
   │ __init__                    25L  0C    0m  CC=0.0    ←0
@@ -215,14 +215,14 @@ LAYERS:
   │ pyqual.yaml                124L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                87L  0C    0m  CC=0.0    ←0
   │ redsl.yaml                  72L  0C    0m  CC=0.0    ←0
-  │ project.sh                  47L  0C    0m  CC=0.0    ←0
+  │ project.sh                  66L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    23L  0C    0m  CC=0.0    ←0
   │ local.dev.txt               12L  0C    0m  CC=0.0    ←0
   │ setup.cfg                    4L  0C    0m  CC=0.0    ←0
   │ tree.sh                      1L  0C    0m  CC=0.0    ←0
   │
-  examples/                       CC̄=1.7    ←in:0  →out:0
+  examples/                       CC̄=1.7    ←in:0  →out:0  ×DUP
   │ prefact.yaml               344L  0C    0m  CC=0.0    ←0
   │ prefact.yaml               281L  0C    0m  CC=0.0    ←0
   │ generate_examples          232L  0C    0m  CC=0.0    ←0
@@ -238,14 +238,14 @@ LAYERS:
   │ cli                         62L  0C    3m  CC=2      ←0
   │ models                      59L  2C    5m  CC=2      ←0
   │ messy_module                54L  1C    4m  CC=2      ←0
-  │ after                       41L  1C    6m  CC=2      ←0
-  │ before                      41L  1C    6m  CC=2      ←0
+  │ after                       41L  1C    6m  CC=2      ←0  ×DUP
+  │ before                      41L  1C    6m  CC=2      ←0  ×DUP
   │ utils                       40L  1C    5m  CC=2      ←3
   │ core                        36L  1C    5m  CC=2      ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                35L  0C    0m  CC=0.0    ←0
-  │ after                       26L  1C    3m  CC=1      ←0
   │ before                      26L  1C    3m  CC=1      ←0
+  │ after                       26L  1C    3m  CC=1      ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                26L  0C    0m  CC=0.0    ←0
   │ prefact.yaml                25L  0C    0m  CC=0.0    ←0
@@ -258,17 +258,17 @@ LAYERS:
   │ before                      19L  1C    3m  CC=1      ←0
   │ prefact.yaml                18L  0C    0m  CC=0.0    ←0
   │ sample_code                 17L  0C    2m  CC=2      ←0
-  │ after                       15L  0C    2m  CC=1      ←0
+  │ after                       15L  0C    2m  CC=1      ←1
   │ before                      15L  0C    2m  CC=1      ←0
-  │ after                       13L  0C    1m  CC=1      ←0
+  │ before                      13L  0C    2m  CC=1      ←2
   │ before                      13L  0C    1m  CC=1      ←0
-  │ after                       13L  0C    2m  CC=1      ←2
-  │ before                      13L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    2m  CC=1      ←0
+  │ after                       13L  0C    1m  CC=1      ←0
   │ requirements.txt            13L  0C    0m  CC=0.0    ←0
-  │ after                        8L  0C    1m  CC=1      ←1
   │ before                       8L  0C    1m  CC=1      ←0
-  │ after                        6L  0C    1m  CC=1      ←0
+  │ after                        8L  0C    1m  CC=1      ←0
   │ before                       6L  0C    1m  CC=1      ←0
+  │ after                        6L  0C    1m  CC=1      ←0
   │ __init__                     6L  0C    0m  CC=0.0    ←0
   │
   docs/                           CC̄=0.0    ←in:0  →out:0
@@ -281,15 +281,15 @@ LAYERS:
 
 COUPLING:
                                         vscode-extension.src                   src.prefact  examples.01-individual-rules       examples.sample-project    benchmark_ram_optimization      examples.04-custom-rules
-          vscode-extension.src                            ──                           ←46                                                                                        ←1                            ←1  hub
-                   src.prefact                            46                            ──                                                                                                                          !! fan-out
+          vscode-extension.src                            ──                           ←47                                                                                        ←1                            ←1  hub
+                   src.prefact                            47                            ──                                                                                                                          !! fan-out
   examples.01-individual-rules                                                                                        ──                             2                                                            
        examples.sample-project                                                                                         1                            ──                                                            
     benchmark_ram_optimization                             1                                                                                                                      ──                              
       examples.04-custom-rules                             1                                                                                                                                                    ──
   CYCLES: none
-  HUB: vscode-extension.src/ (fan-in=48)
-  SMELL: src.prefact/ fan-out=46 → split needed
+  HUB: vscode-extension.src/ (fan-in=49)
+  SMELL: src.prefact/ fan-out=47 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
