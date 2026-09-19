@@ -7,14 +7,14 @@
 # a change broke anything observable, instead of catching it in CI.
 #
 #   [1] Detection   — file watcher with debounce + gitignore-aware excludes
-#   [2] Priority    — quick smoke: ≤3 testql endpoints related to changed
-#                     service (via dependency map)
+#   [2] Priority    — quick smoke: ≤3 testql endpoints related to the changed
+#                     code (via dependency map)
 #   [3] Detail      — only on quick-fail: full testql scenarios + blame
 #                     report (which commit / file / line introduced the
 #                     regression).
 #
 # Pairs with:
-#   - testql           — declarative HTTP scenarios (TOON YAML)
+#   - testql           — declarative CLI scenarios (TOON YAML) in testql-scenarios/
 #   - regix.yaml       — quality regressions (CC, MI, coverage delta)
 #   - koru             — handoff section "On-change gates" reads
 #                        wup status + testql scenario count + regix gates
@@ -22,54 +22,57 @@
 #   - healing-webhook  — receives wup blame reports as alerts (optional)
 #
 # Common usage:
-#   wup init                   # generate this file (interactive)
-#   wup watch                  # start daemon (foreground)
-#   wup map-deps               # rebuild dependency map (run after big refactor)
-#   wup testql-endpoints       # introspect testql scenarios → endpoints
-#   wup status                 # show map + config summary
+#   wup watch                   # start daemon (foreground)
+#   wup map-deps                # rebuild dependency map (run after big refactor)
+#   wup testql-endpoints        # introspect testql scenarios → endpoints
+#   wup status                  # show map + config summary
 #
 # CI: not for CI (use `task quality:gate` there). wup is dev-loop only.
 
 # ── Project metadata ────────────────────────────────────────────────────
 project:
-  name: "prefact"                  # replaced by template:install:wup
-  description: "On-change regression watcher driven by testql scenarios."
+  name: "prefact"
+  description: "Python refactoring pre-analysis toolkit (CLI). On-change gates run testql CLI scenarios."
 
 # ── Layer 1: Detection ──────────────────────────────────────────────────
 # Which files trigger which strategy. Keep paths tight to avoid wakes
-# from doc/test churn.
+# from doc/generated-analysis churn.
 watch:
   paths:
-    - "src/prefact/**"
+    - "src/**"
+    - "tests/**"
   file_types:
     - ".py"
-    - ".ts"
-    - ".tsx"
-    - ".js"
-  excludes:
+  exclude_patterns:
     - "**/__pycache__/**"
     - "**/.venv/**"
+    - "**/venv/**"
     - "**/node_modules/**"
     - "**/dist/**"
     - "**/build/**"
-    - "**/*.test.*"
-    - "**/*.spec.*"
-    - "**/*.md"
+    - ".worktrees/**"
+    - "project/**"
+    - "*.md"
 
 # ── Layer 2 + 3: Test strategy per service ──────────────────────────────
-# A service maps a code subtree to the testql scenarios that exercise it.
-# `quick_tests` runs on every change inside the service. `full_tests`
-# runs ONLY when quick_tests fail (cost gate).
+# prefact is a CLI package (no HTTP service): one shell service maps the
+# source tree to the testql scenarios that exercise it. `quick_tests` runs
+# the generated CLI smoke scenario on every save; `detail_tests` (only on
+# quick-fail) runs the fuller pytest-derived scenario.
 services:
-  - name: "prefact"
-    root: "src/prefact"
+  - name: "prefact-cli"
+    root: "."
     paths:
-      - "src/prefact/**"
-    type: "cli"
+      - "src/**"
+      - "tests/**"
+    type: "shell"
     quick_tests:
       scope: "all"
       max_endpoints: 3
-    full_tests:
+      scenario: "testql-scenarios/generated-cli-tests.testql.toon.yaml"
+    detail_tests:
+      scope: "all"
+      max_endpoints: 10
       scenario: "testql-scenarios/generated-from-pytests.testql.toon.yaml"
 
 # ── Test strategy timing ────────────────────────────────────────────────
@@ -77,24 +80,29 @@ test_strategy:
   quick:
     debounce_s: 2                      # collapse rapid saves
     max_queue: 5                       # drop older if backlog
-    timeout_s: 10                      # quick test must be fast
-  full:
+    timeout_s: 30                      # CLI smoke must stay fast
+  detail:
     debounce_s: 5
+    max_queue: 1
     timeout_s: 60
-    only_on_quick_fail: true
 
-# ── Reporting ───────────────────────────────────────────────────────────
-# Where blame reports land when a regression is detected.
-reporting:
-  # Stdout dashboard via Rich — interactive, colorful, filterable.
-  dashboard: true
-  # Append blame to .wup/blame-history.jsonl for later inspection.
-  blame_log: ".wup/blame-history.jsonl"
-  # If healing-webhook is up (port 8810), forward alerts.
-  webhook_url: "${WUP_WEBHOOK_URL:-}"
+# ── TestQL integration ──────────────────────────────────────────────────
+testql:
+  scenario_dir: "testql-scenarios"
+  smoke_scenario: "generated-cli-tests.testql.toon.yaml"
+  output_format: "json"
+  extra_args: ["--timeout", "30"]
 
-# ── CPU throttling ──────────────────────────────────────────────────────
-# Honor system load. Below threshold, defer non-critical tests.
-resources:
-  max_cpu_percent: 70
-  defer_below_idle_percent: 20
+# ── Failure → ticket bridge ─────────────────────────────────────────────
+# On a confirmed regression (blame report), auto-create a planfile ticket
+# so the failure enters the normal PLF queue instead of being lost.
+planfile:
+  enabled: true
+  command: "planfile"
+  sprint: "current"
+  priority: "normal"
+  labels:
+    - "koru"
+    - "llm-ready"
+    - "wup"
+    - "auto-diag"
