@@ -65,7 +65,7 @@ class PprefactLogger:
         self._log_with_error_context(LogLevel.CRITICAL, message, error, **kwargs)
 
     def _log_with_error_context(
-        self, level: LogLevel, message: str, error: Optional[Exception], **kwargs
+        self, level: LogLevel, message: str, error: Exception | None, **kwargs
     ) -> None:
         if error:
             kwargs.update(
