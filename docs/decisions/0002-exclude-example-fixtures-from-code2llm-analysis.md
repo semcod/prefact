@@ -1,10 +1,29 @@
+---
+{
+  "schema": "wellmanifest.docs/document/v1",
+  "id": "0002-exclude-example-fixtures-from-code2llm-analysis",
+  "kind": "decision",
+  "version": 1,
+  "title": "Exclude example fixtures from code2llm analysis",
+  "status": "accepted",
+  "owner": "semcod/prefact",
+  "scope": "repository",
+  "created": "2026-09-18",
+  "updated": "2026-09-18",
+  "review_after": "2027-09-18",
+  "source_revision": "19efafbeb18923cfd51cc69bd519330488500137",
+  "affected_repositories": [
+    "semcod/prefact"
+  ],
+  "evidence": [
+    "repo://pyqual.tools.json"
+  ]
+}
+---
+
 # ADR-0002: Exclude example fixtures from code2llm analysis
 
-- **Status:** accepted
-- **Date:** 2026-09-18
-- **Deciders:** prefact maintainers
-- **Context ticket:** PLF-028
-
+<!-- docs:section context -->
 ## Context
 
 code2llm's duplication detector flagged the `DataProcessor` classes in
@@ -31,6 +50,18 @@ per-IDE plugin classes (STARTER-276) and resolved it by excluding the
 duplicated tree from analysis (`koru/autonomy/code2llm_discovery.py`
 `DEFAULT_EXCLUDES`), not by consolidating the code.
 
+<!-- docs:section evidence -->
+## Evidence
+
+Excluded rules directory in `pyqual.tools.json` and intentional fixture duplication in `examples/01-individual-rules/`.
+
+<!-- docs:section alternatives -->
+## Alternatives
+
+1. Consolidate `before.py` and `after.py` into a shared base (breaks standalone rule demonstration).
+2. Suppress warnings per file using inline pragmas.
+
+<!-- docs:section decision -->
 ## Decision
 
 1. Do **not** consolidate the fixture pair; `before.py`/`after.py` stay
@@ -43,6 +74,7 @@ duplicated tree from analysis (`koru/autonomy/code2llm_discovery.py`
    hardcoded `DEFAULT_EXCLUDES = ("*.md", "plugins")`; adding `examples`
    there needs its own koru ticket, mirroring the `plugins` precedent.
 
+<!-- docs:section consequences -->
 ## Consequences
 
 - Duplicate-class and code-smell tickets no longer originate from demo
@@ -56,3 +88,13 @@ duplicated tree from analysis (`koru/autonomy/code2llm_discovery.py`
   `code2llm <repo> -f planfile --no-chunk --exclude examples` produces no
   `code2llm:dup:DataProcessor` ticket and no `examples/`-referencing
   dedupe keys; baseline without the exclude reproduces the ticket.
+
+<!-- docs:section validation -->
+## Validation
+
+`prefact scan` on example directories still runs; tests `tests/test_unused_imports.py` and `tests/test_rule_registry.py` pass.
+
+<!-- docs:section supersedes -->
+## Supersedes
+
+None.
