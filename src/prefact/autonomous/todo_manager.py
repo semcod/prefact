@@ -1,41 +1,36 @@
 """TODO management for autonomous prefact.
 
-Ownership contract: prefact owns ONLY the block between ``PREFACT_BEGIN`` and
-``PREFACT_END`` markers in TODO.md. Everything outside those markers is
-operator-maintained content (action plans, notes, manual checklists) and is
-preserved verbatim on every rewrite. Checkbox lines outside the block are
-never parsed as prefact tickets — prefact manages only the tickets it created
-itself.
+The manager is the façade wiring together three cohesive submodules:
 
-Legacy TODO.md files (written before the markers existed) are migrated on the
-first rewrite: the generated header and the known prefact sections are
-recognised as owned, everything else is kept as manual content, and the new
-file wraps the owned part in markers.
+- :mod:`prefact.autonomous.todo_ownership` — splitting TODO.md into manual
+  and prefact-owned regions (including legacy migration);
+- :mod:`prefact.autonomous.todo_planning` — deriving todo state from the
+  owned block;
+- :mod:`prefact.autonomous.todo_render` — rendering the owned block.
+
+Execution (running fixes for pending tasks) stays here because it owns the
+scanner/fixer wiring.
 """
 
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from prefact import __version__
 from prefact.config import Config
 from prefact.config_extended import ExtendedConfig
 from prefact.fixer import Fixer
 from prefact.scanner import Scanner
 
 from ._base import BaseManager, console
-
-CONSTANT_6 = 6
-
-PREFACT_BEGIN = "<!-- PREFACT:BEGIN — generated block, edits inside will be overwritten -->"
-PREFACT_END = "<!-- PREFACT:END -->"
-
-# Section headings prefact has historically generated (legacy files only).
-_OWNED_HEADINGS = (
-    "## ✅ Completed Tasks",
-    "## 📋 Current Issues",
-    "## 📋 Task Status",
+from .todo_ownership import PREFACT_BEGIN, PREFACT_END, split_existing
+from .todo_planning import (
+    find_completed_tasks,
+    generate_current_todos,
+    parse_existing_todos,
+    parse_todo_tasks,
 )
+from .todo_render import build_execution_block, build_todo_block
+
+__all__ = ["PREFACT_BEGIN", "PREFACT_END", "TodoManager"]
 
 
 class TodoManager(BaseManager):
@@ -46,87 +41,14 @@ class TodoManager(BaseManager):
         self.issues_found: List[Dict[str, Any]] = []
 
     # ------------------------------------------------------------------
-    # Ownership: split TODO.md into (manual before, prefact-owned, manual after)
+    # Ownership: read/write the prefact-owned block, preserving the rest
     # ------------------------------------------------------------------
 
     def _split_existing(self) -> Tuple[str, str, str]:
-        """Return ``(before, owned, after)`` of the current TODO.md.
-
-        ``owned`` is the only region prefact may parse or rewrite; ``before``
-        and ``after`` are operator content preserved verbatim.
-        """
+        """Return ``(before, owned, after)`` of the current TODO.md."""
         if not self.todo_path.exists():
             return "", "", ""
-        text = self.todo_path.read_text()
-        if PREFACT_BEGIN in text and PREFACT_END in text:
-            before, rest = text.split(PREFACT_BEGIN, 1)
-            owned, after = rest.split(PREFACT_END, 1)
-            return before, owned, after
-        # Marker variants from other versions: match on the stable prefix.
-        if "<!-- PREFACT:BEGIN" in text and PREFACT_END in text:
-            before, rest = text.split("<!-- PREFACT:BEGIN", 1)
-            marker_rest = rest.split("-->", 1)
-            owned, after = (marker_rest[1] if len(marker_rest) > 1 else rest).split(
-                PREFACT_END, 1
-            )
-            return before, owned, after
-        return self._split_legacy(text)
-
-    def _split_legacy(self, text: str) -> Tuple[str, str, str]:
-        """Split a pre-marker TODO.md into manual and prefact-owned parts."""
-        lines = text.split("\n")
-        flags = self._classify_legacy_lines(lines)
-        if not any(flags):
-            # Nothing recognisably prefact-generated: whole file is manual.
-            return text, "", ""
-        first_owned = flags.index(True)
-        before = "\n".join(lines[:first_owned])
-        owned = "\n".join(
-            line for line, flag in zip(lines[first_owned:], flags[first_owned:]) if flag
-        )
-        after = "\n".join(
-            line
-            for line, flag in zip(lines[first_owned:], flags[first_owned:])
-            if not flag
-        )
-        return before, owned, after
-
-    @staticmethod
-    def _classify_legacy_lines(lines: List[str]) -> List[bool]:
-        """Flag lines that belong to prefact-generated content (legacy files)."""
-        flags = [False] * len(lines)
-        mode: str | None = None  # "header" | "section" | None
-        for idx, line in enumerate(lines):
-            stripped = line.strip()
-            if mode is not None:
-                if stripped.startswith("## ") or stripped.startswith("<!--"):
-                    mode = None  # boundary — reclassify this line below
-                else:
-                    flags[idx] = True
-                    if mode == "header" and stripped == "---":
-                        mode = None
-                    continue
-            if stripped == "# TODO":
-                lookahead = [
-                    lines[j].strip() for j in range(idx, min(idx + 6, len(lines)))
-                ]
-                if any(la.startswith("**Generated by:** prefact") for la in lookahead):
-                    flags[idx] = True
-                    mode = "header"
-                continue
-            if any(stripped.startswith(heading) for heading in _OWNED_HEADINGS):
-                flags[idx] = True
-                mode = "section"
-                continue
-            if stripped.startswith("*To execute all tasks"):
-                flags[idx] = True
-                j = idx - 1
-                while j >= 0 and not lines[j].strip():
-                    flags[j] = True
-                    j -= 1
-                if j >= 0 and lines[j].strip() == "---":
-                    flags[j] = True
-        return flags
+        return split_existing(self.todo_path.read_text())
 
     def _write_owned_block(self, block: str) -> None:
         """Replace prefact's block in TODO.md, preserving manual content."""
@@ -142,7 +64,7 @@ class TodoManager(BaseManager):
     def update_todo_md(self) -> None:
         """Update TODO.md with current issues, marking completed tasks."""
         # Parse existing TODO.md if it exists
-        existing_todos, completed_todos = self._parse_existing_todos()
+        existing_todos, _completed_todos = self._parse_existing_todos()
 
         # Create set of current issues and generate new todos
         current_issues, new_todos, total_active_todos = self._generate_current_todos(
@@ -155,192 +77,37 @@ class TodoManager(BaseManager):
         )
 
         # Build and write TODO.md content
-        self._write_todo_md(
+        block = build_todo_block(
             new_todos, completed_tasks, total_active_todos, total_completed_todos
         )
-
-    def _parse_existing_todos(self) -> Tuple[Dict, List]:
-        """Parse existing prefact-owned TODO entries.
-
-        Only the prefact-owned block is scanned — checkbox lines in manual
-        sections are the operator's, not tickets prefact created, and must
-        never be adopted, completed, or garbage-collected here.
-        """
-        existing_todos = {}
-        completed_todos = []
-
-        _before, owned, _after = self._split_existing()
-        if not owned.strip():
-            return existing_todos, completed_todos
-
-        lines = owned.split("\n")
-        i = 0
-
-        while i < len(lines):
-            line = lines[i].strip()
-
-            if line.startswith("- [ ] ") or line.startswith("- [x] "):
-                content = line[CONSTANT_6:]  # Remove "- [ ] " or "- [x] "
-
-                # Handle multi-line messages
-                while (
-                    i + 1 < len(lines)
-                    and not lines[i + 1].strip().startswith("- [")
-                    and lines[i + 1].strip()
-                ):
-                    content += f" {lines[i + 1].strip()}"
-                    i += 1
-
-                if " - " in content:
-                    file_line_part = content.split(" - ", 1)[0]
-                    message_part = content.split(" - ", 1)[1]
-
-                    # Parse file and line
-                    if ":" in file_line_part:
-                        file_part = self._get_relative_file_path(
-                            file_line_part.rsplit(":", 1)[0]
-                        )
-                        line_part = file_line_part.rsplit(":", 1)[1]
-                        try:
-                            line_num = int(line_part)
-                            key = (file_part, line_num, message_part)
-                            existing_todos[key] = {
-                                "status": "completed"
-                                if line.startswith("- [x] ")
-                                else "pending",
-                                "original_line": line,
-                            }
-                        except ValueError:
-                            # Line number is not an integer, treat differently
-                            key = (file_part, message_part)
-                            existing_todos[key] = {
-                                "status": "completed"
-                                if line.startswith("- [x] ")
-                                else "pending",
-                                "original_line": line,
-                            }
-            i += 1
-
-        return existing_todos, completed_todos
-
-    def _generate_current_todos(
-        self, existing_todos: Dict
-    ) -> Tuple[set, List[str], int]:
-        """Generate todos for current issues."""
-        current_issues = set()
-        new_todos = []
-        seen = set()
-        total_active_todos = 0
-        max_todo_items = self.get_autonomous_limit("autonomous_max_todo_items")
-        limit_reached = False
-        skipped_active_todos = 0
-
-        for issue_group in self.issues_found:
-            rel_file = self._get_relative_file_path(issue_group["file"])
-            for example in issue_group["examples"]:
-                key = (rel_file, example["line"], example["message"])
-                current_issues.add(key)
-
-                # Check if this is a new issue or existing one
-                if key in existing_todos:
-                    # Keep existing status
-                    status = existing_todos[key]["status"]
-                    checkbox = "[x]" if status == "completed" else "[ ]"
-                else:
-                    # New issue
-                    checkbox = "[ ]"
-
-                # Avoid duplicates
-                if key not in seen:
-                    total_active_todos += 1
-                    if len(new_todos) < max_todo_items:
-                        new_todos.append(
-                            f"- {checkbox} {rel_file}:{example['line']} - {example['message']}"
-                        )
-                    elif not limit_reached:
-                        skipped_active_todos = total_active_todos - len(new_todos)
-                        console.print(
-                            f"⚠️ TODO item limit reached ({max_todo_items}); omitting {max(0, skipped_active_todos)} remaining active issues from TODO.md.",
-                            style="yellow",
-                        )
-                        limit_reached = True
-                    seen.add(key)
-
-        return current_issues, new_todos, total_active_todos
-
-    def _find_completed_tasks(
-        self, existing_todos: Dict, current_issues: set
-    ) -> Tuple[List[str], int]:
-        """Find tasks that were completed since last run."""
-        completed_tasks = []
-        total_completed_todos = 0
-        max_completed_todos = self.get_autonomous_limit(
-            "autonomous_max_completed_todos"
-        )
-        limit_reached = False
-        skipped_completed_todos = 0
-
-        for key, todo_info in existing_todos.items():
-            if key not in current_issues and todo_info["status"] == "pending":
-                total_completed_todos += 1
-                if len(completed_tasks) < max_completed_todos:
-                    completed_tasks.append(
-                        f"- [x] {todo_info['original_line'][CONSTANT_6:]}"
-                    )
-                elif not limit_reached:
-                    skipped_completed_todos = total_completed_todos - len(
-                        completed_tasks
-                    )
-                    console.print(
-                        f"⚠️ Completed TODO limit reached ({max_completed_todos}); omitting {max(0, skipped_completed_todos)} remaining completed tasks from TODO.md.",
-                        style="yellow",
-                    )
-                    limit_reached = True
-
-        return completed_tasks, total_completed_todos
-
-    def _write_todo_md(
-        self,
-        new_todos: List[str],
-        completed_tasks: List[str],
-        total_active_todos: int,
-        total_completed_todos: int,
-    ) -> None:
-        """Write the updated prefact block of TODO.md (manual content kept)."""
-        content = "# TODO\n\n"
-        content += f"**Generated by:** prefact v{__version__}\n"
-        content += f"**Generated on:** {datetime.now().isoformat()}\n"
-        content += f"**Total issues:** {total_active_todos} active, {total_completed_todos} completed\n\n"
-        content += "---\n\n"
-
-        # Add completed tasks first
-        if completed_tasks:
-            content += "## ✅ Completed Tasks"
-            if total_completed_todos > len(completed_tasks):
-                content += (
-                    f" (showing {len(completed_tasks)} of {total_completed_todos})"
-                )
-            content += "\n\n"
-            content += "\n".join(completed_tasks)
-            content += "\n\n"
-
-        # Add current tasks
-        if new_todos:
-            content += "## 📋 Current Issues"
-            if total_active_todos > len(new_todos):
-                content += f" (showing {len(new_todos)} of {total_active_todos})"
-            content += "\n\n"
-            content += "\n".join(new_todos)
-            content += (
-                "\n\n---\n\n*To execute all tasks, run: `prefact -a --execute-todos`*"
-            )
-
-        self._write_owned_block(content)
+        self._write_owned_block(block)
 
         total_items = total_active_todos + total_completed_todos
         console.print(
             f"📝 Updated TODO.md: {total_active_todos} active, {total_completed_todos} completed ({total_items} total)"
         )
+
+    def _parse_existing_todos(self) -> Tuple[Dict, List]:
+        """Parse existing prefact-owned TODO entries."""
+        _before, owned, _after = self._split_existing()
+        return parse_existing_todos(owned, self._get_relative_file_path)
+
+    def _generate_current_todos(self, existing_todos: Dict) -> Tuple[set, List[str], int]:
+        """Generate todos for current issues."""
+        max_todo_items = self.get_autonomous_limit("autonomous_max_todo_items")
+        return generate_current_todos(
+            self.issues_found, existing_todos, max_todo_items,
+            self._get_relative_file_path,
+        )
+
+    def _find_completed_tasks(
+        self, existing_todos: Dict, current_issues: set
+    ) -> Tuple[List[str], int]:
+        """Find tasks that were completed since last run."""
+        max_completed_todos = self.get_autonomous_limit(
+            "autonomous_max_completed_todos"
+        )
+        return find_completed_tasks(existing_todos, current_issues, max_completed_todos)
 
     def _get_relative_file_path(self, file_path: str) -> str:
         """Convert file path to relative path for better portability."""
@@ -351,6 +118,10 @@ class TodoManager(BaseManager):
             except ValueError:
                 return str(file_path)
         return str(file_path)
+
+    # ------------------------------------------------------------------
+    # Execution of pending TODO tasks
+    # ------------------------------------------------------------------
 
     def execute_todos(self) -> None:
         """Execute all tasks from TODO.md, marking completed ones and removing obsolete ones."""
@@ -386,37 +157,7 @@ class TodoManager(BaseManager):
     def _parse_todo_tasks(self) -> List[Dict[str, Any]]:
         """Parse active tasks from the prefact-owned block of TODO.md."""
         _before, owned, _after = self._split_existing()
-        lines = owned.split("\n")
-
-        active_tasks = []
-        in_current_section = False
-
-        for line in lines:
-            if line.strip().startswith("## 📋 Current Issues"):
-                in_current_section = True
-                continue
-            elif line.strip().startswith("##") and in_current_section:
-                in_current_section = False
-                continue
-            elif in_current_section and line.strip().startswith("- [ ]"):
-                task_line = line.strip()[CONSTANT_6:]  # Remove "- [ ] "
-                if " - " in task_line:
-                    file_line_part = task_line.split(" - ")[0]
-                    message = task_line.split(" - ", 1)[1]
-
-                    if ":" in file_line_part:
-                        file_path = file_line_part.rsplit(":", 1)[0]
-                        line_num = int(file_line_part.rsplit(":", 1)[1])
-                        active_tasks.append(
-                            {
-                                "file": file_path,
-                                "line": line_num,
-                                "message": message,
-                                "original_line": line,
-                            }
-                        )
-
-        return active_tasks
+        return parse_todo_tasks(owned)
 
     def _get_refactoring_config(self):
         """Get configuration for the refactoring engine."""
@@ -533,19 +274,10 @@ class TodoManager(BaseManager):
         total_tasks: int,
     ) -> None:
         """Update the prefact block with execution results (manual content kept)."""
-        new_content = "# TODO\n\n"
-        new_content += f"**Generated by:** prefact v{__version__}\n"
-        new_content += f"**Generated on:** {datetime.now().isoformat()}\n"
-        new_content += f"**Last executed:** {datetime.now().isoformat()}\n"
-        new_content += f"**Total issues:** {processed_tasks} processed of {total_tasks} active, {executed_count} fixed\n\n"
-        new_content += "---\n\n"
-
-        if completed_tasks:
-            new_content += "## 📋 Task Status\n\n"
-            new_content += "\n".join(completed_tasks)
-            new_content += "\n\n"
-
-        self._write_owned_block(new_content)
+        block = build_execution_block(
+            completed_tasks, executed_count, processed_tasks, total_tasks
+        )
+        self._write_owned_block(block)
         console.print(
             f"🎉 Execution complete: {processed_tasks}/{total_tasks} tasks processed, {executed_count} fixed"
         )
