@@ -20,7 +20,7 @@ from .globals import (
     initialize_cache,
 )
 from .hash import FileHashCache
-from .rule import RuleResultCache
+from .rule import RuleCacheKey, RuleResultCache
 from .scan import ScanResultCache
 
 __all__ = [
@@ -33,6 +33,7 @@ __all__ = [
     "ScanResultCache",
     "ConfigCache",
     "RuleResultCache",
+    "RuleCacheKey",
     "FileHashCache",
     "CacheContext",
     "initialize_cache",
