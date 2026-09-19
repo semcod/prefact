@@ -6,6 +6,13 @@ from pathlib import Path
 
 from prefact.config import Config
 from prefact.engine import RefactoringEngine
+from prefact.models import PipelineResult
+
+
+def run_engine(config: Config) -> PipelineResult:
+    """Create the engine for a config and run it."""
+    engine = RefactoringEngine(config)
+    return engine.run()
 
 
 def run_prefact_example(
@@ -33,35 +40,38 @@ def run_prefact_example(
     print(f"Dry run: {dry_run}")
     print("-" * 50)
 
-    engine = RefactoringEngine(config)
-    result = engine.run()
+    result = run_engine(config)
 
     # Display results
     print("\n📊 Results:")
-    print(f"  Files scanned: {result.files_scanned}")
     print(f"  Total issues: {result.total_issues}")
     print(f"  Issues fixed: {result.total_fixed}")
     print(f"  Validation passed: {result.all_valid}")
 
     # Show issues by rule
-    if result.issues_by_rule:
+    issues_by_rule = {}
+    for issue in result.issues_found:
+        issues_by_rule.setdefault(issue.rule_id, []).append(issue)
+
+    if issues_by_rule:
         print("\n📋 Issues by rule:")
-        for rule_id, issues in result.issues_by_rule.items():
+        for rule_id, issues in issues_by_rule.items():
             print(f"  {rule_id}: {len(issues)} issues")
 
     # Show fix details
-    if result.fixes:
+    if result.fixes_applied:
         print("\n🔧 Fixes applied:")
-        for fix in result.fixes[:5]:  # Show first 5
-            print(f"  {fix.path}:{fix.line} - {fix.description}")
-        if len(result.fixes) > 5:
-            print(f"  ... and {len(result.fixes) - 5} more")
+        for fix in result.fixes_applied[:5]:  # Show first 5
+            print(f"  {fix.file}:{fix.issue.line} - {fix.issue.message}")
+        if len(result.fixes_applied) > 5:
+            print(f"  ... and {len(result.fixes_applied) - 5} more")
 
     # Show validation failures
-    if result.validation_failures:
+    failed_validations = [v for v in result.validations if not v.passed]
+    if failed_validations:
         print("\n❌ Validation failures:")
-        for failure in result.validation_failures:
-            print(f"  {failure.path}: {failure.message}")
+        for failure in failed_validations:
+            print(f"  {failure.file}: {', '.join(failure.errors)}")
 
     return result
 
@@ -104,12 +114,11 @@ def another_function():
         return
 
     # Run with custom rules
-    engine = RefactoringEngine(config)
-    result = engine.run()
+    result = run_engine(config)
 
     print("\nCustom rule results:")
     print(
-        f"  TODO comments found: {len([i for i in result.all_issues if 'todo' in i.rule_id])}"
+        f"  TODO comments found: {len([i for i in result.issues_found if 'todo' in i.rule_id])}"
     )
 
     # Cleanup
@@ -140,14 +149,13 @@ def batch_processing_example():
             config.project_root = project.resolve()
             config.dry_run = True  # Don't actually fix
 
-            engine = RefactoringEngine(config)
-            result = engine.run()
+            result = run_engine(config)
 
             results.append(
                 {
                     "project": project.name,
                     "issues": result.total_issues,
-                    "fixable": len([i for i in result.all_issues if i.fixable]),
+                    "fixable": len([i for i in result.issues_found if i.suggested]),
                 }
             )
         else:
