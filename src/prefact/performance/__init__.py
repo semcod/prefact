@@ -3,7 +3,9 @@
 from prefact.performance.cache import (
     Cache,
     CacheContext,
+    RuleResultKey,
     ScanResultCache,
+    ScanResultKey,
     cleanup_cache,
     clear_cache,
     get_cache,
@@ -39,5 +41,7 @@ __all__ = [
     "ParallelScanTask",
     "FileBatch",
     "ScanResultCache",
+    "ScanResultKey",
+    "RuleResultKey",
     "get_performance_monitor",
 ]

@@ -44,7 +44,6 @@ dependencies = [
     "rich>=12.0.0",
     "tomli>=2.0.0; python_version<'3.11'",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
     "planfile>=0.1.117",
 ]
 dynamic = ["version"]
@@ -76,7 +75,6 @@ dev = [
     "ruff>=0.5.0",
     "pre-commit>=3.0.0",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
 ]
 
 # Documentation
@@ -151,14 +149,12 @@ exclude = [
 dependencies = [
     "prefact[dev]",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
 ]
 
 [tool.hatch.envs.test]
 dependencies = [
     "prefact[dev]",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
     "pytest-xdist>=3.0.0",
 ]
 [[tool.hatch.envs.test.matrix]]
@@ -168,7 +164,6 @@ python = ["3.10", "3.11", "3.12", "3.13"]
 dependencies = [
     "prefact[docs]",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
 ]
 
 [tool.hatch.envs.release]
@@ -177,7 +172,6 @@ dependencies = [
     "twine>=4.0.0",
     "wheel>=0.40.0",
     "costs>=0.1.20",
-    "pfix>=0.1.60",
 ]
 
 [tool.black]
@@ -300,22 +294,6 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
-
-[tool.pfix]
-# Self-healing Python configuration
-model = "openrouter/deep/deep-v4-pro"
-auto_apply = true
-auto_install_deps = true
-auto_restart = false
-max_retries = 3
-create_backups = false
-git_auto_commit = false
-
-[tool.pfix.runtime_todo]
-enabled = true
-todo_file = "TODO.md"
-min_severity = "low"
-deduplicate = true
 
 [tool.costs]
 # AI Cost tracking configuration

@@ -27,6 +27,16 @@ LARGE_FILE_SIZE = 10
 SEPARATOR_LENGTH = 40
 
 
+def _render_test_module(template: str, index: int, file_size_kb: int) -> str:
+    """Render one test module's source text, padded to the requested size."""
+    body = template.format(i=index)
+    padding = ""
+    if file_size_kb > 1:
+        # Add padding to increase file size
+        padding = f"\n# {'x' * (file_size_kb * 1024 - len(body))}\n"
+    return body + padding
+
+
 def create_test_files(
     base_dir: Path, num_files: int = 100, file_size_kb: int = 1
 ) -> List[Path]:
@@ -54,15 +64,9 @@ def main():
 
     for i in range(num_files):
         file_path = base_dir / f"test_module_{i:03d}.py"
-
-        # Adjust content size if needed
-        content = template.format(i=i)
-        if file_size_kb > 1:
-            # Add padding to increase file size
-            padding = f"\n# {'x' * (file_size_kb * 1024 - len(content))}\n"
-            content += padding
-
-        file_path.write_text(content, encoding="utf-8")
+        file_path.write_text(
+            _render_test_module(template, i, file_size_kb), encoding="utf-8"
+        )
         files.append(file_path)
 
     return files

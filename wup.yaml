@@ -1,0 +1,108 @@
+# wup.yaml — WUP (What's Up) intelligent on-change regression watcher.
+#
+# Purpose
+# -------
+# Sit BETWEEN file save and `git commit`. Every save triggers a 3-layer
+# decision tree so the agent (and the human) learn within seconds whether
+# a change broke anything observable, instead of catching it in CI.
+#
+#   [1] Detection   — file watcher with debounce + gitignore-aware excludes
+#   [2] Priority    — quick smoke: ≤3 testql endpoints related to the changed
+#                     code (via dependency map)
+#   [3] Detail      — only on quick-fail: full testql scenarios + blame
+#                     report (which commit / file / line introduced the
+#                     regression).
+#
+# Pairs with:
+#   - testql           — declarative CLI scenarios (TOON YAML) in testql-scenarios/
+#   - regix.yaml       — quality regressions (CC, MI, coverage delta)
+#   - koru             — handoff section "On-change gates" reads
+#                        wup status + testql scenario count + regix gates
+#                        result, so the agent sees gate health upfront.
+#   - healing-webhook  — receives wup blame reports as alerts (optional)
+#
+# Common usage:
+#   wup watch                   # start daemon (foreground)
+#   wup map-deps                # rebuild dependency map (run after big refactor)
+#   wup testql-endpoints        # introspect testql scenarios → endpoints
+#   wup status                  # show map + config summary
+#
+# CI: not for CI (use `task quality:gate` there). wup is dev-loop only.
+
+# ── Project metadata ────────────────────────────────────────────────────
+project:
+  name: "prefact"
+  description: "Python refactoring pre-analysis toolkit (CLI). On-change gates run testql CLI scenarios."
+
+# ── Layer 1: Detection ──────────────────────────────────────────────────
+# Which files trigger which strategy. Keep paths tight to avoid wakes
+# from doc/generated-analysis churn.
+watch:
+  paths:
+    - "src/**"
+    - "tests/**"
+  file_types:
+    - ".py"
+  exclude_patterns:
+    - "**/__pycache__/**"
+    - "**/.venv/**"
+    - "**/venv/**"
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/build/**"
+    - ".worktrees/**"
+    - "project/**"
+    - "*.md"
+
+# ── Layer 2 + 3: Test strategy per service ──────────────────────────────
+# prefact is a CLI package (no HTTP service): one shell service maps the
+# source tree to the testql scenarios that exercise it. `quick_tests` runs
+# the generated CLI smoke scenario on every save; `detail_tests` (only on
+# quick-fail) runs the fuller pytest-derived scenario.
+services:
+  - name: "prefact-cli"
+    root: "."
+    paths:
+      - "src/**"
+      - "tests/**"
+    type: "shell"
+    quick_tests:
+      scope: "all"
+      max_endpoints: 3
+      scenario: "testql-scenarios/generated-cli-tests.testql.toon.yaml"
+    detail_tests:
+      scope: "all"
+      max_endpoints: 10
+      scenario: "testql-scenarios/generated-from-pytests.testql.toon.yaml"
+
+# ── Test strategy timing ────────────────────────────────────────────────
+test_strategy:
+  quick:
+    debounce_s: 2                      # collapse rapid saves
+    max_queue: 5                       # drop older if backlog
+    timeout_s: 30                      # CLI smoke must stay fast
+  detail:
+    debounce_s: 5
+    max_queue: 1
+    timeout_s: 60
+
+# ── TestQL integration ──────────────────────────────────────────────────
+testql:
+  scenario_dir: "testql-scenarios"
+  smoke_scenario: "generated-cli-tests.testql.toon.yaml"
+  output_format: "json"
+  extra_args: ["--timeout", "30"]
+
+# ── Failure → ticket bridge ─────────────────────────────────────────────
+# On a confirmed regression (blame report), auto-create a planfile ticket
+# so the failure enters the normal PLF queue instead of being lost.
+planfile:
+  enabled: true
+  command: "planfile"
+  sprint: "current"
+  priority: "normal"
+  labels:
+    - "koru"
+    - "llm-ready"
+    - "wup"
+    - "auto-diag"

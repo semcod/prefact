@@ -66,3 +66,47 @@ def test_cache_context_lifecycle() -> None:
     # instance from this test can't leak into another test/process.
     with pytest.raises(RuntimeError):
         get_cache()
+
+
+class _MemoryCache:
+    """Minimal Cache stand-in: the result caches only call get/set."""
+
+    def __init__(self) -> None:
+        self._data: dict = {}
+
+    def get(self, key, default=None):
+        return self._data.get(key, default)
+
+    def set(self, key, value, expire=None):
+        self._data[key] = value
+
+
+def test_rule_result_cache_uses_key_object() -> None:
+    from prefact.performance.cache import RuleResultCache, RuleResultKey
+
+    cache = RuleResultCache(_MemoryCache())
+    key = RuleResultKey(
+        rule_id="unused-imports",
+        file_path=Path("src/example.py"),
+        file_hash="abc123",
+        config_hash="cfg42",
+    )
+    assert cache.get(key) is None
+    cache.set(key, [{"line": 3}])
+    assert cache.get(key) == [{"line": 3}]
+
+
+def test_scan_result_cache_uses_key_object() -> None:
+    from prefact.performance.cache import ScanResultCache, ScanResultKey
+
+    cache = ScanResultCache(_MemoryCache())
+    key = ScanResultKey(
+        file_path=Path("src/example.py"),
+        file_hash="abc123",
+        rule_ids=("unused-imports", "print-statements"),
+        config_hash="cfg42",
+    )
+    assert cache.get(key) is None
+    cache.set(key, {"issues": []})
+    assert cache.get(key) == {"issues": []}
+    assert key.as_str() == "scan:src/example.py:abc123:unused-imports,print-statements:cfg42"

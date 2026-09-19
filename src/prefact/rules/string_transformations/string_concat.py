@@ -176,9 +176,8 @@ class StringConcatToFString(BaseRule):
             if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
                 return check(n.left) and check(n.right)
             elif (
-                isinstance(n, ast.Str)
-                or isinstance(n, ast.Constant)
-                and isinstance(n.value, str)
+                (hasattr(ast, "Str") and isinstance(n, ast.Str))
+                or (isinstance(n, ast.Constant) and isinstance(n.value, str))
             ):
                 return True
             else:

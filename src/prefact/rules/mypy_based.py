@@ -282,10 +282,11 @@ class ReturnTypeInferrer:
         # Type mapping for different AST node types
         type_map = {
             ast.Constant: lambda v: type(v.value).__name__,
-            ast.NameConstant: lambda v: type(v.value).__name__,
             ast.List: lambda v: "List",
             ast.Dict: lambda v: "Dict",
         }
+        if hasattr(ast, "NameConstant"):
+            type_map[getattr(ast, "NameConstant")] = lambda v: type(v.value).__name__
 
         for ast_type, type_func in type_map.items():
             if isinstance(value, ast_type):
