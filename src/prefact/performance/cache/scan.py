@@ -1,9 +1,18 @@
 """Specialized cache for scan results."""
 
 from pathlib import Path
-from typing import Any, Optional, Tuple
+from typing import Any, NamedTuple, Optional, Tuple
 
 from .base import CONSTANT_3600, Cache
+
+
+class ScanCacheKey(NamedTuple):
+    """Identity of a cached scan result."""
+
+    file_path: Path
+    file_hash: str
+    rule_ids: Tuple[str, ...]
+    config_hash: str
 
 
 class ScanResultCache:
@@ -12,40 +21,22 @@ class ScanResultCache:
     def __init__(self, cache: Cache):
         self.cache = cache
 
-    def get_key(
-        self,
-        file_path: Path,
-        file_hash: str,
-        rule_ids: Tuple[str, ...],
-        config_hash: str,
-    ) -> str:
+    def get_key(self, key: ScanCacheKey) -> str:
         """Generate cache key for scan result."""
-        key_parts = ["scan", str(file_path), file_hash, ",".join(rule_ids), config_hash]
-        return ":".join(key_parts)
+        return f"scan:{key.file_path}:{key.file_hash}:{','.join(key.rule_ids)}:{key.config_hash}"
 
-    def get(
-        self,
-        file_path: Path,
-        file_hash: str,
-        rule_ids: Tuple[str, ...],
-        config_hash: str,
-    ) -> Optional[Any]:
+    def get(self, key: ScanCacheKey) -> Optional[Any]:
         """Get cached scan result."""
-        key = self.get_key(file_path, file_hash, rule_ids, config_hash)
-        return self.cache.get(key)
+        return self.cache.get(self.get_key(key))
 
     def set(
         self,
-        file_path: Path,
-        file_hash: str,
-        rule_ids: Tuple[str, ...],
-        config_hash: str,
+        key: ScanCacheKey,
         result: Any,
         expire: int = CONSTANT_3600,  # 1 hour
     ) -> None:
         """Cache scan result."""
-        key = self.get_key(file_path, file_hash, rule_ids, config_hash)
-        self.cache.set(key, result, expire=expire)
+        self.cache.set(self.get_key(key), result, expire=expire)
 
     def invalidate_file(self, file_path: Path) -> None:
         """Invalidate all cache entries for a file."""

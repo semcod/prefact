@@ -21,7 +21,7 @@ from .globals import (
 )
 from .hash import FileHashCache
 from .rule import RuleCacheKey, RuleResultCache
-from .scan import ScanResultCache
+from .scan import ScanCacheKey, ScanResultCache
 
 __all__ = [
     "CONSTANT_1024",
@@ -31,6 +31,7 @@ __all__ = [
     "DEFAULT_CACHE_EXPIRE",
     "Cache",
     "ScanResultCache",
+    "ScanCacheKey",
     "ConfigCache",
     "RuleResultCache",
     "RuleCacheKey",
