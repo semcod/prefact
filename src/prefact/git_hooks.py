@@ -185,33 +185,28 @@ exit 0
             hook_path = self.hooks_dir / hook_type
             backup_path = hook_path.with_suffix(".prefact.bak")
 
-            if hook_path.exists():
-                # Check if it's a prefact hook
-                content = hook_path.read_text()
-                if "prefact" in content:
-                    hook_path.unlink()
+            if self._is_prefact_hook(hook_path):
+                hook_path.unlink()
 
-                    # Restore backup if it exists
-                    if backup_path.exists():
-                        backup_path.rename(hook_path)
-                        print(f"Restored original {hook_type} hook")
-                    else:
-                        print(f"Removed {hook_type} hook")
+                # Restore backup if it exists
+                if backup_path.exists():
+                    backup_path.rename(hook_path)
+                    print(f"Restored original {hook_type} hook")
+                else:
+                    print(f"Removed {hook_type} hook")
+
+    @staticmethod
+    def _is_prefact_hook(hook_path: Path) -> bool:
+        """Check whether a hook file was installed by prefact."""
+        return hook_path.exists() and "prefact" in hook_path.read_text()
 
     def list_hooks(self) -> Dict[str, bool]:
         """List status of all hooks."""
         hook_types = ["pre-commit", "pre-push", "commit-msg"]
-        status = {}
-
-        for hook_type in hook_types:
-            hook_path = self.hooks_dir / hook_type
-            if hook_path.exists():
-                content = hook_path.read_text()
-                status[hook_type] = "prefact" in content
-            else:
-                status[hook_type] = False
-
-        return status
+        return {
+            hook_type: self._is_prefact_hook(self.hooks_dir / hook_type)
+            for hook_type in hook_types
+        }
 
     def test_hook(self, hook_type: str) -> bool:
         """Test if a hook is working correctly."""
@@ -349,12 +344,11 @@ def list_git_hooks(repo_root: Optional[Path] = None) -> None:
         repo_root = Path.cwd()
 
     hooks = GitHooks(repo_root)
-    status = hooks.list_hooks()
 
     print("Git hooks status:")
-    for hook_type, installed in status.items():
-        status_str = "✓ Installed (prefact)" if installed else "✗ Not installed"
-        print(f"  {hook_type}: {status_str}")
+    for hook_type, installed in hooks.list_hooks().items():
+        label = "✓ Installed (prefact)" if installed else "✗ Not installed"
+        print(f"  {hook_type}: {label}")
 
 
 # CLI commands
@@ -379,5 +373,5 @@ def main() -> None:
         hooks = GitHooks(args.path)
         for hook_type in args.hooks or ["pre-commit", "pre-push", "commit-msg"]:
             result = hooks.test_hook(hook_type)
-            status = "✓ Working" if result else "✗ Not working"
-            print(f"{hook_type}: {status}")
+            label = "✓ Working" if result else "✗ Not working"
+            print(f"{hook_type}: {label}")

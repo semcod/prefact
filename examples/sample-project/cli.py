@@ -22,14 +22,14 @@ def main(name, email):
         sys.exit(1)
 
     # Create user
-    user = User(id="", name=name, email=email, created_at=datetime.now())
+    new_user = User(id="", name=name, email=email, created_at=datetime.now())
 
-    print("Created user: " + user.name)
+    print("Created user: " + new_user.name)
 
     # Process some data
     processor = DataProcessor()
-    processor.add_item(user.name)
-    processor.add_item(user.email)
+    processor.add_item(new_user.name)
+    processor.add_item(new_user.email)
 
     result = process_data("test data")
     print("Processing result: " + str(result))
@@ -54,8 +54,8 @@ def users():
         User("2", "Bob", "bob@example.com", datetime.now()),
     ]
 
-    for user in users:
-        print("User: " + user.name + " (" + user.email + ")")
+    for entry in users:
+        print("User: " + entry.name + " (" + entry.email + ")")
 
 
 if __name__ == "__main__":

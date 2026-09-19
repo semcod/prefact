@@ -4,6 +4,7 @@ from pathlib import Path
 
 import click
 
+from prefact._base import console
 from prefact.autonomous import AutonomousRefact
 from prefact.config import Config
 from prefact.config_extended import ExtendedConfig
@@ -337,10 +338,6 @@ def autonomous_cmd(
     Automatically initializes prefact.yaml if missing, runs examples,
     scans for issues, and creates tickets in planfile.yaml.
     """
-    from rich.console import Console
-
-    console = Console()
-
     # Initialize autonomous prefact
     auto = AutonomousRefact(
         Path(project_path), exclude_patterns=list(exclude) if exclude else None
@@ -439,12 +436,10 @@ def testql_cmd(
 @main.command()
 def rules() -> None:
     """List all available rules."""
-    from rich.console import Console
     from rich.table import Table
 
     from prefact.rules import get_all_rules
 
-    console = Console()
     table = Table(title="Available Rules")
     table.add_column("Rule ID", style="bold")
     table.add_column("Description")

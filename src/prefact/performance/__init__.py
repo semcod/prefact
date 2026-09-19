@@ -16,6 +16,7 @@ from prefact.performance.cache import (
     initialize_cache,
 )
 from prefact.performance.parallel import (
+    FileBatch,
     ParallelEngine,
     ParallelScanner,
     ParallelScanTask,
@@ -38,6 +39,7 @@ __all__ = [
     "ParallelEngine",
     "ParallelScanner",
     "ParallelScanTask",
+    "FileBatch",
     "ScanResultCache",
     "ScanResultKey",
     "RuleResultKey",

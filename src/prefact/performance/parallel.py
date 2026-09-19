@@ -11,7 +11,7 @@ import pickle
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from prefact.config import Config
 from prefact.engine import RefactoringEngine
@@ -19,6 +19,13 @@ from prefact.engine import RefactoringEngine
 MAX_1 = 1.5
 MAX_16 = 16
 CONSTANT_3600 = 3600
+
+
+class FileBatch(NamedTuple):
+    """A batch of files to process with the selected rules."""
+
+    file_paths: Tuple[Path, ...]
+    rule_ids: Tuple[str, ...]
 
 
 class ParallelScanTask:
@@ -89,16 +96,14 @@ class ParallelEngine:
         self.chunk_size = config.get_rule_option("_performance", "chunk_size", 10)
         self.cache_enabled = config.get_rule_option("_performance", "cache", True)
 
-    def scan_files(
-        self, file_paths: List[Path], rule_ids: Optional[List[str]] = None
-    ) -> List[Dict[str, Any]]:
+    def scan_files(self, batch: FileBatch) -> List[Dict[str, Any]]:
         """Scan multiple files in parallel."""
+        file_paths = list(batch.file_paths)
         if not file_paths:
             return []
 
         # Use all enabled rules if none specified
-        if rule_ids is None:
-            rule_ids = self._get_enabled_rule_ids()
+        rule_ids = list(batch.rule_ids) or self._get_enabled_rule_ids()
 
         # Create tasks
         tasks = [
@@ -204,19 +209,17 @@ class ParallelEngine:
 
         return enabled_rules
 
-    def fix_files(
-        self, file_paths: List[Path], rule_ids: Optional[List[str]] = None
-    ) -> List[Dict[str, Any]]:
+    def fix_files(self, batch: FileBatch) -> List[Dict[str, Any]]:
         """Fix multiple files in parallel."""
         # For fixing, we need to be more careful about file conflicts
         # So we'll process sequentially but in parallel for scanning
         results = []
 
-        for file_path in file_paths:
+        for file_path in batch.file_paths:
             try:
                 config = Config.from_dict(self.config.to_dict())  # type: ignore[attr-defined]
                 engine = RefactoringEngine(config)
-                result = engine.run_file(file_path, rule_ids)  # type: ignore[misc]
+                result = engine.run_file(file_path, list(batch.rule_ids))  # type: ignore[misc]
                 results.append(result)
             except Exception as e:
                 error_result = {
@@ -260,7 +263,9 @@ class ParallelScanner:
                         file_paths.append(file_path)
 
         # Scan in parallel
-        return self.engine.scan_files(file_paths, rule_ids)
+        return self.engine.scan_files(
+            FileBatch(tuple(file_paths), tuple(rule_ids or ()))
+        )
 
     def scan_workspace(
         self, rule_ids: Optional[List[str]] = None
