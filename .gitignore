@@ -262,3 +262,8 @@ examples/quick-start/quick-start.yaml
 
 # Regix gate artifacts (snapshots, cache)
 .regix/
+
+# WUP watcher runtime state (dep map, blame log, tickets cache)
+.wup/
+deps.json
+testql-deps.json
