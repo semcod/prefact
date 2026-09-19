@@ -65,18 +65,15 @@ class PprefactLogger:
         self._log(LogLevel.WARNING, message, **kwargs)
 
     def error(self, message: str, error: Optional[Exception] = None, **kwargs) -> None:
-        if error:
-            kwargs.update(
-                {
-                    "error_type": type(error).__name__,
-                    "error_message": str(error),
-                    "traceback": traceback.format_exc(),
-                }
-            )
-        self._log(LogLevel.ERROR, message, **kwargs)
+        self._log_with_error_context(LogLevel.ERROR, message, error, **kwargs)
 
     def critical(
         self, message: str, error: Optional[Exception] = None, **kwargs
+    ) -> None:
+        self._log_with_error_context(LogLevel.CRITICAL, message, error, **kwargs)
+
+    def _log_with_error_context(
+        self, level: LogLevel, message: str, error: Optional[Exception], **kwargs
     ) -> None:
         if error:
             kwargs.update(
@@ -86,7 +83,7 @@ class PprefactLogger:
                     "traceback": traceback.format_exc(),
                 }
             )
-        self._log(LogLevel.CRITICAL, message, **kwargs)
+        self._log(level, message, **kwargs)
 
     def _log(self, level: LogLevel, message: str, **kwargs) -> None:
         log_record = {
