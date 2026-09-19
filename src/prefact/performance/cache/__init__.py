@@ -20,8 +20,8 @@ from .globals import (
     initialize_cache,
 )
 from .hash import FileHashCache
-from .rule import RuleResultCache
-from .scan import ScanResultCache
+from .rule import RuleResultCache, RuleResultKey
+from .scan import ScanResultCache, ScanResultKey
 
 __all__ = [
     "CONSTANT_1024",
@@ -31,8 +31,10 @@ __all__ = [
     "DEFAULT_CACHE_EXPIRE",
     "Cache",
     "ScanResultCache",
+    "ScanResultKey",
     "ConfigCache",
     "RuleResultCache",
+    "RuleResultKey",
     "FileHashCache",
     "CacheContext",
     "initialize_cache",
