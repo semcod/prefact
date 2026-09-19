@@ -187,8 +187,8 @@ exit 0
 
             if hook_path.exists():
                 # Check if it's a prefact hook
-                content = hook_path.read_text()
-                if "prefact" in content:
+                hook_text = hook_path.read_text()
+                if "prefact" in hook_text:
                     hook_path.unlink()
 
                     # Restore backup if it exists
@@ -206,8 +206,8 @@ exit 0
         for hook_type in hook_types:
             hook_path = self.hooks_dir / hook_type
             if hook_path.exists():
-                content = hook_path.read_text()
-                status[hook_type] = "prefact" in content
+                hook_text = hook_path.read_text()
+                status[hook_type] = "prefact" in hook_text
             else:
                 status[hook_type] = False
 

@@ -58,9 +58,9 @@ class SetupManager(BaseManager):
         # Check for AI indicators
         for py_file in self.project_root.rglob("*.py"):
             try:
-                content = py_file.read_text()
+                file_text = py_file.read_text()
                 if any(
-                    indicator in content
+                    indicator in file_text
                     for indicator in ["TODO", "placeholder", "AI", "LLM"]
                 ):
                     info["has_ai_code"] = True

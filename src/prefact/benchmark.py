@@ -87,11 +87,11 @@ class ScanProbe(BenchmarkProbe):
             base = Path(tmpdir)
 
             for i in range(self.num_files):
-                content = template.format(i=i, mod=i % 10, fn=i % 5)
+                file_text = template.format(i=i, mod=i % 10, fn=i % 5)
                 if self.file_size_kb > 1:
-                    pad = "x" * (self.file_size_kb * 1024 - len(content))
-                    content += f"\n# {pad}\n"
-                (base / f"m{i:04d}.py").write_text(content, encoding="utf-8")
+                    pad = "x" * (self.file_size_kb * 1024 - len(file_text))
+                    file_text += f"\n# {pad}\n"
+                (base / f"m{i:04d}.py").write_text(file_text, encoding="utf-8")
 
             config = Config(
                 project_root=base,
