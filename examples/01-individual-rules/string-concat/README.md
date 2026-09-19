@@ -31,8 +31,7 @@ def format_data(data):
 **After:**
 ```python
 def greet(name, age):
-    message = f"Hello {name}, you are {age} years old"
-    return message
+    return f"Hello {name}, you are {age} years old"
 
 def format_data(data):
     result = f"Data: {data}"
