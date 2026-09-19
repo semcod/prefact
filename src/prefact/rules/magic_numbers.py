@@ -64,7 +64,7 @@ class MagicNumberRule(BaseRule):
         value = None
         if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
             value = node.value
-        elif isinstance(node, ast.Num):  # For older Python versions
+        elif hasattr(ast, "Num") and isinstance(node, ast.Num):  # For older Python versions
             value = node.n
 
         if value is not None and self._is_magic_number(value):

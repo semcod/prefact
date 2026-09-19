@@ -15,6 +15,10 @@ pipeline:
   stages:
 
     # ── Analysis ────────────────────────────────────────────────────
+    # code2llm runs with `--exclude examples` (override in
+    # pyqual.tools.json): examples/ holds before/after rule fixtures
+    # that are near-duplicates by design, not refactor targets.
+    # Rationale: docs/decisions/0002-exclude-example-fixtures-from-code2llm-analysis.md (PLF-028).
     - name: analyze
       tool: code2llm
       when: first_iteration

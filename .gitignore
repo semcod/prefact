@@ -259,3 +259,6 @@ examples/quick-start/quick-start.yaml
 /.subactor/receipts/
 /.subactor/cache/
 /.subactor/snapshots/
+
+# Regix gate artifacts (snapshots, cache)
+.regix/
