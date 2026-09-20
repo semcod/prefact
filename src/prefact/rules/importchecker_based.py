@@ -125,11 +125,14 @@ class ImportCheckerUnusedImports(BaseRule):
         import_lines = self._find_import_lines(source)
 
         for item in results:
-            import_name = item.get("import", "unknown")
-            line_num = import_lines.get(import_name, 1)
+            reported_import = item.get("import", "unknown")
+            line_num = import_lines.get(reported_import, 1)
 
             # Skip __main__ if configured
-            if self.checker_config["ignore_dunder_main"] and import_name == "__main__":
+            if (
+                self.checker_config["ignore_dunder_main"]
+                and reported_import == "__main__"
+            ):
                 continue
 
             issues.append(
@@ -138,9 +141,9 @@ class ImportCheckerUnusedImports(BaseRule):
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {reported_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=reported_import,
                 )
             )
 
@@ -466,7 +469,7 @@ class ImportOptimizer(BaseRule):
 
         return imports
 
-    def _count_usage(self, source: str, import_name: str) -> int:
+    def _count_usage(self, source: str, symbol: str) -> int:
         """Count how many times an import is used."""
         # Simple string-based counting
         # Real implementation would use AST for accuracy
@@ -483,7 +486,7 @@ class ImportOptimizer(BaseRule):
         for i, line in enumerate(lines):
             if i not in import_lines:
                 # Count occurrences of the import name
-                count += line.count(import_name)
+                count += line.count(symbol)
 
         return count
 

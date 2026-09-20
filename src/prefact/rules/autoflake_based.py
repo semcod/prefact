@@ -113,7 +113,7 @@ def create_issues_from_results(
     for item in results:
         if item["type"] == "unused_import":
             # Extract import name from the line
-            import_name = extract_import_name(item["line"])
+            unused_import = extract_import_name(item["line"])
 
             issues.append(
                 Issue(
@@ -121,9 +121,9 @@ def create_issues_from_results(
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {unused_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=unused_import,
                 )
             )
         line_num += 1

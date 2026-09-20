@@ -44,12 +44,12 @@ class UnimportHelper:
                 for line in lines:
                     if "unused import" in line.lower():
                         # Extract import name from line
-                        import_name = UnimportHelper._extract_import_name(line)
-                        if import_name:
+                        detected_import = UnimportHelper._extract_import_name(line)
+                        if detected_import:
                             issues.append(
                                 {
                                     "type": "unused_import",
-                                    "import": import_name,
+                                    "import": detected_import,
                                     "line": line,
                                 }
                             )
@@ -152,17 +152,17 @@ class UnimportUnusedImports(BaseRule):
                 if stripped.startswith("from "):
                     parts = stripped.split()
                     if len(parts) >= 4:
-                        import_name = parts[3]
-                        import_lines[import_name] = f"{i}{1}"
+                        declared_import = parts[3]
+                        import_lines[declared_import] = f"{i}{1}"
                 else:
                     parts = stripped.split()
                     if len(parts) >= 2:
-                        import_name = parts[1].split(",")[0]
-                        import_lines[import_name] = f"{i}{1}"
+                        declared_import = parts[1].split(",")[0]
+                        import_lines[declared_import] = f"{i}{1}"
 
         for item in results:
-            import_name = item.get("import", "unknown")
-            line_num = import_lines.get(import_name, 1)
+            reported_import = item.get("import", "unknown")
+            line_num = import_lines.get(reported_import, 1)
 
             issues.append(
                 Issue(
@@ -170,9 +170,9 @@ class UnimportUnusedImports(BaseRule):
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {reported_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=reported_import,
                 )
             )
 

@@ -199,16 +199,16 @@ class RuffUnusedImports(BaseRule):
             # Extract import name from message
             message = item["message"]
             if "`" in message:
-                import_name = message.split("`")[1]
+                flagged_import = message.split("`")[1]
                 issues.append(
                     Issue(
                         rule_id=self.rule_id,
                         file=path,
                         line=item["location"]["row"],
                         col=item["location"]["column"],
-                        message=f"Unused import: {import_name}",
+                        message=f"Unused import: {flagged_import}",
                         severity=Severity.INFO,
-                        original=import_name,
+                        original=flagged_import,
                     )
                 )
 
