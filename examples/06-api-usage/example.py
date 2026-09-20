@@ -33,37 +33,36 @@ def run_prefact_example(
     print(f"Dry run: {dry_run}")
     print("-" * 50)
 
-    engine = RefactoringEngine(config)
-    result = engine.run()
+    engine_result = RefactoringEngine(config).run()
 
     # Display results
     print("\n📊 Results:")
-    print(f"  Files scanned: {result.files_scanned}")
-    print(f"  Total issues: {result.total_issues}")
-    print(f"  Issues fixed: {result.total_fixed}")
-    print(f"  Validation passed: {result.all_valid}")
+    print(f"  Files scanned: {engine_result.files_scanned}")
+    print(f"  Total issues: {engine_result.total_issues}")
+    print(f"  Issues fixed: {engine_result.total_fixed}")
+    print(f"  Validation passed: {engine_result.all_valid}")
 
     # Show issues by rule
-    if result.issues_by_rule:
+    if engine_result.issues_by_rule:
         print("\n📋 Issues by rule:")
-        for rule_id, issues in result.issues_by_rule.items():
+        for rule_id, issues in engine_result.issues_by_rule.items():
             print(f"  {rule_id}: {len(issues)} issues")
 
     # Show fix details
-    if result.fixes:
+    if engine_result.fixes:
         print("\n🔧 Fixes applied:")
-        for fix in result.fixes[:5]:  # Show first 5
+        for fix in engine_result.fixes[:5]:  # Show first 5
             print(f"  {fix.path}:{fix.line} - {fix.description}")
-        if len(result.fixes) > 5:
-            print(f"  ... and {len(result.fixes) - 5} more")
+        if len(engine_result.fixes) > 5:
+            print(f"  ... and {len(engine_result.fixes) - 5} more")
 
     # Show validation failures
-    if result.validation_failures:
+    if engine_result.validation_failures:
         print("\n❌ Validation failures:")
-        for failure in result.validation_failures:
+        for failure in engine_result.validation_failures:
             print(f"  {failure.path}: {failure.message}")
 
-    return result
+    return engine_result
 
 
 def custom_rule_example():
@@ -104,8 +103,7 @@ def another_function():
         return
 
     # Run with custom rules
-    engine = RefactoringEngine(config)
-    result = engine.run()
+    result = RefactoringEngine(config).run()
 
     print("\nCustom rule results:")
     print(
@@ -140,8 +138,7 @@ def batch_processing_example():
             config.project_root = project.resolve()
             config.dry_run = True  # Don't actually fix
 
-            engine = RefactoringEngine(config)
-            result = engine.run()
+            result = RefactoringEngine(config).run()
 
             results.append(
                 {

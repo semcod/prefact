@@ -99,10 +99,10 @@ class ScanProbe(BenchmarkProbe):
                 dry_run=True,
                 verbose=False,
             )
-            engine = RefactoringEngine(config)
+            scan_engine = RefactoringEngine(config)
 
             t0 = time.perf_counter()
-            result = engine.run(dry_run=True)
+            result = scan_engine.run(dry_run=True)
             elapsed = time.perf_counter() - t0
 
         files_per_sec = self.num_files / elapsed if elapsed > 0 else 0.0

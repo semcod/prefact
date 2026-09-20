@@ -111,10 +111,10 @@ def benchmark_without_rampreload(config: Config) -> float:
 
             return result
 
-    engine = OriginalRefactoringEngine(config)
+    original_engine = OriginalRefactoringEngine(config)
 
     start_time = time.perf_counter()
-    result = engine.run(dry_run=True)  # Dry run to avoid modifying files
+    result = original_engine.run(dry_run=True)  # Dry run to avoid modifying files
     end_time = time.perf_counter()
 
     return end_time - start_time
@@ -122,10 +122,10 @@ def benchmark_without_rampreload(config: Config) -> float:
 
 def benchmark_with_rampreload(config: Config) -> float:
     """Run benchmark with RAM preloading (optimized implementation)."""
-    engine = RefactoringEngine(config)
+    optimized_engine = RefactoringEngine(config)
 
     start_time = time.perf_counter()
-    result = engine.run(dry_run=True)  # Dry run to avoid modifying files
+    result = optimized_engine.run(dry_run=True)  # Dry run to avoid modifying files
     end_time = time.perf_counter()
 
     return end_time - start_time

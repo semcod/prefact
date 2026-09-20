@@ -7,7 +7,6 @@ from typing import Any, List, Optional, Tuple
 
 from prefact.autonomous._base import MIN_CODE_SIZE, BaseManager, console
 from prefact.config_extended import ExtendedConfig
-from prefact.engine import RefactoringEngine
 from prefact.scanner import Scanner
 
 
@@ -54,7 +53,6 @@ class ProjectScanner(BaseManager):
 ```
 """
             console.print(Markdown(info_md))
-            engine = RefactoringEngine(config)
 
             # Get list of files to scan
             scanner = Scanner(config)
