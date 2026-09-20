@@ -71,8 +71,8 @@ class ExtendedConfig(Config):
         )
 
     def to_dict(self) -> Dict[str, Any]:
-        result = super().to_dict()
-        result.update(
+        serialized = super().to_dict()
+        serialized.update(
             {
                 "tools": self.tools,
                 "performance": self.performance,
@@ -80,4 +80,4 @@ class ExtendedConfig(Config):
                 "environments": self.environments,
             }
         )
-        return result
+        return serialized

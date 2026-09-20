@@ -194,12 +194,12 @@ class AutoflakeHelper:
         cmd = build_autoflake_check_command(file_path, config)
 
         try:
-            result = run_autoflake_command(cmd)
+            autoflake_run = run_autoflake_command(cmd)
 
             # Parse output to find issues
             issues = []
-            if result.returncode != 0:
-                lines = result.stdout.splitlines()
+            if autoflake_run.returncode != 0:
+                lines = autoflake_run.stdout.splitlines()
                 issues = parse_autoflake_output(lines)
 
             return issues

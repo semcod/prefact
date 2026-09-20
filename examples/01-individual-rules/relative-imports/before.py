@@ -8,8 +8,8 @@ from .utils import helper_function
 def process_user(user_id):
     """Process a user."""
     user = UserModel(user_id)
-    result = helper_function(user)
-    return result
+    processed_user = helper_function(user)
+    return processed_user
 
 
 class Processor:

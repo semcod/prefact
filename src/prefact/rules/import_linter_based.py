@@ -57,12 +57,12 @@ class ImportLinterHelper:
         cmd = ["import-linter", "run", str(config_path)]
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            linter_run = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
             # Parse output
             issues = []
-            if result.returncode != 0:  # Violations found
-                lines = result.stdout.splitlines()
+            if linter_run.returncode != 0:  # Violations found
+                lines = linter_run.stdout.splitlines()
                 for line in lines:
                     if " - " in line:
                         # Parse violation

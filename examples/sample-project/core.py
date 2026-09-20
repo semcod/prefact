@@ -5,9 +5,9 @@ from utils import *
 
 def process_data(data):
     """Process some data without return type annotation."""
-    result = "Processed: " + str(data)
+    processed_text = "Processed: " + str(data)
     print("Debug: processing data", data)
-    return result
+    return processed_text
 
 
 def calculate_sum(numbers):

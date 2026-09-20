@@ -42,7 +42,7 @@ class PylintHelper:
                 cmd.append(f"--enable={config['enable_codes']}")
 
         try:
-            result = subprocess.run(
+            pylint_run = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
@@ -50,8 +50,8 @@ class PylintHelper:
             )
 
             # Parse JSON output
-            if result.stdout.strip():
-                return json.loads(result.stdout)
+            if pylint_run.stdout.strip():
+                return json.loads(pylint_run.stdout)
             return []
         except (subprocess.SubprocessError, json.JSONDecodeError, FileNotFoundError):
             return []

@@ -144,8 +144,8 @@ def greet(name, age):
 
 def format_data(data):
     """Format data."""
-    result = "Data: " + str(data)
-    return result
+    formatted = "Data: " + str(data)
+    return formatted
 '''
         after = '''"""Example with string concatenation converted to f-strings."""
 
@@ -156,8 +156,8 @@ def greet(name, age):
 
 def format_data(data):
     """Format data."""
-    result = f"Data: {data}"
-    return result
+    formatted = f"Data: {data}"
+    return formatted
 '''
 
     elif rule == "print-statements":
@@ -166,9 +166,9 @@ def format_data(data):
 def process_data(data):
     """Process data with debug prints."""
     print("Starting processing")
-    result = data * 2
-    print(f"Result: {result}")
-    return result
+    doubled = data * 2
+    print(f"Result: {doubled}")
+    return doubled
 
 def calculate(a, b):
     """Calculate with debug output."""
@@ -180,9 +180,9 @@ def calculate(a, b):
 def process_data(data):
     """Process data with debug prints."""
     print("Starting processing")
-    result = data * 2
-    print(f"Result: {result}")
-    return result
+    doubled = data * 2
+    print(f"Result: {doubled}")
+    return doubled
 
 def calculate(a, b):
     """Calculate with debug output."""

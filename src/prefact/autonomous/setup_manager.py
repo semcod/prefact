@@ -106,7 +106,7 @@ class SetupManager(BaseManager):
 
                 try:
                     # Run prefact scan
-                    result = subprocess.run(
+                    scan_process = subprocess.run(
                         [
                             sys.executable,
                             "-m",
@@ -122,9 +122,9 @@ class SetupManager(BaseManager):
                         cwd=self.project_root,
                     )
 
-                    if result.returncode != 0:
+                    if scan_process.returncode != 0:
                         console.print(
-                            f"❌ Example {example_dir.name} failed: {result.stderr}",
+                            f"❌ Example {example_dir.name} failed: {scan_process.stderr}",
                             style="red",
                         )
                         success = False

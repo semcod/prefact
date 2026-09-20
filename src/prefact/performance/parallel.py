@@ -63,13 +63,15 @@ class ParallelScanTask:
         # Perform actual scan
         # TODO: Fix parallel module to use correct API
         config = Config.from_dict(self.config_dict)  # type: ignore[attr-defined]
-        result = RefactoringEngine(config).scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
+        scan_output = RefactoringEngine(config).scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
 
-        # Cache result if enabled
+        # Cache scan_output if enabled
         if self.cache_enabled:
-            cache.set(cache_key, pickle.dumps(result), expire=CONSTANT_3600)  # 1 hour
+            cache.set(
+                cache_key, pickle.dumps(scan_output), expire=CONSTANT_3600
+            )  # 1 hour
 
-        return result
+        return scan_output
 
 
 class ParallelEngine:
@@ -137,10 +139,10 @@ class ParallelEngine:
             for future in as_completed(future_to_task):
                 task = future_to_task[future]
                 try:
-                    result = future.result()
-                    results.append(result)
+                    task_output = future.task_output()
+                    results.append(task_output)
                 except Exception as e:
-                    # Create error result
+                    # Create error task_output
                     error_result = {
                         "file": task.file_path,
                         "issues": [],
@@ -170,10 +172,10 @@ class ParallelEngine:
                 for future in as_completed(future_to_task):
                     task = future_to_task[future]
                     try:
-                        result = future.result()
-                        results.append(result)
+                        task_output = future.task_output()
+                        results.append(task_output)
                     except Exception as e:
-                        # Create error result
+                        # Create error task_output
                         error_result = {
                             "file": task.file_path,
                             "issues": [],
@@ -213,8 +215,8 @@ class ParallelEngine:
         for file_path in file_paths:
             try:
                 config = Config.from_dict(self.config.to_dict())  # type: ignore[attr-defined]
-                result = RefactoringEngine(config).run_file(file_path, rule_ids)  # type: ignore[misc]
-                results.append(result)
+                fix_output = RefactoringEngine(config).run_file(file_path, rule_ids)  # type: ignore[misc]
+                results.append(fix_output)
             except Exception as e:
                 error_result = {
                     "file": file_path,

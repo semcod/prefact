@@ -102,7 +102,7 @@ class ScanProbe(BenchmarkProbe):
             scan_engine = RefactoringEngine(config)
 
             t0 = time.perf_counter()
-            result = scan_engine.run(dry_run=True)
+            engine_report = scan_engine.run(dry_run=True)
             elapsed = time.perf_counter() - t0
 
         files_per_sec = self.num_files / elapsed if elapsed > 0 else 0.0
@@ -113,8 +113,8 @@ class ScanProbe(BenchmarkProbe):
             threshold=self.threshold,
             extra={
                 "files": self.num_files,
-                "issues_found": len(result.issues_found),
-                "fixes_applied": len(result.fixes_applied),
+                "issues_found": len(engine_report.issues_found),
+                "fixes_applied": len(engine_report.fixes_applied),
                 "files_per_sec": round(files_per_sec, 1),
             },
         )

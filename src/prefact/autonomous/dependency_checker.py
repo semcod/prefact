@@ -120,19 +120,21 @@ class DependencyChecker(BaseManager):
     def _query_pip_outdated(self) -> None:
         """Run ``pip list --outdated`` and keep only declared deps."""
         try:
-            result = subprocess.run(
+            pip_query = subprocess.run(
                 [sys.executable, "-m", "pip", "list", "--outdated", "--format=json"],
                 capture_output=True,
                 text=True,
                 timeout=120,
                 cwd=self.project_root,
             )
-            if result.returncode != 0:
-                console.print(f"⚠️  pip list --outdated failed: {result.stderr.strip()}")
+            if pip_query.returncode != 0:
+                console.print(
+                    f"⚠️  pip list --outdated failed: {pip_query.stderr.strip()}"
+                )
                 self.outdated = []
                 return
 
-            all_outdated = json.loads(result.stdout)
+            all_outdated = json.loads(pip_query.stdout)
         except subprocess.TimeoutExpired:
             console.print("⚠️  pip list --outdated timed out (120 s)")
             self.outdated = []

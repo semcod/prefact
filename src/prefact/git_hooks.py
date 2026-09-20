@@ -222,7 +222,7 @@ exit 0
 
         try:
             # Run the hook with --help or similar to test
-            result = subprocess.run(
+            hook_probe = subprocess.run(
                 [str(hook_path)],
                 capture_output=True,
                 text=True,
@@ -378,6 +378,6 @@ def main() -> None:
     elif args.command == "test":
         hooks = GitHooks(args.path)
         for hook_type in args.hooks or ["pre-commit", "pre-push", "commit-msg"]:
-            result = hooks.test_hook(hook_type)
-            status = "✓ Working" if result else "✗ Not working"
+            hook_ok = hooks.test_hook(hook_type)
+            status = "✓ Working" if hook_ok else "✗ Not working"
             print(f"{hook_type}: {status}")

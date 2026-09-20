@@ -9,5 +9,5 @@ def greet(name, age):
 
 def format_data(data):
     """Format data."""
-    result = f"Data: {data}"
-    return result
+    formatted = f"Data: {data}"
+    return formatted

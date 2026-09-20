@@ -23,7 +23,7 @@ def run_example(example_dir: Path) -> Tuple[bool, str]:
 
     try:
         # Run prefact scan
-        result = subprocess.run(
+        scan_process = subprocess.run(
             [
                 sys.executable,
                 "-m",
@@ -39,11 +39,11 @@ def run_example(example_dir: Path) -> Tuple[bool, str]:
             cwd=example_dir.parent.parent,
         )
 
-        if result.returncode != 0:
-            return False, f"Scan failed: {result.stderr}"
+        if scan_process.returncode != 0:
+            return False, f"Scan failed: {scan_process.stderr}"
 
         # Run prefact fix if there are issues
-        if "issues found" in result.stdout:
+        if "issues found" in scan_process.stdout:
             fix_result = subprocess.run(
                 [
                     sys.executable,

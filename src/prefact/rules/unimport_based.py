@@ -35,12 +35,16 @@ class UnimportHelper:
                 cmd.append("--remove-duplicate-imports")
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            unimport_run = subprocess.run(
+                cmd, capture_output=True, text=True, check=False
+            )
 
             # Parse output to find unused imports
             issues = []
-            if result.returncode != 0:  # unimport returns non-zero when issues found
-                lines = result.stdout.splitlines()
+            if (
+                unimport_run.returncode != 0
+            ):  # unimport returns non-zero when issues found
+                lines = unimport_run.stdout.splitlines()
                 for line in lines:
                     if "unused import" in line.lower():
                         # Extract import name from line

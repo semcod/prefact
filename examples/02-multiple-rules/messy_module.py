@@ -50,5 +50,5 @@ class DataProcessor:
         """Process items."""
         print(f"Processing {len(items)} items")
 
-        result = "Processed: " + str(len(items)) + " items"
-        return result
+        summary_line = "Processed: " + str(len(items)) + " items"
+        return summary_line

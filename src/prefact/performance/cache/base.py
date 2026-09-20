@@ -70,10 +70,10 @@ class Cache:
 
     def delete(self, key: str) -> bool:
         """Delete key from cache."""
-        result = self.cache.delete(key)
-        if result:
+        deleted = self.cache.delete(key)
+        if deleted:
             self.stats["deletes"] += 1
-        return result
+        return deleted
 
     def clear(self) -> None:
         """Clear all cache entries."""

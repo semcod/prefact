@@ -20,7 +20,7 @@ class RuffHelper:
     def check_file(file_path: Path, select_codes: List[str]) -> List[Dict]:
         """Run Ruff on a single file and return JSON results."""
         try:
-            result = subprocess.run(
+            ruff_run = subprocess.run(
                 [
                     "ruff",
                     "check",
@@ -36,8 +36,8 @@ class RuffHelper:
                 check=False,
             )  # Use check=False to handle non-zero exit
 
-            if result.stdout.strip():
-                return json.loads(result.stdout)
+            if ruff_run.stdout.strip():
+                return json.loads(ruff_run.stdout)
             return []
         except (subprocess.CalledProcessError, json.JSONDecodeError):
             return []

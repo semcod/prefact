@@ -3,9 +3,9 @@
 
 def process_data(data):
     """Process some data."""
-    result = "Processed: " + str(data)
+    processed_text = "Processed: " + str(data)
     print("Debug: processing data")
-    return result
+    return processed_text
 
 
 def calculate_sum(numbers):

@@ -6,12 +6,12 @@ from typing import Any, Dict, List  # Optional is unused
 
 def process_data(data: List[str]) -> Dict[str, Any]:
     """Process some data."""
-    result = {}
+    item_map = {}
     for item in data:
         key = item.lower()
         value = len(item)
-        result[key] = value
-    return result
+        item_map[key] = value
+    return item_map
 
 
 def format_timestamp(ts: datetime.datetime) -> str:

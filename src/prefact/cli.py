@@ -161,8 +161,8 @@ def _build_config(
 def scan(**kwargs) -> None:
     """Scan for issues without applying fixes."""
     cfg = _build_config(**kwargs)
-    result = RefactoringEngine(cfg).scan_only()
-    _output(result, kwargs)
+    scan_report = RefactoringEngine(cfg).scan_only()
+    _output(scan_report, kwargs)
 
 
 @main.command()
@@ -176,9 +176,9 @@ def fix(dry_run, no_backup, **kwargs) -> None:
     cfg = _build_config(**kwargs)
     cfg.dry_run = dry_run
     cfg.backup = not no_backup
-    result = RefactoringEngine(cfg).run()
-    _output(result, kwargs)
-    if not result.all_valid:
+    fix_report = RefactoringEngine(cfg).run()
+    _output(fix_report, kwargs)
+    if not fix_report.all_valid:
         raise SystemExit(1)
 
 
@@ -188,8 +188,8 @@ def fix(dry_run, no_backup, **kwargs) -> None:
 def check(filepath, **kwargs) -> None:
     """Scan a single file."""
     cfg = _build_config(**kwargs)
-    result = RefactoringEngine(cfg).run_file(Path(filepath), dry_run=True)
-    _output(result, kwargs)
+    file_report = RefactoringEngine(cfg).run_file(Path(filepath), dry_run=True)
+    _output(file_report, kwargs)
 
 
 @main.command()

@@ -103,11 +103,11 @@ def another_function():
         return
 
     # Run with custom rules
-    result = RefactoringEngine(config).run()
+    custom_run = RefactoringEngine(config).run()
 
     print("\nCustom rule results:")
     print(
-        f"  TODO comments found: {len([i for i in result.all_issues if 'todo' in i.rule_id])}"
+        f"  TODO comments found: {len([i for i in custom_run.all_issues if 'todo' in i.rule_id])}"
     )
 
     # Cleanup
@@ -138,13 +138,13 @@ def batch_processing_example():
             config.project_root = project.resolve()
             config.dry_run = True  # Don't actually fix
 
-            result = RefactoringEngine(config).run()
+            batch_run = RefactoringEngine(config).run()
 
             results.append(
                 {
                     "project": project.name,
-                    "issues": result.total_issues,
-                    "fixable": len([i for i in result.all_issues if i.fixable]),
+                    "issues": batch_run.total_issues,
+                    "fixable": len([i for i in batch_run.all_issues if i.fixable]),
                 }
             )
         else:
@@ -176,7 +176,7 @@ def main():
     args = parser.parse_args()
 
     # Main example
-    result = run_prefact_example(args.path, args.config, args.dry_run)
+    example_outcome = run_prefact_example(args.path, args.config, args.dry_run)
 
     # Additional examples
     if args.custom_rules:
@@ -186,7 +186,7 @@ def main():
         batch_processing_example()
 
     # Return exit code based on results
-    return 1 if result.total_issues > 0 else 0
+    return 1 if example_outcome.total_issues > 0 else 0
 
 
 if __name__ == "__main__":

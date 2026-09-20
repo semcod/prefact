@@ -205,11 +205,11 @@ class TodoManager(BaseManager):
         for file_path, file_tasks in tasks_by_file.items():
             if file_path.exists():
                 try:
-                    result = self._process_file_tasks(
+                    file_fix_summary = self._process_file_tasks(
                         file_path, file_tasks, scanner, fixer
                     )
-                    executed_count += result["fixed_count"]
-                    completed_tasks.extend(result["completed_tasks"])
+                    executed_count += file_fix_summary["fixed_count"]
+                    completed_tasks.extend(file_fix_summary["completed_tasks"])
                 except Exception as e:
                     console.print(f"❌ Error fixing {file_path}: {str(e)}")
                     completed_tasks.extend(task["original_line"] for task in file_tasks)
