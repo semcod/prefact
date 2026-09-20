@@ -136,8 +136,8 @@ class Config:
             return None
 
         try:
-            data = tomllib.loads(pyproject.read_text())
-            name = data.get("project", {}).get("name", "")
+            pyproject_data = tomllib.loads(pyproject.read_text())
+            name = pyproject_data.get("project", {}).get("name", "")
             if name:
                 return name.replace("-", "_")
         except Exception:

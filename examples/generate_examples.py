@@ -88,8 +88,8 @@ import os
 
 def process():
     """Process using wildcard imports."""
-    data = defaultdict(list)
-    return data
+    grouped = defaultdict(list)
+    return grouped
 '''
         after = '''"""Example with wildcard imports flagged (not auto-fixed)."""
 
@@ -100,8 +100,8 @@ import os
 
 def process():
     """Process using wildcard imports."""
-    data = defaultdict(list)
-    return data
+    grouped = defaultdict(list)
+    return grouped
 '''
 
     elif rule == "sorted-imports":

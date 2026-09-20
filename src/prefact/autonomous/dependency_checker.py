@@ -87,8 +87,8 @@ class DependencyChecker(BaseManager):
             except ModuleNotFoundError:
                 import tomli as tomllib  # type: ignore[no-redef]
 
-            data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-            deps = data.get("project", {}).get("dependencies", [])
+            pyproject_data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+            deps = pyproject_data.get("project", {}).get("dependencies", [])
             for dep_str in deps:
                 name, spec = self._parse_dep_string(dep_str)
                 if name:

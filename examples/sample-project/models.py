@@ -51,9 +51,9 @@ def create_user(name, email):
 def load_users_from_file(filepath):
     """Load users from JSON file."""
     with open(filepath) as f:
-        data = json.load(f)
+        user_records = json.load(f)
     users = []
-    for item in data:
+    for item in user_records:
         user = User(**item)
         users.append(user)
     return users
