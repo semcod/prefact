@@ -7,8 +7,8 @@ from mypackage.utils import helper_function
 
 def process_user(user_id):
     """Process a user."""
-    user = UserModel(user_id)
-    processed_user = helper_function(user)
+    user_model = UserModel(user_id)
+    processed_user = helper_function(user_model)
     return processed_user
 
 
