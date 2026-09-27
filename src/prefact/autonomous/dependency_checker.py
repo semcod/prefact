@@ -101,10 +101,14 @@ class DependencyChecker(BaseManager):
         for req_file in sorted(self.project_root.glob("requirements*.txt")):
             try:
                 for raw_line in req_file.read_text(encoding="utf-8").splitlines():
-                    line = raw_line.strip()
-                    if not line or line.startswith("#") or line.startswith("-"):
+                    requirement = raw_line.strip()
+                    if (
+                        not requirement
+                        or requirement.startswith("#")
+                        or requirement.startswith("-")
+                    ):
                         continue
-                    m = _REQ_RE.match(line)
+                    m = _REQ_RE.match(requirement)
                     if m:
                         name = m.group("name")
                         op = m.group("op") or ""

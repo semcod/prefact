@@ -30,10 +30,10 @@ def parse_existing_todos(
     i = 0
 
     while i < len(lines):
-        line = lines[i].strip()
+        todo_line = lines[i].strip()
 
-        if line.startswith("- [ ] ") or line.startswith("- [x] "):
-            entry_text = line[CHECKBOX_PREFIX_LEN:]
+        if todo_line.startswith("- [ ] ") or todo_line.startswith("- [x] "):
+            entry_text = todo_line[CHECKBOX_PREFIX_LEN:]
 
             # Handle multi-line messages
             while (
@@ -47,7 +47,7 @@ def parse_existing_todos(
             if " - " in entry_text:
                 file_line_part = entry_text.split(" - ", 1)[0]
                 message_part = entry_text.split(" - ", 1)[1]
-                status = "completed" if line.startswith("- [x] ") else "pending"
+                status = "completed" if todo_line.startswith("- [x] ") else "pending"
 
                 # Parse file and line
                 if ":" in file_line_part:
@@ -61,7 +61,7 @@ def parse_existing_todos(
                         key = (file_part, message_part)
                     existing_todos[key] = {
                         "status": status,
-                        "original_line": line,
+                        "original_line": todo_line,
                     }
         i += 1
 

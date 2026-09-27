@@ -145,9 +145,9 @@ class MyPyMissingReturnType(BaseRule):
             source = path.read_text(encoding="utf-8")
             lines = source.splitlines()
             if 0 < line_num <= len(lines):
-                line = lines[line_num - 1]
+                def_line = lines[line_num - 1]
                 # Simple check: public functions don't start with underscore
-                return "def _" not in line
+                return "def _" not in def_line
         except Exception:
             pass
         return True

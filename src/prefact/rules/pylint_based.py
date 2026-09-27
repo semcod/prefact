@@ -144,15 +144,15 @@ class PylintPrintStatements(BaseRule):
         for issue in issues:
             line_idx = issue.line - 1
             if 0 <= line_idx < len(lines):
-                line = lines[line_idx]
-                if "print(" in line and not line.strip().startswith("#"):
-                    lines[line_idx] = f"# {line}"
+                source_line = lines[line_idx]
+                if "print(" in source_line and not source_line.strip().startswith("#"):
+                    lines[line_idx] = f"# {source_line}"
                     fixes.append(
                         Fix(
                             issue=issue,
                             file=path,
-                            original_code=line,
-                            fixed_code=f"# {line}",
+                            original_code=source_line,
+                            fixed_code=f"# {source_line}",
                             applied=True,
                         )
                     )

@@ -63,9 +63,9 @@ class JsonlEventStore(EventStore):
             return []
         events: list[DomainEvent] = []
         with self.path.open(encoding="utf-8") as handle:
-            for line in handle:
-                line = line.strip()
-                if not line:
+            for raw_line in handle:
+                event_json = raw_line.strip()
+                if not event_json:
                     continue
-                events.append(from_dict(json.loads(line)))
+                events.append(from_dict(json.loads(event_json)))
         return events
