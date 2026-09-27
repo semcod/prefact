@@ -41,7 +41,7 @@ def create_test_files(
     base_dir: Path, num_files: int = 100, file_size_kb: int = 1
 ) -> List[Path]:
     """Create test Python files with import issues to benchmark against."""
-    files = []
+    created_files = []
 
     # Create a simple Python template with import issues
     template = '''"""Test module {i}."""
@@ -67,9 +67,9 @@ def main():
         file_path.write_text(
             _render_test_module(template, i, file_size_kb), encoding="utf-8"
         )
-        files.append(file_path)
+        created_files.append(file_path)
 
-    return files
+    return created_files
 
 
 def benchmark_without_rampreload(config: Config) -> float:
@@ -141,7 +141,8 @@ def run_benchmark(num_files: int = 100, file_size_kb: int = 1) -> Dict[str, floa
         base_dir = Path(tmpdir)
 
         print(f"Creating {num_files} test files ({file_size_kb}KB each)...")
-        files = create_test_files(base_dir, num_files, file_size_kb)
+        # Called for its side effect: the test files written under base_dir.
+        create_test_files(base_dir, num_files, file_size_kb)
 
         # Create config
         config = Config(
