@@ -145,11 +145,9 @@ def main() -> None:
     parser.add_argument("--path", default=".", help="Path to benchmark")
     args = parser.parse_args()
 
-    # Load config
-    config = Config(project_root=Path(args.path))
-
-    # Run benchmark
-    results = benchmark_project(Path(args.path), config)
+    # Load config and run benchmark
+    bench_path = Path(args.path)
+    results = benchmark_project(bench_path, Config(project_root=bench_path))
 
     # Print results
     print_benchmark_results(results)

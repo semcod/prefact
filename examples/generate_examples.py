@@ -19,7 +19,7 @@ for rule in rules:
     rule_dir.mkdir(exist_ok=True)
 
     # Create prefact.yaml
-    config = f"""package_name: mypackage
+    prefact_yaml_template = f"""package_name: mypackage
 
 include:
   - "**/*.py"
@@ -46,7 +46,7 @@ rules:
     enabled: {"true" if rule == "missing-return-type" else "false"}
 """
 
-    (rule_dir / "prefact.yaml").write_text(config)
+    (rule_dir / "prefact.yaml").write_text(prefact_yaml_template)
 
     # Create before.py examples for each rule
     if rule == "duplicate-imports":

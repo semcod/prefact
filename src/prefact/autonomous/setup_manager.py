@@ -28,20 +28,22 @@ class SetupManager(BaseManager):
         )
 
         # Customize based on project
-        config = yaml.safe_load(config_content)
+        generated_config = yaml.safe_load(config_content)
 
         # Add project-specific settings
-        config["project_root"] = str(self.project_root)
-        config["package_name"] = project_info["package_name"]
+        generated_config["project_root"] = str(self.project_root)
+        generated_config["package_name"] = project_info["package_name"]
 
         # Enable LLM rules if AI-generated code detected
         if project_info["has_ai_code"]:
-            config["rules"]["llm-hallucinations"] = {"enabled": True}
-            config["rules"]["magic-numbers"] = {"enabled": True}
+            generated_config["rules"]["llm-hallucinations"] = {"enabled": True}
+            generated_config["rules"]["magic-numbers"] = {"enabled": True}
 
         # Write configuration
         with open(self.refact_config_path, "w") as f:
-            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+            yaml.dump(
+                generated_config, f, default_flow_style=False, sort_keys=False
+            )
 
         console.print(f"✅ Created {self.refact_config_path}")
 

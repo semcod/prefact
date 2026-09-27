@@ -145,7 +145,7 @@ def run_benchmark(num_files: int = 100, file_size_kb: int = 1) -> Dict[str, floa
         create_test_files(base_dir, num_files, file_size_kb)
 
         # Create config
-        config = Config(
+        bench_config = Config(
             project_root=base_dir,
             package_name="test_package",
             dry_run=True,
@@ -154,13 +154,13 @@ def run_benchmark(num_files: int = 100, file_size_kb: int = 1) -> Dict[str, floa
 
         # Benchmark without RAM preloading
         print("Running benchmark WITHOUT RAM preloading...")
-        time_without = benchmark_without_rampreload(config)
+        time_without = benchmark_without_rampreload(bench_config)
         results["without_ram_preload"] = time_without
         print(f"  Time: {time_without:.4f} seconds")
 
         # Benchmark with RAM preloading
         print("Running benchmark WITH RAM preloading...")
-        time_with = benchmark_with_rampreload(config)
+        time_with = benchmark_with_rampreload(bench_config)
         results["with_ram_preload"] = time_with
         print(f"  Time: {time_with:.4f} seconds")
 

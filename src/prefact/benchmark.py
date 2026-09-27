@@ -93,13 +93,14 @@ class ScanProbe(BenchmarkProbe):
                     file_text += f"\n# {pad}\n"
                 (base / f"m{i:04d}.py").write_text(file_text, encoding="utf-8")
 
-            config = Config(
-                project_root=base,
-                package_name="bench",
-                dry_run=True,
-                verbose=False,
+            scan_engine = RefactoringEngine(
+                Config(
+                    project_root=base,
+                    package_name="bench",
+                    dry_run=True,
+                    verbose=False,
+                )
             )
-            scan_engine = RefactoringEngine(config)
 
             t0 = time.perf_counter()
             engine_report = scan_engine.run(dry_run=True)
@@ -148,10 +149,9 @@ def _make_inprocess_probe() -> ThroughputProbe:
             p.write_text(src, encoding="utf-8")
             files.append(p)
 
-        config = Config(
-            project_root=base, package_name="bench", dry_run=True, verbose=False
+        scanner = Scanner(
+            Config(project_root=base, package_name="bench", dry_run=True, verbose=False)
         )
-        scanner = Scanner(config)
         _state["scanner"] = scanner
         _state["files"] = files
         _state["base"] = base

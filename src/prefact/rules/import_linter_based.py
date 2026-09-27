@@ -359,25 +359,25 @@ class ImportLinterCustomArchitecture(BaseRule):
         """Load custom architectural configuration."""
         custom_rules = self.config.get_rule_option(self.rule_id, "rules", {})
 
-        config = {"root_package": self.config.package_name or "planfile"}
+        linter_config = {"root_package": self.config.package_name or "planfile"}
 
         # Add custom layers
         if "layers" in custom_rules:
-            config["layers"] = custom_rules["layers"]
+            linter_config["layers"] = custom_rules["layers"]
 
         # Add custom dependencies
         if "dependencies" in custom_rules:
-            config["dependencies"] = custom_rules["dependencies"]
+            linter_config["dependencies"] = custom_rules["dependencies"]
 
         # Add forbidden patterns
         if "forbidden" in custom_rules:
-            config["forbidden"] = custom_rules["forbidden"]
+            linter_config["forbidden"] = custom_rules["forbidden"]
 
         # Add independence rules
         if "independence" in custom_rules:
-            config["independence"] = custom_rules["independence"]
+            linter_config["independence"] = custom_rules["independence"]
 
-        return config
+        return linter_config
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []

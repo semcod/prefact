@@ -24,38 +24,38 @@ class ProjectScanner(BaseManager):
         """Scan project for issues."""
         try:
             # Load configuration
-            config = ExtendedConfig.from_yaml(self.refact_config_path)
+            scan_config = ExtendedConfig.from_yaml(self.refact_config_path)
             # Force set include from YAML if it's None
-            if config.include is None:
-                config.include = ["**/*.py"]
-            if config.exclude is None:
-                config.exclude = []
+            if scan_config.include is None:
+                scan_config.include = ["**/*.py"]
+            if scan_config.exclude is None:
+                scan_config.exclude = []
             from rich.markdown import Markdown
 
             info_md = f"""## Scan Configuration
 
-**Project root:** `{config.project_root}`
+**Project root:** `{scan_config.project_root}`
 
 **Include patterns:**
 ```
-{chr(10).join(f"- `{p}`" for p in config.include)}
+{chr(10).join(f"- `{p}`" for p in scan_config.include)}
 ```
 """
             # Merge CLI exclude patterns with config file patterns
             if self.exclude_patterns:
-                config.exclude = list(config.exclude or []) + list(
+                scan_config.exclude = list(scan_config.exclude or []) + list(
                     self.exclude_patterns
                 )
                 info_md += f"""
 **Exclude patterns:**
 ```
-{chr(10).join(f"- `{p}`" for p in config.exclude)}
+{chr(10).join(f"- `{p}`" for p in scan_config.exclude)}
 ```
 """
             console.print(Markdown(info_md))
 
             # Get list of files to scan
-            scanner = Scanner(config)
+            scanner = Scanner(scan_config)
             files_to_scan = list(scanner.collect_files())
             max_files_to_scan = self.get_autonomous_limit(
                 "autonomous_max_files_to_scan"
@@ -88,7 +88,7 @@ class ProjectScanner(BaseManager):
 
             # Show progress bar and scan files
             issues_found = self._scan_files_with_progress(
-                scanner, files_to_scan, config
+                scanner, files_to_scan, scan_config
             )
 
             # Store issues for other modules

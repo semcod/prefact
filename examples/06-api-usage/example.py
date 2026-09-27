@@ -2,6 +2,7 @@
 """Example of using prefact programmatically."""
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 
 from prefact.config import Config
@@ -16,24 +17,23 @@ def run_prefact_example(
     # Create configuration
     if config_file and config_file.exists():
         print(f"Loading config from {config_file}")
-        config = Config.from_yaml(config_file)
+        base_config = Config.from_yaml(config_file)
     else:
         print("Using default configuration")
-        config = Config()
+        base_config = Config()
 
-    # Override project path
-    config.project_root = project_path.resolve()
-
-    # Set dry run mode
-    config.dry_run = dry_run
+    # Apply the example's overrides (project path, dry run) in one step
+    run_config = replace(
+        base_config, project_root=project_path.resolve(), dry_run=dry_run
+    )
 
     # Create and run engine
     print(f"\n🔍 Scanning {project_path}")
-    print(f"Package: {config.package_name or 'auto-detect'}")
+    print(f"Package: {run_config.package_name or 'auto-detect'}")
     print(f"Dry run: {dry_run}")
     print("-" * 50)
 
-    engine_result = RefactoringEngine(config).run()
+    engine_result = RefactoringEngine(run_config).run()
 
     # Display results
     print("\n📊 Results:")
@@ -89,9 +89,9 @@ def another_function():
 """)
 
     # Create config with custom rules
-    config = Config()
-    config.project_root = temp_dir.resolve()
-    config.package_name = "temp_project"
+    run_config = Config(
+        project_root=temp_dir.resolve(), package_name="temp_project"
+    )
 
     # Import custom rules
     try:
@@ -103,7 +103,7 @@ def another_function():
         return
 
     # Run with custom rules
-    custom_run = RefactoringEngine(config).run()
+    custom_run = RefactoringEngine(run_config).run()
 
     print("\nCustom rule results:")
     print(
@@ -134,11 +134,12 @@ def batch_processing_example():
     for project in projects:
         if project.exists():
             print(f"\nProcessing {project.name}...")
-            config = Config()
-            config.project_root = project.resolve()
-            config.dry_run = True  # Don't actually fix
+            project_config = Config(
+                project_root=project.resolve(),
+                dry_run=True,  # Don't actually fix
+            )
 
-            batch_run = RefactoringEngine(config).run()
+            batch_run = RefactoringEngine(project_config).run()
 
             results.append(
                 {

@@ -38,7 +38,7 @@ class ConfigGenerator:
         if rules is None:
             rules = ["unused-imports", "relative-imports", "missing-return-type"]
 
-        config: Dict[str, Any] = {
+        extended_config: Dict[str, Any] = {
             "project_root": str(project_root),
             "package_name": project_root.name,
             "include": list(DEFAULT_INCLUDE),
@@ -80,7 +80,7 @@ class ConfigGenerator:
         }
 
         if "ruff" in tools:
-            config["tools"]["ruff"] = {
+            extended_config["tools"]["ruff"] = {
                 "enabled": True,
                 "max_line_length": DEFAULT_MAX_LINE_LENGTH,
                 "select": ["E", "F", "W", "I"],
@@ -88,14 +88,14 @@ class ConfigGenerator:
             }
 
         if "mypy" in tools:
-            config["tools"]["mypy"] = {
+            extended_config["tools"]["mypy"] = {
                 "enabled": True,
                 "strict": False,
                 "ignore_missing_imports": True,
             }
 
         if "isort" in tools:
-            config["tools"]["isort"] = {
+            extended_config["tools"]["isort"] = {
                 "enabled": True,
                 "profile": "black",
                 "multi_line_output": 3,
@@ -103,25 +103,25 @@ class ConfigGenerator:
 
         for rule_id in rules:
             if rule_id == "unused-imports":
-                config["rules"][rule_id] = {
+                extended_config["rules"][rule_id] = {
                     "enabled": True,
                     "tools": ["ruff", "autoflake"],
                     "severity": "error",
                 }
             elif rule_id == "relative-imports":
-                config["rules"][rule_id] = {
+                extended_config["rules"][rule_id] = {
                     "enabled": True,
                     "tools": ["libcst"],
                     "auto_fix": True,
                 }
             elif rule_id == "missing-return-type":
-                config["rules"][rule_id] = {
+                extended_config["rules"][rule_id] = {
                     "enabled": True,
                     "tools": ["mypy"],
                     "severity": "warning",
                 }
             elif rule_id == "llm-hallucinations":
-                config["rules"][rule_id] = {
+                extended_config["rules"][rule_id] = {
                     "enabled": True,
                     "patterns": [
                         {"pattern": "TODO: implement", "severity": "warning"},
@@ -129,13 +129,13 @@ class ConfigGenerator:
                     ],
                 }
             elif rule_id == "magic-numbers":
-                config["rules"][rule_id] = {
+                extended_config["rules"][rule_id] = {
                     "enabled": True,
                     "threshold": 10,
                     "allowed_numbers": [0, 1, -1, 2, 10, 100],
                 }
 
-        return yaml.dump(config, default_flow_style=False, sort_keys=False)
+        return yaml.dump(extended_config, default_flow_style=False, sort_keys=False)
 
     @staticmethod
     def generate_composite_rule_config(

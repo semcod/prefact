@@ -28,7 +28,7 @@ class ISortedImports(BaseRule):
 
     def _load_isort_config(self) -> Dict:
         """Load ISort configuration from prefact config."""
-        config = {
+        isort_settings = {
             "profile": self.config.get_rule_option(self.rule_id, "profile", "black"),
             "line_length": self.config.get_rule_option(
                 self.rule_id, "line_length", DEFAULT_MAX_LINE_LENGTH
@@ -49,9 +49,9 @@ class ISortedImports(BaseRule):
         custom_settings = self.config.get_rule_option(
             self.rule_id, "custom_settings", {}
         )
-        config.update(custom_settings)
+        isort_settings.update(custom_settings)
 
-        return config
+        return isort_settings
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         # Skip if isort is not available

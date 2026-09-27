@@ -163,13 +163,13 @@ class TodoManager(BaseManager):
         """Get configuration for the refactoring engine."""
         if self.refact_config_path.exists():
             try:
-                config = ExtendedConfig.from_yaml(self.refact_config_path)
+                engine_config = ExtendedConfig.from_yaml(self.refact_config_path)
             except Exception:
-                config = Config.from_yaml(self.refact_config_path)
+                engine_config = Config.from_yaml(self.refact_config_path)
         else:
-            config = Config()
-        config.project_root = self.project_root
-        return config
+            engine_config = Config()
+        engine_config.project_root = self.project_root
+        return engine_config
 
     def _limit_todo_execution_tasks(
         self, active_tasks: List[Dict[str, Any]]
@@ -192,9 +192,9 @@ class TodoManager(BaseManager):
         self, active_tasks: List[Dict[str, Any]]
     ) -> Tuple[int, List[str]]:
         """Execute TODO tasks and return count of fixed tasks and completed task lines."""
-        config = self._get_refactoring_config()
-        scanner = Scanner(config)
-        fixer = Fixer(config)
+        engine_config = self._get_refactoring_config()
+        scanner = Scanner(engine_config)
+        fixer = Fixer(engine_config)
         executed_count = 0
         completed_tasks = []
 

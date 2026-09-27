@@ -62,8 +62,9 @@ class ParallelScanTask:
 
         # Perform actual scan
         # TODO: Fix parallel module to use correct API
-        config = Config.from_dict(self.config_dict)  # type: ignore[attr-defined]
-        scan_output = RefactoringEngine(config).scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
+        scan_output = RefactoringEngine(
+            Config.from_dict(self.config_dict)  # type: ignore[attr-defined]
+        ).scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
 
         # Cache scan_output if enabled
         if self.cache_enabled:
@@ -214,8 +215,9 @@ class ParallelEngine:
 
         for file_to_fix in file_paths:
             try:
-                config = Config.from_dict(self.config.to_dict())  # type: ignore[attr-defined]
-                fix_output = RefactoringEngine(config).run_file(file_to_fix, rule_ids)  # type: ignore[misc]
+                fix_output = RefactoringEngine(
+                    Config.from_dict(self.config.to_dict())  # type: ignore[attr-defined]
+                ).run_file(file_to_fix, rule_ids)  # type: ignore[misc]
                 results.append(fix_output)
             except Exception as e:
                 error_result = {
@@ -288,8 +290,9 @@ def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> Dict[str, 
     """Worker function for scanning a single file."""
     scan_target, config_dict, rule_ids = args
 
-    config = Config.from_dict(config_dict)  # type: ignore[attr-defined]
-    return RefactoringEngine(config).scan_file(scan_target, rule_ids)  # type: ignore[attr-defined]
+    return RefactoringEngine(
+        Config.from_dict(config_dict)  # type: ignore[attr-defined]
+    ).scan_file(scan_target, rule_ids)  # type: ignore[attr-defined]
 
 
 # Performance monitoring
