@@ -94,7 +94,9 @@ class LLMHallucinationRule(BaseRule):
             for pattern_config in self.patterns:
                 pattern = pattern_config["pattern"]
                 severity_str = pattern_config.get("severity", "warning")
-                message = pattern_config.get("message", f"Pattern matched: {pattern}")
+                pattern_message = pattern_config.get(
+                    "message", f"Pattern matched: {pattern}"
+                )
 
                 if re.search(pattern, line, re.IGNORECASE):
                     severity = self._map_severity(severity_str)
@@ -105,7 +107,7 @@ class LLMHallucinationRule(BaseRule):
                             file=path,
                             line=line_num,
                             col=0,
-                            message=message,
+                            message=pattern_message,
                             severity=severity,
                             original=line.strip(),
                         )

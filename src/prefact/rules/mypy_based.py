@@ -366,9 +366,9 @@ class SmartReturnTypeRule(BaseRule):
                     # Try to infer return type
                     inferred = ReturnTypeInferrer.infer_return_type(source, node.name)
 
-                    message = f"Function '{node.name}' missing return type"
+                    finding_message = f"Function '{node.name}' missing return type"
                     if inferred:
-                        message += f" (suggested: -> {inferred})"
+                        finding_message += f" (suggested: -> {inferred})"
 
                     issues.append(
                         Issue(
@@ -376,7 +376,7 @@ class SmartReturnTypeRule(BaseRule):
                             file=path,
                             line=node.lineno,
                             col=node.col_offset,
-                            message=message,
+                            message=finding_message,
                             severity=Severity.INFO,
                             original=f"def {node.name}(...):",
                             suggested=f"def {node.name}(...) -> {inferred or 'Any'}:"

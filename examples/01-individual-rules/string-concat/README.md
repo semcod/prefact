@@ -20,8 +20,8 @@ This example demonstrates the `string-concat` rule which converts string concate
 **Before:**
 ```python
 def greet(name, age):
-    message = "Hello " + name + ", you are " + str(age) + " years old"
-    return message
+    greeting = "Hello " + name + ", you are " + str(age) + " years old"
+    return greeting
 
 def format_data(data):
     result = "Data: " + str(data)
@@ -31,8 +31,8 @@ def format_data(data):
 **After:**
 ```python
 def greet(name, age):
-    message = f"Hello {name}, you are {age} years old"
-    return message
+    greeting = f"Hello {name}, you are {age} years old"
+    return greeting
 
 def format_data(data):
     result = f"Data: {data}"

@@ -101,8 +101,8 @@ def main():
         task = progress.add_task("Running examples...", total=len(examples))
 
         for example_dir in examples:
-            success, message = run_example(example_dir)
-            results.append((example_dir.name, success, message))
+            success, status_message = run_example(example_dir)
+            results.append((example_dir.name, success, status_message))
             progress.advance(task)
 
     # Show results table
@@ -112,10 +112,10 @@ def main():
     table.add_column("Message")
 
     success_count = 0
-    for name, success, message in results:
+    for name, success, status_message in results:
         status = "✅ Passed" if success else "❌ Failed"
         style = "green" if success else "red"
-        table.add_row(name, f"[{style}]{status}[/{style}]", message)
+        table.add_row(name, f"[{style}]{status}[/{style}]", status_message)
         if success:
             success_count += 1
 

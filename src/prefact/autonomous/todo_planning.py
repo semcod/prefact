@@ -165,7 +165,7 @@ def parse_todo_tasks(owned: str) -> List[Dict[str, Any]]:
             task_line = line.strip()[CHECKBOX_PREFIX_LEN:]
             if " - " in task_line:
                 file_line_part = task_line.split(" - ")[0]
-                message = task_line.split(" - ", 1)[1]
+                task_message = task_line.split(" - ", 1)[1]
 
                 if ":" in file_line_part:
                     file_path = file_line_part.rsplit(":", 1)[0]
@@ -174,7 +174,7 @@ def parse_todo_tasks(owned: str) -> List[Dict[str, Any]]:
                         {
                             "file": file_path,
                             "line": line_num,
-                            "message": message,
+                            "message": task_message,
                             "original_line": line,
                         }
                     )

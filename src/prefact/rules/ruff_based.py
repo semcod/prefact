@@ -197,9 +197,9 @@ class RuffUnusedImports(BaseRule):
 
         for item in results:
             # Extract import name from message
-            message = item["message"]
-            if "`" in message:
-                flagged_import = message.split("`")[1]
+            diagnostic_message = item["message"]
+            if "`" in diagnostic_message:
+                flagged_import = diagnostic_message.split("`")[1]
                 issues.append(
                     Issue(
                         rule_id=self.rule_id,

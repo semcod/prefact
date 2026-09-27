@@ -69,7 +69,7 @@ class ImportLinterHelper:
                         violation_fields = line.split(" - ", 1)
                         if len(violation_fields) == 2:
                             file_part = violation_fields[0]
-                            message = violation_fields[1]
+                            violation_message = violation_fields[1]
 
                             # Extract file and line
                             if ":" in file_part:
@@ -86,7 +86,7 @@ class ImportLinterHelper:
                                 {
                                     "file": file_path,
                                     "line": line_num,
-                                    "message": message,
+                                    "message": violation_message,
                                     "type": "violation",
                                 }
                             )
@@ -385,10 +385,10 @@ class ImportLinterCustomArchitecture(BaseRule):
 
         for item in results:
             # Determine severity based on rule type
-            message = item.get("message", "").lower()
-            if "forbidden" in message:
+            lowered_message = item.get("message", "").lower()
+            if "forbidden" in lowered_message:
                 severity = Severity.ERROR
-            elif "violation" in message:
+            elif "violation" in lowered_message:
                 severity = Severity.WARNING
             else:
                 severity = Severity.INFO
