@@ -212,14 +212,14 @@ class ParallelEngine:
         # So we'll process sequentially but in parallel for scanning
         results = []
 
-        for file_path in file_paths:
+        for file_to_fix in file_paths:
             try:
                 config = Config.from_dict(self.config.to_dict())  # type: ignore[attr-defined]
-                fix_output = RefactoringEngine(config).run_file(file_path, rule_ids)  # type: ignore[misc]
+                fix_output = RefactoringEngine(config).run_file(file_to_fix, rule_ids)  # type: ignore[misc]
                 results.append(fix_output)
             except Exception as e:
                 error_result = {
-                    "file": file_path,
+                    "file": file_to_fix,
                     "issues": [],
                     "fixes": [],
                     "errors": [str(e)],
@@ -250,13 +250,13 @@ class ParallelScanner:
         # Find all Python files
         file_paths = []
         for pattern in self.config.include:
-            for file_path in directory.glob(pattern):
-                if file_path.is_file():
+            for matched_file in directory.glob(pattern):
+                if matched_file.is_file():
                     # Check exclude patterns
                     if not any(
-                        file_path.match(exclude) for exclude in exclude_patterns
+                        matched_file.match(exclude) for exclude in exclude_patterns
                     ):
-                        file_paths.append(file_path)
+                        file_paths.append(matched_file)
 
         # Scan in parallel
         return self.engine.scan_files(file_paths, rule_ids)
@@ -286,10 +286,10 @@ def init_worker() -> None:  # type: ignore[no-untyped-def]
 
 def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> Dict[str, Any]:
     """Worker function for scanning a single file."""
-    file_path, config_dict, rule_ids = args
+    scan_target, config_dict, rule_ids = args
 
     config = Config.from_dict(config_dict)  # type: ignore[attr-defined]
-    return RefactoringEngine(config).scan_file(file_path, rule_ids)  # type: ignore[attr-defined]
+    return RefactoringEngine(config).scan_file(scan_target, rule_ids)  # type: ignore[attr-defined]
 
 
 # Performance monitoring
