@@ -68,10 +68,10 @@ class StringConcatTransformer(cst.CSTTransformer):
                 collect(n.right)
             elif isinstance(n, cst.SimpleString):
                 # Evaluate the string value
-                value = self._eval_string(n)
-                if value is not None:
+                string_value = self._eval_string(n)
+                if string_value is not None:
                     collected_parts.append(
-                        {"type": "string", "value": value, "node": n}
+                        {"type": "string", "value": string_value, "node": n}
                     )
             else:
                 # This is a variable or expression

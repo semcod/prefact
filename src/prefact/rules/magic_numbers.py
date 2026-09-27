@@ -61,22 +61,22 @@ class MagicNumberRule(BaseRule):
 
     def _extract_literal_issues(self, path: Path, node: ast.AST) -> List[Issue]:
         """Extract issues from literal numeric constants."""
-        value = None
+        number_value = None
         if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
-            value = node.value
+            number_value = node.value
         elif hasattr(ast, "Num") and isinstance(node, ast.Num):  # For older Python versions
-            value = node.n
+            number_value = node.n
 
-        if value is not None and self._is_magic_number(value):
+        if number_value is not None and self._is_magic_number(number_value):
             return [
                 Issue(
                     rule_id=self.rule_id,
                     file=path,
                     line=node.lineno,
                     col=node.col_offset,
-                    message=f"Magic number: {value} - use named constant",
+                    message=f"Magic number: {number_value} - use named constant",
                     severity=Severity.INFO,
-                    original=str(value),
+                    original=str(number_value),
                     suggested="CONSTANT_NAME",
                 )
             ]

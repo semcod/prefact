@@ -56,12 +56,12 @@ class Cache:
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get value from cache."""
-        value = self.cache.get(key, default)
-        if value is not default:
+        cached = self.cache.get(key, default)
+        if cached is not default:
             self.stats["hits"] += 1
         else:
             self.stats["misses"] += 1
-        return value
+        return cached
 
     def set(self, key: str, value: Any, expire: Optional[int] = None) -> None:
         """Set value in cache."""

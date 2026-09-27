@@ -9,8 +9,8 @@ def process_data(data: List[str]) -> Dict[str, Any]:
     item_map = {}
     for item in data:
         key = item.lower()
-        value = len(item)
-        item_map[key] = value
+        item_length = len(item)
+        item_map[key] = item_length
     return item_map
 
 
