@@ -1,41 +1,20 @@
 """Example file with unused imports that should be removed."""
 
 import datetime
-from typing import Any, Dict, List  # Optional is unused
+import json  # Unused
+import os  # Unused
+from pathlib import Path  # Unused
+from typing import Any
+
+from data_helpers import DataProcessor, format_timestamp, process_data, read_file
 
 
-def process_data(data: List[str]) -> Dict[str, Any]:
-    """Process some data."""
-    item_map = {}
-    for item in data:
-        key = item.lower()
-        item_length = len(item)
-        item_map[key] = item_length
-    return item_map
-
-
-def format_timestamp(ts: datetime.datetime) -> str:
-    """Format a timestamp."""
-    return ts.strftime("%Y-%m-%d %H:%M:%S")
-
-
-def read_file(filepath: str) -> str:
-    """Read file contents."""
-    with open(filepath) as f:
-        return f.read()
-
-
-class DataProcessor:
-    """A class with unused imports."""
-
-    def __init__(self):
-        self.data = {}
-        self.timestamp = datetime.datetime.now()
-
-    def add_data(self, key: str, value: Any) -> None:
-        """Add data to processor."""
-        self.data[key] = value
-
-    def get_data(self, key: str) -> Any:
-        """Get data from processor."""
-        return self.data.get(key)
+def build_summary(filepath: str) -> dict[str, Any]:
+    """Summarize a file using the shared data helpers."""
+    processor = DataProcessor()
+    for key, item_length in process_data(read_file(filepath).splitlines()).items():
+        processor.add_data(key, item_length)
+    return {
+        "entries": processor.data,
+        "generated_at": format_timestamp(processor.timestamp),
+    }
