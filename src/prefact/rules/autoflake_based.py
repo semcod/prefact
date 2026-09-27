@@ -233,8 +233,8 @@ class AutoflakeHelper:
         tmp_path = create_temp_file_with_source(source)
 
         try:
-            success = AutoflakeHelper.fix_file(Path(tmp_path), config)
-            if success:
+            autoflake_applied = AutoflakeHelper.fix_file(Path(tmp_path), config)
+            if autoflake_applied:
                 with open(tmp_path) as f:
                     return f.read()
             return source

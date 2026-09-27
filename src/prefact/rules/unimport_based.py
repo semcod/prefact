@@ -109,8 +109,8 @@ class UnimportHelper:
             tmp_path = tmp.name
 
         try:
-            success = UnimportHelper.fix_file(Path(tmp_path), config)
-            if success:
+            unimport_applied = UnimportHelper.fix_file(Path(tmp_path), config)
+            if unimport_applied:
                 with open(tmp_path) as f:
                     return f.read()
             return source

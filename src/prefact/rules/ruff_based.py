@@ -72,8 +72,8 @@ class RuffHelper:
             tmp_path = tmp.name
 
         try:
-            success = RuffHelper.fix_file(Path(tmp_path), select_codes)
-            if success:
+            ruff_applied = RuffHelper.fix_file(Path(tmp_path), select_codes)
+            if ruff_applied:
                 with open(tmp_path) as f:
                     return f.read()
             return source
@@ -161,10 +161,10 @@ class RuffPrintStatements(BaseRule):
             return source, []
 
         # Ruff can remove print statements
-        success = RuffHelper.fix_file(path, ["T201"])
+        prints_removed = RuffHelper.fix_file(path, ["T201"])
         fixes = []
 
-        if success:
+        if prints_removed:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
                 fixes.append(
@@ -221,10 +221,10 @@ class RuffUnusedImports(BaseRule):
             return source, []
 
         # Use Ruff to remove unused imports
-        success = RuffHelper.fix_file(path, ["F401"])
+        unused_imports_removed = RuffHelper.fix_file(path, ["F401"])
         fixes = []
 
-        if success:
+        if unused_imports_removed:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
                 fixes.append(
@@ -286,10 +286,10 @@ class RuffSortedImports(BaseRule):
             return source, []
 
         # Use Ruff to sort imports
-        success = RuffHelper.fix_file(path, ["I001", "I002"])
+        sort_applied = RuffHelper.fix_file(path, ["I001", "I002"])
         fixes = []
 
-        if success:
+        if sort_applied:
             fixed_source = path.read_text(encoding="utf-8")
             for issue in issues:
                 fixes.append(

@@ -353,13 +353,13 @@ def autonomous_cmd(
         return
 
     # Run full autonomous process
-    success = auto.run_autonomous(
+    autonomous_ok = auto.run_autonomous(
         skip_examples=skip_examples,
         with_testql=with_testql,
         testql_scenarios_dir=testql_dir,
     )
 
-    if not success:
+    if not autonomous_ok:
         raise SystemExit(1)
 
 

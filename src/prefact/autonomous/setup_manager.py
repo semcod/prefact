@@ -96,7 +96,7 @@ class SetupManager(BaseManager):
             console.print("⚠️ No example configurations found", style="yellow")
             return True
 
-        success = True
+        all_examples_passed = True
 
         with Progress() as progress:
             task = progress.add_task("Running examples...", total=len(example_configs))
@@ -127,7 +127,7 @@ class SetupManager(BaseManager):
                             f"❌ Example {example_dir.name} failed: {scan_process.stderr}",
                             style="red",
                         )
-                        success = False
+                        all_examples_passed = False
                     else:
                         console.print(f"✅ Example {example_dir.name} passed")
 
@@ -135,8 +135,8 @@ class SetupManager(BaseManager):
                     console.print(
                         f"❌ Error running example {example_dir.name}: {e}", style="red"
                     )
-                    success = False
+                    all_examples_passed = False
 
                 progress.advance(task)
 
-        return success
+        return all_examples_passed
