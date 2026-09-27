@@ -3,12 +3,8 @@
 from pathlib import Path
 from typing import Dict, Optional
 
-from rich.console import Console
-
+from prefact._base import console as console
 from prefact.config_extended import ExtendedConfig
-
-# Shared console instance
-console = Console()
 
 # Constants for code analysis
 MIN_CODE_SIZE = 50
