@@ -41,11 +41,11 @@ class StringConcatTransformer(cst.CSTTransformer):
             return updated_node
 
         # Collect all string parts
-        parts = self._collect_string_parts(updated_node)
+        concat_parts = self._collect_string_parts(updated_node)
 
-        if parts and self._should_transform(parts):
+        if concat_parts and self._should_transform(concat_parts):
             # Create f-string
-            fstring = self._create_fstring(parts)
+            fstring = self._create_fstring(concat_parts)
             if fstring:
                 self.fixes.append(
                     {
@@ -60,7 +60,7 @@ class StringConcatTransformer(cst.CSTTransformer):
 
     def _collect_string_parts(self, node: cst.BinaryOperation) -> List[dict]:
         """Recursively collect all parts of a string concatenation."""
-        parts = []
+        collected_parts = []
 
         def collect(n) -> None:
             if isinstance(n, cst.BinaryOperation) and isinstance(n.operator, cst.Add):
@@ -70,13 +70,15 @@ class StringConcatTransformer(cst.CSTTransformer):
                 # Evaluate the string value
                 value = self._eval_string(n)
                 if value is not None:
-                    parts.append({"type": "string", "value": value, "node": n})
+                    collected_parts.append(
+                        {"type": "string", "value": value, "node": n}
+                    )
             else:
                 # This is a variable or expression
-                parts.append({"type": "expr", "node": n})
+                collected_parts.append({"type": "expr", "node": n})
 
         collect(node)
-        return parts
+        return collected_parts
 
     def _eval_string(self, node: cst.SimpleString) -> Optional[str]:
         """Evaluate a string literal node."""

@@ -61,10 +61,10 @@ def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
                         console.print(f"  [red]{v.file}: {err}[/red]")
 
     console.print()
-    parts = [
+    summary_fields = [
         f"[bold]{result.total_issues}[/bold] issue(s)",
         f"[green]{result.total_fixed}[/green] fixed",
         f"[red]{result.total_failed}[/red] failed",
     ]
-    console.print(" │ ".join(parts))
+    console.print(" │ ".join(summary_fields))
     console.print()

@@ -64,15 +64,15 @@ class ImportCheckerHelper:
         """Convert file path to module name."""
         # This is simplified - real implementation would need
         # to consider PYTHONPATH and package structure
-        parts = file_path.with_suffix("").parts
+        path_segments = file_path.with_suffix("").parts
 
         # Remove common parent directories
-        if "src" in parts:
-            parts = parts[parts.index("src") + 1 :]
-        elif "lib" in parts:
-            parts = parts[parts.index("lib") + 1 :]
+        if "src" in path_segments:
+            path_segments = path_segments[path_segments.index("src") + 1 :]
+        elif "lib" in path_segments:
+            path_segments = path_segments[path_segments.index("lib") + 1 :]
 
-        return ".".join(parts)
+        return ".".join(path_segments)
 
     @staticmethod
     def check_source(source: str, module_name: str = "temp_module") -> List[Dict]:
@@ -159,10 +159,10 @@ class ImportCheckerUnusedImports(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 # Extract import names
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
-                        imports = parts[PORT_3].split(",")
+                    from_tokens = stripped.split()
+                    if len(from_tokens) >= CONSTANT_4:
+                        module = from_tokens[1]
+                        imports = from_tokens[PORT_3].split(",")
                         for imp in imports:
                             name = imp.strip().split(" as ")[0]
                             import_lines[name] = str(i + 1)
@@ -342,14 +342,14 @@ class ImportDependencyAnalysis(BaseRule):
             stripped = line.strip()
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
+                    statement_tokens = stripped.split()
+                    if len(statement_tokens) >= CONSTANT_4:
+                        module = statement_tokens[1]
                         imports.append({"name": module, "line": i + 1, "type": "from"})
                 else:
-                    parts = stripped.split()
-                    if len(parts) >= 2:
-                        module = parts[1].split(".")[0]
+                    statement_tokens = stripped.split()
+                    if len(statement_tokens) >= 2:
+                        module = statement_tokens[1].split(".")[0]
                         imports.append(
                             {"name": module, "line": i + 1, "type": "import"}
                         )
@@ -446,10 +446,10 @@ class ImportOptimizer(BaseRule):
             stripped = line.strip()
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
-                        names = parts[PORT_3].split(",")
+                    from_tokens = stripped.split()
+                    if len(from_tokens) >= CONSTANT_4:
+                        module = from_tokens[1]
+                        names = from_tokens[PORT_3].split(",")
                         for name in names:
                             clean_name = name.strip().split(" as ")[0]
                             imports.append(

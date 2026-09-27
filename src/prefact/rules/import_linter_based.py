@@ -66,10 +66,10 @@ class ImportLinterHelper:
                 for line in lines:
                     if " - " in line:
                         # Parse violation
-                        parts = line.split(" - ", 1)
-                        if len(parts) == 2:
-                            file_part = parts[0]
-                            message = parts[1]
+                        violation_fields = line.split(" - ", 1)
+                        if len(violation_fields) == 2:
+                            file_part = violation_fields[0]
+                            message = violation_fields[1]
 
                             # Extract file and line
                             if ":" in file_part:

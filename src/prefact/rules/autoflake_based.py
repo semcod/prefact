@@ -138,14 +138,14 @@ def extract_import_name(line: str) -> str:
     if "import " in clean_line:
         if clean_line.startswith("from "):
             # from x import y
-            parts = clean_line.split()
-            if len(parts) >= 4:
-                return parts[3]
+            import_tokens = clean_line.split()
+            if len(import_tokens) >= 4:
+                return import_tokens[3]
         else:
             # import x
-            parts = clean_line.split()
-            if len(parts) >= 2:
-                return parts[1].split(",")[0]
+            import_tokens = clean_line.split()
+            if len(import_tokens) >= 2:
+                return import_tokens[1].split(",")[0]
 
     return "unknown"
 

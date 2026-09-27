@@ -53,13 +53,13 @@ class TodoManager(BaseManager):
     def _write_owned_block(self, block: str) -> None:
         """Replace prefact's block in TODO.md, preserving manual content."""
         before, _owned, after = self._split_existing()
-        parts: List[str] = []
+        sections: List[str] = []
         if before.strip():
-            parts.append(before.rstrip() + "\n\n")
-        parts.append(f"{PREFACT_BEGIN}\n{block.rstrip()}\n{PREFACT_END}\n")
+            sections.append(before.rstrip() + "\n\n")
+        sections.append(f"{PREFACT_BEGIN}\n{block.rstrip()}\n{PREFACT_END}\n")
         if after.strip():
-            parts.append("\n" + after.strip() + "\n")
-        self.todo_path.write_text("".join(parts))
+            sections.append("\n" + after.strip() + "\n")
+        self.todo_path.write_text("".join(sections))
 
     def update_todo_md(self) -> None:
         """Update TODO.md with current issues, marking completed tasks."""

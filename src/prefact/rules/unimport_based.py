@@ -79,9 +79,9 @@ class UnimportHelper:
         """Extract import name from unimport output."""
         # Example output: "unused import 'os' found"
         if "'" in line:
-            parts = line.split("'")
-            if len(parts) >= 3:
-                return parts[1]
+            quoted_segments = line.split("'")
+            if len(quoted_segments) >= 3:
+                return quoted_segments[1]
         return None
 
     @staticmethod
@@ -154,14 +154,14 @@ class UnimportUnusedImports(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 # Extract import names
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= 4:
-                        declared_import = parts[3]
+                    import_tokens = stripped.split()
+                    if len(import_tokens) >= 4:
+                        declared_import = import_tokens[3]
                         import_lines[declared_import] = f"{i}{1}"
                 else:
-                    parts = stripped.split()
-                    if len(parts) >= 2:
-                        declared_import = parts[1].split(",")[0]
+                    import_tokens = stripped.split()
+                    if len(import_tokens) >= 2:
+                        declared_import = import_tokens[1].split(",")[0]
                         import_lines[declared_import] = f"{i}{1}"
 
         for item in results:
