@@ -170,8 +170,8 @@ def validate_unused_imports(
     fixed: str, autoflake_config: Dict, path: Path
 ) -> ValidationResult:
     """Validate that no unused imports remain."""
-    remaining = AutoflakeHelper.check_source(fixed, autoflake_config)
-    unused_imports = [r for r in remaining if r["type"] == "unused_import"]
+    remaining_issues = AutoflakeHelper.check_source(fixed, autoflake_config)
+    unused_imports = [r for r in remaining_issues if r["type"] == "unused_import"]
 
     return ValidationResult(
         file=path,
@@ -365,8 +365,8 @@ class AutoflakeUnusedVariables(BaseRule):
         return fixed_source, fixes
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        remaining = AutoflakeHelper.check_source(fixed, self.autoflake_config)
-        unused_vars = [r for r in remaining if r["type"] == "unused_variable"]
+        remaining_issues = AutoflakeHelper.check_source(fixed, self.autoflake_config)
+        unused_vars = [r for r in remaining_issues if r["type"] == "unused_variable"]
 
         return ValidationResult(
             file=path,
