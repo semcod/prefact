@@ -1,5 +1,6 @@
 import ast
 import re
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
@@ -8,6 +9,18 @@ try:
     from prefact.rules import BaseRule, register
 except ImportError:
     from ..rules import BaseRule, register
+
+
+@dataclass
+class ImportRemovalContext:
+    """Context and accumulators for fixing unused imports in a file."""
+
+    path: Path
+    issue: Issue
+    lines: list[str]
+    unused_names: set[str]
+    lines_to_remove: set[int] = field(default_factory=set)
+    fixes: list[Fix] = field(default_factory=list)
 
 
 @register
@@ -68,22 +81,21 @@ class UnusedImports(BaseRule):
         except SyntaxError:
             return source, []
 
-        lines = source.splitlines(keepends=True)
-        lines_to_remove: set[int] = set()
-        fixes: list[Fix] = []
+        ctx = ImportRemovalContext(
+            path=path,
+            issue=issues[0],
+            lines=source.splitlines(keepends=True),
+            unused_names=unused_names,
+        )
 
         for node in ast.iter_child_nodes(tree):
             if isinstance(node, ast.ImportFrom):
-                self.process_import_from(
-                    node, lines, lines_to_remove, fixes, issues[0], path, unused_names
-                )
+                self.process_import_from(node, ctx)
             elif isinstance(node, ast.Import):
-                self.process_import(
-                    node, lines, lines_to_remove, fixes, issues[0], path, unused_names
-                )
+                self.process_import(node, ctx)
 
-        new_lines = self.remove_lines(lines, lines_to_remove)
-        return "".join(new_lines), fixes
+        new_lines = self.remove_lines(ctx.lines, ctx.lines_to_remove)
+        return "".join(new_lines), ctx.fixes
 
     def remove_lines(self, lines: list[str], lines_to_remove: set[int]) -> list[str]:
         return [l for i, l in enumerate(lines, 1) if i not in lines_to_remove]
@@ -91,12 +103,7 @@ class UnusedImports(BaseRule):
     def process_import_from(
         self,
         node: ast.ImportFrom,
-        lines: list[str],
-        lines_to_remove: set[int],
-        fixes: list[Fix],
-        issue: Issue,
-        path: Path,
-        unused_names: set[str],
+        ctx: ImportRemovalContext,
     ) -> None:
         """Process ImportFrom node and mark unused imports for removal."""
         unused_names_in_import = []
@@ -104,19 +111,19 @@ class UnusedImports(BaseRule):
 
         for alias in node.names:
             name = alias.asname or alias.name
-            if name in unused_names:
+            if name in ctx.unused_names:
                 unused_names_in_import.append(alias.name)
             else:
                 all_unused = False
 
         if all_unused:
             # Remove entire import line
-            lines_to_remove.add(node.lineno)
-            fixes.append(
+            ctx.lines_to_remove.add(node.lineno)
+            ctx.fixes.append(
                 Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=lines[node.lineno - 1],
+                    issue=ctx.issue,
+                    file=ctx.path,
+                    original_code=ctx.lines[node.lineno - 1],
                     fixed_code="",
                     applied=True,
                 )
@@ -124,17 +131,17 @@ class UnusedImports(BaseRule):
         elif unused_names_in_import:
             # Remove only unused names from the import
             line_idx = node.lineno - 1
-            if line_idx < len(lines):
-                original_line = lines[line_idx]
+            if line_idx < len(ctx.lines):
+                original_line = ctx.lines[line_idx]
                 modified_line = self._remove_unused_from_line(
                     original_line, unused_names_in_import
                 )
                 if modified_line != original_line:
-                    lines[line_idx] = modified_line
-                    fixes.append(
+                    ctx.lines[line_idx] = modified_line
+                    ctx.fixes.append(
                         Fix(
-                            issue=issue,
-                            file=path,
+                            issue=ctx.issue,
+                            file=ctx.path,
                             original_code=original_line,
                             fixed_code=modified_line,
                             applied=True,
@@ -144,12 +151,7 @@ class UnusedImports(BaseRule):
     def process_import(
         self,
         node: ast.Import,
-        lines: list[str],
-        lines_to_remove: set[int],
-        fixes: list[Fix],
-        issue: Issue,
-        path: Path,
-        unused_names: set[str],
+        ctx: ImportRemovalContext,
     ) -> None:
         """Process Import node and mark unused imports for removal."""
         unused_aliases = []
@@ -157,19 +159,19 @@ class UnusedImports(BaseRule):
 
         for alias in node.names:
             name = alias.asname or alias.name.split(".")[0]
-            if name in unused_names:
+            if name in ctx.unused_names:
                 unused_aliases.append(alias.name)
             else:
                 all_unused = False
 
         if all_unused:
             # Remove entire import line
-            lines_to_remove.add(node.lineno)
-            fixes.append(
+            ctx.lines_to_remove.add(node.lineno)
+            ctx.fixes.append(
                 Fix(
-                    issue=issue,
-                    file=path,
-                    original_code=lines[node.lineno - 1],
+                    issue=ctx.issue,
+                    file=ctx.path,
+                    original_code=ctx.lines[node.lineno - 1],
                     fixed_code="",
                     applied=True,
                 )
@@ -177,17 +179,17 @@ class UnusedImports(BaseRule):
         elif unused_aliases:
             # Remove only unused imports from the line
             line_idx = node.lineno - 1
-            if line_idx < len(lines):
-                original_line = lines[line_idx]
+            if line_idx < len(ctx.lines):
+                original_line = ctx.lines[line_idx]
                 modified_line = self._remove_unused_from_import_line(
                     original_line, unused_aliases
                 )
                 if modified_line != original_line:
-                    lines[line_idx] = modified_line
-                    fixes.append(
+                    ctx.lines[line_idx] = modified_line
+                    ctx.fixes.append(
                         Fix(
-                            issue=issue,
-                            file=path,
+                            issue=ctx.issue,
+                            file=ctx.path,
                             original_code=original_line,
                             fixed_code=modified_line,
                             applied=True,
