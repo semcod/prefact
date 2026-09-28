@@ -20,14 +20,14 @@ DEFAULT_PRIORITY = 99
 
 def _sort_key(node: ast.stmt) -> tuple[int, str]:
     if isinstance(node, ast.Import):
-        name = node.names[0].name
+        module_name = node.names[0].name
     elif isinstance(node, ast.ImportFrom):
-        name = node.module or ""
+        module_name = node.module or ""
     else:
         return (DEFAULT_PRIORITY, "")
-    top = name.split(".")[0]
+    top = module_name.split(".")[0]
     group = 0 if top in _STDLIB else (2 if top.startswith("_") else 1)
-    return (group, name.lower())
+    return (group, module_name.lower())
 
 
 @register
