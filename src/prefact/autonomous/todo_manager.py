@@ -53,13 +53,13 @@ class TodoManager(BaseManager):
     def _write_owned_block(self, block: str) -> None:
         """Replace prefact's block in TODO.md, preserving manual content."""
         before, _owned, after = self._split_existing()
-        parts: List[str] = []
+        sections: List[str] = []
         if before.strip():
-            parts.append(before.rstrip() + "\n\n")
-        parts.append(f"{PREFACT_BEGIN}\n{block.rstrip()}\n{PREFACT_END}\n")
+            sections.append(before.rstrip() + "\n\n")
+        sections.append(f"{PREFACT_BEGIN}\n{block.rstrip()}\n{PREFACT_END}\n")
         if after.strip():
-            parts.append("\n" + after.strip() + "\n")
-        self.todo_path.write_text("".join(parts))
+            sections.append("\n" + after.strip() + "\n")
+        self.todo_path.write_text("".join(sections))
 
     def update_todo_md(self) -> None:
         """Update TODO.md with current issues, marking completed tasks."""
@@ -163,13 +163,13 @@ class TodoManager(BaseManager):
         """Get configuration for the refactoring engine."""
         if self.refact_config_path.exists():
             try:
-                config = ExtendedConfig.from_yaml(self.refact_config_path)
+                engine_config = ExtendedConfig.from_yaml(self.refact_config_path)
             except Exception:
-                config = Config.from_yaml(self.refact_config_path)
+                engine_config = Config.from_yaml(self.refact_config_path)
         else:
-            config = Config()
-        config.project_root = self.project_root
-        return config
+            engine_config = Config()
+        engine_config.project_root = self.project_root
+        return engine_config
 
     def _limit_todo_execution_tasks(
         self, active_tasks: List[Dict[str, Any]]
@@ -192,9 +192,9 @@ class TodoManager(BaseManager):
         self, active_tasks: List[Dict[str, Any]]
     ) -> Tuple[int, List[str]]:
         """Execute TODO tasks and return count of fixed tasks and completed task lines."""
-        config = self._get_refactoring_config()
-        scanner = Scanner(config)
-        fixer = Fixer(config)
+        engine_config = self._get_refactoring_config()
+        scanner = Scanner(engine_config)
+        fixer = Fixer(engine_config)
         executed_count = 0
         completed_tasks = []
 
@@ -205,11 +205,11 @@ class TodoManager(BaseManager):
         for file_path, file_tasks in tasks_by_file.items():
             if file_path.exists():
                 try:
-                    result = self._process_file_tasks(
+                    file_fix_summary = self._process_file_tasks(
                         file_path, file_tasks, scanner, fixer
                     )
-                    executed_count += result["fixed_count"]
-                    completed_tasks.extend(result["completed_tasks"])
+                    executed_count += file_fix_summary["fixed_count"]
+                    completed_tasks.extend(file_fix_summary["completed_tasks"])
                 except Exception as e:
                     console.print(f"❌ Error fixing {file_path}: {str(e)}")
                     completed_tasks.extend(task["original_line"] for task in file_tasks)

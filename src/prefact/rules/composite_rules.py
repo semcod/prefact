@@ -217,9 +217,9 @@ class CompositeImportRules(BaseRule):
         all_errors = []
 
         for tool in self.tools:
-            result = tool.validate(path, original, fixed)
-            all_checks.extend(result.checks)
-            all_errors.extend(result.errors)
+            tool_report = tool.validate(path, original, fixed)
+            all_checks.extend(tool_report.checks)
+            all_errors.extend(tool_report.errors)
 
         return ValidationResult(
             file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors
@@ -294,9 +294,9 @@ class CompositeTypeChecking(BaseRule):
         all_errors = []
 
         for tool in self.tools:
-            result = tool.validate(path, original, fixed)
-            all_checks.extend(result.checks)
-            all_errors.extend(result.errors)
+            tool_report = tool.validate(path, original, fixed)
+            all_checks.extend(tool_report.checks)
+            all_errors.extend(tool_report.errors)
 
         return ValidationResult(
             file=path, passed=len(all_errors) == 0, checks=all_checks, errors=all_errors

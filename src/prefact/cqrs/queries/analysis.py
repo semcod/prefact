@@ -114,8 +114,8 @@ class AnalysisQueryHandler:
         results = self.validator.validate_file(
             query.path, query.original, query.fixed, query.issues
         )
-        for result in results:
+        for validation in results:
             self.bus.publish(
-                ValidationCompleted(file=str(result.file), passed=result.passed)
+                ValidationCompleted(file=str(validation.file), passed=validation.passed)
             )
         return results

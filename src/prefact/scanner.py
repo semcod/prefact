@@ -16,11 +16,11 @@ def _load_gitignore(root: Path) -> list[str]:
     if gitignore_path.exists():
         try:
             with open(gitignore_path, encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
+                for raw_line in f:
+                    gitignore_pattern = raw_line.strip()
                     # Skip empty lines and comments
-                    if line and not line.startswith("#"):
-                        patterns.append(line)
+                    if gitignore_pattern and not gitignore_pattern.startswith("#"):
+                        patterns.append(gitignore_pattern)
         except (OSError, UnicodeDecodeError):
             pass
     return patterns

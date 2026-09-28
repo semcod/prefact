@@ -44,16 +44,15 @@ class Post:
 
 def create_user(name, email):
     """Create a new user."""
-    new_user = User(id="", name=name, email=email, created_at=datetime.now())
-    return new_user
+    return User(id="", name=name, email=email, created_at=datetime.now())
 
 
 def load_users_from_file(filepath):
     """Load users from JSON file."""
     with open(filepath) as f:
-        data = json.load(f)
+        user_records = json.load(f)
     users = []
-    for item in data:
-        loaded = User(**item)
-        users.append(loaded)
+    for item in user_records:
+        loaded_user = User(**item)
+        users.append(loaded_user)
     return users

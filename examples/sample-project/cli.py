@@ -31,8 +31,8 @@ def main(name, email):
     processor.add_item(new_user.name)
     processor.add_item(new_user.email)
 
-    result = process_data("test data")
-    print("Processing result: " + str(result))
+    processed_output = process_data("test data")
+    print("Processing result: " + str(processed_output))
 
     summary = processor.get_summary()
     print("Summary: " + summary)

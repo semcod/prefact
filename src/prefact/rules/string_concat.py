@@ -23,11 +23,11 @@ def _is_str_concat(node: ast.BinOp) -> bool:
     """Check if node is a string + concatenation mixing literals and names."""
     if not isinstance(node.op, ast.Add):
         return False
-    parts = _flatten_add(node)
+    operands = _flatten_add(node)
     has_str = any(
-        isinstance(p, ast.Constant) and isinstance(p.value, str) for p in parts
+        isinstance(p, ast.Constant) and isinstance(p.value, str) for p in operands
     )
-    has_name = any(isinstance(p, (ast.Name, ast.Attribute, ast.Call)) for p in parts)
+    has_name = any(isinstance(p, (ast.Name, ast.Attribute, ast.Call)) for p in operands)
     return has_str and has_name
 
 

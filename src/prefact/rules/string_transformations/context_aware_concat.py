@@ -57,12 +57,14 @@ class ContextAwareStringTransformer(cst.CSTTransformer):
 
         # Use the same transformation logic as StringConcatTransformer
         transformer = StringConcatTransformer()
-        result = transformer.leave_BinaryOperation(original_node, updated_node)
+        transformed_node = transformer.leave_BinaryOperation(
+            original_node, updated_node
+        )
 
-        if result != updated_node:
+        if transformed_node != updated_node:
             self.fixes.extend(transformer.fixes)
 
-        return result
+        return transformed_node
 
     def _should_skip_context(self, node: cst.BinaryOperation) -> bool:
         """Check if we should skip transformation based on context."""

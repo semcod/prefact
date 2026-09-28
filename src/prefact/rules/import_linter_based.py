@@ -57,19 +57,19 @@ class ImportLinterHelper:
         cmd = ["import-linter", "run", str(config_path)]
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            linter_run = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
             # Parse output
             issues = []
-            if result.returncode != 0:  # Violations found
-                lines = result.stdout.splitlines()
+            if linter_run.returncode != 0:  # Violations found
+                lines = linter_run.stdout.splitlines()
                 for line in lines:
                     if " - " in line:
                         # Parse violation
-                        parts = line.split(" - ", 1)
-                        if len(parts) == 2:
-                            file_part = parts[0]
-                            message = parts[1]
+                        violation_fields = line.split(" - ", 1)
+                        if len(violation_fields) == 2:
+                            file_part = violation_fields[0]
+                            violation_message = violation_fields[1]
 
                             # Extract file and line
                             if ":" in file_part:
@@ -86,7 +86,7 @@ class ImportLinterHelper:
                                 {
                                     "file": file_path,
                                     "line": line_num,
-                                    "message": message,
+                                    "message": violation_message,
                                     "type": "violation",
                                 }
                             )
@@ -359,25 +359,25 @@ class ImportLinterCustomArchitecture(BaseRule):
         """Load custom architectural configuration."""
         custom_rules = self.config.get_rule_option(self.rule_id, "rules", {})
 
-        config = {"root_package": self.config.package_name or "planfile"}
+        linter_config = {"root_package": self.config.package_name or "planfile"}
 
         # Add custom layers
         if "layers" in custom_rules:
-            config["layers"] = custom_rules["layers"]
+            linter_config["layers"] = custom_rules["layers"]
 
         # Add custom dependencies
         if "dependencies" in custom_rules:
-            config["dependencies"] = custom_rules["dependencies"]
+            linter_config["dependencies"] = custom_rules["dependencies"]
 
         # Add forbidden patterns
         if "forbidden" in custom_rules:
-            config["forbidden"] = custom_rules["forbidden"]
+            linter_config["forbidden"] = custom_rules["forbidden"]
 
         # Add independence rules
         if "independence" in custom_rules:
-            config["independence"] = custom_rules["independence"]
+            linter_config["independence"] = custom_rules["independence"]
 
-        return config
+        return linter_config
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
@@ -385,10 +385,10 @@ class ImportLinterCustomArchitecture(BaseRule):
 
         for item in results:
             # Determine severity based on rule type
-            message = item.get("message", "").lower()
-            if "forbidden" in message:
+            lowered_message = item.get("message", "").lower()
+            if "forbidden" in lowered_message:
                 severity = Severity.ERROR
-            elif "violation" in message:
+            elif "violation" in lowered_message:
                 severity = Severity.WARNING
             else:
                 severity = Severity.INFO

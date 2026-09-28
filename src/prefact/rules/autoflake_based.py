@@ -113,7 +113,7 @@ def create_issues_from_results(
     for item in results:
         if item["type"] == "unused_import":
             # Extract import name from the line
-            import_name = extract_import_name(item["line"])
+            unused_import = extract_import_name(item["line"])
 
             issues.append(
                 Issue(
@@ -121,9 +121,9 @@ def create_issues_from_results(
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {unused_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=unused_import,
                 )
             )
         line_num += 1
@@ -138,14 +138,14 @@ def extract_import_name(line: str) -> str:
     if "import " in clean_line:
         if clean_line.startswith("from "):
             # from x import y
-            parts = clean_line.split()
-            if len(parts) >= 4:
-                return parts[3]
+            import_tokens = clean_line.split()
+            if len(import_tokens) >= 4:
+                return import_tokens[3]
         else:
             # import x
-            parts = clean_line.split()
-            if len(parts) >= 2:
-                return parts[1].split(",")[0]
+            import_tokens = clean_line.split()
+            if len(import_tokens) >= 2:
+                return import_tokens[1].split(",")[0]
 
     return "unknown"
 
@@ -194,12 +194,12 @@ class AutoflakeHelper:
         cmd = build_autoflake_check_command(file_path, config)
 
         try:
-            result = run_autoflake_command(cmd)
+            autoflake_run = run_autoflake_command(cmd)
 
             # Parse output to find issues
             issues = []
-            if result.returncode != 0:
-                lines = result.stdout.splitlines()
+            if autoflake_run.returncode != 0:
+                lines = autoflake_run.stdout.splitlines()
                 issues = parse_autoflake_output(lines)
 
             return issues
@@ -233,8 +233,8 @@ class AutoflakeHelper:
         tmp_path = create_temp_file_with_source(source)
 
         try:
-            success = AutoflakeHelper.fix_file(Path(tmp_path), config)
-            if success:
+            autoflake_applied = AutoflakeHelper.fix_file(Path(tmp_path), config)
+            if autoflake_applied:
                 with open(tmp_path) as f:
                     return f.read()
             return source

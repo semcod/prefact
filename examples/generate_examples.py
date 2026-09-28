@@ -19,7 +19,7 @@ for rule in rules:
     rule_dir.mkdir(exist_ok=True)
 
     # Create prefact.yaml
-    config = f"""package_name: mypackage
+    prefact_yaml_template = f"""package_name: mypackage
 
 include:
   - "**/*.py"
@@ -46,7 +46,7 @@ rules:
     enabled: {"true" if rule == "missing-return-type" else "false"}
 """
 
-    (rule_dir / "prefact.yaml").write_text(config)
+    (rule_dir / "prefact.yaml").write_text(prefact_yaml_template)
 
     # Create before.py examples for each rule
     if rule == "duplicate-imports":
@@ -88,8 +88,8 @@ import os
 
 def process():
     """Process using wildcard imports."""
-    data = defaultdict(list)
-    return data
+    grouped = defaultdict(list)
+    return grouped
 '''
         after = '''"""Example with wildcard imports flagged (not auto-fixed)."""
 
@@ -100,8 +100,8 @@ import os
 
 def process():
     """Process using wildcard imports."""
-    data = defaultdict(list)
-    return data
+    grouped = defaultdict(list)
+    return grouped
 '''
 
     elif rule == "sorted-imports":
@@ -139,13 +139,13 @@ def process():
 
 def greet(name, age):
     """Greet someone."""
-    message = "Hello " + name + ", you are " + str(age) + " years old"
-    return message
+    greeting = "Hello " + name + ", you are " + str(age) + " years old"
+    return greeting
 
 def format_data(data):
     """Format data."""
-    result = "Data: " + str(data)
-    return result
+    formatted = "Data: " + str(data)
+    return formatted
 '''
         after = '''"""Example with string concatenation converted to f-strings."""
 
@@ -155,8 +155,8 @@ def greet(name, age):
 
 def format_data(data):
     """Format data."""
-    result = f"Data: {data}"
-    return result
+    formatted = f"Data: {data}"
+    return formatted
 '''
 
     elif rule == "print-statements":
@@ -165,9 +165,9 @@ def format_data(data):
 def process_data(data):
     """Process data with debug prints."""
     print("Starting processing")
-    result = data * 2
-    print(f"Result: {result}")
-    return result
+    doubled = data * 2
+    print(f"Result: {doubled}")
+    return doubled
 
 def calculate(a, b):
     """Calculate with debug output."""
@@ -179,9 +179,9 @@ def calculate(a, b):
 def process_data(data):
     """Process data with debug prints."""
     print("Starting processing")
-    result = data * 2
-    print(f"Result: {result}")
-    return result
+    doubled = data * 2
+    print(f"Result: {doubled}")
+    return doubled
 
 def calculate(a, b):
     """Calculate with debug output."""

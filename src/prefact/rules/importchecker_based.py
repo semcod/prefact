@@ -64,15 +64,15 @@ class ImportCheckerHelper:
         """Convert file path to module name."""
         # This is simplified - real implementation would need
         # to consider PYTHONPATH and package structure
-        parts = file_path.with_suffix("").parts
+        path_segments = file_path.with_suffix("").parts
 
         # Remove common parent directories
-        if "src" in parts:
-            parts = parts[parts.index("src") + 1 :]
-        elif "lib" in parts:
-            parts = parts[parts.index("lib") + 1 :]
+        if "src" in path_segments:
+            path_segments = path_segments[path_segments.index("src") + 1 :]
+        elif "lib" in path_segments:
+            path_segments = path_segments[path_segments.index("lib") + 1 :]
 
-        return ".".join(parts)
+        return ".".join(path_segments)
 
     @staticmethod
     def check_source(source: str, module_name: str = "temp_module") -> List[Dict]:
@@ -125,11 +125,14 @@ class ImportCheckerUnusedImports(BaseRule):
         import_lines = self._find_import_lines(source)
 
         for item in results:
-            import_name = item.get("import", "unknown")
-            line_num = import_lines.get(import_name, 1)
+            reported_import = item.get("import", "unknown")
+            line_num = import_lines.get(reported_import, 1)
 
             # Skip __main__ if configured
-            if self.checker_config["ignore_dunder_main"] and import_name == "__main__":
+            if (
+                self.checker_config["ignore_dunder_main"]
+                and reported_import == "__main__"
+            ):
                 continue
 
             issues.append(
@@ -138,9 +141,9 @@ class ImportCheckerUnusedImports(BaseRule):
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {reported_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=reported_import,
                 )
             )
 
@@ -156,10 +159,10 @@ class ImportCheckerUnusedImports(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 # Extract import names
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
-                        imports = parts[PORT_3].split(",")
+                    from_tokens = stripped.split()
+                    if len(from_tokens) >= CONSTANT_4:
+                        module = from_tokens[1]
+                        imports = from_tokens[PORT_3].split(",")
                         for imp in imports:
                             name = imp.strip().split(" as ")[0]
                             import_lines[name] = str(i + 1)
@@ -339,14 +342,14 @@ class ImportDependencyAnalysis(BaseRule):
             stripped = line.strip()
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
+                    statement_tokens = stripped.split()
+                    if len(statement_tokens) >= CONSTANT_4:
+                        module = statement_tokens[1]
                         imports.append({"name": module, "line": i + 1, "type": "from"})
                 else:
-                    parts = stripped.split()
-                    if len(parts) >= 2:
-                        module = parts[1].split(".")[0]
+                    statement_tokens = stripped.split()
+                    if len(statement_tokens) >= 2:
+                        module = statement_tokens[1].split(".")[0]
                         imports.append(
                             {"name": module, "line": i + 1, "type": "import"}
                         )
@@ -443,10 +446,10 @@ class ImportOptimizer(BaseRule):
             stripped = line.strip()
             if stripped.startswith(("import ", "from ")):
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= CONSTANT_4:
-                        module = parts[1]
-                        names = parts[PORT_3].split(",")
+                    from_tokens = stripped.split()
+                    if len(from_tokens) >= CONSTANT_4:
+                        module = from_tokens[1]
+                        names = from_tokens[PORT_3].split(",")
                         for name in names:
                             clean_name = name.strip().split(" as ")[0]
                             imports.append(
@@ -466,7 +469,7 @@ class ImportOptimizer(BaseRule):
 
         return imports
 
-    def _count_usage(self, source: str, import_name: str) -> int:
+    def _count_usage(self, source: str, symbol: str) -> int:
         """Count how many times an import is used."""
         # Simple string-based counting
         # Real implementation would use AST for accuracy
@@ -483,7 +486,7 @@ class ImportOptimizer(BaseRule):
         for i, line in enumerate(lines):
             if i not in import_lines:
                 # Count occurrences of the import name
-                count += line.count(import_name)
+                count += line.count(symbol)
 
         return count
 

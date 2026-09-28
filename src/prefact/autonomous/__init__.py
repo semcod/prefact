@@ -264,25 +264,25 @@ class AutonomousRefact:
 
                 try:
                     # Try pytest first
-                    result = subprocess.run(
+                    test_run = subprocess.run(
                         ["pytest", str(test_path), "-v"],
                         capture_output=True,
                         text=True,
                         cwd=self.project_root,
                     )
 
-                    if result.returncode == 0:
+                    if test_run.returncode == 0:
                         console.print("✅ Tests passed", style="green")
                         return True
                     else:
                         console.print(
-                            f"⚠️ Tests failed: {result.stderr}", style="yellow"
+                            f"⚠️ Tests failed: {test_run.stderr}", style="yellow"
                         )
 
                 except FileNotFoundError:
                     # Try unittest
                     try:
-                        result = subprocess.run(
+                        test_run = subprocess.run(
                             [
                                 sys.executable,
                                 "-m",
@@ -297,12 +297,12 @@ class AutonomousRefact:
                             cwd=self.project_root,
                         )
 
-                        if result.returncode == 0:
+                        if test_run.returncode == 0:
                             console.print("✅ Tests passed", style="green")
                             return True
                         else:
                             console.print(
-                                f"⚠️ Tests failed: {result.stderr}", style="yellow"
+                                f"⚠️ Tests failed: {test_run.stderr}", style="yellow"
                             )
 
                     except Exception as e:

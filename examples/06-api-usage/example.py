@@ -2,6 +2,7 @@
 """Example of using prefact programmatically."""
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 
 from prefact.config import Config
@@ -23,34 +24,33 @@ def run_prefact_example(
     # Create configuration
     if config_file and config_file.exists():
         print(f"Loading config from {config_file}")
-        config = Config.from_yaml(config_file)
+        base_config = Config.from_yaml(config_file)
     else:
         print("Using default configuration")
-        config = Config()
+        base_config = Config()
 
-    # Override project path
-    config.project_root = project_path.resolve()
-
-    # Set dry run mode
-    config.dry_run = dry_run
+    # Apply the example's overrides (project path, dry run) in one step
+    run_config = replace(
+        base_config, project_root=project_path.resolve(), dry_run=dry_run
+    )
 
     # Create and run engine
     print(f"\n🔍 Scanning {project_path}")
-    print(f"Package: {config.package_name or 'auto-detect'}")
+    print(f"Package: {run_config.package_name or 'auto-detect'}")
     print(f"Dry run: {dry_run}")
     print("-" * 50)
 
-    result = run_engine(config)
+    engine_result = run_engine(run_config)
 
     # Display results
     print("\n📊 Results:")
-    print(f"  Total issues: {result.total_issues}")
-    print(f"  Issues fixed: {result.total_fixed}")
-    print(f"  Validation passed: {result.all_valid}")
+    print(f"  Total issues: {engine_result.total_issues}")
+    print(f"  Issues fixed: {engine_result.total_fixed}")
+    print(f"  Validation passed: {engine_result.all_valid}")
 
     # Show issues by rule
     issues_by_rule = {}
-    for issue in result.issues_found:
+    for issue in engine_result.issues_found:
         issues_by_rule.setdefault(issue.rule_id, []).append(issue)
 
     if issues_by_rule:
@@ -59,21 +59,21 @@ def run_prefact_example(
             print(f"  {rule_id}: {len(issues)} issues")
 
     # Show fix details
-    if result.fixes_applied:
+    if engine_result.fixes_applied:
         print("\n🔧 Fixes applied:")
-        for fix in result.fixes_applied[:5]:  # Show first 5
+        for fix in engine_result.fixes_applied[:5]:  # Show first 5
             print(f"  {fix.file}:{fix.issue.line} - {fix.issue.message}")
-        if len(result.fixes_applied) > 5:
-            print(f"  ... and {len(result.fixes_applied) - 5} more")
+        if len(engine_result.fixes_applied) > 5:
+            print(f"  ... and {len(engine_result.fixes_applied) - 5} more")
 
     # Show validation failures
-    failed_validations = [v for v in result.validations if not v.passed]
+    failed_validations = [v for v in engine_result.validations if not v.passed]
     if failed_validations:
         print("\n❌ Validation failures:")
         for failure in failed_validations:
             print(f"  {failure.file}: {', '.join(failure.errors)}")
 
-    return result
+    return engine_result
 
 
 def custom_rule_example():
@@ -100,9 +100,9 @@ def another_function():
 """)
 
     # Create config with custom rules
-    config = Config()
-    config.project_root = temp_dir.resolve()
-    config.package_name = "temp_project"
+    run_config = Config(
+        project_root=temp_dir.resolve(), package_name="temp_project"
+    )
 
     # Import custom rules
     try:
@@ -114,11 +114,11 @@ def another_function():
         return
 
     # Run with custom rules
-    result = run_engine(config)
+    custom_run = run_engine(run_config)
 
     print("\nCustom rule results:")
     print(
-        f"  TODO comments found: {len([i for i in result.issues_found if 'todo' in i.rule_id])}"
+        f"  TODO comments found: {len([i for i in custom_run.issues_found if 'todo' in i.rule_id])}"
     )
 
     # Cleanup
@@ -145,17 +145,18 @@ def batch_processing_example():
     for project in projects:
         if project.exists():
             print(f"\nProcessing {project.name}...")
-            config = Config()
-            config.project_root = project.resolve()
-            config.dry_run = True  # Don't actually fix
+            project_config = Config(
+                project_root=project.resolve(),
+                dry_run=True,  # Don't actually fix
+            )
 
-            result = run_engine(config)
+            batch_run = run_engine(project_config)
 
             results.append(
                 {
                     "project": project.name,
-                    "issues": result.total_issues,
-                    "fixable": len([i for i in result.issues_found if i.suggested]),
+                    "issues": batch_run.total_issues,
+                    "fixable": len([i for i in batch_run.issues_found if i.suggested]),
                 }
             )
         else:
@@ -187,7 +188,7 @@ def main():
     args = parser.parse_args()
 
     # Main example
-    result = run_prefact_example(args.path, args.config, args.dry_run)
+    example_outcome = run_prefact_example(args.path, args.config, args.dry_run)
 
     # Additional examples
     if args.custom_rules:
@@ -197,7 +198,7 @@ def main():
         batch_processing_example()
 
     # Return exit code based on results
-    return 1 if result.total_issues > 0 else 0
+    return 1 if example_outcome.total_issues > 0 else 0
 
 
 if __name__ == "__main__":

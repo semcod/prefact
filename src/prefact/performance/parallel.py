@@ -69,16 +69,17 @@ class ParallelScanTask:
 
         # Perform actual scan
         # TODO: Fix parallel module to use correct API
-        config = Config.from_dict(self.config_dict)  # type: ignore[attr-defined]
-        engine = RefactoringEngine(config)
+        scan_output = RefactoringEngine(
+            Config.from_dict(self.config_dict)  # type: ignore[attr-defined]
+        ).scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
 
-        result = engine.scan_file(self.file_path, self.rule_ids)  # type: ignore[attr-defined]
-
-        # Cache result if enabled
+        # Cache scan_output if enabled
         if self.cache_enabled:
-            cache.set(cache_key, pickle.dumps(result), expire=CONSTANT_3600)  # 1 hour
+            cache.set(
+                cache_key, pickle.dumps(scan_output), expire=CONSTANT_3600
+            )  # 1 hour
 
-        return result
+        return scan_output
 
 
 class ParallelEngine:
@@ -144,10 +145,10 @@ class ParallelEngine:
             for future in as_completed(future_to_task):
                 task = future_to_task[future]
                 try:
-                    result = future.result()
-                    results.append(result)
+                    task_output = future.task_output()
+                    results.append(task_output)
                 except Exception as e:
-                    # Create error result
+                    # Create error task_output
                     error_result = {
                         "file": task.file_path,
                         "issues": [],
@@ -177,10 +178,10 @@ class ParallelEngine:
                 for future in as_completed(future_to_task):
                     task = future_to_task[future]
                     try:
-                        result = future.result()
-                        results.append(result)
+                        task_output = future.task_output()
+                        results.append(task_output)
                     except Exception as e:
-                        # Create error result
+                        # Create error task_output
                         error_result = {
                             "file": task.file_path,
                             "issues": [],
@@ -254,13 +255,13 @@ class ParallelScanner:
         # Find all Python files
         file_paths = []
         for pattern in self.config.include:
-            for file_path in directory.glob(pattern):
-                if file_path.is_file():
+            for matched_file in directory.glob(pattern):
+                if matched_file.is_file():
                     # Check exclude patterns
                     if not any(
-                        file_path.match(exclude) for exclude in exclude_patterns
+                        matched_file.match(exclude) for exclude in exclude_patterns
                     ):
-                        file_paths.append(file_path)
+                        file_paths.append(matched_file)
 
         # Scan in parallel
         return self.engine.scan_files(
@@ -292,12 +293,11 @@ def init_worker() -> None:  # type: ignore[no-untyped-def]
 
 def scan_file_worker(args: Tuple[Path, Dict[str, Any], List[str]]) -> Dict[str, Any]:
     """Worker function for scanning a single file."""
-    file_path, config_dict, rule_ids = args
+    scan_target, config_dict, rule_ids = args
 
-    config = Config.from_dict(config_dict)  # type: ignore[attr-defined]
-    engine = RefactoringEngine(config)
-
-    return engine.scan_file(file_path, rule_ids)  # type: ignore[attr-defined]
+    return RefactoringEngine(
+        Config.from_dict(config_dict)  # type: ignore[attr-defined]
+    ).scan_file(scan_target, rule_ids)  # type: ignore[attr-defined]
 
 
 # Performance monitoring

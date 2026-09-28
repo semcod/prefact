@@ -41,7 +41,7 @@ def create_test_files(
     base_dir: Path, num_files: int = 100, file_size_kb: int = 1
 ) -> List[Path]:
     """Create test Python files with import issues to benchmark against."""
-    files = []
+    created_files = []
 
     # Create a simple Python template with import issues
     template = '''"""Test module {i}."""
@@ -67,9 +67,9 @@ def main():
         file_path.write_text(
             _render_test_module(template, i, file_size_kb), encoding="utf-8"
         )
-        files.append(file_path)
+        created_files.append(file_path)
 
-    return files
+    return created_files
 
 
 def benchmark_without_rampreload(config: Config) -> float:
@@ -83,15 +83,15 @@ def benchmark_without_rampreload(config: Config) -> float:
 
             from prefact.models import PipelineResult
 
-            result = PipelineResult(dry_run=dry_run)
+            original_outcome = PipelineResult(dry_run=dry_run)
 
             # Phase 1 – Scan (original way, reads files)
             issues_map = self.scanner.scan()
             for file_issues in issues_map.values():
-                result.issues_found.extend(file_issues)
+                original_outcome.issues_found.extend(file_issues)
 
-            if not result.issues_found:
-                return result
+            if not original_outcome.issues_found:
+                return original_outcome
 
             # Phase 2 – Fix (reads files again)
             for path, issues in issues_map.items():
@@ -100,21 +100,23 @@ def benchmark_without_rampreload(config: Config) -> float:
 
                 for fix in fixes:
                     (
-                        result.fixes_applied if fix.applied else result.fixes_failed
+                        original_outcome.fixes_applied
+                        if fix.applied
+                        else original_outcome.fixes_failed
                     ).append(fix)
 
                 # Phase 3 – Validate (reads files again)
                 validations = self.validator.validate_file(
                     path, original, fixed_source, issues
                 )
-                result.validations.extend(validations)
+                original_outcome.validations.extend(validations)
 
-            return result
+            return original_outcome
 
-    engine = OriginalRefactoringEngine(config)
+    original_engine = OriginalRefactoringEngine(config)
 
     start_time = time.perf_counter()
-    result = engine.run(dry_run=True)  # Dry run to avoid modifying files
+    timed_run = original_engine.run(dry_run=True)  # Dry run to avoid modifying files
     end_time = time.perf_counter()
 
     return end_time - start_time
@@ -122,10 +124,10 @@ def benchmark_without_rampreload(config: Config) -> float:
 
 def benchmark_with_rampreload(config: Config) -> float:
     """Run benchmark with RAM preloading (optimized implementation)."""
-    engine = RefactoringEngine(config)
+    optimized_engine = RefactoringEngine(config)
 
     start_time = time.perf_counter()
-    result = engine.run(dry_run=True)  # Dry run to avoid modifying files
+    timed_run = optimized_engine.run(dry_run=True)  # Dry run to avoid modifying files
     end_time = time.perf_counter()
 
     return end_time - start_time
@@ -139,10 +141,11 @@ def run_benchmark(num_files: int = 100, file_size_kb: int = 1) -> Dict[str, floa
         base_dir = Path(tmpdir)
 
         print(f"Creating {num_files} test files ({file_size_kb}KB each)...")
-        files = create_test_files(base_dir, num_files, file_size_kb)
+        # Called for its side effect: the test files written under base_dir.
+        create_test_files(base_dir, num_files, file_size_kb)
 
         # Create config
-        config = Config(
+        bench_config = Config(
             project_root=base_dir,
             package_name="test_package",
             dry_run=True,
@@ -151,13 +154,13 @@ def run_benchmark(num_files: int = 100, file_size_kb: int = 1) -> Dict[str, floa
 
         # Benchmark without RAM preloading
         print("Running benchmark WITHOUT RAM preloading...")
-        time_without = benchmark_without_rampreload(config)
+        time_without = benchmark_without_rampreload(bench_config)
         results["without_ram_preload"] = time_without
         print(f"  Time: {time_without:.4f} seconds")
 
         # Benchmark with RAM preloading
         print("Running benchmark WITH RAM preloading...")
-        time_with = benchmark_with_rampreload(config)
+        time_with = benchmark_with_rampreload(bench_config)
         results["with_ram_preload"] = time_with
         print(f"  Time: {time_with:.4f} seconds")
 
@@ -217,11 +220,11 @@ def main() -> None:
     )
     print("-" * 60)
 
-    for result in all_results:
+    for row in all_results:
         print(
-            f"{result['num_files']:<6} {result['file_size_kb']:<6}KB "
-            f"{result['without_ram_preload']:<10.4f}s {result['with_ram_preload']:<10.4f}s "
-            f"{result['improvement_percent']:<12.1f}% {result['speedup_factor']:<8.2f}x"
+            f"{row['num_files']:<6} {row['file_size_kb']:<6}KB "
+            f"{row['without_ram_preload']:<10.4f}s {row['with_ram_preload']:<10.4f}s "
+            f"{row['improvement_percent']:<12.1f}% {row['speedup_factor']:<8.2f}x"
         )
 
     # Average improvement

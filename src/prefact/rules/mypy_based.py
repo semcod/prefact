@@ -145,9 +145,9 @@ class MyPyMissingReturnType(BaseRule):
             source = path.read_text(encoding="utf-8")
             lines = source.splitlines()
             if 0 < line_num <= len(lines):
-                line = lines[line_num - 1]
+                def_line = lines[line_num - 1]
                 # Simple check: public functions don't start with underscore
-                return "def _" not in line
+                return "def _" not in def_line
         except Exception:
             pass
         return True
@@ -366,9 +366,9 @@ class SmartReturnTypeRule(BaseRule):
                     # Try to infer return type
                     inferred = ReturnTypeInferrer.infer_return_type(source, node.name)
 
-                    message = f"Function '{node.name}' missing return type"
+                    finding_message = f"Function '{node.name}' missing return type"
                     if inferred:
-                        message += f" (suggested: -> {inferred})"
+                        finding_message += f" (suggested: -> {inferred})"
 
                     issues.append(
                         Issue(
@@ -376,7 +376,7 @@ class SmartReturnTypeRule(BaseRule):
                             file=path,
                             line=node.lineno,
                             col=node.col_offset,
-                            message=message,
+                            message=finding_message,
                             severity=Severity.INFO,
                             original=f"def {node.name}(...):",
                             suggested=f"def {node.name}(...) -> {inferred or 'Any'}:"

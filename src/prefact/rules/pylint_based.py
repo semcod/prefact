@@ -42,7 +42,7 @@ class PylintHelper:
                 cmd.append(f"--enable={config['enable_codes']}")
 
         try:
-            result = subprocess.run(
+            pylint_run = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
@@ -50,8 +50,8 @@ class PylintHelper:
             )
 
             # Parse JSON output
-            if result.stdout.strip():
-                return json.loads(result.stdout)
+            if pylint_run.stdout.strip():
+                return json.loads(pylint_run.stdout)
             return []
         except (subprocess.SubprocessError, json.JSONDecodeError, FileNotFoundError):
             return []
@@ -144,15 +144,15 @@ class PylintPrintStatements(BaseRule):
         for issue in issues:
             line_idx = issue.line - 1
             if 0 <= line_idx < len(lines):
-                line = lines[line_idx]
-                if "print(" in line and not line.strip().startswith("#"):
-                    lines[line_idx] = f"# {line}"
+                source_line = lines[line_idx]
+                if "print(" in source_line and not source_line.strip().startswith("#"):
+                    lines[line_idx] = f"# {source_line}"
                     fixes.append(
                         Fix(
                             issue=issue,
                             file=path,
-                            original_code=line,
-                            fixed_code=f"# {line}",
+                            original_code=source_line,
+                            fixed_code=f"# {source_line}",
                             applied=True,
                         )
                     )
@@ -392,33 +392,34 @@ class PylintComprehensive(BaseRule):
 # Pylint configuration generator
 def generate_pylint_rc(config: Config, output_path: Path) -> None:
     """Generate a .pylintrc file based on prefact configuration."""
-    content = "[MAIN]\n"
-    content += "disable=all\n\n"
-    content += "[MESSAGES CONTROL]\n"
-    content += "# Enable specific rules\n"
-    content += "enable=consider-using-f-string,unused-import,duplicate-key\n\n"
-    content += "[FORMAT]\n"
-    content += "max-line-length=88\n\n"
-    content += "[DESIGN]\n"
-    content += "max-args=7\n"
-    content += "max-locals=15\n"
-    content += "max-returns=6\n"
-    content += "max-branches=12\n"
-    content += "max-statements=50\n"
-    content += "max-parents=7\n"
-    content += "max-attributes=7\n"
-    content += "min-public-methods=2\n"
-    content += "max-public-methods=20\n\n"
-    content += "[TYPECHECK]\n"
-    content += "ignored-modules=\n"
-    content += "ignored-classes=\n"
-    content += "generated-members=\n\n"
+    rc_sections = [
+        "[MAIN]\n" "disable=all\n\n",
+        "[MESSAGES CONTROL]\n"
+        "# Enable specific rules\n"
+        "enable=consider-using-f-string,unused-import,duplicate-key\n\n",
+        "[FORMAT]\n" "max-line-length=88\n\n",
+        "[DESIGN]\n"
+        "max-args=7\n"
+        "max-locals=15\n"
+        "max-returns=6\n"
+        "max-branches=12\n"
+        "max-statements=50\n"
+        "max-parents=7\n"
+        "max-attributes=7\n"
+        "min-public-methods=2\n"
+        "max-public-methods=20\n\n",
+        "[TYPECHECK]\n"
+        "ignored-modules=\n"
+        "ignored-classes=\n"
+        "generated-members=\n\n",
+    ]
 
     # Add custom configurations
     for rule_id, rule_config in config.rules.items():
         if rule_config.options:
-            content += f"\n[{rule_id.upper()}]\n"
-            for key, value in rule_config.options.items():
-                content += f"{key}={value}\n"
+            options = "".join(
+                f"{key}={value}\n" for key, value in rule_config.options.items()
+            )
+            rc_sections.append(f"\n[{rule_id.upper()}]\n{options}")
 
-    output_path.write_text(content)
+    output_path.write_text("".join(rc_sections))

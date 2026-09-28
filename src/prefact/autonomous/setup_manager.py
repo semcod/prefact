@@ -28,20 +28,22 @@ class SetupManager(BaseManager):
         )
 
         # Customize based on project
-        config = yaml.safe_load(config_content)
+        generated_config = yaml.safe_load(config_content)
 
         # Add project-specific settings
-        config["project_root"] = str(self.project_root)
-        config["package_name"] = project_info["package_name"]
+        generated_config["project_root"] = str(self.project_root)
+        generated_config["package_name"] = project_info["package_name"]
 
         # Enable LLM rules if AI-generated code detected
         if project_info["has_ai_code"]:
-            config["rules"]["llm-hallucinations"] = {"enabled": True}
-            config["rules"]["magic-numbers"] = {"enabled": True}
+            generated_config["rules"]["llm-hallucinations"] = {"enabled": True}
+            generated_config["rules"]["magic-numbers"] = {"enabled": True}
 
         # Write configuration
         with open(self.refact_config_path, "w") as f:
-            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+            yaml.dump(
+                generated_config, f, default_flow_style=False, sort_keys=False
+            )
 
         console.print(f"✅ Created {self.refact_config_path}")
 
@@ -58,9 +60,9 @@ class SetupManager(BaseManager):
         # Check for AI indicators
         for py_file in self.project_root.rglob("*.py"):
             try:
-                content = py_file.read_text()
+                file_text = py_file.read_text()
                 if any(
-                    indicator in content
+                    indicator in file_text
                     for indicator in ["TODO", "placeholder", "AI", "LLM"]
                 ):
                     info["has_ai_code"] = True
@@ -96,7 +98,7 @@ class SetupManager(BaseManager):
             console.print("⚠️ No example configurations found", style="yellow")
             return True
 
-        success = True
+        all_examples_passed = True
 
         with Progress() as progress:
             task = progress.add_task("Running examples...", total=len(example_configs))
@@ -106,7 +108,7 @@ class SetupManager(BaseManager):
 
                 try:
                     # Run prefact scan
-                    result = subprocess.run(
+                    scan_process = subprocess.run(
                         [
                             sys.executable,
                             "-m",
@@ -122,12 +124,12 @@ class SetupManager(BaseManager):
                         cwd=self.project_root,
                     )
 
-                    if result.returncode != 0:
+                    if scan_process.returncode != 0:
                         console.print(
-                            f"❌ Example {example_dir.name} failed: {result.stderr}",
+                            f"❌ Example {example_dir.name} failed: {scan_process.stderr}",
                             style="red",
                         )
-                        success = False
+                        all_examples_passed = False
                     else:
                         console.print(f"✅ Example {example_dir.name} passed")
 
@@ -135,8 +137,8 @@ class SetupManager(BaseManager):
                     console.print(
                         f"❌ Error running example {example_dir.name}: {e}", style="red"
                     )
-                    success = False
+                    all_examples_passed = False
 
                 progress.advance(task)
 
-        return success
+        return all_examples_passed

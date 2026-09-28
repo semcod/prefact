@@ -184,7 +184,6 @@ exit 0
         for hook_type in hook_types:
             hook_path = self.hooks_dir / hook_type
             backup_path = hook_path.with_suffix(".prefact.bak")
-
             if self._is_prefact_hook(hook_path):
                 hook_path.unlink()
 
@@ -217,7 +216,7 @@ exit 0
 
         try:
             # Run the hook with --help or similar to test
-            result = subprocess.run(
+            hook_probe = subprocess.run(
                 [str(hook_path)],
                 capture_output=True,
                 text=True,

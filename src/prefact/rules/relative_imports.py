@@ -41,9 +41,9 @@ def _module_to_str(node: cst.BaseExpression | None) -> str:
 
 def _str_to_module(dotted: str) -> cst.BaseExpression:
     """Convert ``'a.b.c'`` to a CST Attribute chain."""
-    parts = dotted.split(".")
-    node: cst.BaseExpression = cst.Name(parts[0])
-    for part in parts[1:]:
+    name_segments = dotted.split(".")
+    node: cst.BaseExpression = cst.Name(name_segments[0])
+    for part in name_segments[1:]:
         node = cst.Attribute(value=node, attr=cst.Name(part))
     return node
 
@@ -94,15 +94,15 @@ class _RelativeImportFixer(cst.CSTTransformer):
         except ValueError:
             return None
 
-        parts = list(rel.parts)
-        if parts and parts[0] == "src":
-            parts = parts[1:]
-        parts = parts[:-1]  # remove filename
+        path_segments = list(rel.parts)
+        if path_segments and path_segments[0] == "src":
+            path_segments = path_segments[1:]
+        path_segments = path_segments[:-1]  # remove filename
 
         up = level - 1
-        if up > len(parts):
+        if up > len(path_segments):
             return None
-        base_parts = parts[: len(parts) - up] if up else parts
+        base_parts = path_segments[: len(path_segments) - up] if up else path_segments
 
         module_str = _module_to_str(module_node) if module_node else ""
         result_parts = list(base_parts) + ([module_str] if module_str else [])

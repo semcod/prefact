@@ -27,13 +27,13 @@ try:
     # Create a simple test
     from prefact.config import Config
 
-    config = Config(project_root=Path("."), package_name="test", verbose=True)
+    engine_config = Config(project_root=Path("."), package_name="test", verbose=True)
 
-    engine = RefactoringEngine(config)
+    optimized_engine = RefactoringEngine(engine_config)
     print("✓ RefactoringEngine created successfully")
 
     # Test _preload_sources method
-    sources = engine._preload_sources()
+    sources = optimized_engine._preload_sources()
     print(f"✓ _preload_sources returned {len(sources)} files")
 
     if sources:

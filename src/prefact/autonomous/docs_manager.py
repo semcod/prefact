@@ -275,8 +275,8 @@ class DocsManager(BaseManager):
             except ModuleNotFoundError:
                 import tomli as tomllib  # type: ignore[no-redef]
 
-            data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-            version = data.get("project", {}).get("version")
+            pyproject_data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+            version = pyproject_data.get("project", {}).get("version")
             return version if isinstance(version, str) and version else "Unreleased"
         except Exception:
             return "Unreleased"

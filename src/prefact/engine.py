@@ -70,14 +70,14 @@ class RefactoringEngine:
         if dry_run is None:
             dry_run = self.config.dry_run
 
-        result = PipelineResult(dry_run=dry_run)
+        pipeline_outcome = PipelineResult(dry_run=dry_run)
         self.bus.publish(PipelineStarted(dry_run=dry_run))
 
         # Collect all files first
         files = self.queries.handle(CollectFiles())
         if not files:
             self.bus.publish(PipelineCompleted())
-            return result
+            return pipeline_outcome
 
         # Preload small files into RAM to avoid multiple I/O operations
         sources = self._preload_sources(files)
@@ -93,11 +93,11 @@ class RefactoringEngine:
             issues_map.update(self.queries.handle(ScanPaths(paths=large_files)))
 
         for file_issues in issues_map.values():
-            result.issues_found.extend(file_issues)
+            pipeline_outcome.issues_found.extend(file_issues)
 
-        if not result.issues_found:
+        if not pipeline_outcome.issues_found:
             self.bus.publish(PipelineCompleted())
-            return result
+            return pipeline_outcome
 
         # Phase 2 – Fix (using preloaded sources when available)
         for path, issues in issues_map.items():
@@ -111,7 +111,7 @@ class RefactoringEngine:
                 FixFile(path=path, source=original, issues=issues, dry_run=dry_run)
             )
             for fix in fixes:
-                (result.fixes_applied if fix.applied else result.fixes_failed).append(
+                (pipeline_outcome.fixes_applied if fix.applied else pipeline_outcome.fixes_failed).append(
                     fix
                 )
 
@@ -119,25 +119,25 @@ class RefactoringEngine:
             validations = self.queries.handle(
                 ValidateFile(path=path, original=original, fixed=fixed_source, issues=issues)
             )
-            result.validations.extend(validations)
+            pipeline_outcome.validations.extend(validations)
 
         self.bus.publish(
             PipelineCompleted(
-                issues_found=result.total_issues,
-                fixes_applied=result.total_fixed,
-                fixes_failed=result.total_failed,
-                all_valid=result.all_valid,
+                issues_found=pipeline_outcome.total_issues,
+                fixes_applied=pipeline_outcome.total_fixed,
+                fixes_failed=pipeline_outcome.total_failed,
+                all_valid=pipeline_outcome.all_valid,
             )
         )
-        return result
+        return pipeline_outcome
 
     def scan_only(self) -> PipelineResult:
-        result = PipelineResult(dry_run=True)
+        scan_outcome = PipelineResult(dry_run=True)
 
         # Collect all files first
         files = self.queries.handle(CollectFiles())
         if not files:
-            return result
+            return scan_outcome
 
         # Preload small files into RAM
         sources = self._preload_sources(files)
@@ -153,38 +153,38 @@ class RefactoringEngine:
             issues_map.update(self.queries.handle(ScanPaths(paths=large_files)))
 
         for file_issues in issues_map.values():
-            result.issues_found.extend(file_issues)
+            scan_outcome.issues_found.extend(file_issues)
 
-        return result
+        return scan_outcome
 
     def run_file(self, path: Path, *, dry_run: bool = False) -> PipelineResult:
-        result = PipelineResult(dry_run=dry_run)
+        file_outcome = PipelineResult(dry_run=dry_run)
 
         # For single file, just load it directly
         try:
             source = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
-            return result
+            return file_outcome
 
         sources = {path: source}
         issues_map = self.queries.handle(ScanSources(sources=sources))
         issues = issues_map.get(path, [])
-        result.issues_found.extend(issues)
+        file_outcome.issues_found.extend(issues)
 
         if not issues:
-            return result
+            return file_outcome
 
         fixed_source, fixes = self.commands.handle(
             FixFile(path=path, source=source, issues=issues, dry_run=dry_run)
         )
         for fix in fixes:
-            (result.fixes_applied if fix.applied else result.fixes_failed).append(fix)
+            (file_outcome.fixes_applied if fix.applied else file_outcome.fixes_failed).append(fix)
 
         validations = self.queries.handle(
             ValidateFile(path=path, original=source, fixed=fixed_source, issues=issues)
         )
-        result.validations.extend(validations)
-        return result
+        file_outcome.validations.extend(validations)
+        return file_outcome
 
     def _preload_sources(self, files: list[Path] | None = None) -> dict[Path, str]:
         """Preload small file sources into RAM to avoid multiple I/O operations.

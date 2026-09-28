@@ -3,11 +3,11 @@
 
 def greet(name, age):
     """Greet someone."""
-    message = "Hello " + name + ", you are " + str(age) + " years old"
-    return message
+    greeting = "Hello " + name + ", you are " + str(age) + " years old"
+    return greeting
 
 
 def format_data(data):
     """Format data."""
-    result = "Data: " + str(data)
-    return result
+    formatted = "Data: " + str(data)
+    return formatted

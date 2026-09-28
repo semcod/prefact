@@ -9,5 +9,5 @@ from .models import *
 
 def process():
     """Process using wildcard imports."""
-    data = defaultdict(list)
-    return data
+    grouped = defaultdict(list)
+    return grouped

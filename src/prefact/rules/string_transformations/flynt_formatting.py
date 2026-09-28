@@ -32,8 +32,8 @@ class FlyntHelper:
             }
 
             # Apply transformations
-            result = api.fstringify(source, **options)
-            return result
+            fstringified = api.fstringify(source, **options)
+            return fstringified
         except ImportError:
             # flynt not available
             return source

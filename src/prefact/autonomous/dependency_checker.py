@@ -87,8 +87,8 @@ class DependencyChecker(BaseManager):
             except ModuleNotFoundError:
                 import tomli as tomllib  # type: ignore[no-redef]
 
-            data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-            deps = data.get("project", {}).get("dependencies", [])
+            pyproject_data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+            deps = pyproject_data.get("project", {}).get("dependencies", [])
             for dep_str in deps:
                 name, spec = self._parse_dep_string(dep_str)
                 if name:
@@ -101,10 +101,14 @@ class DependencyChecker(BaseManager):
         for req_file in sorted(self.project_root.glob("requirements*.txt")):
             try:
                 for raw_line in req_file.read_text(encoding="utf-8").splitlines():
-                    line = raw_line.strip()
-                    if not line or line.startswith("#") or line.startswith("-"):
+                    requirement = raw_line.strip()
+                    if (
+                        not requirement
+                        or requirement.startswith("#")
+                        or requirement.startswith("-")
+                    ):
                         continue
-                    m = _REQ_RE.match(line)
+                    m = _REQ_RE.match(requirement)
                     if m:
                         name = m.group("name")
                         op = m.group("op") or ""
@@ -120,19 +124,21 @@ class DependencyChecker(BaseManager):
     def _query_pip_outdated(self) -> None:
         """Run ``pip list --outdated`` and keep only declared deps."""
         try:
-            result = subprocess.run(
+            pip_query = subprocess.run(
                 [sys.executable, "-m", "pip", "list", "--outdated", "--format=json"],
                 capture_output=True,
                 text=True,
                 timeout=120,
                 cwd=self.project_root,
             )
-            if result.returncode != 0:
-                console.print(f"⚠️  pip list --outdated failed: {result.stderr.strip()}")
+            if pip_query.returncode != 0:
+                console.print(
+                    f"⚠️  pip list --outdated failed: {pip_query.stderr.strip()}"
+                )
                 self.outdated = []
                 return
 
-            all_outdated = json.loads(result.stdout)
+            all_outdated = json.loads(pip_query.stdout)
         except subprocess.TimeoutExpired:
             console.print("⚠️  pip list --outdated timed out (120 s)")
             self.outdated = []

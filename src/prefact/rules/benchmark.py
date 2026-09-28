@@ -87,10 +87,10 @@ def benchmark_project(project_root: Path, config: Config) -> Dict:
 
     for file_path in python_files:
         try:
-            result = benchmark_file(file_path, config)
-            all_results.append(result)
-            total_ast_time += result["total"]["ast_time_ms"]
-            total_ruff_time += result["total"]["ruff_time_ms"]
+            file_benchmark = benchmark_file(file_path, config)
+            all_results.append(file_benchmark)
+            total_ast_time += file_benchmark["total"]["ast_time_ms"]
+            total_ruff_time += file_benchmark["total"]["ruff_time_ms"]
         except Exception as e:
             print(f"Error benchmarking {file_path}: {e}")
 
@@ -124,14 +124,14 @@ def print_benchmark_results(results: Dict) -> None:
     print("PER-FILE RESULTS")
     print("-" * 60)
 
-    for result in results["results"]:
-        file_name = Path(result["file"]).name
+    for file_stats in results["results"]:
+        file_name = Path(file_stats["file"]).name
         print(
-            f"\n{file_name} ({result['lines']} lines, {result['file_size_bytes']} bytes)"
+            f"\n{file_name} ({file_stats['lines']} lines, {file_stats['file_size_bytes']} bytes)"
         )
-        print(f"  Speedup: {result['total']['overall_speedup']:.2f}x")
+        print(f"  Speedup: {file_stats['total']['overall_speedup']:.2f}x")
 
-        for rule_id, rule_result in result["rules"].items():
+        for rule_id, rule_result in file_stats["rules"].items():
             speedup = rule_result["speedup"]
             match = "✓" if rule_result["issues_match"] else "✗"
             print(f"  {rule_id}: {speedup:.2f}x speedup, issues match: {match}")
@@ -145,11 +145,9 @@ def main() -> None:
     parser.add_argument("--path", default=".", help="Path to benchmark")
     args = parser.parse_args()
 
-    # Load config
-    config = Config(project_root=Path(args.path))
-
-    # Run benchmark
-    results = benchmark_project(Path(args.path), config)
+    # Load config and run benchmark
+    bench_path = Path(args.path)
+    results = benchmark_project(bench_path, Config(project_root=bench_path))
 
     # Print results
     print_benchmark_results(results)

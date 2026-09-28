@@ -214,11 +214,11 @@ def add_ruff_config_to_prefact_yaml(config_path: Path) -> None:
     import yaml
 
     with open(config_path) as f:
-        config = yaml.safe_load(f) or {}
+        prefact_yaml = yaml.safe_load(f) or {}
 
     # Add Ruff settings
-    if "ruff" not in config:
-        config["ruff"] = {
+    if "ruff" not in prefact_yaml:
+        prefact_yaml["ruff"] = {
             "enabled": True,
             "rules": {
                 "unused-imports": {"use_ruff": True},
@@ -231,4 +231,4 @@ def add_ruff_config_to_prefact_yaml(config_path: Path) -> None:
         }
 
     with open(config_path, "w") as f:
-        yaml.dump(config, f, default_flow_style=False)
+        yaml.dump(prefact_yaml, f, default_flow_style=False)

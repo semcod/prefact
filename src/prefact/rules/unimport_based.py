@@ -35,21 +35,25 @@ class UnimportHelper:
                 cmd.append("--remove-duplicate-imports")
 
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            unimport_run = subprocess.run(
+                cmd, capture_output=True, text=True, check=False
+            )
 
             # Parse output to find unused imports
             issues = []
-            if result.returncode != 0:  # unimport returns non-zero when issues found
-                lines = result.stdout.splitlines()
+            if (
+                unimport_run.returncode != 0
+            ):  # unimport returns non-zero when issues found
+                lines = unimport_run.stdout.splitlines()
                 for line in lines:
                     if "unused import" in line.lower():
                         # Extract import name from line
-                        import_name = UnimportHelper._extract_import_name(line)
-                        if import_name:
+                        detected_import = UnimportHelper._extract_import_name(line)
+                        if detected_import:
                             issues.append(
                                 {
                                     "type": "unused_import",
-                                    "import": import_name,
+                                    "import": detected_import,
                                     "line": line,
                                 }
                             )
@@ -75,9 +79,9 @@ class UnimportHelper:
         """Extract import name from unimport output."""
         # Example output: "unused import 'os' found"
         if "'" in line:
-            parts = line.split("'")
-            if len(parts) >= 3:
-                return parts[1]
+            quoted_segments = line.split("'")
+            if len(quoted_segments) >= 3:
+                return quoted_segments[1]
         return None
 
     @staticmethod
@@ -105,8 +109,8 @@ class UnimportHelper:
             tmp_path = tmp.name
 
         try:
-            success = UnimportHelper.fix_file(Path(tmp_path), config)
-            if success:
+            unimport_applied = UnimportHelper.fix_file(Path(tmp_path), config)
+            if unimport_applied:
                 with open(tmp_path) as f:
                     return f.read()
             return source
@@ -150,19 +154,19 @@ class UnimportUnusedImports(BaseRule):
             if stripped.startswith(("import ", "from ")):
                 # Extract import names
                 if stripped.startswith("from "):
-                    parts = stripped.split()
-                    if len(parts) >= 4:
-                        import_name = parts[3]
-                        import_lines[import_name] = f"{i}{1}"
+                    import_tokens = stripped.split()
+                    if len(import_tokens) >= 4:
+                        declared_import = import_tokens[3]
+                        import_lines[declared_import] = f"{i}{1}"
                 else:
-                    parts = stripped.split()
-                    if len(parts) >= 2:
-                        import_name = parts[1].split(",")[0]
-                        import_lines[import_name] = f"{i}{1}"
+                    import_tokens = stripped.split()
+                    if len(import_tokens) >= 2:
+                        declared_import = import_tokens[1].split(",")[0]
+                        import_lines[declared_import] = f"{i}{1}"
 
         for item in results:
-            import_name = item.get("import", "unknown")
-            line_num = import_lines.get(import_name, 1)
+            reported_import = item.get("import", "unknown")
+            line_num = import_lines.get(reported_import, 1)
 
             issues.append(
                 Issue(
@@ -170,9 +174,9 @@ class UnimportUnusedImports(BaseRule):
                     file=path,
                     line=line_num,
                     col=0,
-                    message=f"Unused import: {import_name}",
+                    message=f"Unused import: {reported_import}",
                     severity=Severity.INFO,
-                    original=import_name,
+                    original=reported_import,
                 )
             )
 

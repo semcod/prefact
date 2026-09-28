@@ -90,9 +90,9 @@ class CompositeRuleFactory:
                 all_errors = []
 
                 for tool in self.tools:
-                    result = tool.validate(path, original, fixed)
-                    all_checks.extend(result.checks)
-                    all_errors.extend(result.errors)
+                    tool_report = tool.validate(path, original, fixed)
+                    all_checks.extend(tool_report.checks)
+                    all_errors.extend(tool_report.errors)
 
                 return ValidationResult(
                     file=path,

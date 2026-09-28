@@ -23,7 +23,7 @@ def run_example(example_dir: Path) -> Tuple[bool, str]:
 
     try:
         # Run prefact scan
-        result = subprocess.run(
+        scan_process = subprocess.run(
             [
                 sys.executable,
                 "-m",
@@ -39,11 +39,11 @@ def run_example(example_dir: Path) -> Tuple[bool, str]:
             cwd=example_dir.parent.parent,
         )
 
-        if result.returncode != 0:
-            return False, f"Scan failed: {result.stderr}"
+        if scan_process.returncode != 0:
+            return False, f"Scan failed: {scan_process.stderr}"
 
         # Run prefact fix if there are issues
-        if "issues found" in result.stdout:
+        if "issues found" in scan_process.stdout:
             fix_result = subprocess.run(
                 [
                     sys.executable,
@@ -101,8 +101,8 @@ def main():
         task = progress.add_task("Running examples...", total=len(examples))
 
         for example_dir in examples:
-            success, message = run_example(example_dir)
-            results.append((example_dir.name, success, message))
+            success, status_message = run_example(example_dir)
+            results.append((example_dir.name, success, status_message))
             progress.advance(task)
 
     # Show results table
@@ -112,10 +112,10 @@ def main():
     table.add_column("Message")
 
     success_count = 0
-    for name, success, message in results:
+    for name, success, status_message in results:
         status = "✅ Passed" if success else "❌ Failed"
         style = "green" if success else "red"
-        table.add_row(name, f"[{style}]{status}[/{style}]", message)
+        table.add_row(name, f"[{style}]{status}[/{style}]", status_message)
         if success:
             success_count += 1
 

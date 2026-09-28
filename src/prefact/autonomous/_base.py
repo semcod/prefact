@@ -3,12 +3,8 @@
 from pathlib import Path
 from typing import Dict, Optional
 
-from rich.console import Console
-
+from prefact._base import console as console
 from prefact.config_extended import ExtendedConfig
-
-# Shared console instance
-console = Console()
 
 # Constants for code analysis
 MIN_CODE_SIZE = 50
@@ -58,13 +54,15 @@ class BaseManager:
 
         if self.refact_config_path.exists():
             try:
-                config = ExtendedConfig.from_yaml(self.refact_config_path)
+                extended_config = ExtendedConfig.from_yaml(self.refact_config_path)
             except Exception:
-                config = None
+                extended_config = None
 
-            if config is not None:
+            if extended_config is not None:
                 for limit_key, default_value in DEFAULT_AUTONOMOUS_LIMITS.items():
-                    configured_value = config.performance.get(limit_key, default_value)
+                    configured_value = extended_config.performance.get(
+                        limit_key, default_value
+                    )
                     if isinstance(configured_value, int) and configured_value > 0:
                         limits[limit_key] = configured_value
 

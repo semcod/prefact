@@ -1,9 +1,9 @@
 """Rich-based console reporter for pipeline results."""
 
-from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from prefact._base import console
 from prefact.models import PipelineResult, Severity
 
 _STYLE = {
@@ -14,8 +14,6 @@ _STYLE = {
 
 
 def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
-    console = Console()
-
     mode = "[dim](dry-run)[/]" if result.dry_run else ""
     console.print()
     console.print(
@@ -61,10 +59,10 @@ def print_report(result: PipelineResult, *, verbose: bool = False) -> None:
                         console.print(f"  [red]{v.file}: {err}[/red]")
 
     console.print()
-    parts = [
+    summary_fields = [
         f"[bold]{result.total_issues}[/bold] issue(s)",
         f"[green]{result.total_fixed}[/green] fixed",
         f"[red]{result.total_failed}[/red] failed",
     ]
-    console.print(" │ ".join(parts))
+    console.print(" │ ".join(summary_fields))
     console.print()
