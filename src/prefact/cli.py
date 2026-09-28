@@ -457,17 +457,17 @@ def rules() -> None:
 # ── helpers ───────────────────────────────────────────────────────────
 
 
-def _output(result, kwargs) -> None:
+def _output(report, kwargs) -> None:
     fmt = kwargs.get("output_format", "console")
     if fmt == "json":
         text = json_reporter.dump(
-            result,
+            report,
             output=Path(kwargs["output_file"]) if kwargs.get("output_file") else None,
         )
         if not kwargs.get("output_file"):
             click.echo(text)
     else:
-        console_reporter.print_report(result, verbose=kwargs.get("verbose", False))
+        console_reporter.print_report(report, verbose=kwargs.get("verbose", False))
 
 
 if __name__ == "__main__":
