@@ -12,8 +12,7 @@ from prefact.models import PipelineResult
 
 def run_engine(config: Config) -> PipelineResult:
     """Create the engine for a config and run it."""
-    engine = RefactoringEngine(config)
-    return engine.run()
+    return RefactoringEngine(config).run()
 
 
 def run_prefact_example(
