@@ -54,8 +54,8 @@ def users():
         User("2", "Bob", "bob@example.com", datetime.now()),
     ]
 
-    for user in users:
-        print("User: " + user.name + " (" + user.email + ")")
+    for entry in users:
+        print("User: " + entry.name + " (" + entry.email + ")")
 
 
 if __name__ == "__main__":

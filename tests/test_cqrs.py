@@ -16,6 +16,7 @@ from prefact.cqrs import (
     RefactoringCommandHandler,
     ScanCompleted,
     ScanStarted,
+    Subscription,
     ValidateFile,
 )
 from prefact.cqrs.events import from_dict
@@ -28,7 +29,9 @@ from prefact.models import Fix, Issue, ValidationResult
 def test_bus_dispatches_to_subscribers() -> None:
     bus = EventBus()
     seen: list[ScanStarted] = []
-    bus.subscribe("analysis.scan.started", lambda event: seen.append(event))
+    bus.subscribe(
+        Subscription("analysis.scan.started", lambda event: seen.append(event))
+    )
     bus.publish(ScanStarted(file_count=2))
     assert len(seen) == 1
     assert seen[0].file_count == 2
@@ -46,8 +49,8 @@ def test_bus_unsubscribe() -> None:
     bus = EventBus()
     seen: list[ScanStarted] = []
     handler = lambda event: seen.append(event)  # noqa: E731
-    bus.subscribe("analysis.scan.started", handler)
-    bus.unsubscribe("analysis.scan.started", handler)
+    bus.subscribe(Subscription("analysis.scan.started", handler))
+    bus.unsubscribe(Subscription("analysis.scan.started", handler))
     bus.publish(ScanStarted(file_count=1))
     assert seen == []
 
@@ -117,7 +120,9 @@ def test_command_handler_emits_fix_applied() -> None:
     bus = EventBus()
     handler = RefactoringCommandHandler(_FakeFixer(), bus)
     seen: list[FixApplied] = []
-    bus.subscribe("refactoring.fix.applied", lambda event: seen.append(event))
+    bus.subscribe(
+        Subscription("refactoring.fix.applied", lambda event: seen.append(event))
+    )
 
     issue = _issue()
     _source, fixes = handler.handle(
@@ -132,7 +137,9 @@ def test_command_handler_emits_fix_failed() -> None:
     bus = EventBus()
     handler = RefactoringCommandHandler(_FakeFixer(), bus)
     seen: list[FixFailed] = []
-    bus.subscribe("refactoring.fix.failed", lambda event: seen.append(event))
+    bus.subscribe(
+        Subscription("refactoring.fix.failed", lambda event: seen.append(event))
+    )
 
     issue = _issue(rule_id="failing")
     handler.handle(FixFile(path=Path("f.py"), source="x", issues=[issue]))
@@ -172,9 +179,15 @@ def test_query_handler_emits_scan_events() -> None:
     started: list[ScanStarted] = []
     detected: list[IssueDetected] = []
     completed: list[ScanCompleted] = []
-    bus.subscribe("analysis.scan.started", lambda event: started.append(event))
-    bus.subscribe("analysis.issue.detected", lambda event: detected.append(event))
-    bus.subscribe("analysis.scan.completed", lambda event: completed.append(event))
+    bus.subscribe(
+        Subscription("analysis.scan.started", lambda event: started.append(event))
+    )
+    bus.subscribe(
+        Subscription("analysis.issue.detected", lambda event: detected.append(event))
+    )
+    bus.subscribe(
+        Subscription("analysis.scan.completed", lambda event: completed.append(event))
+    )
 
     from prefact.cqrs.queries.analysis import ScanSources
 
@@ -190,12 +203,12 @@ def test_query_handler_emits_validation_event() -> None:
     bus = EventBus()
     handler = AnalysisQueryHandler(_FakeScanner(), _FakeValidator(), bus)
     seen: list[object] = []
-    bus.subscribe("analysis.validation.completed", lambda event: seen.append(event))
+    bus.subscribe(
+        Subscription("analysis.validation.completed", lambda event: seen.append(event))
+    )
 
     results = handler.handle(
-        ValidateFile(
-            path=Path("f.py"), original="a", fixed="b", issues=[_issue()]
-        )
+        ValidateFile(path=Path("f.py"), original="a", fixed="b", issues=[_issue()])
     )
     assert results[0].passed is True
     assert len(seen) == 1

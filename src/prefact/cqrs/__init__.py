@@ -15,7 +15,7 @@ an append-only :class:`~prefact.cqrs.store.EventStore` so the history can be
 replayed (event sourcing).
 """
 
-from prefact.cqrs.bus import EventBus
+from prefact.cqrs.bus import EventBus, Subscription
 from prefact.cqrs.commands.refactoring import FixFile, RefactoringCommandHandler
 from prefact.cqrs.events import (
     FixApplied,
@@ -38,6 +38,7 @@ from prefact.cqrs.store import EventStore, InMemoryEventStore, JsonlEventStore
 
 __all__ = [
     "EventBus",
+    "Subscription",
     "EventStore",
     "InMemoryEventStore",
     "JsonlEventStore",

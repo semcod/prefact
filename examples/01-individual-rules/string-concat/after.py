@@ -3,8 +3,7 @@
 
 def greet(name, age):
     """Greet someone."""
-    greeting = f"Hello {name}, you are {age} years old"
-    return greeting
+    return f"Hello {name}, you are {age} years old"
 
 
 def format_data(data):
