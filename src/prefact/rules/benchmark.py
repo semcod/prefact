@@ -147,13 +147,13 @@ def main() -> None:
 
     # Load config and run benchmark
     bench_path = Path(args.path)
-    results = benchmark_project(bench_path, Config(project_root=bench_path))
+    benchmark_report = benchmark_project(bench_path, Config(project_root=bench_path))
 
     # Print results
-    print_benchmark_results(results)
+    print_benchmark_results(benchmark_report)
 
     # Save detailed results
     output_file = Path("benchmark_results.json")
     with open(output_file, "w") as f:
-        json.dump(results, f, indent=2)
+        json.dump(benchmark_report, f, indent=2)
     print(f"\nDetailed results saved to: {output_file}")
