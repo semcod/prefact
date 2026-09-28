@@ -1,0 +1,1 @@
+planfile ticket fail PLF-047 --error "False positive: src/prefact/cli.py:152 is list concatenation (list + list), not string concatenation; converting to f-string would break cfg.exclude list[str]"
