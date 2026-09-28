@@ -16,13 +16,13 @@ from prefact.rules.migration import RuleMigrationManager
 
 def benchmark_file(file_path: Path, config: Config) -> Dict:
     """Benchmark a single file with both AST and Ruff implementations."""
-    source = file_path.read_text(encoding="utf-8")
+    file_content = file_path.read_text(encoding="utf-8")
     migration_manager = RuleMigrationManager(config)
 
     results = {
         "file": str(file_path),
-        "file_size_bytes": len(source),
-        "lines": source.count("\n") + 1,
+        "file_size_bytes": len(file_content),
+        "lines": file_content.count("\n") + 1,
         "rules": {},
     }
 
@@ -40,13 +40,13 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
         # Profile AST implementation
         ast_rule = ast_rule_class(config)
         ast_start = time.perf_counter()
-        ast_issues = ast_rule.scan_file(file_path, source)
+        ast_issues = ast_rule.scan_file(file_path, file_content)
         ast_time = time.perf_counter() - ast_start
 
         # Profile Ruff implementation
         ruff_rule = ruff_rule_class(config)
         ruff_start = time.perf_counter()
-        ruff_issues = ruff_rule.scan_file(file_path, source)
+        ruff_issues = ruff_rule.scan_file(file_path, file_content)
         ruff_time = time.perf_counter() - ruff_start
 
         # Store results
