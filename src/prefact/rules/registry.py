@@ -97,13 +97,13 @@ class LazyRuleRegistry:
 
         # Load the module
         module_path = self._rule_modules[rule_id]
-        module = self._load_module(module_path)
+        rule_module = self._load_module(module_path)
 
-        if module is None:
+        if rule_module is None:
             return None
 
         # Find the rule class in the module
-        rule_class = self._find_rule_class(module, rule_id)
+        rule_class = self._find_rule_class(rule_module, rule_id)
         if rule_class:
             self._rule_cache[rule_id] = rule_class
             return rule_class
@@ -116,23 +116,23 @@ class LazyRuleRegistry:
             return self._module_cache[module_path]
 
         try:
-            module = importlib.import_module(module_path)
-            self._module_cache[module_path] = module
-            return module
+            loaded_module = importlib.import_module(module_path)
+            self._module_cache[module_path] = loaded_module
+            return loaded_module
         except ImportError as e:
             print(f"Warning: Could not load module {module_path}: {e}")
             return None
 
-    def _find_rule_class(self, module, rule_id: str) -> Optional[Type[BaseRule]]:
+    def _find_rule_class(self, rule_module, rule_id: str) -> Optional[Type[BaseRule]]:
         """Find a rule class in a module by rule_id."""
         # Check for a direct mapping
-        rule_map = getattr(module, "_RULE_MAP", None)
+        rule_map = getattr(rule_module, "_RULE_MAP", None)
         if rule_map and rule_id in rule_map:
             return rule_map[rule_id]
 
         # Search through module attributes
-        for attr_name in dir(module):
-            attr = getattr(module, attr_name)
+        for attr_name in dir(rule_module):
+            attr = getattr(rule_module, attr_name)
             if (
                 isinstance(attr, type)
                 and issubclass(attr, BaseRule)
