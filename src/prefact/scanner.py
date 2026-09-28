@@ -86,10 +86,10 @@ def _dedupe_issues(issues: list[Issue]) -> list[Issue]:
     seen: set[tuple[str, str, int, int, str]] = set()
     unique: list[Issue] = []
     for issue in issues:
-        key = (issue.rule_id, str(issue.file), issue.line, issue.col, issue.message)
-        if key in seen:
+        issue_key = (issue.rule_id, str(issue.file), issue.line, issue.col, issue.message)
+        if issue_key in seen:
             continue
-        seen.add(key)
+        seen.add(issue_key)
         unique.append(issue)
     return unique
 
