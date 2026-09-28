@@ -63,11 +63,11 @@ def main():
 '''
 
     for i in range(num_files):
-        file_path = base_dir / f"test_module_{i:03d}.py"
-        file_path.write_text(
+        module_path = base_dir / f"test_module_{i:03d}.py"
+        module_path.write_text(
             _render_test_module(template, i, file_size_kb), encoding="utf-8"
         )
-        created_files.append(file_path)
+        created_files.append(module_path)
 
     return created_files
 
