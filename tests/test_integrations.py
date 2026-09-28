@@ -452,7 +452,7 @@ def test_performance_comparison():
     source = ""
     imports = ["import os", "import sys", "import json", "import re", "import math"]
     for i in range(100):
-        source += imports[i % len(imports)] + "\n"
+        source += f"{imports[i % len(imports)]}\n"
         source += f"def func_{i}():\n"
         source += f'    print("Function {i}")\n'
         source += "    return None\n\n"
@@ -525,7 +525,7 @@ def run_integration_tests():
     print("✓ Performance comparison completed")
 
     # Run comprehensive test suite
-    print("\n" + "=" * CONSTANT_60)
+    print(f"\n{'=' * CONSTANT_60}")
     print("RUNNING COMPREHENSIVE TEST SUITE")
     print("=" * CONSTANT_60)
 
