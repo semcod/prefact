@@ -82,14 +82,14 @@ class CustomImportOrganization(BaseRule):
 
         # Check organization
         if self.custom_rules["group_by_package"]:
-            issues.extend(self._check_grouping(path, imports))
+            issues.extend(self._check_grouping(imports))
 
         if self.custom_rules["alphabetical_within_groups"]:
             issues.extend(self._check_alphabetical(path, imports))
 
         return issues
 
-    def _check_grouping(self, path: Path, imports: List[Dict]) -> List[Issue]:
+    def _check_grouping(self, imports: List[Dict]) -> List[Issue]:
         """Check if imports are properly grouped by package."""
         issues = []
         current_package = None
