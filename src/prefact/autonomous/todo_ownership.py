@@ -77,32 +77,32 @@ def classify_legacy_lines(lines: List[str]) -> List[bool]:
     flags = [False] * len(lines)
     mode: str | None = None  # "header" | "section" | None
     for idx, line in enumerate(lines):
-        stripped = line.strip()
+        line_content = line.strip()
         if mode is not None:
-            if _is_boundary_line(stripped):
+            if _is_boundary_line(line_content):
                 mode = None  # boundary — reclassify this line below
             else:
                 flags[idx] = True
-                if mode == "header" and stripped == "---":
+                if mode == "header" and line_content == "---":
                     mode = None
                 continue
-        if stripped == "# TODO":
+        if line_content == "# TODO":
             if _has_prefact_signature(lines, idx):
                 flags[idx] = True
                 mode = "header"
             continue
-        if _is_owned_heading(stripped):
+        if _is_owned_heading(line_content):
             flags[idx] = True
             mode = "section"
             continue
-        if stripped.startswith(_FOOTER_PREFIX):
+        if line_content.startswith(_FOOTER_PREFIX):
             _claim_footer(lines, flags, idx)
     return flags
 
 
-def _is_boundary_line(stripped: str) -> bool:
+def _is_boundary_line(line_text: str) -> bool:
     """A heading or comment line closes the current owned region."""
-    return stripped.startswith("## ") or stripped.startswith("<!--")
+    return line_text.startswith("## ") or line_text.startswith("<!--")
 
 
 def _has_prefact_signature(lines: List[str], idx: int) -> bool:
@@ -111,9 +111,9 @@ def _has_prefact_signature(lines: List[str], idx: int) -> bool:
     return any(la.startswith(_HEADER_SIGNATURE) for la in lookahead)
 
 
-def _is_owned_heading(stripped: str) -> bool:
+def _is_owned_heading(heading_text: str) -> bool:
     """Match one of the section headings prefact has historically generated."""
-    return any(stripped.startswith(heading) for heading in _OWNED_HEADINGS)
+    return any(heading_text.startswith(heading) for heading in _OWNED_HEADINGS)
 
 
 def _claim_footer(lines: List[str], flags: List[bool], idx: int) -> None:
