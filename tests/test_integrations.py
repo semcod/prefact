@@ -452,12 +452,7 @@ def test_performance_comparison():
     source = ""
     imports = ["import os", "import sys", "import json", "import re", "import math"]
     for i in range(100):
-        source += f"""{imports[i % len(imports)]}
-def func_{i}():
-    print("Function {i}")
-    return None
-
-"""
+        source += f"{imports[i % len(imports)]}\ndef func_{i}():\n    print('Function {i}')\n    return None\n\n"
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
         tmp.write(source)
