@@ -84,7 +84,12 @@ class Config:
 
     def rule_enabled(self, rule_id: str) -> bool:
         rc = self.rules.get(rule_id)
-        return rc.enabled if rc else True
+        if rc is not None:
+            return rc.enabled
+        # Heavy external tool rules and composites should NOT be enabled by default unless explicitly configured
+        if any(rule_id.startswith(p) for p in ("pylint-", "unimport-", "autoflake-", "import-linter-", "importchecker-", "mypy-", "composite-")) or rule_id == "type-checking":
+            return False
+        return True
 
     def is_rule_enabled(self, rule_id: str) -> bool:
         """Alias for rule_enabled for compatibility."""

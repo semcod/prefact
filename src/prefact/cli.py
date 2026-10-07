@@ -64,6 +64,13 @@ def main(
 
     Use 'prefact -a' for autonomous mode.
     """
+    try:
+        from prefact.autoupdate import check_for_updates
+
+        check_for_updates("prefact")
+    except Exception:
+        pass
+
     if autonomous:
         # Auto-skip examples if exclude pattern matches examples directory
         auto_skip_examples = skip_examples

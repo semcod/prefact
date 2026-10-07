@@ -176,12 +176,56 @@ class Scanner:
 
         import fnmatch
 
+        # Hardcoded safety for common non-source/cache folders
+        _skip_dirs = {
+            ".git",
+            "node_modules",
+            "__pycache__",
+            "env",
+            ".env",
+            "venv",
+            ".venv",
+            "virtualenv",
+            "site-packages",
+            "build",
+            "dist",
+            "target",
+            ".cache",
+            "cache",
+            ".tmp",
+            "tmp",
+            ".subactor",
+            ".codex",
+            "state",
+            ".pytest_cache",
+            ".ruff_cache",
+            ".idea",
+            ".vscode",
+            ".governance",
+            "tests",
+            ".worktrees",
+            "artifacts",
+            ".planfile",
+            ".benchmarks",
+            "benchmarks",
+            "bench-results",
+            "twinerd-bench-results",
+            ".cargo",
+        }
+        if any(part in _skip_dirs for part in abs_path.parts):
+            return True
+
         for pat in self._exclude_patterns:
             if not pat:
                 continue
 
             # Match directly
             if fnmatch.fnmatch(rel_str, pat) or fnmatch.fnmatch(rel_str, f"*/{pat}"):
+                return True
+
+            # Match directory normalized pattern (e.g. **/tests/** -> tests)
+            clean_pat = pat.strip("/*")
+            if clean_pat and (clean_pat in rel.parts or fnmatch.fnmatch(rel_str, f"*{clean_pat}*")):
                 return True
 
             # Match parents
@@ -193,20 +237,5 @@ class Scanner:
                     parent_str, f"*/{pat}"
                 ):
                     return True
-
-        # Hardcoded safety for common folders if not caught by patterns
-        _skip_dirs = {
-            ".git",
-            "node_modules",
-            "__pycache__",
-            "env",
-            ".env",
-            "venv",
-            ".venv",
-            "virtualenv",
-            "site-packages",
-        }
-        if any(part in _skip_dirs for part in abs_path.parts):
-            return True
 
         return False

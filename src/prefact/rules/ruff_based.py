@@ -16,31 +16,44 @@ except ImportError:
 class RuffHelper:
     """Helper class for Ruff operations."""
 
-    @staticmethod
-    def check_file(file_path: Path, select_codes: List[str]) -> List[Dict]:
-        """Run Ruff on a single file and return JSON results."""
-        try:
-            ruff_run = subprocess.run(
-                [
-                    "ruff",
-                    "check",
-                    str(file_path),
-                    "--select",
-                    ",".join(select_codes),
-                    "--output-format",
-                    "json",
-                    "--no-fix",
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )  # Use check=False to handle non-zero exit
+    _CACHE: Dict[str, List[Dict]] = {}
 
-            if ruff_run.stdout.strip():
-                return json.loads(ruff_run.stdout)
-            return []
-        except (subprocess.CalledProcessError, json.JSONDecodeError):
-            return []
+    @classmethod
+    def check_file(cls, file_path: Path, select_codes: List[str]) -> List[Dict]:
+        """Run Ruff on a single file and return JSON results, caching per file."""
+        file_key = str(file_path)
+        if file_key not in cls._CACHE:
+            try:
+                ruff_run = subprocess.run(
+                    [
+                        "ruff",
+                        "check",
+                        file_key,
+                        "--select",
+                        "F401,F811,F403,T201,I001,E,W,F,I",
+                        "--output-format",
+                        "json",
+                        "--no-fix",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                if ruff_run.stdout.strip():
+                    cls._CACHE[file_key] = json.loads(ruff_run.stdout)
+                else:
+                    cls._CACHE[file_key] = []
+            except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
+                cls._CACHE[file_key] = []
+
+        all_issues = cls._CACHE.get(file_key, [])
+        codes_set = set(select_codes)
+        return [
+            issue
+            for issue in all_issues
+            if issue.get("code") in codes_set
+            or any(issue.get("code", "").startswith(c) for c in codes_set)
+        ]
 
     @staticmethod
     def fix_file(file_path: Path, select_codes: List[str]) -> bool:
