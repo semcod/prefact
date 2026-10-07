@@ -152,7 +152,24 @@ class RelativeToAbsoluteImports(BaseRule):
     def fix(
         self, path: Path, source: str, issues: list[Issue]
     ) -> tuple[str, list[Fix]]:
-        if not issues or not self.package_name:
+        # Detect package name per-file if project_root is a multi-package mono-repo
+        pkg_name = self.package_name
+        if not pkg_name:
+            curr = path.parent
+            while curr != self.config.project_root and curr != curr.parent:
+                if (curr / "pyproject.toml").exists():
+                    try:
+                        import tomllib
+                        with open(curr / "pyproject.toml", "rb") as f:
+                            data = tomllib.load(f)
+                        pkg_name = data.get("project", {}).get("name")
+                    except Exception:
+                        pass
+                    if pkg_name:
+                        break
+                curr = curr.parent
+
+        if not issues or not pkg_name:
             return source, []
 
         try:
@@ -161,7 +178,7 @@ class RelativeToAbsoluteImports(BaseRule):
             return source, []
 
         transformer = _RelativeImportFixer(
-            path, self.package_name, self.config.project_root
+            path, pkg_name, self.config.project_root
         )
         new_tree = cst_tree.visit(transformer)
         fixed_source = new_tree.code

@@ -91,6 +91,10 @@ class FlyntStringFormatting(BaseRule):
             return source, []
 
         fixed_source = FlyntHelper.fix_source(source)
+        try:
+            ast.parse(fixed_source)
+        except SyntaxError:
+            return source, []
         fixes = []
 
         if fixed_source != source:

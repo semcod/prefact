@@ -203,6 +203,12 @@ class StringConcatToFString(BaseRule):
         fixed_tree = cst_tree.visit(transformer)
         fixed_source = fixed_tree.code
 
+        # Safety check: ensure transformation produces valid syntax
+        try:
+            ast.parse(fixed_source)
+        except SyntaxError:
+            return source, []
+
         fixes = []
         for fix_info in transformer.fixes:
             fixes.append(
