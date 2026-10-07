@@ -51,10 +51,17 @@ def _str_to_module(dotted: str) -> cst.BaseExpression:
 class _RelativeImportFixer(cst.CSTTransformer):
     """Transform relative imports to absolute using the resolved package root."""
 
-    def __init__(self, file_path: Path, package_name: str, project_root: Path) -> None:
+    def __init__(
+        self,
+        file_path: Path,
+        package_name: str,
+        project_root: Path,
+        package_root: Path | None = None,
+    ) -> None:
         self.file_path = file_path
-        self.package_name = package_name
+        self.package_name = package_name.replace("-", "_")
         self.project_root = project_root
+        self.package_root = package_root
         self.fixes: list[dict] = []
 
     def leave_ImportFrom(
@@ -89,10 +96,14 @@ class _RelativeImportFixer(cst.CSTTransformer):
         self, level: int, module_node: cst.BaseExpression | None
     ) -> str | None:
         """Resolve ``level`` dots + ``module_node`` to an absolute dotted path."""
+        root = self.package_root.resolve() if self.package_root else self.project_root.resolve()
         try:
-            rel = self.file_path.resolve().relative_to(self.project_root.resolve())
+            rel = self.file_path.resolve().relative_to(root)
         except ValueError:
-            return None
+            try:
+                rel = self.file_path.resolve().relative_to(self.project_root.resolve())
+            except ValueError:
+                return None
 
         path_segments = list(rel.parts)
         if path_segments and path_segments[0] == "src":
@@ -104,6 +115,7 @@ class _RelativeImportFixer(cst.CSTTransformer):
             return None
         base_parts = path_segments[: len(path_segments) - up] if up else path_segments
 
+        # If base_parts already starts with package_name (or package_name with underscores), ensure prefix is consistent
         module_str = _module_to_str(module_node) if module_node else ""
         result_parts = list(base_parts) + ([module_str] if module_str else [])
         return ".".join(result_parts) if result_parts else None
@@ -154,20 +166,22 @@ class RelativeToAbsoluteImports(BaseRule):
     ) -> tuple[str, list[Fix]]:
         # Detect package name per-file if project_root is a multi-package mono-repo
         pkg_name = self.package_name
-        if not pkg_name:
-            curr = path.parent
-            while curr != self.config.project_root and curr != curr.parent:
-                if (curr / "pyproject.toml").exists():
-                    try:
-                        import tomllib
-                        with open(curr / "pyproject.toml", "rb") as f:
-                            data = tomllib.load(f)
-                        pkg_name = data.get("project", {}).get("name")
-                    except Exception:
-                        pass
-                    if pkg_name:
+        pkg_root: Path | None = None
+        curr = path.parent
+        while curr != self.config.project_root and curr != curr.parent:
+            if (curr / "pyproject.toml").exists():
+                try:
+                    import tomllib
+                    with open(curr / "pyproject.toml", "rb") as f:
+                        data = tomllib.load(f)
+                    detected = data.get("project", {}).get("name")
+                    if detected:
+                        pkg_name = detected.replace("-", "_")
+                        pkg_root = curr
                         break
-                curr = curr.parent
+                except Exception:
+                    pass
+            curr = curr.parent
 
         if not issues or not pkg_name:
             return source, []
@@ -178,7 +192,7 @@ class RelativeToAbsoluteImports(BaseRule):
             return source, []
 
         transformer = _RelativeImportFixer(
-            path, pkg_name, self.config.project_root
+            path, pkg_name, self.config.project_root, package_root=pkg_root
         )
         new_tree = cst_tree.visit(transformer)
         fixed_source = new_tree.code

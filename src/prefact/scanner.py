@@ -212,7 +212,7 @@ class Scanner:
             "twinerd-bench-results",
             ".cargo",
         }
-        if any(part in _skip_dirs for part in abs_path.parts):
+        if any(part in _skip_dirs for part in rel.parts):
             return True
 
         for pat in self._exclude_patterns:
@@ -225,7 +225,11 @@ class Scanner:
 
             # Match directory normalized pattern (e.g. **/tests/** -> tests)
             clean_pat = pat.strip("/*")
-            if clean_pat and (clean_pat in rel.parts or fnmatch.fnmatch(rel_str, f"*{clean_pat}*")):
+            if clean_pat and (
+                clean_pat in rel.parts
+                or fnmatch.fnmatch(rel_str, f"*/{clean_pat}/*")
+                or fnmatch.fnmatch(rel_str, f"{clean_pat}/*")
+            ):
                 return True
 
             # Match parents

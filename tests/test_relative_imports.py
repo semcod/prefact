@@ -109,6 +109,24 @@ class TestFix:
         assert fixed == source
         assert fixes == []
 
+    def test_monorepo_subpackage_resolution(self, tmp_path: Path) -> None:
+        # Root is a monorepo workspace without a root package
+        subpkg = tmp_path / "packages" / "sub-pkg"
+        (subpkg / "src" / "sub_pkg" / "inner").mkdir(parents=True)
+        (subpkg / "pyproject.toml").write_text('[project]\nname = "sub-pkg"\n')
+        
+        cfg = Config(project_root=tmp_path, package_name="")
+        source = "from .inner import deep_helper\n"
+        rule = RelativeToAbsoluteImports(cfg)
+        file_path = subpkg / "src" / "sub_pkg" / "main.py"
+        file_path.write_text(source)
+        
+        issues = rule.scan_file(file_path, source)
+        fixed, fixes = rule.fix(file_path, source, issues)
+        assert "from sub_pkg.inner import deep_helper" in fixed
+        assert len(fixes) == 1
+
+
 
 class TestValidate:
     def test_valid_after_fix(self, config: Config) -> None:
