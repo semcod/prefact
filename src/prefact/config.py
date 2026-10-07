@@ -44,6 +44,11 @@ class Config:
     # JSON-lines file so a run can be replayed later.
     event_store: Path | None = None
 
+    # Wellmanifest host contract protection (Never commit on main or dirty primary checkout)
+    enforce_wellmanifest: bool = True
+    allow_dirty_checkout: bool = False
+    fail_on_wellmanifest_violation: bool = False
+
     # --- helpers --------------------------------------------------------
 
     @classmethod

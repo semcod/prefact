@@ -51,6 +51,17 @@ class Fixer:
             all_fixes.extend(fixes)
 
         if not dry_run and all_fixes:
+            if getattr(self.config, "enforce_wellmanifest", True) and not getattr(self.config, "allow_dirty_checkout", False):
+                from prefact._base import console
+                from prefact.wellmanifest.guard import is_safe_to_modify, WellmanifestViolationError
+
+                safe, reason = is_safe_to_modify(path)
+                if not safe:
+                    console.print(f"[bold red]🚫 Wellmanifest Guard Blocked In-Place Fix:[/bold red]\n  File: {path}\n  Reason: {reason}")
+                    if getattr(self.config, "fail_on_wellmanifest_violation", False):
+                        raise WellmanifestViolationError(reason)
+                    return source, []
+
             if self.config.backup:
                 shutil.copy2(path, path.with_suffix(f"{path.suffix}.bak"))
             path.write_text(source, encoding="utf-8")
