@@ -140,6 +140,23 @@ class RelativeToAbsoluteImports(BaseRule):
         except SyntaxError:
             return issues
 
+        pkg_name = self.package_name
+        if not pkg_name:
+            curr = path.parent
+            while curr != self.config.project_root and curr != curr.parent:
+                if (curr / "pyproject.toml").exists():
+                    try:
+                        import tomllib
+                        with open(curr / "pyproject.toml", "rb") as f:
+                            data = tomllib.load(f)
+                        detected = data.get("project", {}).get("name")
+                        if detected:
+                            pkg_name = detected.replace("-", "_")
+                            break
+                    except Exception:
+                        pass
+                curr = curr.parent
+
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and (node.level or 0) > 0:
                 module_str = node.module or ""
@@ -153,8 +170,8 @@ class RelativeToAbsoluteImports(BaseRule):
                         message=f"Relative import (level={node.level}): '{original}'",
                         severity=Severity.WARNING,
                         original=f"from {original} import ...",
-                        suggested=f"from {self.package_name}.{module_str} import ..."
-                        if self.package_name
+                        suggested=f"from {pkg_name}.{module_str} import ..."
+                        if pkg_name
                         else "",
                         meta={"level": node.level, "module": module_str},
                     )
