@@ -5,6 +5,7 @@ Run this module to see performance comparisons for your project.
 
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 from typing import Dict
@@ -73,11 +74,19 @@ def benchmark_file(file_path: Path, config: Config) -> Dict:
 
 def benchmark_project(project_root: Path, config: Config) -> Dict:
     """Benchmark entire project."""
-    python_files = list(project_root.rglob("*.py"))
-    # Filter out test files and __pycache__
-    python_files = [
-        f for f in python_files if "test" not in f.name and "__pycache__" not in str(f)
-    ]
+    skip_dirs = {
+        ".git", "node_modules", "__pycache__", "env", ".env", "venv", ".venv",
+        "virtualenv", "site-packages", "build", "dist", "target", ".cache",
+        "cache", ".tmp", "tmp", ".subactor", ".codex", "state", ".pytest_cache",
+        ".ruff_cache", ".idea", ".vscode", ".governance", ".worktrees",
+        "artifacts", ".planfile", ".benchmarks", "htmlcov", "sessions", ".sessions"
+    }
+    python_files = []
+    for dirpath, dirnames, filenames in os.walk(project_root, topdown=True):
+        dirnames[:] = [d for d in dirnames if d not in skip_dirs and not d.startswith(".")]
+        for filename in filenames:
+            if filename.endswith(".py") and "test" not in filename:
+                python_files.append(Path(dirpath) / filename)
 
     print(f"Benchmarking {len(python_files)} Python files...")
 
