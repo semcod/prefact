@@ -73,6 +73,17 @@ class StringConcatTransformer(cst.CSTTransformer):
                     collected_parts.append(
                         {"type": "string", "value": string_value, "node": n}
                     )
+            elif isinstance(n, cst.FormattedString):
+                # Flatten child formatted string parts to avoid nested f-strings
+                for part in n.parts:
+                    if isinstance(part, cst.FormattedStringText):
+                        collected_parts.append(
+                            {"type": "string", "value": part.value, "node": part}
+                        )
+                    elif isinstance(part, cst.FormattedStringExpression):
+                        collected_parts.append(
+                            {"type": "expr", "node": part.expression}
+                        )
             else:
                 # This is a variable or expression
                 collected_parts.append({"type": "expr", "node": n})

@@ -20,6 +20,11 @@ from prefact.models import Fix, Issue, Severity, ValidationResult
 DOT_CHAR_CODE = 46
 
 try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib  # type: ignore[no-redef]
+
+try:
     from prefact.rules import BaseRule, register
 except ImportError:
     from ..rules import BaseRule, register
@@ -146,7 +151,6 @@ class RelativeToAbsoluteImports(BaseRule):
             while curr != self.config.project_root and curr != curr.parent:
                 if (curr / "pyproject.toml").exists():
                     try:
-                        import tomllib
                         with open(curr / "pyproject.toml", "rb") as f:
                             data = tomllib.load(f)
                         detected = data.get("project", {}).get("name")
@@ -188,7 +192,6 @@ class RelativeToAbsoluteImports(BaseRule):
         while curr != self.config.project_root and curr != curr.parent:
             if (curr / "pyproject.toml").exists():
                 try:
-                    import tomllib
                     with open(curr / "pyproject.toml", "rb") as f:
                         data = tomllib.load(f)
                     detected = data.get("project", {}).get("name")
