@@ -94,12 +94,56 @@ def _dedupe_issues(issues: list[Issue]) -> list[Issue]:
     return unique
 
 
+_SKIP_DIRS: frozenset[str] = frozenset({
+    ".git",
+    "node_modules",
+    "__pycache__",
+    "env",
+    ".env",
+    "venv",
+    ".venv",
+    "virtualenv",
+    "site-packages",
+    "build",
+    "dist",
+    "target",
+    ".cache",
+    "cache",
+    ".tmp",
+    "tmp",
+    ".subactor",
+    ".codex",
+    "state",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".idea",
+    ".vscode",
+    ".governance",
+    "tests",
+    ".worktrees",
+    "artifacts",
+    ".planfile",
+    ".benchmarks",
+    "benchmarks",
+    "bench-results",
+    "twinerd-bench-results",
+    ".cargo",
+    "c2004",
+    "c2004-git-backup",
+    "workshop",
+    "managed_components",
+    "vendor",
+    "maskservice.local",
+})
+
+
 class Scanner:
     """Discovers Python files and runs all enabled rules against them."""
 
     def __init__(self, config: Config) -> None:
         self.config = config
         self._rules: list[BaseRule] = []
+        self._project_root = self.config.project_root.resolve()
         # Load gitignore patterns
         self._gitignore_patterns = _load_gitignore(config.project_root)
         # Combine with config exclude patterns
@@ -117,25 +161,43 @@ class Scanner:
         of the previous root.glob() approach which fully traversed the tree
         (stat'ing every file inside a populated virtualenv) before filtering.
         """
-        root = self.config.project_root.resolve()
+        root = self._project_root
         include_patterns = self.config.include or []
         files: list[Path] = []
         for dirpath, dirnames, filenames in os.walk(root, topdown=True):
+            # 1. Fast O(1) prune by directory basename
+            dirnames[:] = [
+                d for d in dirnames
+                if d not in _SKIP_DIRS and not d.endswith(".local")
+            ]
+
+            # 2. Path-based exclude pruning for remaining directories
             current_dir = Path(dirpath)
-            dirnames[:] = [d for d in dirnames if not self._excluded(current_dir / d)]
+            try:
+                rel_dir = current_dir.relative_to(root)
+            except ValueError:
+                rel_dir = current_dir.resolve().relative_to(root)
+
+            dirnames[:] = [
+                d for d in dirnames
+                if not self._excluded(current_dir / d, rel=rel_dir / d)
+            ]
+
+            # 3. For files, check include patterns first before expensive exclude check
+            rel_dir_str = str(rel_dir)
             for filename in filenames:
-                file_path = current_dir / filename
-                if self._excluded(file_path):
-                    continue
-                try:
-                    rel_str = str(file_path.relative_to(root))
-                except ValueError:
-                    continue
-                if any(
+                rel_str = f"{rel_dir_str}/{filename}" if rel_dir_str != "." else filename
+                if include_patterns and not any(
                     _match_gitignore_pattern(rel_str, pattern)
                     for pattern in include_patterns
                 ):
-                    files.append(file_path)
+                    continue
+
+                file_path = current_dir / filename
+                rel_path = rel_dir / filename if rel_dir_str != "." else Path(filename)
+                if self._excluded(file_path, rel=rel_path):
+                    continue
+                files.append(file_path)
         return sorted(set(files))
 
     def scan(self, files: list[Path] | None = None) -> dict[Path, list[Issue]]:
@@ -163,58 +225,25 @@ class Scanner:
                 results[path] = file_issues
         return results
 
-    def _excluded(self, path: Path) -> bool:
+    def _excluded(self, path: Path, rel: Path | None = None) -> bool:
         """Check if a path should be excluded based on patterns."""
-        try:
-            root = self.config.project_root.resolve()
-            abs_path = path.resolve()
-            rel = abs_path.relative_to(root)
-            rel_str = str(rel)
-        except ValueError:
-            # Not under project root, skip
+        if rel is None:
+            if not path.is_absolute():
+                rel = path
+            else:
+                try:
+                    rel = path.relative_to(self._project_root)
+                except ValueError:
+                    try:
+                        rel = path.resolve().relative_to(self._project_root)
+                    except ValueError:
+                        # Not under project root, skip
+                        return True
+
+        if any(part in _SKIP_DIRS or part.endswith(".local") for part in rel.parts):
             return True
 
-        import fnmatch
-
-        # Hardcoded safety for common non-source/cache folders
-        _skip_dirs = {
-            ".git",
-            "node_modules",
-            "__pycache__",
-            "env",
-            ".env",
-            "venv",
-            ".venv",
-            "virtualenv",
-            "site-packages",
-            "build",
-            "dist",
-            "target",
-            ".cache",
-            "cache",
-            ".tmp",
-            "tmp",
-            ".subactor",
-            ".codex",
-            "state",
-            ".pytest_cache",
-            ".ruff_cache",
-            ".idea",
-            ".vscode",
-            ".governance",
-            "tests",
-            ".worktrees",
-            "artifacts",
-            ".planfile",
-            ".benchmarks",
-            "benchmarks",
-            "bench-results",
-            "twinerd-bench-results",
-            ".cargo",
-        }
-        if any(part in _skip_dirs for part in rel.parts):
-            return True
-
+        rel_str = str(rel)
         for pat in self._exclude_patterns:
             if not pat:
                 continue
