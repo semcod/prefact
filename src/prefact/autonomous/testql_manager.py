@@ -7,6 +7,7 @@ to TODO.md plus configured integrations to the shared ``planfile`` API.
 from __future__ import annotations
 
 from pathlib import Path
+import os
 from typing import Any
 
 from prefact.autonomous._base import BaseManager, console
@@ -28,7 +29,7 @@ class TestQLManager(BaseManager):
         sync_targets: bool = True,
         max_tickets: int = 25,
         testql_bin: str = "testql",
-        testql_repo_path: str | Path = "/home/tom/github/oqlos/testql",
+        testql_repo_path: str | Path | None = None,
         strategy_path: str | Path | None = None,
     ) -> dict[str, Any]:
         """Execute scenario and update planfile/TODO based on results.
@@ -37,6 +38,10 @@ class TestQLManager(BaseManager):
         and per-integration sync status. Network/LLM operations are delegated
         to ``planfile.testql_integration``.
         """
+        if testql_repo_path is None:
+            testql_repo_path = os.environ.get(
+                "TESTQL_REPO_PATH", str(Path.home() / "github" / "oqlos" / "testql")
+            )
         try:
             from planfile import (
                 build_testql_tickets,  # noqa: F401 - import-guards the exc branch below
@@ -181,10 +186,14 @@ class TestQLManager(BaseManager):
         sync_targets: bool = True,
         max_tickets: int = 25,
         testql_bin: str = "testql",
-        testql_repo_path: str | Path = "/home/tom/github/oqlos/testql",
+        testql_repo_path: str | Path | None = None,
         strategy_path: str | Path | None = None,
     ) -> dict[str, Any]:
         """Run all discovered TestQL scenarios and aggregate the results."""
+        if testql_repo_path is None:
+            testql_repo_path = os.environ.get(
+                "TESTQL_REPO_PATH", str(Path.home() / "github" / "oqlos" / "testql")
+            )
         scenarios = self.discover_scenarios(scenarios_dir)
         results: list[dict[str, Any]] = []
 

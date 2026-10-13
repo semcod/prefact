@@ -478,8 +478,8 @@ def autonomous_cmd(
 @click.option("--testql-bin", default="testql", help="TestQL CLI executable name/path.")
 @click.option(
     "--testql-repo-path",
-    default="/home/tom/github/oqlos/testql",
-    help="Fallback path to local TestQL repository.",
+    default=None,
+    help="Fallback path to local TestQL repository (defaults to TESTQL_REPO_PATH or ~/github/oqlos/testql).",
 )
 def testql_cmd(
     scenario_path,

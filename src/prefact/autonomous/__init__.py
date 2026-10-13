@@ -198,7 +198,7 @@ class AutonomousRefact:
         sync_targets: bool = True,
         max_tickets: int = 25,
         testql_bin: str = "testql",
-        testql_repo_path: str = "/home/tom/github/oqlos/testql",
+        testql_repo_path: Optional[str | Path] = None,
         strategy_path=None,
     ):
         """Run TestQL DSL validation and bridge to planfile/TODO/integrations."""
@@ -224,7 +224,7 @@ class AutonomousRefact:
         sync_targets: bool = True,
         max_tickets: int = 25,
         testql_bin: str = "testql",
-        testql_repo_path: str = "/home/tom/github/oqlos/testql",
+        testql_repo_path: Optional[str | Path] = None,
         strategy_path=None,
     ) -> Dict[str, Any]:
         """Discover and run all TestQL scenarios in the project."""
