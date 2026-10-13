@@ -154,6 +154,14 @@ class ProjectScanner(BaseManager):
         max_workers = min(config.performance.get("max_workers", 4), len(files_to_scan))
         console.print(f"🚀 Using parallel processing with {max_workers} workers")
 
+        if any(getattr(r, "rule_id", "").startswith("ruff-") for r in scanner._rules):
+            try:
+                from prefact.rules.ruff_based import RuffHelper
+
+                RuffHelper.preload_files(files_to_scan)
+            except Exception:
+                pass
+
         def scan_file(file_path: Path) -> Tuple[Path, List[Any]]:
             file_issues = []
             try:
@@ -201,6 +209,14 @@ class ProjectScanner(BaseManager):
         start_time,
     ) -> List[Any]:
         """Scan files sequentially."""
+        if any(getattr(r, "rule_id", "").startswith("ruff-") for r in scanner._rules):
+            try:
+                from prefact.rules.ruff_based import RuffHelper
+
+                RuffHelper.preload_files(files_to_scan)
+            except Exception:
+                pass
+
         issues_found = []
 
         for i, file_path in enumerate(files_to_scan):

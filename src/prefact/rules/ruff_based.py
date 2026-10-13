@@ -1,9 +1,11 @@
 """Ruff-based rules - fast implementation for multiple rule types."""
 
 import json
+import shutil
 import subprocess
+import threading
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Sequence
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
 
@@ -17,36 +19,114 @@ class RuffHelper:
     """Helper class for Ruff operations."""
 
     _CACHE: Dict[str, List[Dict]] = {}
+    _RUFF_AVAILABLE: Optional[bool] = None
+    _LOCK = threading.Lock()
 
     @classmethod
-    def check_file(cls, file_path: Path, select_codes: List[str]) -> List[Dict]:
-        """Run Ruff on a single file and return JSON results, caching per file."""
-        file_key = str(file_path)
-        if file_key not in cls._CACHE:
+    def is_available(cls) -> bool:
+        """Check if ruff binary is available in PATH."""
+        if cls._RUFF_AVAILABLE is None:
+            cls._RUFF_AVAILABLE = shutil.which("ruff") is not None
+        return cls._RUFF_AVAILABLE
+
+    @classmethod
+    def clear_cache(cls) -> None:
+        """Clear cached Ruff results."""
+        with cls._LOCK:
+            cls._CACHE.clear()
+
+    @classmethod
+    def preload_files(cls, file_paths: Sequence[Path]) -> None:
+        """Run Ruff in batch on multiple files to populate the cache."""
+        if not cls.is_available():
+            return
+
+        with cls._LOCK:
+            to_scan: List[Path] = []
+            for fp in file_paths:
+                k1 = str(fp)
+                try:
+                    k2 = str(fp.resolve())
+                except Exception:
+                    k2 = k1
+                if k1 not in cls._CACHE and k2 not in cls._CACHE:
+                    to_scan.append(fp)
+
+        if not to_scan:
+            return
+
+        chunk_size = 200
+        for i in range(0, len(to_scan), chunk_size):
+            chunk = to_scan[i : i + chunk_size]
+            batch_results: Dict[str, List[Dict]] = {}
+            for p in chunk:
+                batch_results[str(p)] = []
+                try:
+                    batch_results[str(p.resolve())] = []
+                except Exception:
+                    pass
+
+            cmd = [
+                "ruff",
+                "check",
+                *[str(p) for p in chunk],
+                "--select",
+                "F401,F811,F403,T201,I001,E,W,F,I",
+                "--output-format",
+                "json",
+                "--no-fix",
+            ]
             try:
                 ruff_run = subprocess.run(
-                    [
-                        "ruff",
-                        "check",
-                        file_key,
-                        "--select",
-                        "F401,F811,F403,T201,I001,E,W,F,I",
-                        "--output-format",
-                        "json",
-                        "--no-fix",
-                    ],
+                    cmd,
                     capture_output=True,
                     text=True,
                     check=False,
                 )
                 if ruff_run.stdout.strip():
-                    cls._CACHE[file_key] = json.loads(ruff_run.stdout)
-                else:
-                    cls._CACHE[file_key] = []
+                    raw_issues = json.loads(ruff_run.stdout)
+                    for item in raw_issues:
+                        fname = item.get("filename")
+                        if fname:
+                            f_path = Path(fname)
+                            k1 = str(f_path)
+                            try:
+                                k2 = str(f_path.resolve())
+                            except Exception:
+                                k2 = k1
+                            if k1 in batch_results:
+                                batch_results[k1].append(item)
+                            else:
+                                batch_results[k1] = [item]
+                            if k2 in batch_results and k2 != k1:
+                                batch_results[k2].append(item)
+                            elif k2 != k1:
+                                batch_results[k2] = [item]
             except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
-                cls._CACHE[file_key] = []
+                pass
 
-        all_issues = cls._CACHE.get(file_key, [])
+            with cls._LOCK:
+                cls._CACHE.update(batch_results)
+
+    @classmethod
+    def check_file(cls, file_path: Path, select_codes: List[str]) -> List[Dict]:
+        """Run Ruff on a single file and return JSON results, caching per file."""
+        if not cls.is_available():
+            return []
+
+        file_key = str(file_path)
+        try:
+            resolved_key = str(file_path.resolve())
+        except Exception:
+            resolved_key = file_key
+
+        if file_key not in cls._CACHE and resolved_key not in cls._CACHE:
+            cls.preload_files([file_path])
+
+        all_issues = cls._CACHE.get(file_key)
+        if all_issues is None:
+            all_issues = cls._CACHE.get(resolved_key, [])
+
         codes_set = set(select_codes)
         return [
             issue
@@ -55,9 +135,11 @@ class RuffHelper:
             or any(issue.get("code", "").startswith(c) for c in codes_set)
         ]
 
-    @staticmethod
-    def fix_file(file_path: Path, select_codes: List[str]) -> bool:
+    @classmethod
+    def fix_file(cls, file_path: Path, select_codes: List[str]) -> bool:
         """Run Ruff with --fix on a file."""
+        if not cls.is_available():
+            return False
         try:
             subprocess.run(
                 [
@@ -71,13 +153,21 @@ class RuffHelper:
                 check=True,
                 capture_output=True,
             )
+            with cls._LOCK:
+                cls._CACHE.pop(str(file_path), None)
+                try:
+                    cls._CACHE.pop(str(file_path.resolve()), None)
+                except Exception:
+                    pass
             return True
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             return False
 
-    @staticmethod
-    def fix_source(source: str, select_codes: List[str]) -> str:
+    @classmethod
+    def fix_source(cls, source: str, select_codes: List[str]) -> str:
         """Fix source code in memory using Ruff."""
+        if not cls.is_available():
+            return source
         import tempfile
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
@@ -85,7 +175,7 @@ class RuffHelper:
             tmp_path = tmp.name
 
         try:
-            ruff_applied = RuffHelper.fix_file(Path(tmp_path), select_codes)
+            ruff_applied = cls.fix_file(Path(tmp_path), select_codes)
             if ruff_applied:
                 with open(tmp_path) as f:
                     return f.read()
@@ -94,6 +184,7 @@ class RuffHelper:
             import os
 
             os.unlink(tmp_path)
+
 
 
 @register
@@ -173,12 +264,10 @@ class RuffPrintStatements(BaseRule):
         if not issues:
             return source, []
 
-        # Ruff can remove print statements
-        prints_removed = RuffHelper.fix_file(path, ["T201"])
+        fixed_source = RuffHelper.fix_source(source, ["T201"])
         fixes = []
 
-        if prints_removed:
-            fixed_source = path.read_text(encoding="utf-8")
+        if fixed_source != source:
             for issue in issues:
                 fixes.append(
                     Fix(
@@ -233,12 +322,10 @@ class RuffUnusedImports(BaseRule):
         if not issues:
             return source, []
 
-        # Use Ruff to remove unused imports
-        unused_imports_removed = RuffHelper.fix_file(path, ["F401"])
+        fixed_source = RuffHelper.fix_source(source, ["F401"])
         fixes = []
 
-        if unused_imports_removed:
-            fixed_source = path.read_text(encoding="utf-8")
+        if fixed_source != source:
             for issue in issues:
                 fixes.append(
                     Fix(
@@ -298,12 +385,10 @@ class RuffSortedImports(BaseRule):
         if not issues:
             return source, []
 
-        # Use Ruff to sort imports
-        sort_applied = RuffHelper.fix_file(path, ["I001", "I002"])
+        fixed_source = RuffHelper.fix_source(source, ["I001", "I002"])
         fixes = []
 
-        if sort_applied:
-            fixed_source = path.read_text(encoding="utf-8")
+        if fixed_source != source:
             for issue in issues:
                 fixes.append(
                     Fix(

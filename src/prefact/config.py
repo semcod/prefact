@@ -92,7 +92,31 @@ class Config:
         if rc is not None:
             return rc.enabled
         # Heavy external tool rules and composites should NOT be enabled by default unless explicitly configured
-        if any(rule_id.startswith(p) for p in ("pylint-", "unimport-", "autoflake-", "import-linter-", "importchecker-", "mypy-", "composite-")) or rule_id == "type-checking":
+        external_tool_rules = {
+            "type-checking",
+            "unused-variables",
+            "import-layers",
+            "no-relative-imports",
+            "module-independence",
+            "custom-architecture",
+            "import-dependencies",
+            "import-optimization",
+            "isorted-imports",
+            "import-section-separators",
+            "custom-import-organization",
+        }
+        if rule_id in external_tool_rules or any(
+            rule_id.startswith(p)
+            for p in (
+                "pylint-",
+                "unimport-",
+                "autoflake-",
+                "import-linter-",
+                "importchecker-",
+                "mypy-",
+                "composite-",
+            )
+        ):
             return False
         return True
 

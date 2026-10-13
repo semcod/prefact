@@ -100,7 +100,8 @@ class ImportDependencyAnalysis(BaseRule):
     ) -> List[List[str]]:
         """Detect circular imports (simplified implementation)."""
         # This is a simplified version - real implementation would need
-        # to build a full dependency graph
+        # to build a full dependency graph across all project files.
+        # Within single-file scope, only flag direct self-imports.
         circular = []
 
         # Get current module name
@@ -108,12 +109,9 @@ class ImportDependencyAnalysis(BaseRule):
         if not current_module:
             return circular
 
-        # Check if any import could be circular
         for imp in imports:
-            if imp["type"] == "from":
-                # Simplified check - just warn about same package imports
-                if current_module.split(".")[0] in imp["name"]:
-                    circular.append([current_module, imp["name"], current_module])
+            if imp["name"] == current_module:
+                circular.append([current_module, imp["name"], current_module])
 
         return circular
 

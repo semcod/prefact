@@ -186,9 +186,22 @@ def validate_unused_imports(
 class AutoflakeHelper:
     """Helper class for Autoflake operations."""
 
+    _AVAILABLE: Optional[bool] = None
+
+    @classmethod
+    def is_available(cls) -> bool:
+        """Check if autoflake binary is available in PATH."""
+        if cls._AVAILABLE is None:
+            import shutil
+
+            cls._AVAILABLE = shutil.which("autoflake") is not None
+        return cls._AVAILABLE
+
     @staticmethod
     def check_file(file_path: Path, config: Optional[Dict] = None) -> List[Dict]:
         """Check a file for unused imports and variables using Autoflake."""
+        if not AutoflakeHelper.is_available():
+            return []
         # Autoflake doesn't have a check-only mode, so we simulate it
         # by running with --check-diff flag
         cmd = build_autoflake_check_command(file_path, config)
@@ -209,6 +222,8 @@ class AutoflakeHelper:
     @staticmethod
     def check_source(source: str, config: Optional[Dict] = None) -> List[Dict]:
         """Check source code for unused imports and variables."""
+        if not AutoflakeHelper.is_available():
+            return []
         tmp_path = create_temp_file_with_source(source)
 
         try:
@@ -219,6 +234,8 @@ class AutoflakeHelper:
     @staticmethod
     def fix_file(file_path: Path, config: Optional[Dict] = None) -> bool:
         """Remove unused imports and variables from a file."""
+        if not AutoflakeHelper.is_available():
+            return False
         cmd = build_autoflake_fix_command(file_path, config)
 
         try:
@@ -230,6 +247,8 @@ class AutoflakeHelper:
     @staticmethod
     def fix_source(source: str, config: Optional[Dict] = None) -> str:
         """Remove unused imports and variables from source code."""
+        if not AutoflakeHelper.is_available():
+            return source
         tmp_path = create_temp_file_with_source(source)
 
         try:

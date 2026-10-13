@@ -215,6 +215,14 @@ class Scanner:
 
     def scan_sources(self, sources: dict[Path, str]) -> dict[Path, list[Issue]]:
         """Scan files using preloaded sources to avoid I/O operations."""
+        if any(getattr(r, "rule_id", "").startswith("ruff-") for r in self._rules):
+            try:
+                from prefact.rules.ruff_based import RuffHelper
+
+                RuffHelper.preload_files(list(sources.keys()))
+            except Exception:
+                pass
+
         results: dict[Path, list[Issue]] = {}
         for path, source in sources.items():
             file_issues: list[Issue] = []
