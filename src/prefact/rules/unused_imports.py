@@ -30,9 +30,8 @@ class UnusedImports(BaseRule):
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:
         issues: list[Issue] = []
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
 
         imported = _collect_imported_names(tree)
@@ -76,9 +75,8 @@ class UnusedImports(BaseRule):
             return source, []
 
         unused_names = {i.original for i in issues}
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return source, []
 
         ctx = ImportRemovalContext(

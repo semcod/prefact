@@ -49,13 +49,11 @@ class MagicNumberRule(BaseRule):
         if any(re.match(pattern, path.name) for pattern in self.ignore_patterns):
             return issues
 
-        try:
-            tree = ast.parse(source)
+        tree = self.parse_ast(source)
+        if tree is not None:
             for node in ast.walk(tree):
                 issues.extend(self._extract_literal_issues(path, node))
                 issues.extend(self._extract_comparison_issues(path, node))
-        except SyntaxError:
-            pass
 
         return issues
 

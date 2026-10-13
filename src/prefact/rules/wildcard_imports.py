@@ -18,9 +18,8 @@ class WildcardImports(BaseRule):
 
     def scan_file(self, path: Path, source: str) -> list[Issue]:
         issues: list[Issue] = []
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom):

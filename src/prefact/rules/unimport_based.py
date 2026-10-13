@@ -233,8 +233,8 @@ class UnimportDuplicateImports(BaseRule):
         # We'll use AST-based detection for reporting
         issues = []
 
-        try:
-            tree = ast.parse(source)
+        tree = self.parse_ast(source)
+        if tree is not None:
             imports = {}
 
             for node in ast.iter_child_nodes(tree):
@@ -274,8 +274,6 @@ class UnimportDuplicateImports(BaseRule):
                             )
                         else:
                             imports[name] = node.lineno
-        except SyntaxError:
-            pass
 
         return issues
 
@@ -328,8 +326,8 @@ class UnimportStarImports(BaseRule):
         issues = []
 
         # Find star imports
-        try:
-            tree = ast.parse(source)
+        tree = self.parse_ast(source)
+        if tree is not None:
             for node in ast.iter_child_nodes(tree):
                 if isinstance(node, ast.ImportFrom):
                     if any(alias.name == "*" for alias in node.names):
@@ -345,8 +343,6 @@ class UnimportStarImports(BaseRule):
                                 original=f"from {module} import *",
                             )
                         )
-        except SyntaxError:
-            pass
 
         return issues
 

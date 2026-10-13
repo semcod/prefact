@@ -248,16 +248,13 @@ class ReturnTypeInferrer:
     @staticmethod
     def infer_return_type(source: str, func_name: str) -> Optional[str]:
         """Try to infer return type of a function."""
-
-        try:
-            tree = ast.parse(source)
+        from prefact.rules._ast_cache import parse_cached
+        tree = parse_cached(source)
+        if tree is not None:
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and node.name == func_name:
                     return_types = ReturnTypeInferrer._analyze_return_types(node)
                     return ReturnTypeInferrer._unify_types(return_types)
-        except SyntaxError:
-            pass
-
         return None
 
     @staticmethod
@@ -354,9 +351,8 @@ class SmartReturnTypeRule(BaseRule):
     def scan_file(self, path: Path, source: str) -> List[Issue]:
 
         issues = []
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
 
         for node in ast.walk(tree):

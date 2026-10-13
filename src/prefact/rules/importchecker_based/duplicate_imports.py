@@ -18,9 +18,8 @@ class ImportCheckerDuplicateImports(BaseRule):
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
 
-        # Parse AST to find imports
-        try:
-            tree = ast.parse(source)
+        tree = self.parse_ast(source)
+        if tree is not None:
             import_map = {}
 
             for node in ast.iter_child_nodes(tree):
@@ -60,8 +59,6 @@ class ImportCheckerDuplicateImports(BaseRule):
                             )
                         else:
                             import_map[name] = node.lineno
-        except SyntaxError:
-            pass
 
         return issues
 
