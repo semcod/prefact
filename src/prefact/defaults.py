@@ -30,4 +30,10 @@ DEFAULT_EXCLUDE: list[str] = [
     "**/.planfile/**",
     "**/.governance/**",
     "examples/**",
+    "**/c2004/**",
+    "**/c2004-git-backup/**",
+    "**/workshop/**",
+    "**/managed_components/**",
+    "**/vendor/**",
+    "**/*.local/**",
 ]
