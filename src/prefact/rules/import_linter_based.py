@@ -8,7 +8,7 @@ relative import restrictions.
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import yaml
 
@@ -23,6 +23,17 @@ except ImportError:
 
 class ImportLinterHelper:
     """Helper class for import-linter operations."""
+
+    _AVAILABLE: Optional[bool] = None
+
+    @classmethod
+    def is_available(cls) -> bool:
+        """Check if import-linter binary is available in PATH."""
+        if cls._AVAILABLE is None:
+            import shutil
+
+            cls._AVAILABLE = shutil.which("import-linter") is not None
+        return cls._AVAILABLE
 
     @staticmethod
     def create_config(config: Dict, output_path: Path) -> None:
@@ -54,6 +65,8 @@ class ImportLinterHelper:
     @staticmethod
     def run_linter(config_path: Path) -> List[Dict]:
         """Run import-linter and return results."""
+        if not ImportLinterHelper.is_available():
+            return []
         cmd = ["import-linter", "run", str(config_path)]
 
         try:
@@ -98,6 +111,8 @@ class ImportLinterHelper:
     @staticmethod
     def check_file(file_path: Path, config: Dict) -> List[Dict]:
         """Check a specific file using import-linter."""
+        if not ImportLinterHelper.is_available():
+            return []
         # Create temporary config
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as tmp:
             config_path = Path(tmp.name)

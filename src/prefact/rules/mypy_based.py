@@ -25,9 +25,22 @@ except ImportError:
 class MyPyHelper:
     """Helper class for MyPy operations."""
 
+    _MYPY_AVAILABLE: Optional[bool] = None
+
+    @classmethod
+    def is_available(cls) -> bool:
+        """Check if mypy binary is available in PATH."""
+        if cls._MYPY_AVAILABLE is None:
+            import shutil
+
+            cls._MYPY_AVAILABLE = shutil.which("mypy") is not None
+        return cls._MYPY_AVAILABLE
+
     @staticmethod
     def check_file(file_path: Path, config: Optional[Dict] = None) -> List[Dict]:
         """Run MyPy on a single file and return JSON results."""
+        if not MyPyHelper.is_available():
+            return []
         with tempfile.TemporaryDirectory() as tmpdir:
             report_file = Path(tmpdir) / "result.json"
 
@@ -246,28 +259,39 @@ class ReturnTypeInferrer:
     """Infer return types for simple functions."""
 
     @staticmethod
+    def infer_from_node(node: ast.FunctionDef) -> Optional[str]:
+        """Try to infer return type directly from an AST FunctionDef node."""
+        return_types = ReturnTypeInferrer._analyze_return_types(node)
+        return ReturnTypeInferrer._unify_types(return_types)
+
+    @staticmethod
     def infer_return_type(source: str, func_name: str) -> Optional[str]:
         """Try to infer return type of a function."""
         from prefact.rules._ast_cache import parse_cached
+
         tree = parse_cached(source)
         if tree is not None:
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and node.name == func_name:
-                    return_types = ReturnTypeInferrer._analyze_return_types(node)
-                    return ReturnTypeInferrer._unify_types(return_types)
+                    return ReturnTypeInferrer.infer_from_node(node)
         return None
 
     @staticmethod
     def _analyze_return_types(node: ast.FunctionDef) -> set[str]:
-        """Analyze all return statements in a function."""
+        """Analyze all return statements in a function without walking into nested functions."""
         return_types = set()
 
-        for n in ast.walk(node):
-            if isinstance(n, ast.Return):
-                type_name = ReturnTypeInferrer._get_return_value_type(n.value)
-                if type_name:
-                    return_types.add(type_name)
+        def collect(n: ast.AST) -> None:
+            for child in ast.iter_child_nodes(n):
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    continue
+                if isinstance(child, ast.Return):
+                    type_name = ReturnTypeInferrer._get_return_value_type(child.value)
+                    if type_name:
+                        return_types.add(type_name)
+                collect(child)
 
+        collect(node)
         return return_types
 
     @staticmethod
@@ -359,8 +383,8 @@ class SmartReturnTypeRule(BaseRule):
             if isinstance(node, ast.FunctionDef):
                 # Check if function has return type annotation
                 if node.returns is None and not node.name.startswith("_"):
-                    # Try to infer return type
-                    inferred = ReturnTypeInferrer.infer_return_type(source, node.name)
+                    # Try to infer return type directly from AST node
+                    inferred = ReturnTypeInferrer.infer_from_node(node)
 
                     finding_message = f"Function '{node.name}' missing return type"
                     if inferred:
