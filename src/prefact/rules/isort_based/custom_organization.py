@@ -49,9 +49,8 @@ class CustomImportOrganization(BaseRule):
         import ast
 
         issues = []
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
 
         # Find all import statements

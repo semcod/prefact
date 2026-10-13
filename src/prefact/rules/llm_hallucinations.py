@@ -122,9 +122,8 @@ class LLMHallucinationRule(BaseRule):
         """Check for patterns in AST."""
         issues = []
 
-        try:
-            tree = ast.parse(source)
-
+        tree = self.parse_ast(source)
+        if tree is not None:
             for node in ast.walk(tree):
                 # Check for suspicious function names
                 if isinstance(node, ast.FunctionDef):
@@ -156,9 +155,6 @@ class LLMHallucinationRule(BaseRule):
                                 original=module,
                             )
                         )
-
-        except SyntaxError:
-            pass
 
         return issues
 

@@ -29,9 +29,8 @@ class PrintStatements(BaseRule):
             if pat in rel:
                 return issues
 
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
 
         for node in ast.walk(tree):

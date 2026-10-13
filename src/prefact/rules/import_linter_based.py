@@ -222,8 +222,8 @@ class ImportLinterNoRelative(BaseRule):
         # First, quick AST check for relative imports
         import ast
 
-        try:
-            tree = ast.parse(source)
+        tree = self.parse_ast(source)
+        if tree is not None:
             for node in ast.walk(tree):
                 if isinstance(node, ast.ImportFrom) and node.level > 0:
                     # Found relative import
@@ -238,8 +238,6 @@ class ImportLinterNoRelative(BaseRule):
                             original="relative import",
                         )
                     )
-        except SyntaxError:
-            pass
 
         # Then use import-linter for more comprehensive checking
         results = ImportLinterHelper.check_file(path, self.linter_config)

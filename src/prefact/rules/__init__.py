@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from prefact.config import Config
-    from prefact.models import Fix, Issue, ValidationResult
+from prefact.rules._ast_cache import clear as clear_ast_cache, parse_cached
 
 
 class BaseRule(abc.ABC):
@@ -32,6 +32,11 @@ class BaseRule(abc.ABC):
 
     def __init__(self, config: "Config") -> None:
         self.config = config
+
+    @staticmethod
+    def parse_ast(source: str):
+        """Return cached AST for source, or None on SyntaxError."""
+        return parse_cached(source)
 
     @abc.abstractmethod
     def scan_file(self, path: Path, source: str) -> list["Issue"]:

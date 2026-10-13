@@ -159,9 +159,8 @@ class StringConcatToFString(BaseRule):
 
     def scan_file(self, path: Path, source: str) -> List[Issue]:
         issues = []
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
+        tree = self.parse_ast(source)
+        if tree is None:
             return issues
 
         # Find string concatenations

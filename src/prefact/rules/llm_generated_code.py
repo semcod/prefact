@@ -134,9 +134,8 @@ class LLMGeneratedCodeRule(BaseRule):
         """Check for LLM-typical docstring patterns."""
         issues = []
 
-        try:
-            tree = ast.parse(source)
-
+        tree = self.parse_ast(source)
+        if tree is not None:
             for node in ast.walk(tree):
                 if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                     if ast.get_docstring(node) and self._has_llm_docstring_pattern(
@@ -153,9 +152,6 @@ class LLMGeneratedCodeRule(BaseRule):
                                 original=node.name,
                             )
                         )
-
-        except SyntaxError:
-            pass
 
         return issues
 
