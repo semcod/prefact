@@ -76,9 +76,14 @@ class LazyRuleRegistry:
             "import-linter-independence": "prefact.rules.import_linter_based",
             "import-linter-custom-architecture": "prefact.rules.import_linter_based",
             # Composite rules
-            "composite-unused-imports": "prefact.rules.composite",
-            "composite-imports": "prefact.rules.composite",
-            "composite-type-checking": "prefact.rules.composite",
+            "composite-unused-imports": "prefact.rules.composite_rules",
+            "composite-imports": "prefact.rules.composite_rules",
+            "composite-type-checking": "prefact.rules.composite_rules",
+            # LLM-specific rules
+            "llm-hallucinations": "prefact.rules.llm_hallucinations",
+            "magic-numbers": "prefact.rules.magic_numbers",
+            "llm-generated-code": "prefact.rules.llm_generated_code",
+            "ai-boilerplate": "prefact.rules.ai_boilerplate",
         }
 
         # Cache for loaded rule classes
@@ -271,15 +276,16 @@ def _initialize_built_in_rules():
         "import-linter-custom-architecture", "prefact.rules.import_linter_based"
     )
 
-    registry.register_rule_module("composite-imports", "prefact.rules.composite")
-    registry.register_rule_module("composite-type-checking", "prefact.rules.composite")
+    registry.register_rule_module("composite-imports", "prefact.rules.composite_rules")
+    registry.register_rule_module("composite-type-checking", "prefact.rules.composite_rules")
 
     # LLM-specific rules
-    registry.register_rule_module("llm-hallucinations", "prefact.rules.llm_specific")
-    registry.register_rule_module("magic-numbers", "prefact.rules.llm_specific")
-    registry.register_rule_module("llm-generated-code", "prefact.rules.llm_specific")
-    registry.register_rule_module("ai-boilerplate", "prefact.rules.llm_specific")
+    registry.register_rule_module("llm-hallucinations", "prefact.rules.llm_hallucinations")
+    registry.register_rule_module("magic-numbers", "prefact.rules.magic_numbers")
+    registry.register_rule_module("llm-generated-code", "prefact.rules.llm_generated_code")
+    registry.register_rule_module("ai-boilerplate", "prefact.rules.ai_boilerplate")
 
 
 # Initialize built-in rules
 _initialize_built_in_rules()
+

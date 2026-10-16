@@ -2,9 +2,17 @@
   "ticket": "ticket-003",
   "summary": "Remove pfix auto-repair configuration and dependency declarations",
   "allowedPaths": [
+    ".gitignore",
+    ".governance/**",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "Makefile",
+    "TODO.md",
+    "project/**",
+    "project/ticket-003/**",
     "pyproject.toml",
-    "uv.lock",
-    "project/ticket-003/**"
+    "uv.lock"
   ],
   "forbiddenPaths": [
     ".env",

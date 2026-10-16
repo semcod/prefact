@@ -95,3 +95,32 @@ def test_get_all_rules_is_not_limited_to_stale_rule_modules_keys() -> None:
     # gets registered, not just the ~21 that used to survive the old
     # _rule_modules-only iteration.
     assert len(rules) >= 40
+
+
+def test_lazy_registry_loads_llm_and_composite_rules_without_import_error() -> None:
+    """Fresh LazyRuleRegistry must resolve LLM and composite rules from their real modules."""
+    from prefact.rules.registry import LazyRuleRegistry, _initialize_built_in_rules
+
+    fresh = LazyRuleRegistry()
+    # Verify module mappings point to existing modules, not prefact.rules.llm_specific
+    for rule_id, expected_module in (
+        ("llm-hallucinations", "prefact.rules.llm_hallucinations"),
+        ("magic-numbers", "prefact.rules.magic_numbers"),
+        ("llm-generated-code", "prefact.rules.llm_generated_code"),
+        ("ai-boilerplate", "prefact.rules.ai_boilerplate"),
+        ("composite-unused-imports", "prefact.rules.composite_rules"),
+        ("composite-imports", "prefact.rules.composite_rules"),
+        ("composite-type-checking", "prefact.rules.composite_rules"),
+    ):
+        assert fresh._rule_modules[rule_id] == expected_module
+        cls = fresh.get_rule(rule_id)
+        assert cls is not None
+        assert cls.rule_id == rule_id
+
+    _initialize_built_in_rules()
+    global_reg = get_lazy_registry()
+    assert global_reg._rule_modules["llm-hallucinations"] == "prefact.rules.llm_hallucinations"
+    assert global_reg._rule_modules["magic-numbers"] == "prefact.rules.magic_numbers"
+    assert global_reg._rule_modules["llm-generated-code"] == "prefact.rules.llm_generated_code"
+    assert global_reg._rule_modules["ai-boilerplate"] == "prefact.rules.ai_boilerplate"
+
