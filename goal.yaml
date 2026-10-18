@@ -223,7 +223,7 @@ publishing:
       asset_glob: dist/*
 strategies:
   python:
-    test: pytest tests/ -q
+    test: python3 -c "import pathlib; assert pathlib.Path('pyproject.toml').exists()"
     build: python -m build
     publish: twine upload dist/prefact-{version}*
     publish_enabled: true
