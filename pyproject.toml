@@ -46,7 +46,7 @@ dependencies = [
     "costs>=0.1.20",
     "planfile>=0.1.117",
 ]
-version = "0.1.71"
+version = "0.1.69"
 
 license = "Apache-2.0"
 [project.optional-dependencies]

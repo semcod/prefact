@@ -2927,7 +2927,7 @@ wheels = [
 
 [[package]]
 name = "prefact"
-version = "0.1.71"
+version = "0.1.69"
 source = { editable = "." }
 dependencies = [
     { name = "ast-decompiler" },
