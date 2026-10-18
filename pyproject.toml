@@ -46,7 +46,7 @@ dependencies = [
     "costs>=0.1.20",
     "planfile>=0.1.117",
 ]
-dynamic = ["version"]
+version = "0.1.71"
 
 license = "Apache-2.0"
 [project.optional-dependencies]
@@ -113,9 +113,6 @@ ruff-integration = "prefact.plugins.ruff_integration:register"
 mypy-integration = "prefact.plugins.mypy_integration:register"
 isort-integration = "prefact.plugins.isort_integration:register"
 
-[tool.hatch.version]
-path = "src/prefact/__init__.py"
-pattern = "__version__ = \"(?P<version>[^\"]+)\""
 
 [tool.hatch.build.targets.sdist]
 include = [
