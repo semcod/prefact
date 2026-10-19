@@ -36,11 +36,8 @@ class RuffHelper:
             cls._CACHE.clear()
 
     @classmethod
-    def preload_files(cls, file_paths: Sequence[Path]) -> None:
-        """Run Ruff in batch on multiple files to populate the cache."""
-        if not cls.is_available():
-            return
-
+    def _filter_uncached_files(cls, file_paths: Sequence[Path]) -> List[Path]:
+        """Filter file paths that are not yet present in cache."""
         with cls._LOCK:
             to_scan: List[Path] = []
             for fp in file_paths:
@@ -51,61 +48,76 @@ class RuffHelper:
                     k2 = k1
                 if k1 not in cls._CACHE and k2 not in cls._CACHE:
                     to_scan.append(fp)
+            return to_scan
 
+    @staticmethod
+    def _parse_ruff_output(stdout: str, batch_results: Dict[str, List[Dict]]) -> None:
+        """Parse Ruff JSON output and populate batch results mapping."""
+        raw_issues = json.loads(stdout)
+        for item in raw_issues:
+            fname = item.get("filename")
+            if not fname:
+                continue
+            f_path = Path(fname)
+            k1 = str(f_path)
+            try:
+                k2 = str(f_path.resolve())
+            except Exception:
+                k2 = k1
+            batch_results.setdefault(k1, []).append(item)
+            if k2 != k1:
+                batch_results.setdefault(k2, []).append(item)
+
+    @classmethod
+    def _scan_chunk(cls, chunk: Sequence[Path]) -> Dict[str, List[Dict]]:
+        """Run Ruff on a chunk of files and return collected issue mappings."""
+        batch_results: Dict[str, List[Dict]] = {}
+        for p in chunk:
+            batch_results[str(p)] = []
+            try:
+                batch_results[str(p.resolve())] = []
+            except Exception:
+                pass
+
+        cmd = [
+            "ruff",
+            "check",
+            "--no-cache",
+            *[str(p) for p in chunk],
+            "--select",
+            "F401,F811,F403,T201,I001,E,W,F,I",
+            "--output-format",
+            "json",
+            "--no-fix",
+        ]
+        try:
+            ruff_run = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if ruff_run.stdout.strip():
+                cls._parse_ruff_output(ruff_run.stdout, batch_results)
+        except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
+            pass
+
+        return batch_results
+
+    @classmethod
+    def preload_files(cls, file_paths: Sequence[Path]) -> None:
+        """Run Ruff in batch on multiple files to populate the cache."""
+        if not cls.is_available():
+            return
+
+        to_scan = cls._filter_uncached_files(file_paths)
         if not to_scan:
             return
 
         chunk_size = 200
         for i in range(0, len(to_scan), chunk_size):
             chunk = to_scan[i : i + chunk_size]
-            batch_results: Dict[str, List[Dict]] = {}
-            for p in chunk:
-                batch_results[str(p)] = []
-                try:
-                    batch_results[str(p.resolve())] = []
-                except Exception:
-                    pass
-
-            cmd = [
-                "ruff",
-                "check",
-                "--no-cache",
-                *[str(p) for p in chunk],
-                "--select",
-                "F401,F811,F403,T201,I001,E,W,F,I",
-                "--output-format",
-                "json",
-                "--no-fix",
-            ]
-            try:
-                ruff_run = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
-                if ruff_run.stdout.strip():
-                    raw_issues = json.loads(ruff_run.stdout)
-                    for item in raw_issues:
-                        fname = item.get("filename")
-                        if fname:
-                            f_path = Path(fname)
-                            k1 = str(f_path)
-                            try:
-                                k2 = str(f_path.resolve())
-                            except Exception:
-                                k2 = k1
-                            if k1 in batch_results:
-                                batch_results[k1].append(item)
-                            else:
-                                batch_results[k1] = [item]
-                            if k2 in batch_results and k2 != k1:
-                                batch_results[k2].append(item)
-                            elif k2 != k1:
-                                batch_results[k2] = [item]
-            except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
-                pass
-
+            batch_results = cls._scan_chunk(chunk)
             with cls._LOCK:
                 cls._CACHE.update(batch_results)
 
