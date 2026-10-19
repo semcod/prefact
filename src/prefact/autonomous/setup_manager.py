@@ -14,6 +14,27 @@ from prefact.config_extended import ConfigGenerator
 from ._base import BaseManager, console
 
 
+# Standard environment, cache, session and dependency directories to skip
+SKIP_DIRS = {
+    ".git", "node_modules", "__pycache__", "env", ".env", "venv", ".venv",
+    "virtualenv", "site-packages", "build", "dist", "target", ".cache",
+    "cache", ".tmp", "tmp", ".subactor", ".codex", "state", ".pytest_cache",
+    ".ruff_cache", ".idea", ".vscode", ".governance", ".worktrees",
+    "artifacts", ".planfile", ".benchmarks", "htmlcov", "sessions", ".sessions",
+}
+
+AI_INDICATORS = ("TODO", "placeholder", "AI", "LLM")
+
+
+def _file_contains_ai_markers(py_file: Path) -> bool:
+    """Check if a Python file contains AI-related indicators."""
+    try:
+        file_text = py_file.read_text(encoding="utf-8", errors="ignore")
+        return any(indicator in file_text for indicator in AI_INDICATORS)
+    except Exception:
+        return False
+
+
 class SetupManager(BaseManager):
     """Handles project setup - configuration and examples."""
 
@@ -49,65 +70,43 @@ class SetupManager(BaseManager):
 
         console.print(f"✅ Created {self.refact_config_path}")
 
-    def detect_project_info(self) -> Dict[str, Any]:
-        """Detect project characteristics."""
-        info = {
-            "package_name": self.project_root.name,
-            "has_ai_code": False,
-            "is_test_project": False,
-            "has_tests": False,
-            "python_version": "3.8",
-        }
-
-        # Standard environment, cache, session and dependency directories to skip
-        skip_dirs = {
-            ".git", "node_modules", "__pycache__", "env", ".env", "venv", ".venv",
-            "virtualenv", "site-packages", "build", "dist", "target", ".cache",
-            "cache", ".tmp", "tmp", ".subactor", ".codex", "state", ".pytest_cache",
-            ".ruff_cache", ".idea", ".vscode", ".governance", ".worktrees",
-            "artifacts", ".planfile", ".benchmarks", "htmlcov", "sessions", ".sessions"
-        }
-
-        # Check for AI indicators (bounded to top-level source files, max 50 files)
+    def _detect_ai_code(self) -> bool:
+        """Check for AI indicators (bounded to top-level source files, max 50 files)."""
         checked_count = 0
         for dirpath, dirnames, filenames in os.walk(self.project_root, topdown=True):
-            dirnames[:] = [d for d in dirnames if d not in skip_dirs and not d.startswith(".")]
+            dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS and not d.startswith(".")]
             for filename in filenames:
                 if filename.endswith(".py"):
-                    py_file = Path(dirpath) / filename
-                    try:
-                        file_text = py_file.read_text(encoding="utf-8", errors="ignore")
-                        if any(
-                            indicator in file_text
-                            for indicator in ["TODO", "placeholder", "AI", "LLM"]
-                        ):
-                            info["has_ai_code"] = True
-                            break
-                    except Exception:
-                        pass
+                    if _file_contains_ai_markers(Path(dirpath) / filename):
+                        return True
                     checked_count += 1
                     if checked_count >= 50:
-                        break
-            if info["has_ai_code"] or checked_count >= 50:
-                break
+                        return False
+        return False
 
-        # Check for tests (shallow checks first, then bounded directory presence)
+    def _detect_has_tests(self) -> bool:
+        """Check for tests (shallow checks first, then bounded directory presence)."""
         if (self.project_root / "tests").exists() or (self.project_root / "test").exists():
-            info["has_tests"] = True
-        else:
-            for item in self.project_root.iterdir():
-                if item.name not in skip_dirs and "test" in item.name.lower():
-                    info["has_tests"] = True
-                    break
+            return True
+        for item in self.project_root.iterdir():
+            if item.name not in SKIP_DIRS and "test" in item.name.lower():
+                return True
+        return False
 
-        # Check if this is a test project
-        if (
-            "test" in self.project_root.name.lower()
-            or "example" in self.project_root.name.lower()
-        ):
-            info["is_test_project"] = True
+    def _is_test_project(self) -> bool:
+        """Check if this is a test project."""
+        name = self.project_root.name.lower()
+        return "test" in name or "example" in name
 
-        return info
+    def detect_project_info(self) -> Dict[str, Any]:
+        """Detect project characteristics."""
+        return {
+            "package_name": self.project_root.name,
+            "has_ai_code": self._detect_ai_code(),
+            "is_test_project": self._is_test_project(),
+            "has_tests": self._detect_has_tests(),
+            "python_version": "3.8",
+        }
 
     def run_examples(self) -> bool:
         """Run all examples and verify they work."""
