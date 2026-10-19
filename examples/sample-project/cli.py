@@ -16,7 +16,7 @@ def main(name, email):
     """Main CLI command."""
     print("Starting CLI application")
 
-    # Validate email
+    valid_email = validate_email(email)
     if not validate_email(email):
         print("Invalid email provided!")
         sys.exit(1)
