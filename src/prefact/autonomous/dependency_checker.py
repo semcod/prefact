@@ -85,7 +85,8 @@ class DependencyChecker(BaseManager):
             try:
                 import tomllib  # Python 3.11+
             except ModuleNotFoundError:
-                import tomli as tomllib  # type: ignore[no-redef]
+                import importlib
+                tomllib = importlib.import_module("tomli")  # type: ignore[no-redef]
 
             pyproject_data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
             deps = pyproject_data.get("project", {}).get("dependencies", [])

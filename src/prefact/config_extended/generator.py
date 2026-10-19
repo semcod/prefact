@@ -26,20 +26,8 @@ class ConfigGenerator:
     """Generate configuration files."""
 
     @staticmethod
-    def generate_extended_config(
-        project_root: Path,
-        tools: Optional[List[str]] = None,
-        rules: Optional[List[str]] = None,
-    ) -> str:
-        """Generate an extended prefact.yaml configuration."""
-        if tools is None:
-            tools = ["ruff", "mypy", "isort"]
-
-        if rules is None:
-            rules = ["unused-imports", "relative-imports", "missing-return-type"]
-
-        extended_config: Dict[str, Any] = {
-            "project_root": str(project_root),
+    def _get_base_config(project_root: Path) -> Dict[str, Any]:
+        return {
             "package_name": project_root.name,
             "include": list(DEFAULT_INCLUDE),
             "exclude": list(DEFAULT_EXCLUDE) + ["**/tests/**"],
@@ -78,50 +66,52 @@ class ConfigGenerator:
                 },
             },
         }
-
+        
+    @staticmethod
+    def _configure_tools(tools_cfg: Dict[str, Any], tools: List[str]) -> None:
         if "ruff" in tools:
-            extended_config["tools"]["ruff"] = {
+            tools_cfg["ruff"] = {
                 "enabled": True,
                 "max_line_length": DEFAULT_MAX_LINE_LENGTH,
                 "select": ["E", "F", "W", "I"],
                 "ignore": ["E501"],
             }
-
         if "mypy" in tools:
-            extended_config["tools"]["mypy"] = {
+            tools_cfg["mypy"] = {
                 "enabled": True,
                 "strict": False,
                 "ignore_missing_imports": True,
             }
-
         if "isort" in tools:
-            extended_config["tools"]["isort"] = {
+            tools_cfg["isort"] = {
                 "enabled": True,
                 "profile": "black",
                 "multi_line_output": 3,
             }
 
+    @staticmethod
+    def _configure_rules(rules_cfg: Dict[str, Any], rules: List[str]) -> None:
         for rule_id in rules:
             if rule_id == "unused-imports":
-                extended_config["rules"][rule_id] = {
+                rules_cfg[rule_id] = {
                     "enabled": True,
                     "tools": ["ruff", "autoflake"],
                     "severity": "error",
                 }
             elif rule_id == "relative-imports":
-                extended_config["rules"][rule_id] = {
+                rules_cfg[rule_id] = {
                     "enabled": True,
                     "tools": ["libcst"],
                     "auto_fix": True,
                 }
             elif rule_id == "missing-return-type":
-                extended_config["rules"][rule_id] = {
+                rules_cfg[rule_id] = {
                     "enabled": True,
                     "tools": ["mypy"],
                     "severity": "warning",
                 }
             elif rule_id == "llm-hallucinations":
-                extended_config["rules"][rule_id] = {
+                rules_cfg[rule_id] = {
                     "enabled": True,
                     "patterns": [
                         {"pattern": "TODO: implement", "severity": "warning"},
@@ -129,11 +119,28 @@ class ConfigGenerator:
                     ],
                 }
             elif rule_id == "magic-numbers":
-                extended_config["rules"][rule_id] = {
+                rules_cfg[rule_id] = {
                     "enabled": True,
                     "threshold": 10,
                     "allowed_numbers": [0, 1, -1, 2, 10, 100],
                 }
+
+    @staticmethod
+    def generate_extended_config(
+        project_root: Path,
+        tools: Optional[List[str]] = None,
+        rules: Optional[List[str]] = None,
+    ) -> str:
+        """Generate an extended prefact.yaml configuration."""
+        if tools is None:
+            tools = ["ruff", "mypy", "isort"]
+
+        if rules is None:
+            rules = ["unused-imports", "relative-imports", "missing-return-type"]
+
+        extended_config = ConfigGenerator._get_base_config(project_root)
+        ConfigGenerator._configure_tools(extended_config["tools"], tools)
+        ConfigGenerator._configure_rules(extended_config["rules"], rules)
 
         return yaml.dump(extended_config, default_flow_style=False, sort_keys=False)
 
