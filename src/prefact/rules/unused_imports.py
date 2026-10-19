@@ -9,6 +9,10 @@ try:
     from prefact.rules import BaseRule, register
 except ImportError:
     from ..rules import BaseRule, register
+try:
+    from prefact.rules.validation import validate_syntax
+except ImportError:
+    from .validation import validate_syntax
 
 
 @dataclass
@@ -58,15 +62,7 @@ class UnusedImports(BaseRule):
         return issues
 
     def validate(self, path: Path, original: str, fixed: str) -> ValidationResult:
-        checks, errors = [], []
-        try:
-            ast.parse(fixed)
-            checks.append("syntax_valid")
-        except SyntaxError as exc:
-            errors.append(f"SyntaxError: {exc}")
-        return ValidationResult(
-            file=path, passed=not errors, checks=checks, errors=errors
-        )
+        return validate_syntax(path, original, fixed)
 
     def fix(
         self, path: Path, source: str, issues: list[Issue]
