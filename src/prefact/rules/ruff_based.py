@@ -160,6 +160,15 @@ class RuffHelper:
         return batch_results
 
     @classmethod
+    def _preload_chunks(cls, to_scan: Sequence[Path], chunk_size: int = 200) -> None:
+        """Scan chunks of files and update cache."""
+        for i in range(0, len(to_scan), chunk_size):
+            chunk = to_scan[i : i + chunk_size]
+            batch_results = cls._scan_chunk(chunk)
+            with cls._LOCK:
+                cls._CACHE.update(batch_results)
+
+    @classmethod
     def preload_files(cls, file_paths: Sequence[Path]) -> None:
         """Run Ruff in batch on multiple files to populate the cache."""
         if not cls.is_available():
@@ -168,13 +177,7 @@ class RuffHelper:
         to_scan = cls._filter_uncached_files(file_paths)
         if not to_scan:
             return
-
-        chunk_size = 200
-        for i in range(0, len(to_scan), chunk_size):
-            chunk = to_scan[i : i + chunk_size]
-            batch_results = cls._scan_chunk(chunk)
-            with cls._LOCK:
-                cls._CACHE.update(batch_results)
+        cls._preload_chunks(to_scan)
 
     @classmethod
     def check_file(cls, file_path: Path, select_codes: List[str]) -> List[Dict]:
