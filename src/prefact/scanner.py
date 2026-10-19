@@ -304,4 +304,9 @@ class Scanner:
 
     def _excluded(self, path: Path, rel: Path | None = None) -> bool:
         """Check if a path should be excluded based on patterns."""
-        return _is_path_excluded(path, self._project_root, self._exclude_patterns, rel=rel)
+        return _is_path_excluded(
+            path,
+            self._project_root,
+            self._exclude_patterns,
+            rel=rel,
+        )
