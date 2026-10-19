@@ -1,5 +1,7 @@
 """Setup management for autonomous prefact - configuration and examples."""
 
+import os
+from pathlib import Path
 import subprocess
 import sys
 from typing import Any, Dict
@@ -57,24 +59,46 @@ class SetupManager(BaseManager):
             "python_version": "3.8",
         }
 
-        # Check for AI indicators
-        for py_file in self.project_root.rglob("*.py"):
-            try:
-                file_text = py_file.read_text()
-                if any(
-                    indicator in file_text
-                    for indicator in ["TODO", "placeholder", "AI", "LLM"]
-                ):
-                    info["has_ai_code"] = True
-                    break
-            except Exception:
-                pass
+        # Standard environment, cache, session and dependency directories to skip
+        skip_dirs = {
+            ".git", "node_modules", "__pycache__", "env", ".env", "venv", ".venv",
+            "virtualenv", "site-packages", "build", "dist", "target", ".cache",
+            "cache", ".tmp", "tmp", ".subactor", ".codex", "state", ".pytest_cache",
+            ".ruff_cache", ".idea", ".vscode", ".governance", ".worktrees",
+            "artifacts", ".planfile", ".benchmarks", "htmlcov", "sessions", ".sessions"
+        }
 
-        # Check for tests
-        if any(self.project_root.glob("test*")) or any(
-            self.project_root.glob("**/test*")
-        ):
+        # Check for AI indicators (bounded to top-level source files, max 50 files)
+        checked_count = 0
+        for dirpath, dirnames, filenames in os.walk(self.project_root, topdown=True):
+            dirnames[:] = [d for d in dirnames if d not in skip_dirs and not d.startswith(".")]
+            for filename in filenames:
+                if filename.endswith(".py"):
+                    py_file = Path(dirpath) / filename
+                    try:
+                        file_text = py_file.read_text(encoding="utf-8", errors="ignore")
+                        if any(
+                            indicator in file_text
+                            for indicator in ["TODO", "placeholder", "AI", "LLM"]
+                        ):
+                            info["has_ai_code"] = True
+                            break
+                    except Exception:
+                        pass
+                    checked_count += 1
+                    if checked_count >= 50:
+                        break
+            if info["has_ai_code"] or checked_count >= 50:
+                break
+
+        # Check for tests (shallow checks first, then bounded directory presence)
+        if (self.project_root / "tests").exists() or (self.project_root / "test").exists():
             info["has_tests"] = True
+        else:
+            for item in self.project_root.iterdir():
+                if item.name not in skip_dirs and "test" in item.name.lower():
+                    info["has_tests"] = True
+                    break
 
         # Check if this is a test project
         if (

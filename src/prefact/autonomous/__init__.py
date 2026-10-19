@@ -44,6 +44,10 @@ class AutonomousRefact:
         self.issues_found: List[Dict[str, Any]] = []
         self.tickets_created: List[Dict[str, Any]] = []
 
+    @property
+    def refact_config_path(self) -> Path:
+        return self.setup_manager.refact_config_path
+
     def run_autonomous(
         self,
         skip_examples: bool = False,
