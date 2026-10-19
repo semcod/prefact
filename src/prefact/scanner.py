@@ -137,6 +137,52 @@ _SKIP_DIRS: frozenset[str] = frozenset({
 })
 
 
+def _resolve_rel_path(path: Path, root: Path) -> Path | None:
+    """Resolve path relative to root, returning None if not under root."""
+    if not path.is_absolute():
+        return path
+    try:
+        return path.relative_to(root)
+    except ValueError:
+        try:
+            return path.resolve().relative_to(root)
+        except ValueError:
+            return None
+
+
+def _matches_pattern_direct(path_str: str, pat: str) -> bool:
+    return fnmatch.fnmatch(path_str, pat) or fnmatch.fnmatch(path_str, f"*/{pat}")
+
+
+def _matches_directory_pattern(rel: Path, rel_str: str, pat: str) -> bool:
+    clean_pat = pat.strip("/*")
+    if not clean_pat:
+        return False
+    return (
+        clean_pat in rel.parts
+        or fnmatch.fnmatch(rel_str, f"*/{clean_pat}/*")
+        or fnmatch.fnmatch(rel_str, f"{clean_pat}/*")
+    )
+
+
+def _matches_parent_pattern(rel: Path, pat: str) -> bool:
+    for parent in rel.parents:
+        parent_str = str(parent)
+        if parent_str != "." and _matches_pattern_direct(parent_str, pat):
+            return True
+    return False
+
+
+def _matches_exclude_pattern(rel: Path, rel_str: str, pat: str) -> bool:
+    if not pat:
+        return False
+    return (
+        _matches_pattern_direct(rel_str, pat)
+        or _matches_directory_pattern(rel, rel_str, pat)
+        or _matches_parent_pattern(rel, pat)
+    )
+
+
 class Scanner:
     """Discovers Python files and runs all enabled rules against them."""
 
@@ -236,47 +282,15 @@ class Scanner:
     def _excluded(self, path: Path, rel: Path | None = None) -> bool:
         """Check if a path should be excluded based on patterns."""
         if rel is None:
-            if not path.is_absolute():
-                rel = path
-            else:
-                try:
-                    rel = path.relative_to(self._project_root)
-                except ValueError:
-                    try:
-                        rel = path.resolve().relative_to(self._project_root)
-                    except ValueError:
-                        # Not under project root, skip
-                        return True
+            rel = _resolve_rel_path(path, self._project_root)
+            if rel is None:
+                return True
 
         if any(part in _SKIP_DIRS or part.endswith(".local") for part in rel.parts):
             return True
 
         rel_str = str(rel)
-        for pat in self._exclude_patterns:
-            if not pat:
-                continue
-
-            # Match directly
-            if fnmatch.fnmatch(rel_str, pat) or fnmatch.fnmatch(rel_str, f"*/{pat}"):
-                return True
-
-            # Match directory normalized pattern (e.g. **/tests/** -> tests)
-            clean_pat = pat.strip("/*")
-            if clean_pat and (
-                clean_pat in rel.parts
-                or fnmatch.fnmatch(rel_str, f"*/{clean_pat}/*")
-                or fnmatch.fnmatch(rel_str, f"{clean_pat}/*")
-            ):
-                return True
-
-            # Match parents
-            for parent in rel.parents:
-                parent_str = str(parent)
-                if parent_str == ".":
-                    continue
-                if fnmatch.fnmatch(parent_str, pat) or fnmatch.fnmatch(
-                    parent_str, f"*/{pat}"
-                ):
-                    return True
-
-        return False
+        return any(
+            _matches_exclude_pattern(rel, rel_str, pat)
+            for pat in self._exclude_patterns
+        )
