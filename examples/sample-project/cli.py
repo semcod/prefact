@@ -3,6 +3,9 @@
 import sys
 
 import click
+
+
+import click
 from models import User
 from utils import validate_email
 
