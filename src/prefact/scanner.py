@@ -206,6 +206,7 @@ def _is_path_excluded(
         return True
     return _matches_any_pattern(target_rel, exclude_patterns)
 
+
 class Scanner:
     """Discovers Python files and runs all enabled rules against them."""
 
