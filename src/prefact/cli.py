@@ -203,65 +203,71 @@ def fix(dry_run, no_backup, worktree, auto_merge, **kwargs) -> None:
     cfg.backup = not no_backup
 
     if worktree and not dry_run:
-        from prefact.wellmanifest import WellmanifestWorktreeManager, find_wellmanifest_root
-
-        repo_root = find_wellmanifest_root(cfg.project_root)
-        if not repo_root:
-            console.print(
-                "[bold yellow]⚠️ No Wellmanifest repository found with project/new-ticket.sh. Running standard fix...[/bold yellow]"
-            )
-        else:
-            mgr = WellmanifestWorktreeManager(repo_root)
-            if not mgr.can_allocate():
-                console.print(
-                    f"[bold red]❌ Cannot allocate ticket: {mgr.new_ticket_script} is missing or not executable.[/bold red]"
-                )
-                raise SystemExit(1)
-
-            scan_report = RefactoringEngine(cfg).scan_only()
-            if not scan_report.issues_found:
-                console.print("[bold green]✅ No issues found to fix.[/bold green]")
-                return
-
-            files_to_fix = sorted(
-                list(
-                    set(
-                        str(issue.file.resolve().relative_to(repo_root.resolve()))
-                        for issue in scan_report.issues_found
-                        if issue.file.resolve().is_relative_to(repo_root.resolve())
-                    )
-                )
-            )
-            if not files_to_fix:
-                console.print("[bold yellow]No files to fix inside this repository.[/bold yellow]")
-                return
-
-            title = f"Prefact: fix {len(scan_report.issues_found)} issues across {len(files_to_fix)} files"
-            allocation = mgr.allocate_ticket(title=title, owned_paths=files_to_fix)
-
-            wt_cfg = _build_config(**kwargs)
-            wt_cfg.project_root = allocation.worktree_path
-            wt_cfg.backup = not no_backup
-            wt_cfg.allow_dirty_checkout = True  # Safe inside ticket worktree
-
-            wt_report = RefactoringEngine(wt_cfg).run()
-            _output(wt_report, kwargs)
-
-            if auto_merge:
-                decision = mgr.evaluate_merge_disposition(allocation)
-                console.print(f"[bold cyan]Merge disposition:[/bold cyan] {decision['disposition']}")
-                if decision["disposition"] == "adopt":
-                    mgr.merge_ticket(allocation)
-                else:
-                    console.print(
-                        f"[bold yellow]Ticket {allocation.ticket_id} left in worktree {allocation.worktree_path} (disposition: {decision['disposition']}).[/bold yellow]"
-                    )
+        if _run_worktree_fix(cfg, no_backup=no_backup, auto_merge=auto_merge, kwargs=kwargs):
             return
 
     fix_report = RefactoringEngine(cfg).run()
     _output(fix_report, kwargs)
     if not fix_report.all_valid:
         raise SystemExit(1)
+
+
+def _run_worktree_fix(cfg, no_backup: bool, auto_merge: bool, kwargs: dict) -> bool:
+    from prefact.wellmanifest import WellmanifestWorktreeManager, find_wellmanifest_root
+
+    repo_root = find_wellmanifest_root(cfg.project_root)
+    if not repo_root:
+        console.print(
+            "[bold yellow]⚠️ No Wellmanifest repository found with project/new-ticket.sh. Running standard fix...[/bold yellow]"
+        )
+        return False
+
+    mgr = WellmanifestWorktreeManager(repo_root)
+    if not mgr.can_allocate():
+        console.print(
+            f"[bold red]❌ Cannot allocate ticket: {mgr.new_ticket_script} is missing or not executable.[/bold red]"
+        )
+        raise SystemExit(1)
+
+    scan_report = RefactoringEngine(cfg).scan_only()
+    if not scan_report.issues_found:
+        console.print("[bold green]✅ No issues found to fix.[/bold green]")
+        return True
+
+    files_to_fix = sorted(
+        list(
+            set(
+                str(issue.file.resolve().relative_to(repo_root.resolve()))
+                for issue in scan_report.issues_found
+                if issue.file.resolve().is_relative_to(repo_root.resolve())
+            )
+        )
+    )
+    if not files_to_fix:
+        console.print("[bold yellow]No files to fix inside this repository.[/bold yellow]")
+        return True
+
+    title = f"Prefact: fix {len(scan_report.issues_found)} issues across {len(files_to_fix)} files"
+    allocation = mgr.allocate_ticket(title=title, owned_paths=files_to_fix)
+
+    wt_cfg = _build_config(**kwargs)
+    wt_cfg.project_root = allocation.worktree_path
+    wt_cfg.backup = not no_backup
+    wt_cfg.allow_dirty_checkout = True  # Safe inside ticket worktree
+
+    wt_report = RefactoringEngine(wt_cfg).run()
+    _output(wt_report, kwargs)
+
+    if auto_merge:
+        decision = mgr.evaluate_merge_disposition(allocation)
+        console.print(f"[bold cyan]Merge disposition:[/bold cyan] {decision['disposition']}")
+        if decision["disposition"] == "adopt":
+            mgr.merge_ticket(allocation)
+        else:
+            console.print(
+                f"[bold yellow]Ticket {allocation.ticket_id} left in worktree {allocation.worktree_path} (disposition: {decision['disposition']}).[/bold yellow]"
+            )
+    return True
 
 
 @main.command()
