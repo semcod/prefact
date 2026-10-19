@@ -28,6 +28,9 @@ def find_wellmanifest_root(target_path: Path) -> Optional[Path]:
     current = resolved if resolved.is_dir() else resolved.parent
 
     while current != current.parent:
+        if current.name == ".subactor":
+            return None
+
         new_ticket = current / "project" / "new-ticket.sh"
         gov_manifest = current / ".governance" / "manifest.json"
         hub_manifest = current / "governance" / "manifest.hub.json"

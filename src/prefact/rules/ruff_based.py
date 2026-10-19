@@ -69,6 +69,7 @@ class RuffHelper:
             cmd = [
                 "ruff",
                 "check",
+                "--no-cache",
                 *[str(p) for p in chunk],
                 "--select",
                 "F401,F811,F403,T201,I001,E,W,F,I",
@@ -145,6 +146,7 @@ class RuffHelper:
                 [
                     "ruff",
                     "check",
+                    "--no-cache",
                     str(file_path),
                     "--select",
                     ",".join(select_codes),
