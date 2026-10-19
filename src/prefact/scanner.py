@@ -183,6 +183,29 @@ def _matches_exclude_pattern(rel: Path, rel_str: str, pat: str) -> bool:
     )
 
 
+def _has_skip_dir(rel: Path) -> bool:
+    return any(part in _SKIP_DIRS or part.endswith(".local") for part in rel.parts)
+
+
+def _matches_any_pattern(rel: Path, patterns: list[str]) -> bool:
+    rel_str = str(rel)
+    return any(
+        _matches_exclude_pattern(rel, rel_str, pat)
+        for pat in patterns
+    )
+
+
+def _is_path_excluded(
+    path: Path,
+    root: Path,
+    exclude_patterns: list[str],
+    rel: Path | None = None,
+) -> bool:
+    target_rel = rel if rel is not None else _resolve_rel_path(path, root)
+    if target_rel is None or _has_skip_dir(target_rel):
+        return True
+    return _matches_any_pattern(target_rel, exclude_patterns)
+
 class Scanner:
     """Discovers Python files and runs all enabled rules against them."""
 
@@ -281,16 +304,4 @@ class Scanner:
 
     def _excluded(self, path: Path, rel: Path | None = None) -> bool:
         """Check if a path should be excluded based on patterns."""
-        if rel is None:
-            rel = _resolve_rel_path(path, self._project_root)
-            if rel is None:
-                return True
-
-        if any(part in _SKIP_DIRS or part.endswith(".local") for part in rel.parts):
-            return True
-
-        rel_str = str(rel)
-        return any(
-            _matches_exclude_pattern(rel, rel_str, pat)
-            for pat in self._exclude_patterns
-        )
+        return _is_path_excluded(path, self._project_root, self._exclude_patterns, rel=rel)
