@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import threading
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from prefact.models import Fix, Issue, Severity, ValidationResult
 
@@ -29,6 +29,65 @@ class RuffHelper:
             cls._RUFF_AVAILABLE = shutil.which("ruff") is not None
         return cls._RUFF_AVAILABLE
 
+    @staticmethod
+    def _path_keys(path: Path) -> Tuple[str, str]:
+        k1 = str(path)
+        try:
+            k2 = str(path.resolve())
+        except Exception:
+            k2 = k1
+        return k1, k2
+
+    @classmethod
+    def _distribute_issues(
+        cls, raw_issues: List[Dict], batch_results: Dict[str, List[Dict]]
+    ) -> None:
+        for item in raw_issues:
+            fname = item.get("filename")
+            if not fname:
+                continue
+            k1, k2 = cls._path_keys(Path(fname))
+            keys = (k1, k2) if k1 != k2 else (k1,)
+            for k in keys:
+                if k in batch_results:
+                    batch_results[k].append(item)
+                else:
+                    batch_results[k] = [item]
+
+    @classmethod
+    def _run_ruff_chunk(cls, chunk: Sequence[Path]) -> Dict[str, List[Dict]]:
+        batch_results: Dict[str, List[Dict]] = {}
+        for p in chunk:
+            k1, k2 = cls._path_keys(p)
+            batch_results[k1] = []
+            batch_results[k2] = []
+
+        cmd = [
+            "ruff",
+            "check",
+            "--no-cache",
+            *[str(p) for p in chunk],
+            "--select",
+            "F401,F811,F403,T201,I001,E,W,F,I",
+            "--output-format",
+            "json",
+            "--no-fix",
+        ]
+        try:
+            ruff_run = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if ruff_run.stdout.strip():
+                raw_issues = json.loads(ruff_run.stdout)
+                cls._distribute_issues(raw_issues, batch_results)
+        except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
+            pass
+
+        return batch_results
+
     @classmethod
     def clear_cache(cls) -> None:
         """Clear cached Ruff results."""
@@ -41,11 +100,7 @@ class RuffHelper:
         with cls._LOCK:
             to_scan: List[Path] = []
             for fp in file_paths:
-                k1 = str(fp)
-                try:
-                    k2 = str(fp.resolve())
-                except Exception:
-                    k2 = k1
+                k1, k2 = cls._path_keys(fp)
                 if k1 not in cls._CACHE and k2 not in cls._CACHE:
                     to_scan.append(fp)
             return to_scan
@@ -127,11 +182,7 @@ class RuffHelper:
         if not cls.is_available():
             return []
 
-        file_key = str(file_path)
-        try:
-            resolved_key = str(file_path.resolve())
-        except Exception:
-            resolved_key = file_key
+        file_key, resolved_key = cls._path_keys(file_path)
 
         if file_key not in cls._CACHE and resolved_key not in cls._CACHE:
             cls.preload_files([file_path])
