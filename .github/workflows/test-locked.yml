@@ -31,7 +31,7 @@ jobs:
           repository: wellmanifest/docs
           ref: 19efafbeb18923cfd51cc69bd519330488500137
           path: .docs-standard
-          token: ${{ secrets.ORG_SYNC_PAT }}
+          token: ${{ github.token }}
           persist-credentials: false
       - name: Validate documentation placement
         shell: bash
